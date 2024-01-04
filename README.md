@@ -8,7 +8,7 @@
 <h4 align="center">Made for Developers, Designed for Users</h4>
 
 <p align="center">
-<img src="https://img.shields.io/github/actions/workflow/status/usbac/aurora/ci.yml"/>
+<img src="https://img.shields.io/github/actions/workflow/status/Usbac/aurora/ci.yml"/>
 <img src="https://img.shields.io/badge/stable-0.1.0-blue.svg">
 <img src="https://img.shields.io/badge/license-MIT-orange.svg">
 </p>
