@@ -1,0 +1,32 @@
+body {
+    display: flex;
+    justify-content: center;
+    margin: 0 14px;
+    gap: 14px;
+}
+
+body > * {
+    margin: 0;
+    line-height: 1em;
+    text-align: center;
+}
+
+img {
+    height: 100px;
+    width: 140px;
+    object-fit: contain;
+    align-self: center;
+}
+
+h1 {
+    font-size: 100px;
+    font-weight: 500;
+}
+
+h2 {
+    font-weight: 500;
+}
+
+p {
+    font-size: 20px;
+}

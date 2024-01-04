@@ -1,0 +1,370 @@
+const LOADING_ICON = '<svg class="loading-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" fill="none" stroke="#25292e" stroke-width="10" r="36" stroke-dasharray="171 56"></circle></svg>';
+function get(query) {
+    return document.querySelectorAll(query)[0];
+}
+
+String.prototype.sprintf = function(...args) {
+    let str = this;
+    args.map(arg => str = str.replace('%s', arg));
+    return str;
+};
+
+String.prototype.toSlug = function() {
+    return this.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+};
+
+Element.prototype.appendAfter = function(el) {
+    this.parentNode.insertBefore(el, this.nextSibling);
+};
+
+Element.prototype.setLoading = function() {
+    this.dataset.originalHtml = this.innerHTML;
+    this.innerHTML = LOADING_ICON;
+    this.classList.add('loading');
+};
+
+Element.prototype.resetState = function() {
+    this.classList.remove('loading');
+    if (this.dataset.hasOwnProperty('originalHtml')) {
+        this.innerHTML = this.dataset.originalHtml;
+        delete this.dataset.originalHtml;
+    }
+};
+
+class Snackbar {
+    static #timeout = null;
+
+    static show(msg = '', success = true) {
+        let snackbar = get('#snackbar');
+
+        if (snackbar.hasAttribute('show')) {
+            this.hide();
+            setTimeout(() => this.show(msg, success), 200);
+            return;
+        }
+
+        if (!success) {
+            snackbar.classList.add('error');
+        }
+
+        get('#snackbar > span').innerHTML = msg;
+        snackbar.setAttribute('show', true);
+        this.#timeout = setTimeout(() => this.hide(), 5000);
+    }
+
+    static hide() {
+        let snackbar = get('#snackbar');
+        clearTimeout(this.#timeout);
+        snackbar.removeAttribute('show');
+        setTimeout(() => snackbar.classList.remove('error'), 200);
+    }
+}
+
+class Form {
+    static #getData(form_id) {
+        let form_data = new FormData;
+
+        document.querySelectorAll(`#${form_id} *[name]`).forEach(el => {
+            let type = el.getAttribute('type');
+            let key = el.getAttribute('name');
+            let value = el.value;
+
+            if (type == 'checkbox') {
+                if (el.hasAttribute('multiselect')) {
+                    key += '[]';
+                    value = el.checked ? el.getAttribute('value') : undefined;
+                } else {
+                    value = Number(el.checked);
+                }
+            } else if (type == 'file') {
+                value = el.files[0];
+            }
+
+            if (typeof value !== 'undefined') {
+                form_data.append(key, value);
+            }
+        });
+
+        return form_data;
+    }
+
+    static #handleResponse(res, form_id) {
+        let field_errors = false;
+        Object.keys(res?.errors ?? {}).forEach(key => {
+            let input = get(`#${form_id} *[name="${key}"]`);
+            if (!input) {
+                return;
+            }
+
+            let err = document.createElement('span');
+            err.classList.add('field-error');
+            err.innerHTML = res.errors[key];
+            input.appendAfter(err);
+            field_errors = true;
+        });
+
+        if (res?.success) {
+            Snackbar.show(LANG.done);
+        } else if (res?.errors?.hasOwnProperty(0)) {
+            Snackbar.show(res.errors[0], false);
+        } else if (res?.success === false) {
+            Snackbar.show(LANG[field_errors ? 'field_errors' : 'unexpected_error'], false);
+        }
+
+        return res;
+    }
+
+    static send(url, form_id = null, btn = null) {
+        let btn_el = btn ? btn : event.target;
+
+        if (btn_el) {
+            if (btn_el.classList.contains('loading')) {
+                return;
+            }
+
+            btn_el.setLoading();
+        }
+
+        if (form_id) {
+            document.querySelectorAll(`#${form_id} *[name] + span.field-error`)
+                .forEach(el => el.remove());
+        }
+
+        return fetch(url, {
+            method: 'POST',
+            body: this.#getData(form_id),
+        })
+            .then(res => {
+                if (res.redirected) {
+                    window.location.href = res.url;
+                    return {};
+                }
+
+                return res.json();
+            })
+            .then(res => this.#handleResponse(res, form_id))
+            .catch(() => {
+                Snackbar.show(LANG.unexpected_error, false);
+                return {};
+            })
+            .then(res => {
+                if (btn_el) {
+                    btn_el.resetState();
+                }
+
+                return res;
+            });
+    }
+
+    static initFileInput(el) {
+        el.querySelector('input[type="file"]').addEventListener('change', e => {
+            el.querySelector('input[type="text"]').value = e.target.files[0] ? e.target.files[0].name : '';
+        });
+    }
+
+    static initCharCounters() {
+        document.querySelectorAll('*[char-count]').forEach(input => {
+            let count_el = document.createElement('span');
+            count_el.classList.add('char-counter');
+
+            input.appendAfter(count_el);
+            input.addEventListener('input', e => count_el.innerHTML = e.target.value.length + ' ' + LANG.characters);
+            input.dispatchEvent(new Event('input'));
+        });
+    }
+}
+
+class Listing {
+    static #next_page_url = '';
+    static #next_page = 1;
+
+    static setNextPageUrl(url) {
+        this.#next_page_url = url;
+    }
+
+    static setNextPage(page) {
+        this.#next_page = page;
+    }
+
+    static loadNextPage() {
+        if (!this.#next_page) {
+            return;
+        }
+
+        let listing = get('#main-listing');
+        let total_items = get('#total-items');
+        let btn = get('button.load-more');
+        btn.setLoading();
+
+        if (this.#next_page == 1) {
+            listing.innerHTML = LOADING_ICON;
+        }
+
+        fetch(`${this.#next_page_url}${window.location.search}&page=${this.#next_page}`)
+            .then(res => res.json())
+            .then(res => {
+                if (this.#next_page == 1) {
+                    if (!res.html) {
+                        res.html = '<h3 class="empty">' + LANG.no_results + '</h3>';
+                    }
+
+                    listing.innerHTML = res.html;
+                } else {
+                    listing.insertAdjacentHTML('beforeend', res.html);
+                }
+
+                if (!res.next_page) {
+                    btn.classList.add('hidden');
+                    this.#next_page = false;
+                } else {
+                    btn.classList.remove('hidden');
+                    this.#next_page++;
+                }
+
+                if (total_items && res.hasOwnProperty('count')) {
+                    total_items.innerHTML = res.count + ' ' + LANG[res.count == 1 ? 'item' : 'items'];
+                }
+            })
+            .finally(() => {
+                btn.resetState();
+                get('#main-listing > svg')?.remove();
+            });
+    }
+}
+
+class Dropdown {
+    static #active_dropdown = null;
+
+    static init() {
+        let updateActiveDropdown = () => {
+            const VERTICAL_MARGIN = 4;
+
+            if (!this.#active_dropdown) {
+                return;
+            }
+
+            let btn_rect = this.#active_dropdown.original_btn.getBoundingClientRect();
+            this.#active_dropdown.style.top = (btn_rect.top + btn_rect.height + VERTICAL_MARGIN) + 'px';
+            this.#active_dropdown.style.left = btn_rect.left + 'px';
+            let dropdown_rect = this.#active_dropdown.getBoundingClientRect();
+
+            if ((dropdown_rect.x + dropdown_rect.width) >= (window.innerWidth - VERTICAL_MARGIN)) {
+                this.#active_dropdown.style.left = ((btn_rect.x - dropdown_rect.width) + btn_rect.width) + 'px';
+            }
+
+            if (dropdown_rect.y + dropdown_rect.height >= (window.innerHeight - VERTICAL_MARGIN)) {
+                this.#active_dropdown.style.top = (btn_rect.y - dropdown_rect.height - VERTICAL_MARGIN) + 'px';
+            }
+        }
+
+        document.addEventListener('scroll', updateActiveDropdown);
+        window.addEventListener('resize', updateActiveDropdown);
+        document.addEventListener('click', e => {
+            let dropdown_btn = e?.target?.closest('*[dropdown]');
+            let dropdown = dropdown_btn?.querySelector('.dropdown-menu');
+
+            if (this.#active_dropdown?.contains(e?.target)) {
+                return;
+            }
+
+            this.close();
+            if (this.#active_dropdown === dropdown) {
+                return;
+            }
+
+            this.#active_dropdown = dropdown;
+
+            if (this.#active_dropdown) {
+                this.#active_dropdown.setAttribute('active', true);
+                this.#active_dropdown.original_btn = dropdown_btn;
+                document.body.appendChild(this.#active_dropdown);
+                updateActiveDropdown();
+            }
+        }, true);
+    }
+
+    static close() {
+        if (this.#active_dropdown) {
+            this.#active_dropdown.removeAttribute('active');
+            this.#active_dropdown.original_btn.appendChild(this.#active_dropdown);
+        }
+    }
+}
+
+class ImageDialog {
+    static #input_el = null;
+    static #img_el = null;
+    static #dialog_el = null;
+    static #content_path = '';
+    static #current_path = '';
+
+    static init(dialog_el, input_el, img_el, content_path) {
+        this.#dialog_el = dialog_el;
+        this.#input_el = input_el;
+        this.#img_el = img_el;
+        this.#content_path = content_path;
+        this.#current_path = '';
+
+        img_el.addEventListener('click', () => {
+            this.#dialog_el.innerHTML = LOADING_ICON;
+            this.#dialog_el.showModal();
+            this.setImagePage(content_path);
+        });
+
+        dialog_el.addEventListener('dragover', event => {
+            event.preventDefault();
+        }, false);
+
+        dialog_el.addEventListener('drop', event => {
+            event.preventDefault();
+
+            this.#dialog_el.innerHTML = LOADING_ICON;
+            let data = new FormData();
+            Array.from(event.dataTransfer.files).map(file => data.append('file[]', file));
+
+            fetch('/admin/media/upload?path=' + this.#current_path, {
+                method: 'POST',
+                body: data,
+            })
+            .then(res => res.json())
+            .then(res => {
+                this.setImagePage(this.#current_path);
+                if (res.errors && res.errors.hasOwnProperty(0)) {
+                    alert(res.errors[0]);
+                }
+            })
+            .catch(() => alert(LANG.unexpected_error));
+        });
+    }
+
+    static setImagePage(path) {
+        this.#current_path = path;
+        fetch('/admin/image_dialog?path=' + path)
+            .catch(() => alert(LANG.unexpected_error))
+            .then(async res => {
+                if (res.status != 200) {
+                    alert(LANG.unexpected_error);
+                    this.close();
+                    return;
+                }
+
+                this.#dialog_el.innerHTML = await res.text();
+            });
+    }
+
+    static setImage(path) {
+        this.#input_el.value = path;
+        this.#img_el.src = '/' + this.#content_path + '/' + path;
+        this.#img_el.classList.remove('empty-img');
+    }
+
+    static clearImage() {
+        this.#input_el.value = '';
+        this.#img_el.src = '/public/assets/no-image.svg';
+        this.#img_el.classList.add('empty-img');
+    }
+
+    static close() {
+        this.#dialog_el.close();
+    }
+}

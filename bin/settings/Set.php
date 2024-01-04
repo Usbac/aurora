@@ -1,0 +1,50 @@
+<?php
+
+namespace Aurora\Bin\Settings;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+class Set extends \Aurora\Bin\BaseCommand
+{
+    protected function configure()
+    {
+        $this->setName('settings:set')
+            ->setDescription('Set the value of a system setting')
+            ->addArgument('name', InputArgument::REQUIRED, 'Setting name.')
+            ->addArgument('value', InputArgument::REQUIRED, 'Setting value.');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $io = new SymfonyStyle($input, $output);
+        $names = [
+            'Blog url' => 'blog_url',
+            'Date format' => 'date_format',
+            'Description' => 'description',
+            'Language' => 'language',
+            'Logo' => 'logo',
+            'Maintenance' => 'maintenance',
+            'Meta description' => 'meta_description',
+            'Meta keywords' => 'meta_keywords',
+            'Items per page' => 'per_page',
+            'Theme' => 'theme',
+            'Title' => 'title',
+            'Views count' => 'views_count',
+        ];
+
+        $field = $names[$input->getArgument('name')] ?? null;
+
+        if (!isset($field)) {
+            $io->error('Invalid setting name given, must be one of: ' . implode(', ', array_keys($names)));
+            return Command::INVALID;
+        }
+
+        return $this->config['db']->query('UPDATE settings SET value = ? WHERE `key` = ?', $input->getArgument('value'), $field)
+            ? Command::SUCCESS
+            : Command::FAILURE;
+    }
+}

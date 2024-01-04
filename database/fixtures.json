@@ -1,0 +1,250 @@
+{
+    "meta": {
+        "created": "2024-01-01 00:00:01",
+        "version": "0.1.0"
+    },
+    "tables": {
+        "links": [
+            {
+                "id": 1,
+                "title": "Home",
+                "url": "\/",
+                "order": 1,
+                "status": 1
+            },
+            {
+                "id": 2,
+                "title": "Blog",
+                "url": "\/blog",
+                "order": 2,
+                "status": 1
+            },
+            {
+                "id": 3,
+                "title": "About",
+                "url": "\/about",
+                "order": 3,
+                "status": 1
+            }
+        ],
+        "pages": [
+            {
+                "id": 1,
+                "title": "Home",
+                "slug": "",
+                "html": "<section>\r\n<h1 style=\"text-align: center;\">Welcome!<\/h1>\r\n<p style=\"font-size: 14pt;\">Thank you for choosing Aurora.<\/p>\r\n<h3>Documentation<\/h3>\r\n<p style=\"font-size: 14pt;\">You can take a look at the <a style=\"text-decoration: underline; color: blue;\" href=\"https:\/\/github.com\/Usbac\/aurora\/wiki\" target=\"_blank\" rel=\"noopener\">documentation<\/a> to learn more about the CMS. There you will find information about the architecture, settings, installation, CLI and more...<\/p>\r\n<h3>Contributing<\/h3>\r\n<p style=\"font-size: 14pt;\">Any contribution or support to this project will be highly appreciated. Please review the <a style=\"text-decoration: underline; color: blue;\" href=\"https:\/\/github.com\/Usbac\/aurora\/blob\/main\/CONTRIBUTING.md\" target=\"_blank\" rel=\"noopener\">contribution guide<\/a> before you open issues or send pull requests in the repository.<\/p>\r\n<\/section>",
+                "status": 1,
+                "static": 0,
+                "static_file": "",
+                "meta_title": "",
+                "meta_description": "",
+                "canonical_url": "",
+                "edited_at": 1704312585
+            },
+            {
+                "id": 2,
+                "title": "About",
+                "slug": "about",
+                "html": "<section>\r\n<h1 style=\"text-align: center;\">About<\/h1>\r\n<p style=\"font-size: 14pt;\">Aurora is a modern and lightweight CMS made in PHP, focused on both developers and content managers. Extremely simple to install, use and modify.<\/p>\r\n<\/section>",
+                "status": 1,
+                "static": 0,
+                "static_file": "",
+                "meta_title": "",
+                "meta_description": "",
+                "canonical_url": "",
+                "edited_at": 1704297570
+            }
+        ],
+        "password_restores": [],
+        "posts": [
+            {
+                "id": 1,
+                "title": "My First post",
+                "slug": "first-post",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam interdum dui ut ante ornare, dictum interdum mi pulvinar.",
+                "html": "<div>\r\n<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam interdum dui ut ante ornare, dictum interdum mi pulvinar. Pellentesque neque quam, tristique eu blandit non, auctor eu diam. Vivamus laoreet odio in lacus lobortis, in faucibus ligula luctus.<\/div>\r\n<div>\u00a0<\/div>\r\n<div>Curabitur cursus consectetur gravida. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas ante risus, feugiat vitae dignissim a, ullamcorper euismod orci. Duis iaculis, dolor id congue malesuada, erat risus sollicitudin ex, vel rutrum mi nibh ut velit. Nam molestie porta iaculis.<\/div>\r\n<div>\u00a0<\/div>\r\n<div>Nam augue elit, vulputate sit amet mi sed, rhoncus gravida purus. Vivamus sagittis dignissim varius. Praesent varius dignissim libero nec egestas. Suspendisse id nibh porta, luctus velit id, interdum tortor. Fusce laoreet aliquam metus, ut volutpat leo porta a. Suspendisse velit augue, viverra ac vulputate at, laoreet quis tellus. Nulla sed vestibulum erat. Nulla ultricies eros dolor, ac viverra odio consequat eu.<\/div>\r\n<div>\u00a0<\/div>\r\n<div>\r\n<div>\r\n<div>Quisque pulvinar cursus rhoncus. Integer in velit augue. Donec quis eros urna. In ac ullamcorper mauris. Nam vel neque sit amet erat volutpat laoreet ac in tortor. Etiam ultricies nisi a ipsum sodales, non aliquam erat blandit.<\/div>\r\n<div>\u00a0<\/div>\r\n<div>Duis non euismod orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque tempus bibendum nulla in posuere. Ut scelerisque tellus felis, sed malesuada mi dictum id.<\/div>\r\n<div>\u00a0<\/div>\r\n<div>Sed a massa pretium, gravida mauris a, commodo tellus. Maecenas sit amet neque a odio vehicula iaculis sed non felis. Nullam blandit sit amet orci et rhoncus. Mauris ut enim mauris. Etiam elit elit, elementum ut feugiat nec, ultrices eu arcu. In hac habitasse platea dictumst.<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<div>\r\n<div>\r\n<div>Vivamus velit nisi, dignissim eget dignissim sed, eleifend ac purus. Sed ultricies ultricies ligula vitae iaculis. Proin gravida augue in molestie sodales. Phasellus maximus dui non turpis feugiat, vel posuere odio feugiat.<\/div>\r\n<div>\u00a0<\/div>\r\n<div>Suspendisse quis ligula vel lorem laoreet blandit sit amet ac sapien. Aliquam a dolor quis est malesuada fermentum in a dui. Aenean sem risus, tempor sit amet cursus eu, porttitor in odio. Integer id nunc vel tellus hendrerit ultrices nec a metus. Sed vel erat turpis. Etiam dapibus mi id tincidunt ornare. Proin in quam vel mauris imperdiet iaculis sit amet eu neque.<\/div>\r\n<div>\u00a0<\/div>\r\n<div>Curabitur enim elit, rhoncus eu mattis a, vestibulum ut leo. Vestibulum varius sodales augue et sagittis.<\/div>\r\n<\/div>\r\n<\/div>",
+                "user_id": 1,
+                "image": "..\/assets\/stein egil.jpg",
+                "image_alt": "",
+                "status": 1,
+                "meta_title": "",
+                "meta_description": "",
+                "canonical_url": "",
+                "published_at": 1704240000
+            }
+        ],
+        "posts_to_tags": [
+            {
+                "post_id": 1,
+                "tag_id": 1
+            },
+            {
+                "post_id": 1,
+                "tag_id": 2
+            }
+        ],
+        "roles": [
+            {
+                "level": 1,
+                "slug": "contributor"
+            },
+            {
+                "level": 2,
+                "slug": "editor"
+            },
+            {
+                "level": 3,
+                "slug": "admin"
+            },
+            {
+                "level": 4,
+                "slug": "owner"
+            }
+        ],
+        "roles_permissions": [
+            {
+                "role_level": 1,
+                "permission": "edit_posts"
+            },
+            {
+                "role_level": 2,
+                "permission": "publish_posts"
+            },
+            {
+                "role_level": 2,
+                "permission": "edit_tags"
+            },
+            {
+                "role_level": 2,
+                "permission": "edit_links"
+            },
+            {
+                "role_level": 2,
+                "permission": "edit_pages"
+            },
+            {
+                "role_level": 2,
+                "permission": "edit_media"
+            },
+            {
+                "role_level": 3,
+                "permission": "edit_users"
+            },
+            {
+                "role_level": 3,
+                "permission": "impersonate"
+            },
+            {
+                "role_level": 4,
+                "permission": "edit_settings"
+            },
+            {
+                "role_level": 4,
+                "permission": "update"
+            }
+        ],
+        "settings": [
+            {
+                "key": "maintenance",
+                "value": "0"
+            },
+            {
+                "key": "blog_url",
+                "value": "blog"
+            },
+            {
+                "key": "date_format",
+                "value": "MMM dd, Y"
+            },
+            {
+                "key": "logo",
+                "value": "../assets/logo.svg"
+            },
+            {
+                "key": "title",
+                "value": "Aurora"
+            },
+            {
+                "key": "description",
+                "value": "The CMS"
+            },
+            {
+                "key": "meta_title",
+                "value": "Aurora"
+            },
+            {
+                "key": "meta_description",
+                "value": "The CMS"
+            },
+            {
+                "key": "meta_keywords",
+                "value": ""
+            },
+            {
+                "key": "per_page",
+                "value": "10"
+            },
+            {
+                "key": "language",
+                "value": "en"
+            },
+            {
+                "key": "views_count",
+                "value": "0"
+            },
+            {
+                "key": "theme",
+                "value": "default"
+            },
+            {
+                "key": "header_code",
+                "value": ""
+            },
+            {
+                "key": "footer_code",
+                "value": ""
+            },
+            {
+                "key": "post_code",
+                "value": ""
+            },
+            {
+                "key": "editor_code",
+                "value": "<script src=\"\/public\/assets\/js\/tinymce\/tinymce.min.js\"><\/script>\n        <script>let selector = \"textarea#html\";\n        tinymce.init({\n            selector: selector,\n            plugins: [ \"image\", \"wordcount\", \"autoresize\", \"code\", \"link\", \"lists\" ],\n            images_upload_url: \"\/admin\/posts\/upload_image\",\n            setup: editor => editor.on(\"Change Keyup\", () => get(selector).innerHTML = editor.getContent()),\n        });\n        <\/script>"
+            }
+        ],
+        "tags": [
+            {
+                "id": 1,
+                "name": "Travel",
+                "slug": "travel",
+                "description": "",
+                "meta_title": "",
+                "meta_description": ""
+            },
+            {
+                "id": 2,
+                "name": "Nature",
+                "slug": "nature",
+                "description": "",
+                "meta_title": "",
+                "meta_description": ""
+            }
+        ],
+        "users": [
+            {
+                "id": 1,
+                "name": "John Doe",
+                "slug": "john-doe",
+                "email": "john.doe@mail.com",
+                "image": "",
+                "status": 1,
+                "password": "$2y$10$ue5adhL6CJWfW8YiMW5JIehftbALWWIStJ6p9cA9BxdWICqWkymZS",
+                "role": 4,
+                "created_at": "1694409154",
+                "last_active": "1694409154"
+            }
+        ],
+        "views": []
+    }
+}

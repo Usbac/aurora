@@ -1,0 +1,34 @@
+{
+    "name": "usbac/aurora",
+    "description": "The CMS",
+    "keywords": [
+        "cms", "blog", "small", "web", "apps", "fast"
+    ],
+    "type": "project",
+    "license": "MIT",
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "Usbac",
+            "homepage": "https://github.com/Usbac"
+        }
+    ],
+    "scripts": {
+        "post-autoload-dump": "php -r \"require './vendor/autoload.php'; \\Aurora\\System\\Helper::copy('vendor/tinymce/tinymce', 'public/assets/js/tinymce');\""
+    },
+    "require": {
+        "php": ">=8.0.0",
+        "tinymce/tinymce": "^6.7",
+        "symfony/console": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aurora\\App\\": "app/controllers",
+            "Aurora\\Bin\\": "bin",
+            "Aurora\\System\\": "system"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
+}

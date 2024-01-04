@@ -1,0 +1,8 @@
+.vscode
+.DS_Store
+*.log
+composer.lock
+database/db.sqlite
+public/content/*
+public/assets/js/tinymce
+vendor
