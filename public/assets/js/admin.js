@@ -104,7 +104,7 @@ class Form {
         });
 
         if (res?.success) {
-            Snackbar.show(LANG.done);
+            Snackbar.show(res?.msg ? res.msg : LANG.done);
         } else if (res?.errors?.hasOwnProperty(0)) {
             Snackbar.show(res.errors[0], false);
         } else if (res?.success === false) {
