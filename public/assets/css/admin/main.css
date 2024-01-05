@@ -1325,6 +1325,12 @@ textarea.code {
     text-align: center;
 }
 
+/* settings */
+
+.tab-content {
+    display: none;
+}
+
 @media screen and (max-width: 1080px) {
     .admin > .content {
         --content-spacing: 14px;
