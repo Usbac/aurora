@@ -225,6 +225,7 @@
                 update_button.resetState();
                 if (res === false) {
                     update_title.innerHTML = LANG.update_not_found;
+                    update_button.setAttribute('disabled', true);
                 } else if (typeof res === 'object' && res !== null) {
                     update_title.innerHTML = LANG.update_found.sprintf(res.version);
                     new_version = res.version;
