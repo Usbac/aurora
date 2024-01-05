@@ -209,6 +209,7 @@ span.loading {
 }
 
 .tabs > a svg {
+    min-width: 16px;
     margin-right: 10px;
     fill: var(--main-color);
 }
@@ -1384,5 +1385,11 @@ textarea.code {
 
     dialog {
         min-width: calc(100% - (14px * 2)) !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .input-group-container {
+        flex-direction: column;
     }
 }
