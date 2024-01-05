@@ -94,7 +94,7 @@ final class Update
             }
         }
 
-        return empty($latest_release)
+        return empty($latest_release) || $latest_release['version'] === $version
             ? false
             : [
                 'zip' => $latest_release['zip'],
