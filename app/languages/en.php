@@ -134,6 +134,7 @@ return [
     'server_info' => 'Server info',
     'settings' => 'Settings',
     'sign_in' => 'Sign in',
+    'sign_in_success' => 'You are now logged in. You will be redirected shortly.',
     'site_footer' => 'Site footer',
     'site_footer_description' => 'Code here will be injected into the footer of all pages.',
     'site_header' => 'Site header',

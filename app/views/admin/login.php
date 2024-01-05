@@ -37,7 +37,7 @@
 <script>
     function loginHandler(res) {
         if (res.success) {
-            setTimeout(() => location.reload(), 1000);
+            setTimeout(() => location.reload(), 3000);
         }
     }
 
