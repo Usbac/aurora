@@ -29,7 +29,8 @@ final class Update
      */
     public function run(string $zip): true|int
     {
-        if (!file_put_contents('update.zip', fopen($zip, 'r'))) {
+        $zip_file = \Aurora\System\Helper::getPath('update.zip');
+        if (!file_put_contents($zip_file, fopen($zip, 'r', false, self::getStreamContext()))) {
             return self::ERROR_CONNECTION;
         }
 
@@ -46,7 +47,7 @@ final class Update
         }
 
         foreach (self::UPDATE_DIRECTORIES as $dir) {
-            if (!\Aurora\System\Helper::copy("$zip_dir/$dir", dirname(__DIR__) . "/$dir")) {
+            if (!\Aurora\System\Helper::copy("$zip_dir/$dir", \Aurora\System\Helper::getPath("/$dir"))) {
                 return self::ERROR_COPY;
             }
         }
@@ -62,12 +63,7 @@ final class Update
      */
     public function getLatestRelease(): array|false|int
     {
-        $releases = @file_get_contents('https://api.github.com/repos/usbac/aurora/releases', false, stream_context_create([
-            'http' => [
-                'method' => 'GET',
-                'header' => [ 'User-Agent: PHP' ],
-            ],
-        ]));
+        $releases = @file_get_contents('https://api.github.com/repos/usbac/aurora/releases', false, self::getStreamContext());
 
         if (!$releases) {
             return self::ERROR_CONNECTION;
@@ -100,5 +96,19 @@ final class Update
                 'zip' => $latest_release['zip'],
                 'version' => implode('.', $latest_release['version']),
             ];
+    }
+
+    /**
+     * Returns the stream context for the requests
+     * @return resource the stream context
+     */
+    private function getStreamContext()
+    {
+        return stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'header' => [ 'User-Agent: PHP' ],
+            ],
+        ]);
     }
 }
