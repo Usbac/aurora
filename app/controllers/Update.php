@@ -29,25 +29,27 @@ final class Update
      */
     public function run(string $zip): true|int
     {
-        $zip_file = \Aurora\System\Helper::getPath('update.zip');
-        if (!file_put_contents($zip_file, fopen($zip, 'r', false, self::getStreamContext()))) {
+        $temp_dir = sys_get_temp_dir();
+        $zip_dir = tempnam($temp_dir, 'aurora-update');
+
+        if (!file_put_contents($zip_dir, fopen($zip, 'r', false, self::getStreamContext()))) {
             return self::ERROR_CONNECTION;
         }
 
         $zip = new \ZipArchive();
 
-        if ($zip->open('update.zip') !== true || !$zip->extractTo('.') || !($index = $zip->getNameIndex(0))) {
+        if ($zip->open($zip_dir) !== true || !$zip->extractTo($temp_dir) || !($index = $zip->getNameIndex(0))) {
             return self::ERROR_ZIP;
         }
 
-        $zip_dir = trim($index, '/');
+        $new_version_dir = "$temp_dir/" . trim($index, '/');
 
         if (!$zip->close()) {
             return self::ERROR_ZIP;
         }
 
         foreach (self::UPDATE_DIRECTORIES as $dir) {
-            if (!\Aurora\System\Helper::copy("$zip_dir/$dir", \Aurora\System\Helper::getPath("/$dir"))) {
+            if (!\Aurora\System\Helper::copy("$new_version_dir/$dir", \Aurora\System\Helper::getPath("/$dir"))) {
                 return self::ERROR_COPY;
             }
         }
