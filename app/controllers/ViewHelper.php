@@ -6,17 +6,32 @@ final class ViewHelper
 {
     private const WORDS_PER_MINUTE = 210;
 
+    /**
+     * Returns the url or path to obtain a file without unnecessary cache
+     * @param string $file the file url or path
+     * @return string the url or path to obtain a file without unnecessary cache
+     */
     public function getFileQuery(string $file): string
     {
         return "$file?v=" . filemtime(\Aurora\System\Helper::getPath($file));
     }
 
+    /**
+     * Returns the time in minutes required to read the given string
+     * @param string $str the string
+     * @return int the reading time
+     */
     public function getReadTime(string $str): int
     {
         return max(1, round(str_word_count($str) / self::WORDS_PER_MINUTE));
     }
 
-    public function getContentUrl($url): string
+    /**
+     * Returns the url of the given content
+     * @param mixed $url the url
+     * @return string the url
+     */
+    public function getContentUrl(mixed $url): string
     {
         $host = parse_url($url, PHP_URL_HOST);
 
@@ -25,7 +40,12 @@ final class ViewHelper
             : \Aurora\System\Helper::getUrl(\Aurora\System\Kernel::config('content') . '/' . trim($url, '/'));
     }
 
-    public function dateFormat($tstamp): string
+    /**
+     * Returns the given timestamp formatted
+     * @param mixed $tstamp the timestamp
+     * @return string the given timestamp formatted
+     */
+    public function dateFormat(mixed $tstamp): string
     {
         static $formatter = null;
 
