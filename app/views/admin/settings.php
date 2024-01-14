@@ -143,6 +143,10 @@
             <div class="grid tab-content" data-tab="#info">
                 <div class="card v-spacing">
                     <div class="input-group">
+                        <label><?= t('operating_system') ?></label>
+                        <span><?= e(php_uname('s') . ' ' . php_uname('r')) ?></span>
+                    </div>
+                    <div class="input-group">
                         <label><?= t('php_version') ?></label>
                         <span><?= e(phpversion()) ?></span>
                     </div>
@@ -159,9 +163,13 @@
                         <span><?= e(rtrim(\Aurora\System\Helper::getPath(), '/')) ?></span>
                     </div>
                     <div class="input-group">
-                        <label><?= t('max_upload_file_size') ?></label>
-                        <span class="description"><?= t('max_upload_file_size_description', false) ?></span>
-                        <span><?= e(\Aurora\App\Media::getFileSize(\Aurora\App\Media::getMaxUploadFileSize())) ?></span>
+                        <label><?= t('memory_limit') ?></label>
+                        <span><?= e(\Aurora\System\Helper::getByteSize(\Aurora\System\Helper::getPHPSize(ini_get('memory_limit')))) ?></span>
+                    </div>
+                    <div class="input-group">
+                        <label><?= t('file_size_upload_limit') ?></label>
+                        <span class="description"><?= t('file_size_upload_limit_description', false) ?></span>
+                        <span><?= e(\Aurora\System\Helper::getByteSize(\Aurora\App\Media::getMaxUploadFileSize())) ?></span>
                     </div>
                 </div>
             </div>
