@@ -19,7 +19,7 @@
         </div>
         <div class="w20 file-info">
             <?php if ($file['is_file']): ?>
-                <p><?= e(\Aurora\App\Media::getFileSize($file['size'])) ?></p>
+                <p><?= e(\Aurora\System\Helper::getByteSize($file['size'])) ?></p>
             <?php endif ?>
             <p><?= e($file['mime']) ?></p>
         </div>
