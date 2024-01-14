@@ -184,18 +184,6 @@ final class Media
     }
 
     /**
-     * Returns the file size in a human readable format
-     * @param float $bytes the file size in bytes
-     * @return string the file size in a human readable format
-     */
-    public static function getFileSize(float $bytes): string
-    {
-        $factor = floor((strlen($bytes) - 1) / 3);
-
-        return sprintf('%.2f', $bytes / pow(1024, $factor)) . ([ 'B', 'kB', 'MB', 'GB', 'TB' ][$factor] ?? '');
-    }
-
-    /**
      * Uploads the given file to the given path
      * @param array $file the file
      * @param string $path the path relative to the project root directory
@@ -227,7 +215,7 @@ final class Media
      */
     public static function getMaxUploadFileSize(): mixed
     {
-        return min(self::getPHPSize(ini_get('post_max_size')), self::getPHPSize(ini_get('upload_max_filesize')));
+        return min(array_map(fn($key) => \Aurora\System\Helper::getPHPSize(ini_get($key)), [ 'post_max_size', 'upload_max_filesize' ]));
     }
 
     /**
@@ -282,26 +270,5 @@ final class Media
         }
 
         return $file_path;
-    }
-
-    /**
-     * Returns the size in bytes based on the given PHP size string
-     * @param string $size_str The PHP size string
-     * @return int the size in bytes
-     */
-    private static function getPHPSize(string $size_str): int
-    {
-        $size = substr($size_str, 0, -1);
-        switch (strtoupper(substr($size_str, -1))) {
-            case 'P': $size *= 1024;
-            case 'T': $size *= 1024;
-            case 'G': $size *= 1024;
-            case 'M': $size *= 1024;
-            case 'K': $size *= 1024;
-                break;
-            default: $size = $size_str;
-        }
-
-        return (int) $size;
     }
 }

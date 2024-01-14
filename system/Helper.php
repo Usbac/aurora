@@ -101,4 +101,37 @@ final class Helper
 
         return true;
     }
+
+    /**
+     * Returns the given byte size in a human readable format
+     * @param float $bytes the size in bytes
+     * @return string the byte size in a human readable format
+     */
+    public static function getByteSize(float $bytes): string
+    {
+        $factor = floor((strlen($bytes) - 1) / 3);
+
+        return sprintf('%.2f', $bytes / pow(1024, $factor)) . ([ 'B', 'kB', 'MB', 'GB', 'TB' ][$factor] ?? '');
+    }
+
+    /**
+     * Returns the size in bytes based on the given PHP size string
+     * @param string $size_str The PHP size string
+     * @return int the size in bytes
+     */
+    public static function getPHPSize(string $size_str): int
+    {
+        $size = substr($size_str, 0, -1);
+        switch (strtoupper(substr($size_str, -1))) {
+            case 'P': $size *= 1024;
+            case 'T': $size *= 1024;
+            case 'G': $size *= 1024;
+            case 'M': $size *= 1024;
+            case 'K': $size *= 1024;
+                break;
+            default: $size = $size_str;
+        }
+
+        return (int) $size;
+    }
 }
