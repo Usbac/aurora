@@ -30,7 +30,7 @@ final class Post extends \Aurora\App\ModuleBase
         return $data;
     }
 
-    public function add(array $data): string|false
+    public function add(array $data): string|bool
     {
         try {
             $this->db->connection->beginTransaction();

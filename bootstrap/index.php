@@ -16,7 +16,7 @@ if (!function_exists('t')) {
 }
 
 if (!function_exists('js')) {
-    function js(mixed $val): string|false
+    function js(mixed $val): string|bool
     {
         return json_encode($val);
     }

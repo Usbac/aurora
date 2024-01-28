@@ -17,7 +17,7 @@ final class Link extends \Aurora\App\ModuleBase
         return $this->getPage(null, null, 'status', 'order');
     }
 
-    public function add(array $data): string|false
+    public function add(array $data): string|bool
     {
         return $this->db->insert($this->table, $this->getBaseData($data));
     }

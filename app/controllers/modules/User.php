@@ -38,7 +38,7 @@ final class User extends \Aurora\App\ModuleBase
         return $res ? $id : false;
     }
 
-    public function add(array $data): string|false
+    public function add(array $data): string|bool
     {
         $time = time();
         return $this->db->insert($this->table, [

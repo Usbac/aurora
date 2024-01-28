@@ -25,9 +25,9 @@ final class Update
     /**
      * Updates the system to the given release zip
      * @param string path to the release zip file
-     * @return true|int true on success, an error code otherwise
+     * @return int|bool true on success, an error code otherwise
      */
-    public function run(string $zip): true|int
+    public function run(string $zip): int|bool
     {
         $temp_dir = sys_get_temp_dir();
         $zip_dir = tempnam($temp_dir, 'aurora-update');
@@ -59,11 +59,11 @@ final class Update
 
     /**
      * Returns an array with data about the latest release compatible with the current version (same major version)
-     * @return array|false|int the array with data about the latest release,
+     * @return array|bool|int the array with data about the latest release,
      * false if there are no new releases compatible with the current version
      * or an error code in case of errors
      */
-    public function getLatestRelease(): array|false|int
+    public function getLatestRelease(): array|bool|int
     {
         $releases = @file_get_contents('https://api.github.com/repos/usbac/aurora/releases', false, self::getStreamContext());
 

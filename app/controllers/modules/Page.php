@@ -16,7 +16,7 @@ final class Page extends \Aurora\App\ModuleBase
         'views' => 'views DESC, pages.title ASC',
     ];
 
-    public function add(array $data): string|false
+    public function add(array $data): string|bool
     {
         return $this->db->insert($this->table, $this->getBaseData($data));
     }

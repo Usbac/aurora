@@ -47,9 +47,9 @@ final class DB
      * Inserts a row into the specified table
      * @param string $table the table
      * @param array $data the row data
-     * @return string|false the id of the inserted row on success, false otherwise
+     * @return string|bool the id of the inserted row on success, false otherwise
      */
-    public function insert(string $table, array $data): string|false
+    public function insert(string $table, array $data): string|bool
     {
         return $this->intoOperation('INSERT', $table, $data);
     }
@@ -58,9 +58,9 @@ final class DB
      * Replaces a row into the specified table
      * @param string $table the table
      * @param array $data the row data
-     * @return string|false the id of the replaced row on success, false otherwise
+     * @return string|bool the id of the replaced row on success, false otherwise
      */
-    public function replace(string $table, array $data): string|false
+    public function replace(string $table, array $data): string|bool
     {
         return $this->intoOperation('REPLACE', $table, $data);
     }
@@ -135,9 +135,9 @@ final class DB
      * @param string $statement the statement (e.g., INSERT, REPLACE)
      * @param string $table the table
      * @param array $data the row data
-     * @return string|false the id of the row on success, false otherwise
+     * @return string|bool the id of the row on success, false otherwise
      */
-    private function intoOperation(string $statement, string $table, array $data = []): string|false
+    private function intoOperation(string $statement, string $table, array $data = []): string|bool
     {
         $keys = array_map(fn($key) => "`$key`", array_keys($data));
 
