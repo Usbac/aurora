@@ -311,7 +311,6 @@ dialog .bottom button {
 }
 
 .image-dialog .listing-row:not(.header):hover {
-    background: var(--third-color);
     cursor: pointer;
 }
 
