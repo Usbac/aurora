@@ -1040,7 +1040,7 @@ textarea.code {
     display: flex;
     align-items: center;
     border-bottom: 1px var(--border-color) solid;
-    padding: 16px 16px 16px 0;
+    padding: 16px;
     text-decoration: none;
     color: var(--main-color);
     gap: 16px;
