@@ -164,7 +164,7 @@
                     </div>
                     <div class="input-group">
                         <label><?= t('memory_limit') ?></label>
-                        <span><?= e(\Aurora\System\Helper::getByteSize(\Aurora\System\Helper::getPHPSize(ini_get('memory_limit')))) ?></span>
+                        <span><?= e(\Aurora\System\Helper::getByteSize(\Aurora\System\Helper::getPhpSize(ini_get('memory_limit')))) ?></span>
                     </div>
                     <div class="input-group">
                         <label><?= t('file_size_upload_limit') ?></label>

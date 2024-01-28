@@ -215,7 +215,7 @@ final class Media
      */
     public static function getMaxUploadFileSize(): mixed
     {
-        return min(array_map(fn($key) => \Aurora\System\Helper::getPHPSize(ini_get($key)), [ 'post_max_size', 'upload_max_filesize' ]));
+        return min(array_map(fn($key) => \Aurora\System\Helper::getPhpSize(ini_get($key)), [ 'post_max_size', 'upload_max_filesize' ]));
     }
 
     /**

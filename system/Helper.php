@@ -119,7 +119,7 @@ final class Helper
      * @param string $size_str The PHP size string
      * @return int the size in bytes
      */
-    public static function getPHPSize(string $size_str): int
+    public static function getPhpSize(string $size_str): int
     {
         $size = substr($size_str, 0, -1);
         switch (strtoupper(substr($size_str, -1))) {
