@@ -9,7 +9,6 @@
     --button-background-color: #006ad3;
     --danger-color: #ff5234;
     --danger-background-color: #413a46;
-    --row-hover-background: linear-gradient(270deg, #293040, transparent);
     color: var(--main-color);
 }
 

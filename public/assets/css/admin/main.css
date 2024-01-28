@@ -15,7 +15,6 @@
     --danger-background-color: #ffebe9a3;
     --success-color: #29b23a;
     --box-shadow: 0px 0px 3px 1px var(--border-color);
-    --row-hover-background: linear-gradient(270deg, #fff, #f3f3f300);
     --border-radius: 8px;
     --nav-width: 220px;
     --input-padding: 6px 12px;
@@ -1062,7 +1061,7 @@ textarea.code {
 }
 
 .listing-row:not(.header):hover {
-    background: var(--row-hover-background);
+    background: var(--fourth-color);
 }
 
 .subtitle {
