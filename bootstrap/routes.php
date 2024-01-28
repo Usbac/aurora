@@ -198,7 +198,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'next_page' => $page_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $page_mod->count($where),
-            'html' => $view->get('admin/partials/pages.php', [
+            'html' => $view->get('admin/partials/lists/pages.php', [
                 'pages' => $page_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
             ]),
         ]);
@@ -283,7 +283,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'next_page' => $post_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $post_mod->count($where),
-            'html' => $view->get('admin/partials/posts.php', [
+            'html' => $view->get('admin/partials/lists/posts.php', [
                 'posts' => $post_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
             ]),
         ]);
@@ -375,7 +375,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'next_page' => $user_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $user_mod->count($where),
-            'html' => $view->get('admin/partials/users.php', [
+            'html' => $view->get('admin/partials/lists/users.php', [
                 'users' => $user_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
             ]),
         ]);
@@ -463,7 +463,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'next_page' => $link_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $link_mod->count($where),
-            'html' => $view->get('admin/partials/links.php', [
+            'html' => $view->get('admin/partials/lists/links.php', [
                 'links' => $link_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
             ]),
         ]);
@@ -526,7 +526,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'next_page' => $tag_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $tag_mod->count($where),
-            'html' => $view->get('admin/partials/tags.php', [
+            'html' => $view->get('admin/partials/lists/tags.php', [
                 'tags' => $tag_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
             ]),
         ]);
@@ -591,7 +591,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'next_page' => false,
             'count' => count($files),
-            'html' => $view->get('admin/partials/media.php', [
+            'html' => $view->get('admin/partials/lists/media.php', [
                 'files' => $files ? $files : [],
             ]),
         ]);
