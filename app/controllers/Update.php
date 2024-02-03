@@ -82,7 +82,7 @@ final class Update
                 continue;
             }
 
-            $version_index = ($version[1] * 1000) + ($version[2] ?? 0);
+            $version_index = $this->getVersionIndex($version);
             if ($version_index >= ($latest_release['index'] ?? 0)) {
                 $latest_release = [
                     'zip' => $release['zipball_url'],
@@ -92,7 +92,7 @@ final class Update
             }
         }
 
-        return empty($latest_release) || $latest_release['version'] === $current_version
+        return empty($latest_release) || $this->getVersionIndex($current_version) >= $this->getVersionIndex($latest_release['version'])
             ? false
             : [
                 'zip' => $latest_release['zip'],
@@ -112,5 +112,15 @@ final class Update
                 'header' => [ 'User-Agent: PHP' ],
             ],
         ]);
+    }
+
+    /**
+     * Returns the index of the given version. Usually used when comparing versions.
+     * @param array $version the version array
+     * @return int the version index
+     */
+    private function getVersionIndex(array $version): int
+    {
+        return ($version[0] * 1000000) + ($version[1] * 1000) + ($version[2] ?? 0);
     }
 }
