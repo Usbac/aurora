@@ -43,7 +43,10 @@
                         <a id="page-link" target="_blank"></a>
                     </div>
                     <?php if (\Aurora\System\Helper::isValidId($page['id'] ?? false)): ?>
-                        <span class="form-extra-data"><?= t('number_views') ?>: <?= e($page['views']) ?></span>
+                        <div class="extra-data">
+                            <span><?= t('id') ?>: <?= e($page['id']) ?></span>
+                            <span><?= t('number_views') ?>: <?= e($page['views']) ?></span>
+                        </div>
                     <?php endif ?>
                 </div>
                 <div class="card v-spacing">

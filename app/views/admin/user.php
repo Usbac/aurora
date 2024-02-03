@@ -42,6 +42,7 @@
                 <input id="user-image-input" type="hidden" name="image" value="<?= e($user['image'] ?? '') ?>"/>
                 <?php if (\Aurora\System\Helper::isValidId($user['id'] ?? false)): ?>
                     <div class="extra-info">
+                        <p><?= t('id') ?>: <?= e($user['id']) ?></p>
                         <p><?= t('number_posts') ?>: <?= e($user['posts']) ?></p>
                         <p><?= t('last_active') ?>: <?= e($this->dateFormat($user['last_active'])) ?></p>
                     </div>

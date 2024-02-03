@@ -43,6 +43,9 @@
                         <button class="slider" onclick="get('#status').click()"></button>
                     </div>
                 </div>
+                <div class="extra-data">
+                    <span><?= t('id') ?>: <?= e($link['id']) ?></span>
+                </div>
             </div>
         </div>
     </div>

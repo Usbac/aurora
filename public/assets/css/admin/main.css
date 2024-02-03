@@ -1226,7 +1226,10 @@ textarea.code {
     fill: #54aeff;
 }
 
-.form-extra-data {
+.extra-data {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     font-weight: var(--font-semibold);
 }
 
@@ -1256,7 +1259,7 @@ textarea.code {
     text-align: center;
     font-weight: var(--font-semibold);
     margin-top: 14px;
-    gap: 14px;
+    gap: 10px;
 }
 
 #user-form .extra-info * {

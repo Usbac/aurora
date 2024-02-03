@@ -37,7 +37,10 @@
                     <textarea id="description" name="description" char-count><?= e($tag['description'] ?? '') ?></textarea>
                 </div>
                 <?php if (\Aurora\System\Helper::isValidId($tag['id'] ?? false)): ?>
-                    <span class="form-extra-data"><?= t('number_posts') ?>: <?= e($tag['posts']) ?></span>
+                    <div class="extra-data">
+                        <span><?= t('id') ?>: <?= e($tag['id']) ?></span>
+                        <span><?= t('number_posts') ?>: <?= e($tag['posts']) ?></span>
+                    </div>
                 <?php endif ?>
             </div>
             <div class="card v-spacing">
