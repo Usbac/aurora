@@ -62,6 +62,7 @@ return [
     'get_new_password' => 'Get a new password',
     'go_back' => 'Go back',
     'host_name' => 'Host name',
+    'id' => 'ID',
     'image_alt' => 'Image alt',
     'image_picker' => 'Image picker',
     'impersonate' => 'Impersonate',

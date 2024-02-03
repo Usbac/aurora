@@ -62,6 +62,7 @@ return [
     'get_new_password' => 'Obtener una nueva contraseña',
     'go_back' => 'Regresar',
     'host_name' => 'Nombre del host',
+    'id' => 'ID',
     'image_alt' => 'Alt de imagen',
     'image_picker' => 'Selector de imagen',
     'impersonate' => 'Personificar',
