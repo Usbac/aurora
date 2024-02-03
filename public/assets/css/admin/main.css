@@ -1024,7 +1024,7 @@ textarea.code {
     display: flex;
     text-transform: uppercase;
     font-weight: var(--font-semibold);
-    padding: 0 16px 16px 0;
+    padding: 0 16px 16px 16px;
 }
 
 .listing-row.header * {
