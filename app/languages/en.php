@@ -110,6 +110,7 @@ return [
     'pages' => 'Pages',
     'password' => 'Password',
     'password_confirm' => 'Password confirm',
+    'path_copied' => 'Path copied',
     'php_version' => 'PHP Version',
     'post' => 'Post',
     'post_code' => 'Posts code',

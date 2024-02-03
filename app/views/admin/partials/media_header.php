@@ -178,7 +178,7 @@
         let result = document.execCommand('copy');
         document.body.removeChild(input);
         if (result) {
-            Snackbar.show(LANG.done);
+            Snackbar.show(LANG.path_copied);
         }
     }
 
