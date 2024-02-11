@@ -79,6 +79,15 @@ code {
     border-radius: 4px;
 }
 
+.warning {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #ffee71;
+    text-align: center;
+    margin-left: var(--nav-width);
+}
+
 .title-label {
     color: white;
     background: #9fa4ad;
@@ -1334,6 +1343,10 @@ textarea.code {
 }
 
 @media screen and (max-width: 1080px) {
+    * {
+        --nav-width: 0;
+    }
+
     .admin > .content {
         --content-spacing: 14px;
         margin-left: initial;
