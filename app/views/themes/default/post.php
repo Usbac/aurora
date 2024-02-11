@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(lang()) ?>">
+<html lang="<?= e($this->lang()) ?>">
 <head>
     <title><?= e($post['title'] . ' - ' . setting('title')) ?></title>
     <?= $this->include('themes/default/partials/head.php') ?>
@@ -10,7 +10,7 @@
     <?php foreach ($post['tags'] as $tag): ?>
         <meta property="article:tag" content="<?= e($tag) ?>"/>
     <?php endforeach ?>
-    <link rel="canonical" href="<?= e(empty($post['canonical_url']) ? url($_SERVER['REQUEST_URI']) : $post['canonical_url']) ?>"/>
+    <link rel="canonical" href="<?= e(empty($post['canonical_url']) ? $this->url($_SERVER['REQUEST_URI']) : $post['canonical_url']) ?>"/>
 </head>
 <body>
     <?= $this->include('themes/default/partials/header.php') ?>

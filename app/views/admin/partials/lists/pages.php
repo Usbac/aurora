@@ -21,7 +21,7 @@
             <div class="three-dots" onclick="return false" dropdown>
                 <?= $this->include('icons/dots.svg') ?>
                 <div class="dropdown-menu">
-                    <div onclick="window.open(<?= e(js(url($page['slug']))) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= t('view') ?></div>
+                    <div onclick="window.open(<?= e(js($this->url($page['slug']))) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= t('view') ?></div>
                     <?php if (\Aurora\App\Permission::can('edit_pages')): ?>
                         <div
                             class="danger"

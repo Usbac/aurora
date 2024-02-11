@@ -56,4 +56,20 @@ final class ViewHelper
         $formatter->setPattern(\Aurora\App\Setting::get('date_format') ?? '');
         return $formatter->format($tstamp);
     }
+
+    /**
+     * @see \Aurora\System\Helper::getUrl
+     */
+    public function url(string $path = ''): string
+    {
+        return \Aurora\System\Helper::getUrl($path);
+    }
+
+    /**
+     * @see \Aurora\System\Language::getCode
+     */
+    public function lang(): string
+    {
+        return \Aurora\System\Container::get('language')->getCode();
+    }
 }

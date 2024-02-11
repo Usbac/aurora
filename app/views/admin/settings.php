@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(lang()) ?>">
+<html lang="<?= e($this->lang()) ?>">
 <head>
     <title><?= t('settings') . ' - ' . e(setting('title')) ?></title>
     <?= $this->include('admin/partials/head.php') ?>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="<?= e(lang()) ?>">
+<html lang="<?= e($this->lang()) ?>">
 <head>
     <title><?= e(setting('title')) ?></title>
     <?= $this->include('themes/default/partials/head.php') ?>
     <link rel="stylesheet" href="<?= e($this->getFileQuery('/public/assets/css/themes/default/information.css')) ?>">
-    <link rel="canonical" href="<?= e(url($_SERVER['REQUEST_URI'])) ?>"/>
+    <link rel="canonical" href="<?= e($this->url($_SERVER['REQUEST_URI'])) ?>"/>
 </head>
 <body>
     <?php if (setting('logo')): ?>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(lang()) ?>">
+<html lang="<?= e($this->lang()) ?>">
 <head>
     <title><?= t('post') . ' - ' . e(setting('title')) ?></title>
     <?= $this->include('admin/partials/head.php') ?>
@@ -105,7 +105,7 @@
                     </div>
                     <div class="input-group">
                         <label for="canonical-url"><?= t('canonical_url') ?></label>
-                        <input id="canonical-url" name="canonical_url" type="text" placeholder="<?= e(url(setting('blog_url') . '/lorem-ipsum')) ?>" value="<?= e($post['canonical_url'] ?? '') ?>"/>
+                        <input id="canonical-url" name="canonical_url" type="text" placeholder="<?= e($this->url(setting('blog_url') . '/lorem-ipsum')) ?>" value="<?= e($post['canonical_url'] ?? '') ?>"/>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@
             return;
         }
 
-        let url = <?= js(url(setting('blog_url'))) ?> + '/' + slug;
+        let url = <?= js($this->url(setting('blog_url'))) ?> + '/' + slug;
         get('#post-link').innerHTML = url;
         get('#post-link').setAttribute('href', url);
     }

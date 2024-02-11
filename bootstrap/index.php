@@ -22,24 +22,10 @@ if (!function_exists('js')) {
     }
 }
 
-if (!function_exists('url')) {
-    function url(string $path = ''): string
-    {
-        return \Aurora\System\Helper::getUrl($path);
-    }
-}
-
 if (!function_exists('setting')) {
     function setting(?string $key = null): mixed
     {
         return \Aurora\App\Setting::get($key);
-    }
-}
-
-if (!function_exists('lang')) {
-    function lang(): string
-    {
-        return \Aurora\System\Container::get('language')->getCode();
     }
 }
 

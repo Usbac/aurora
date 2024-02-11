@@ -30,7 +30,7 @@
             <div class="three-dots" onclick="return false" dropdown>
                 <?= $this->include('icons/dots.svg') ?>
                 <div class="dropdown-menu">
-                    <div onclick="copyPath(<?= e(js(url($file_path))) ?>)"><?= $this->include('icons/clipboard.svg') ?> <?= t('copy_path') ?></div>
+                    <div onclick="copyPath(<?= e(js($this->url($file_path))) ?>)"><?= $this->include('icons/clipboard.svg') ?> <?= t('copy_path') ?></div>
                     <?php if (\Aurora\App\Permission::can('edit_media')): ?>
                         <div onclick="openDuplicateDialog(<?= e(js($i)) ?>)"><?= $this->include('icons/duplicate.svg') ?> <?= t('duplicate') ?>…</div>
                         <div onclick="openMoveDialog(<?= e(js($i)) ?>)"><?= $this->include('icons/move_file.svg') ?> <?= t('move') ?>…</div>

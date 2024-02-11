@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(lang()) ?>">
+<html lang="<?= e($this->lang()) ?>">
 <?php $current_user = !empty($user) && $user['id'] == $_SESSION['user']['id'] ?>
 <?php $can_edit_user = \Aurora\App\Permission::can('edit_users'); ?>
 <?php $title = t($current_user ? 'your_user' : 'user'); ?>

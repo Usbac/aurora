@@ -7,7 +7,7 @@
         <a href="/admin/dashboard">
             <?= $this->include('icons/home.svg') ?> <?= t('dashboard') ?>
         </a>
-        <a href="<?= e(url()) ?>" target="_blank">
+        <a href="<?= e($this->url()) ?>" target="_blank">
             <?= $this->include('icons/window.svg') ?> <?= t('view_site') ?>
         </a>
         <a href="/admin/pages" separator>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(lang()) ?>">
+<html lang="<?= e($this->lang()) ?>">
 <head>
     <title><?= e("$title - " . setting('title')) ?></title>
     <?= $this->include('themes/default/partials/head.php') ?>
@@ -10,7 +10,7 @@
         <meta property="og:title" content="<?= e(setting('meta_title')) ?>"/>
         <meta property="og:description" content="<?= e(setting('meta_description')) ?>"/>
     <?php endif ?>
-    <link rel="canonical" href="<?= e(url($_SERVER['REQUEST_URI'])) ?>"/>
+    <link rel="canonical" href="<?= e($this->url($_SERVER['REQUEST_URI'])) ?>"/>
 </head>
 <body>
     <?= $this->include('themes/default/partials/header.php') ?>

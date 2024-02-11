@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(lang()) ?>">
+<html lang="<?= e($this->lang()) ?>">
 <head>
     <title><?= t('page') . ' - ' . e(setting('title')) ?></title>
     <?= $this->include('admin/partials/head.php') ?>
@@ -18,7 +18,7 @@
                     <button class="delete" onclick="remove(this);" <?php if (!$can_edit_page): ?> disabled <?php endif ?>>
                         <?= $this->include('icons/trash.svg') ?>
                     </button>
-                    <button onclick="window.open(<?= e(js(url($page['slug']))) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?></button>
+                    <button onclick="window.open(<?= e(js($this->url($page['slug']))) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?></button>
                 <?php endif ?>
                 <button id="save" onclick="save();" <?php if (!$can_edit_page): ?> disabled <?php endif ?>><?= t('save') ?></button>
             </div>
@@ -85,7 +85,7 @@
                     </div>
                     <div class="input-group">
                         <label for="canonical-url"><?= t('canonical_url') ?></label>
-                        <input id="canonical-url" name="canonical_url" type="text" placeholder="<?= e(url('/about')) ?>" value="<?= e($page['canonical_url'] ?? '') ?>"/>
+                        <input id="canonical-url" name="canonical_url" type="text" placeholder="<?= e($this->url('/about')) ?>" value="<?= e($page['canonical_url'] ?? '') ?>"/>
                     </div>
                 </div>
             </div>
@@ -119,7 +119,7 @@
     }
 
     function updateUrl() {
-        let url = <?= js(url()) ?> + '/' + get('#slug').value;
+        let url = <?= js($this->url()) ?> + '/' + get('#slug').value;
         get('#page-link').innerHTML = url;
         get('#page-link').setAttribute('href', url);
     }
