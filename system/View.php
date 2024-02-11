@@ -8,7 +8,6 @@ final class View
 
     public function __construct(private string $templates_dir, private ?object $helper = null)
     {
-        $this->templates_dir = $templates_dir;
     }
 
     /**
