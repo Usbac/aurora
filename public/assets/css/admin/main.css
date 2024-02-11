@@ -124,10 +124,18 @@ code {
     cursor: not-allowed;
 }
 
+.pointer {
+    transition: opacity var(--transition-time);
+}
+
+input[disabled] + .slider {
+    opacity: 0.8;
+    cursor: not-allowed !important;
+}
+
 .pointer:hover,
 button:hover:not(:disabled):not(.loading),
-.button:hover:not(:disabled):not(.loading),
-input[disabled] + .slider {
+.button:hover:not(:disabled):not(.loading) {
     opacity: 0.8;
     cursor: pointer;
 }
