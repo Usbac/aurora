@@ -1145,7 +1145,7 @@ textarea.code {
 
 .dropdown-menu > * {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     padding: 8px;
     border-radius: var(--border-radius);
     overflow: hidden;
