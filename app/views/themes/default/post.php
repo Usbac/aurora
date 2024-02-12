@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e($this->lang()) ?>">
+<html lang="<?= e(\Aurora\System\Container::get('language')->getCode()) ?>">
 <head>
     <title><?= e($post['title'] . ' - ' . setting('title')) ?></title>
     <?= $this->include('themes/default/partials/head.php') ?>

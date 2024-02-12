@@ -64,12 +64,4 @@ final class ViewHelper
     {
         return \Aurora\System\Helper::getUrl($path);
     }
-
-    /**
-     * @see \Aurora\System\Language::getCode
-     */
-    public function lang(): string
-    {
-        return \Aurora\System\Container::get('language')->getCode();
-    }
 }

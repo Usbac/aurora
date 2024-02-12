@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e($this->lang()) ?>">
+<html lang="<?= e(\Aurora\System\Container::get('language')->getCode()) ?>">
 <head>
     <title><?= t('sign_in') . ' - ' . e(setting('title')) ?></title>
     <?= $this->include('admin/partials/head.php') ?>
