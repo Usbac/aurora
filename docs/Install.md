@@ -14,7 +14,7 @@ Go to your web server's root directory and run the following command:
 composer create-project usbac/aurora
 ```
 
-It will download a fresh copy of Aurora and install all the dependencies. You can also download a zip file from the [releases page](https://github.com/Usbac/aurora/releases) and unzip it in your web server's root directory.
+It will download a fresh copy of Aurora and install all the dependencies. You can also download a zip file from the [releases page](https://github.com/Usbac/aurora/releases), unzip it in your web server's root directory and run the `composer install` command.
 
 Done! You can now access your Aurora panel by going to `/admin` in your localhost (e.g., http://localhost/admin).
 

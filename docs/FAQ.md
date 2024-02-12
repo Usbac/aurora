@@ -59,3 +59,5 @@ You can update Aurora to the latest compatible version by running the command:
 ```bash
 php aurora update
 ```
+
+Or in the admin panel, by going to **Settings** > **Update** (`/admin/settings#update`).
