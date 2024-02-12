@@ -6,6 +6,14 @@ final class View
 {
     private array $data = [];
 
+    private string $parent = '';
+
+    private bool $inside_parent = false;
+
+    private array $sections = [];
+
+    private array $sections_stack = [];
+
     public function __construct(private string $templates_dir, private ?object $helper = null)
     {
     }
@@ -22,9 +30,10 @@ final class View
      * Returns the template output
      * @param string $template the template
      * @param [array] $data the template data
+     * @param [bool] $handle_parent process the parent template or not
      * @return string the template output
      */
-    public function get(string $template, array $data = []): string
+    public function get(string $template, array $data = [], bool $handle_parent = true): string
     {
         $this->data = $data;
         extract($data, EXTR_SKIP);
@@ -42,6 +51,12 @@ final class View
         $output = ob_get_contents();
         ob_end_clean();
 
+        if ($this->parent && $handle_parent) {
+            $this->inside_parent = true;
+            $output = $this->get($this->parent, $this->data, false);
+            $this->inside_parent = false;
+        }
+
         return $output;
     }
 
@@ -52,6 +67,42 @@ final class View
      */
     protected function include(string $template): string
     {
-        return $this->get($template, $this->data);
+        return $this->get($template, $this->data, false);
+    }
+
+    /**
+     * Sets the parent template for the current template
+     * @param string $parent the parent template
+     */
+    protected function extend(string $parent): void
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Starts a new section
+     * @param string $name the section name
+     */
+    protected function sectionStart(string $name): void
+    {
+        $this->sections_stack[] = $name;
+        ob_start();
+    }
+
+    /**
+     * Ends the latest section in the stack
+     */
+    protected function sectionEnd(): void
+    {
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        $section = array_pop($this->sections_stack);
+
+        if ($this->inside_parent) {
+            echo $this->sections[$section] ?? $output;
+        } else {
+            $this->sections[$section] = $output;
+        }
     }
 }
