@@ -85,5 +85,5 @@
         document.cookie = 'theme=' + theme + ';path=/';
     });
 </script>
-<?php $this->sectionStart('script') ?>
+<?php $this->sectionStart('extra') ?>
 <?php $this->sectionEnd() ?>

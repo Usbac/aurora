@@ -51,7 +51,7 @@
     <button class="load-more hidden" onclick="Listing.loadNextPage()"><?= t('load_more') ?></button>
 <?php $this->sectionEnd() ?>
 
-<?php $this->sectionStart('script') ?>
+<?php $this->sectionStart('extra') ?>
     <script>
         let filters_form = document.getElementById('filters-form');
 

@@ -92,7 +92,7 @@
     <dialog id="image-dialog" class="image-dialog"></dialog>
 <?php $this->sectionEnd() ?>
 
-<?php $this->sectionStart('script') ?>
+<?php $this->sectionStart('extra') ?>
     <script>
         window.id = <?= js($user['id'] ?? '') ?>;
 

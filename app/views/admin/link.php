@@ -48,7 +48,7 @@
     </div>
 <?php $this->sectionEnd() ?>
 
-<?php $this->sectionStart('script') ?>
+<?php $this->sectionStart('extra') ?>
     <script>
         window.id = <?= js($link['id'] ?? '') ?>;
 

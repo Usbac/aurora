@@ -111,7 +111,7 @@
     <dialog id="image-dialog" class="image-dialog"></dialog>
 <?php $this->sectionEnd() ?>
 
-<?php $this->sectionStart('script') ?>
+<?php $this->sectionStart('extra') ?>
     <?= setting('editor_code') ?>
     <script>
         window.id = <?= js($post['id'] ?? '') ?>;

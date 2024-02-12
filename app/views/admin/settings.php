@@ -209,7 +209,7 @@
     <dialog id="image-dialog" class="image-dialog"></dialog>
 <?php $this->sectionEnd() ?>
 
-<?php $this->sectionStart('script') ?>
+<?php $this->sectionStart('extra') ?>
     <script>
         var new_version = '';
         var update_handler_initialized = false;
