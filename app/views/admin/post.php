@@ -6,8 +6,8 @@
 </head>
 <body class="admin">
     <?= $this->include('admin/partials/nav.php') ?>
-    <?php $can_edit_post = \Aurora\App\Permission::can('edit_posts'); ?>
     <div class="content">
+        <?php $can_edit_post = \Aurora\App\Permission::can('edit_posts'); ?>
         <div>
             <div class="page-title">
                 <?= $this->include('admin/partials/menu_btn.php') ?>
