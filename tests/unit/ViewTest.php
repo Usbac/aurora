@@ -27,4 +27,12 @@ final class ViewTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals("Hello, Mr Alex.\n", $view->get('hello2.html', [ 'name' => 'Alex' ]));
     }
+
+    public function testInheritance(): void
+    {
+        $view = new \Aurora\System\View(dirname(__DIR__) . '/fixtures/views');
+
+        $this->assertEquals("<!DOCTYPE html>\n<head>\n<title>Document</title></head>\n<body>\n<div>Lorem ipsum</div></body>\n</html>\n<script></script>\n",
+            $view->get('inheritance_child.html', [ 'message' => 'Lorem ipsum' ]));
+    }
 }
