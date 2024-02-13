@@ -124,10 +124,6 @@ code {
     cursor: not-allowed;
 }
 
-.pointer {
-    transition: opacity var(--transition-time);
-}
-
 input[disabled] + .slider {
     opacity: 0.8;
     cursor: not-allowed !important;
@@ -389,12 +385,17 @@ button,
     padding: var(--button-padding);
     border-radius: var(--border-radius);
     border: none;
-    transition: opacity var(--transition-time), color var(--transition-time), background-color var(--transition-time);
     text-decoration: none;
     font-size: var(--font-size-bg);
     font-weight: var(--font-semibold);
     min-height: 36px;
     min-width: 44px;
+}
+
+button,
+.button,
+img.pointer {
+    transition: opacity var(--transition-time), color var(--transition-time), background-color var(--transition-time), border-color var(--transition-time);
 }
 
 button.light,
