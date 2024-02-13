@@ -71,17 +71,15 @@ final class ViewHelper
      */
     public function csrfToken(): string
     {
-        $token = bin2hex(random_bytes(8));
-
         if (!isset($_COOKIE['csrf_token'])) {
+            $token = bin2hex(random_bytes(8));
+
+            $_COOKIE['csrf_token'] = $token;
             setcookie('csrf_token', $token, [
                 'path' => '/',
-                'secure' => true,
                 'httponly' => true,
                 'samesite' => 'Lax',
             ]);
-
-            return $token;
         }
 
         return $_COOKIE['csrf_token'];
