@@ -188,7 +188,7 @@ span.loading {
 
 .grid {
     display: grid;
-    grid-gap: 36px;
+    grid-gap: 28px;
     grid-auto-rows: min-content;
 }
 
@@ -542,7 +542,7 @@ button.load-more {
     display: flex;
     flex-direction: column;
     background: var(--fourth-color);
-    padding: 28px;
+    padding: 22px;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
@@ -814,8 +814,8 @@ textarea.code {
     display: flex;
     flex-direction: column;
     gap: 26px;
-    --content-spacing: 42px;
-    padding: calc(var(--content-spacing) * 0.8) var(--content-spacing);
+    --content-spacing: 34px;
+    padding: var(--content-spacing);
     position: relative;
     background-color: var(--background-color);
     min-height: calc(100vh - var(--content-spacing));
