@@ -31,6 +31,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         }
     });
 
+    $router->middleware('*', function() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !\Aurora\System\Helper::isCsrfTokenValid($_POST['csrf'] ?? '')) {
+            echo json_encode([ 'reload' => true ]);
+            exit;
+        }
+    });
+
     $router->code(404, function() use ($view, $lang, $theme_dir) {
         return $view->get("$theme_dir/information.php", [
             'title' => '404',
