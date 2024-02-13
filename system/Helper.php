@@ -134,4 +134,14 @@ final class Helper
 
         return (int) $size;
     }
+
+    /**
+     * Returns true if the given CSRF token is valid, false otherwise
+     * @param string $value the CSRF token
+     * @return bool true if the given CSRF token is valid, false otherwise
+     */
+    public static function isCsrfTokenValid(string $value)
+    {
+        return isset($_COOKIE['csrf_token']) && $_COOKIE['csrf_token'] === $value;
+    }
 }

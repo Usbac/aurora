@@ -64,4 +64,26 @@ final class ViewHelper
     {
         return \Aurora\System\Helper::getUrl($path);
     }
+
+    /**
+     * Returns the current CSRF token, it creates it if it's not set
+     * @return string the CSRF token
+     */
+    public function csrfToken(): string
+    {
+        $token = bin2hex(random_bytes(8));
+
+        if (!isset($_COOKIE['csrf_token'])) {
+            setcookie('csrf_token', $token, [
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]);
+
+            return $token;
+        }
+
+        return $_COOKIE['csrf_token'];
+    }
 }
