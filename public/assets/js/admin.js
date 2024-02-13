@@ -90,6 +90,11 @@ class Form {
 
     static #handleResponse(res, form_id) {
         let field_errors = false;
+
+        if (res?.reload) {
+            location.reload();
+        }
+
         Object.keys(res?.errors ?? {}).forEach(key => {
             let input = get(`#${form_id} *[name="${key}"]`);
             if (!input) {
