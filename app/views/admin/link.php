@@ -41,9 +41,11 @@
                     <button class="slider" onclick="get('#status').click()"></button>
                 </div>
             </div>
-            <div class="extra-data">
-                <span><?= t('id') ?>: <?= e($link['id']) ?></span>
-            </div>
+            <?php if (\Aurora\System\Helper::isValidId($link['id'] ?? false)): ?>
+                <div class="extra-data">
+                    <span><?= t('id') ?>: <?= e($link['id']) ?></span>
+                </div>
+            <?php endif ?>
         </div>
     </div>
 <?php $this->sectionEnd() ?>
