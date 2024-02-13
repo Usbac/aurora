@@ -15,6 +15,7 @@
             <input id="password-confirm" type="password" name="password_confirm" value=""/>
         </div>
         <input type="hidden" name="hash" value="<?= e($_GET['hash']) ?>"/>
+        <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
         <button onclick="passwordRestore()"><?= t('restore_your_password') ?></button>
     </div>
 </body>

@@ -88,6 +88,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
     </div>
     <dialog id="image-dialog" class="image-dialog"></dialog>
 <?php $this->sectionEnd() ?>
@@ -110,7 +111,9 @@
                 return;
             }
 
-            Form.send('/admin/users/remove/' + window.id, null, btn).then(res => {
+            Form.send('/admin/users/remove/' + window.id, null, btn, {
+                csrf: <?= js($this->csrfToken()) ?>,
+            }).then(res => {
                 if (res.success) {
                     setTimeout(() => history.back(), 2000);
                 }

@@ -87,6 +87,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
     </div>
 <?php $this->sectionEnd() ?>
 
@@ -109,7 +110,9 @@
                 return;
             }
 
-            Form.send('/admin/pages/remove/' + window.id, null, btn).then(res => {
+            Form.send('/admin/pages/remove/' + window.id, null, btn, {
+                csrf: <?= js($this->csrfToken()) ?>,
+            }).then(res => {
                 if (res.success) {
                     setTimeout(() => history.back(), 2000);
                 }

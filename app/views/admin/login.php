@@ -18,6 +18,7 @@
             <label for="password"><?= t('password') ?></label>
             <input id="password" type="password" name="password" value=""/>
         </div>
+        <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
         <button onclick="Form.send('/admin/login', 'login-form').then(loginHandler);"><?= t('sign_in') ?></button>
         <button class="pointer light" onclick="get('#login-form').classList.add('hidden'); get('#restore-form').classList.remove('hidden');"><?= t('forgot_password') ?></button>
     </div>
@@ -29,6 +30,7 @@
             <label for="restore-email"><?= t('email') ?></label>
             <input id="restore-email" type="email" name="email" value="" maxlength="255"/>
         </div>
+        <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
         <button onclick="sendPasswordRestore()"><?= t('get_new_password') ?></button>
         <button class="pointer light" onclick="get('#login-form').classList.remove('hidden'); get('#restore-form').classList.add('hidden');"><?= t('go_back') ?></button>
     </div>

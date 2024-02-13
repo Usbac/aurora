@@ -110,18 +110,20 @@
     let content = get('.content');
 
     function uploadFile() {
-        Form.send('/admin/media/upload' + window.location.search, 'file-form', get('#file-form button'))
-            .then(res => {
-                handleResponse(res);
-                get('#input-file').value = '';
-            });
+        Form.send('/admin/media/upload' + window.location.search, 'file-form', get('#file-form button'), {
+            csrf: <?= js($this->csrfToken()) ?>,
+        }).then(res => {
+            handleResponse(res);
+            get('#input-file').value = '';
+        });
     }
 
     function deleteFile(i) {
         file_name = get('#file-name-' + i).innerText;
         if (confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(file_name))) {
-            Form.send('/admin/media/remove?path=' + path + '/' + file_name)
-                .then(res => handleResponse(res));
+            Form.send('/admin/media/remove?path=' + path + '/' + file_name, null, null, {
+                csrf: <?= js($this->csrfToken()) ?>,
+            }).then(res => handleResponse(res));
         }
     }
 
@@ -141,8 +143,9 @@
     }
 
     function createFolder() {
-        Form.send('/admin/media/createFolder' + window.location.search, 'folder-dialog')
-            .then(res => handleResponse(res));
+        Form.send('/admin/media/createFolder' + window.location.search, 'folder-dialog', null, {
+            csrf: <?= js($this->csrfToken()) ?>,
+        }).then(res => handleResponse(res));
     }
 
     function openMoveDialog(i) {
@@ -151,8 +154,9 @@
     }
 
     function moveFile() {
-        Form.send('/admin/media/move?path=' + path + '/' + file_name, 'move-dialog')
-            .then(res => handleResponse(res));
+        Form.send('/admin/media/move?path=' + path + '/' + file_name, 'move-dialog', null, {
+            csrf: <?= js($this->csrfToken()) ?>,
+        }).then(res => handleResponse(res));
     }
 
     function openDuplicateDialog(i) {
@@ -161,8 +165,9 @@
     }
 
     function duplicateFile() {
-        Form.send('/admin/media/duplicate?path=' + path + '/' + file_name, 'duplicate-dialog')
-            .then(res => handleResponse(res));
+        Form.send('/admin/media/duplicate?path=' + path + '/' + file_name, 'duplicate-dialog', null, {
+            csrf: <?= js($this->csrfToken()) ?>,
+        }).then(res => handleResponse(res));
     }
 
     function copyPath(path) {
@@ -195,6 +200,7 @@
 
         document.body.style.cursor = 'wait';
         let data = new FormData();
+        data.append('csrf', <?= js($this->csrfToken()) ?>);
         Array.from(event.dataTransfer.files).map(file => data.append('file[]', file));
 
         fetch('/admin/media/upload' + window.location.search, {

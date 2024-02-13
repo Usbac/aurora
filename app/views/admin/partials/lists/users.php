@@ -39,15 +39,17 @@
                             <div
                                 class="danger"
                                 onclick="
-                                    if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($user['name'])) ?>)))
-                                        Form.send('/admin/users/remove/' + <?= e(js($user['id'])) ?>)
-                                            .then(res => {
-                                                if (res.success) {
-                                                    Dropdown.close();
-                                                    Listing.setNextPage(1);
-                                                    Listing.loadNextPage();
-                                                }
-                                            });
+                                    if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($user['name'])) ?>))) {
+                                        Form.send('/admin/users/remove/' + <?= e(js($user['id'])) ?>, null, null, {
+                                            csrf: <?= e(js($this->csrfToken())) ?>,
+                                        }).then(res => {
+                                            if (res.success) {
+                                                Dropdown.close();
+                                                Listing.setNextPage(1);
+                                                Listing.loadNextPage();
+                                            }
+                                        });
+                                    }
                                 "
                             ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
                         <?php endif ?>

@@ -51,6 +51,7 @@
                 <textarea id="meta-description" name="meta_description" char-count><?= e($tag['meta_description'] ?? '') ?></textarea>
             </div>
         </div>
+        <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
     </div>
 <?php $this->sectionEnd() ?>
 
@@ -72,7 +73,9 @@
                 return;
             }
 
-            Form.send('/admin/tags/remove/' + window.id, null, btn).then(res => {
+            Form.send('/admin/tags/remove/' + window.id, null, btn, {
+                csrf: <?= js($this->csrfToken()) ?>,
+            }).then(res => {
                 if (res.success) {
                     setTimeout(() => history.back(), 2000);
                 }
