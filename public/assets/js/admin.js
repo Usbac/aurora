@@ -61,8 +61,10 @@ class Snackbar {
 }
 
 class Form {
-    static #getData(form_id) {
+    static #getData(form_id, initial_data = {}) {
         let form_data = new FormData;
+
+        Object.keys(initial_data).forEach(key => form_data.append(key, initial_data[key]));
 
         document.querySelectorAll(`#${form_id} *[name]`).forEach(el => {
             let type = el.getAttribute('type');
@@ -119,7 +121,7 @@ class Form {
         return res;
     }
 
-    static send(url, form_id = null, btn = null) {
+    static send(url, form_id = null, btn = null, extra_data = {}) {
         let btn_el = btn ? btn : event.target;
 
         if (btn_el) {
@@ -137,7 +139,7 @@ class Form {
 
         return fetch(url, {
             method: 'POST',
-            body: this.#getData(form_id),
+            body: this.#getData(form_id, extra_data),
         })
             .then(res => {
                 if (res.redirected) {
