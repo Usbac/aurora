@@ -105,13 +105,14 @@
 </dialog>
 
 <script>
+    let csrf_token = <?= js($this->csrfToken()) ?>;
     let path = <?= js($_GET['path'] ?? \Aurora\System\Kernel::config('content')) ?>;
     let file_name = null;
     let content = get('.content');
 
     function uploadFile() {
         Form.send('/admin/media/upload' + window.location.search, 'file-form', get('#file-form button'), {
-            csrf: <?= js($this->csrfToken()) ?>,
+            csrf: csrf_token,
         }).then(res => {
             handleResponse(res);
             get('#input-file').value = '';
@@ -122,7 +123,7 @@
         file_name = get('#file-name-' + i).innerText;
         if (confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(file_name))) {
             Form.send('/admin/media/remove?path=' + path + '/' + file_name, null, null, {
-                csrf: <?= js($this->csrfToken()) ?>,
+                csrf: csrf_token,
             }).then(res => handleResponse(res));
         }
     }
@@ -133,8 +134,9 @@
     }
 
     function editFile() {
-        Form.send('/admin/media/save?path=' + path + '/' + file_name, 'edit-dialog')
-            .then(res => handleResponse(res));
+        Form.send('/admin/media/save?path=' + path + '/' + file_name, 'edit-dialog', null, {
+            csrf: csrf_token,
+        }).then(res => handleResponse(res));
     }
 
     function openFolderDialog() {
@@ -144,7 +146,7 @@
 
     function createFolder() {
         Form.send('/admin/media/createFolder' + window.location.search, 'folder-dialog', null, {
-            csrf: <?= js($this->csrfToken()) ?>,
+            csrf: csrf_token,
         }).then(res => handleResponse(res));
     }
 
@@ -155,7 +157,7 @@
 
     function moveFile() {
         Form.send('/admin/media/move?path=' + path + '/' + file_name, 'move-dialog', null, {
-            csrf: <?= js($this->csrfToken()) ?>,
+            csrf: csrf_token,
         }).then(res => handleResponse(res));
     }
 
@@ -166,7 +168,7 @@
 
     function duplicateFile() {
         Form.send('/admin/media/duplicate?path=' + path + '/' + file_name, 'duplicate-dialog', null, {
-            csrf: <?= js($this->csrfToken()) ?>,
+            csrf: csrf_token,
         }).then(res => handleResponse(res));
     }
 
