@@ -70,6 +70,8 @@
 </html>
 <script>
     window.addEventListener('load', () => {
+        updateMetaThemeColor(<?= js(($_COOKIE['theme'] ?? '') !== 'dark') ?>);
+
         document.querySelectorAll('.admin-options > a').forEach(el => {
             if (location.pathname.startsWith(el.getAttribute('href'))) {
                 el.dataset.checked = true;
@@ -79,8 +81,15 @@
         Dropdown.init();
     });
 
+    function updateMetaThemeColor(light) {
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', light ? '#ffffff' : '#171821');
+    }
+
     document.getElementById('toggle-theme').addEventListener('click', () => {
-        let theme = get('#css-dark').toggleAttribute('disabled') ? 'light' : 'dark';
+        let is_light_enabled = get('#css-dark').toggleAttribute('disabled');
+        let theme = is_light_enabled ? 'light' : 'dark';
+
+        updateMetaThemeColor(is_light_enabled);
         get('#toggle-theme').dataset.theme = theme;
         document.cookie = 'theme=' + theme + ';path=/';
     });
