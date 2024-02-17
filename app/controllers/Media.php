@@ -168,6 +168,10 @@ final class Media
             throw new \InvalidArgumentException("Path '$destination' is not a valid path within " . self::$directory);
         }
 
+        if ($source === $destination) {
+            $destination = \Aurora\System\Helper::getNewFilename($destination);
+        }
+
         return \Aurora\System\Helper::copy($source, $destination);
     }
 

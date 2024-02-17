@@ -144,4 +144,27 @@ final class Helper
     {
         return isset($_COOKIE['csrf_token']) && $_COOKIE['csrf_token'] === $value;
     }
+
+    /**
+     * Returns the new name for the given file name, used to handle filename collision. The suffix " ([number])" is used.
+     * e.g., given "a.txt", if file "a.txt" exists then "a (2).txt" will be returned
+     * @param string $filename the filename
+     * @return string the new filename
+     */
+    public static function getNewFilename(string $filename): string
+    {
+        $new = $filename;
+        $i = 2;
+
+        while (file_exists($new)) {
+            $path_info = pathinfo($new);
+            $new_filename = preg_replace('/ \((\d+)\)$/', '', $path_info['filename']);
+            $new_filename .= " ($i)";
+
+            $new = $path_info['dirname'] . "/$new_filename" . (empty($path_info['extension']) ? '' : ('.' . $path_info['extension']));
+            $i++;
+        }
+
+        return $new;
+    }
 }
