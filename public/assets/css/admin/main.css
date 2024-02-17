@@ -148,6 +148,7 @@ button.loading,
     animation: rotation 1s infinite linear;
     width: var(--size);
     height: var(--size);
+    stroke: var(--main-color);
 }
 
 input,
@@ -635,7 +636,7 @@ textarea.code {
     object-fit: contain !important;
     padding: 20%;
     box-sizing: border-box;
-    background: var(--third-color);
+    background: white;
 }
 
 /* login */
@@ -1236,6 +1237,10 @@ textarea.code {
 .listing-row.file .custom-media svg {
     --image-size: 32px;
     padding: 9px 13px;
+}
+
+.listing-row.file .custom-media.file svg {
+    fill: var(--main-color);
 }
 
 .listing-row.file .custom-media.folder svg {

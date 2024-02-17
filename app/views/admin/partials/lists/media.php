@@ -7,7 +7,7 @@
                     <img src="<?= e($file_path) ?>"/>
                 </a>
             <?php elseif ($file['is_file']): ?>
-                <a href="<?= e($file_path) ?>" target="_blank" class="pointer custom-media">
+                <a href="<?= e($file_path) ?>" target="_blank" class="pointer custom-media file">
                     <?= $this->include('icons/file.svg') ?>
                 </a>
             <?php else: ?>
