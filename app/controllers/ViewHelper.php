@@ -8,12 +8,12 @@ final class ViewHelper
 
     /**
      * Returns the url or path to obtain a file without unnecessary cache
-     * @param string $file the file url or path
+     * @param string $filename the file url or path
      * @return string the url or path to obtain a file without unnecessary cache
      */
-    public function getFileQuery(string $file): string
+    public function getFileQuery(string $filename): string
     {
-        return "$file?v=" . filemtime(\Aurora\System\Helper::getPath($file));
+        return "$filename?v=" . filemtime(\Aurora\System\Helper::getPath($filename));
     }
 
     /**
