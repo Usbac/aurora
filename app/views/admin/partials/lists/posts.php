@@ -35,13 +35,7 @@
                                 if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($post['title'])) ?>))) {
                                     Form.send('/admin/posts/remove/' + <?= e(js($post['id'])) ?>, null, null, {
                                         csrf: <?= e(js($this->csrfToken())) ?>,
-                                    }).then(res => {
-                                        if (res.success) {
-                                            Dropdown.close();
-                                            Listing.setNextPage(1);
-                                            Listing.loadNextPage();
-                                        }
-                                    });
+                                    }).then(res => listHandleResponse(res));
                                 }
                             "
                         ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>

@@ -73,5 +73,14 @@
             Listing.setNextPageUrl(<?= js("$current_path/page") ?>);
             Listing.loadNextPage();
         });
+
+        function listHandleResponse(res) {
+            if (res.success) {
+                document.querySelector('dialog[open]')?.close();
+                Dropdown.close();
+                Listing.setNextPage(1);
+                Listing.loadNextPage();
+            }
+        }
     </script>
 <?php $this->sectionEnd() ?>
