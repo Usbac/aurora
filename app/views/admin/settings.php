@@ -273,8 +273,8 @@
                 ? 'initial'
                 : 'none');
             document.querySelectorAll('.tabs > a').forEach(el => el.getAttribute('href') == location.hash
-                ? el.classList.add('active')
-                : el.classList.remove('active'));
+                ? el.setAttribute('data-checked', true)
+                : el.removeAttribute('data-checked'));
         });
 
         window.addEventListener('load', () => {

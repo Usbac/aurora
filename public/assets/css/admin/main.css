@@ -211,19 +211,19 @@ span.loading {
     display: flex;
     align-items: center;
     padding: var(--options-padding);
-    color: inherit;
-    text-decoration: none;
     border-radius: var(--border-radius);
+    text-decoration: none;
+    color: inherit;
 }
 
-.tabs > a.active {
+.tabs > a[data-checked] {
     background-color: var(--third-color);
     font-weight: bold;
 }
 
 .tabs > a svg {
     min-width: 16px;
-    margin-right: 10px;
+    margin-right: 17px;
     fill: var(--main-color);
 }
 
