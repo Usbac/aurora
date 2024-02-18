@@ -146,7 +146,7 @@ final class Helper
     }
 
     /**
-     * Returns the new name for the given file name, used to handle filename collision. The suffix " ([number])" is used.
+     * Returns the new name for the given filename, used to handle filename collision. The suffix " ([number])" is used.
      * e.g., given "a.txt", if file "a.txt" exists then "a (2).txt" will be returned
      * @param string $filename the filename
      * @return string the new filename
