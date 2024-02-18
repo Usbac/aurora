@@ -91,8 +91,6 @@ class Form {
     }
 
     static #handleResponse(res, form_id) {
-        let field_errors = false;
-
         if (res?.reload) {
             location.reload();
         }
@@ -107,15 +105,12 @@ class Form {
             err.classList.add('field-error');
             err.innerHTML = res.errors[key];
             input.appendAfter(err);
-            field_errors = true;
         });
 
         if (res?.success) {
             Snackbar.show(res?.msg ? res.msg : LANG.done);
         } else if (res?.errors?.hasOwnProperty(0)) {
             Snackbar.show(res.errors[0], false);
-        } else if (res?.success === false) {
-            Snackbar.show(LANG[field_errors ? 'field_errors' : 'unexpected_error'], false);
         }
 
         return res;

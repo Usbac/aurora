@@ -53,7 +53,6 @@ return [
     'error_rename_item' => 'Error renaming item. The name is invalid, the file does not comply with the server rules or the path is not writable.',
     'error_sending_email' => 'Error sending email. Verify the server configuration or contact an administrator',
     'error_upload_file' => 'Error uploading file. The name is invalid, the size excees the <a href="/admin/settings#info">server rules</a> or the path is not writable.',
-    'field_errors' => 'One or more fields have an error. Please check and try again',
     'file_size_upload_limit' => 'File size upload limit',
     'file_size_upload_limit_description' => 'The value is the lowest possible value between the <code>post_max_size</code> and the <code>upload_max_filesize</code> options of your PHP configuration.',
     'folder' => 'Folder',
