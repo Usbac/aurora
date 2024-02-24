@@ -42,7 +42,7 @@
                                     if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($user['name'])) ?>))) {
                                         Form.send('/admin/users/remove/' + <?= e(js($user['id'])) ?>, null, null, {
                                             csrf: <?= e(js($this->csrfToken())) ?>,
-                                        }).then(res => listHandleResponse(res));
+                                        }).then(res => Listing.handleResponse(res));
                                     }
                                 "
                             ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>

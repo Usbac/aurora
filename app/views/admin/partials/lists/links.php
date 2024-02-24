@@ -28,7 +28,7 @@
                                 if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($link['title'])) ?>))) {
                                     Form.send('/admin/links/remove/' + <?= e(js($link['id'])) ?>, null, null, {
                                         csrf: <?= e(js($this->csrfToken())) ?>,
-                                    }).then(res => listHandleResponse(res));
+                                    }).then(res => Listing.handleResponse(res));
                                 }
                             "
                         ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>

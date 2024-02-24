@@ -114,7 +114,7 @@
         Form.send('/admin/media/upload' + window.location.search, 'file-form', get('#file-form button'), {
             csrf: csrf_token,
         }).then(res => {
-            listHandleResponse(res);
+            Listing.handleResponse(res);
             get('#input-file').value = '';
         });
     }
@@ -124,7 +124,7 @@
         if (confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(file_name))) {
             Form.send('/admin/media/remove?path=' + path + '/' + file_name, null, null, {
                 csrf: csrf_token,
-            }).then(res => listHandleResponse(res));
+            }).then(res => Listing.handleResponse(res));
         }
     }
 
@@ -136,7 +136,7 @@
     function editFile() {
         Form.send('/admin/media/save?path=' + path + '/' + file_name, 'edit-dialog', null, {
             csrf: csrf_token,
-        }).then(res => listHandleResponse(res));
+        }).then(res => Listing.handleResponse(res));
     }
 
     function openFolderDialog() {
@@ -147,7 +147,7 @@
     function createFolder() {
         Form.send('/admin/media/createFolder' + window.location.search, 'folder-dialog', null, {
             csrf: csrf_token,
-        }).then(res => listHandleResponse(res));
+        }).then(res => Listing.handleResponse(res));
     }
 
     function openMoveDialog(i) {
@@ -158,7 +158,7 @@
     function moveFile() {
         Form.send('/admin/media/move?path=' + path + '/' + file_name, 'move-dialog', null, {
             csrf: csrf_token,
-        }).then(res => listHandleResponse(res));
+        }).then(res => Listing.handleResponse(res));
     }
 
     function openDuplicateDialog(i) {
@@ -169,7 +169,7 @@
     function duplicateFile() {
         Form.send('/admin/media/duplicate?path=' + path + '/' + file_name, 'duplicate-dialog', null, {
             csrf: csrf_token,
-        }).then(res => listHandleResponse(res));
+        }).then(res => Listing.handleResponse(res));
     }
 
     function copyPath(path) {
@@ -217,7 +217,7 @@
                 Snackbar.show(res.errors[0], false);
             }
 
-            listHandleResponse(res);
+            Listing.handleResponse(res);
         })
         .catch(() => Snackbar.show(LANG.unexpected_error, false))
         .finally(() => document.body.style.cursor = 'default');

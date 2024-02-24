@@ -232,6 +232,15 @@ class Listing {
                 get('#main-listing > svg')?.remove();
             });
     }
+
+    static handleResponse(res) {
+        if (res.success) {
+            document.querySelector('dialog[open]')?.close();
+            Dropdown.close();
+            this.setNextPage(1);
+            this.loadNextPage();
+        }
+    }
 }
 
 class Dropdown {
