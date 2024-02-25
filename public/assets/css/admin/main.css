@@ -636,7 +636,7 @@ textarea.code {
     object-fit: contain !important;
     padding: 20%;
     box-sizing: border-box;
-    background: white;
+    background: var(--third-color);
 }
 
 /* login */
