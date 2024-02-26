@@ -20,7 +20,7 @@
 </div>
 <div class="media-options">
     <button onclick="downloadAll()" title="<?= t('download_zip') ?>"><?= $this->include('icons/zip.svg') ?></button>
-    <button <?php if (!$can_edit_media): ?> disabled <?php endif ?> onclick="openFolderDialog()" title="<?= t('create_folder') ?>"><?= $this->include('icons/folder.svg') ?></button>
+    <button <?php if (!$can_edit_media): ?> disabled <?php endif ?> onclick="openCreateFolderDialog()" title="<?= t('create_folder') ?>"><?= $this->include('icons/folder.svg') ?></button>
     <div id="file-form">
         <button onclick="get('#input-file').click()" title="<?= t('upload_file') ?>" <?php if (!$can_edit_media): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
         <input id="input-file" type="file" class="hidden" name="file" oninput="uploadFile()"/>
@@ -130,7 +130,9 @@
 
     function openEditFileDialog(i) {
         file_name = get('#file-name-input').value = get('#file-name-' + i).innerText;
-        get('#edit-dialog').showModal();
+        let dialog = get('#edit-dialog');
+        removeErrors(dialog);
+        dialog.showModal();
     }
 
     function editFile() {
@@ -139,9 +141,11 @@
         }).then(res => Listing.handleResponse(res));
     }
 
-    function openFolderDialog() {
+    function openCreateFolderDialog() {
         get('#folder-input').value = '';
-        get('#folder-dialog').showModal();
+        let dialog = get('#folder-dialog');
+        removeErrors(dialog);
+        dialog.showModal();
     }
 
     function createFolder() {
@@ -152,7 +156,9 @@
 
     function openMoveDialog(i) {
         file_name = get('#file-name-' + i).innerText;
-        get('#move-dialog').showModal();
+        let dialog = get('#move-dialog');
+        removeErrors(dialog);
+        dialog.showModal();
     }
 
     function moveFile() {
@@ -193,6 +199,10 @@
         if (confirm(<?= js(t('download_media_description', false)) ?>)) {
             location = '/admin/settings/media_download?path=' + path;
         }
+    }
+
+    function removeErrors(dialog) {
+        dialog.querySelectorAll('.field-error').forEach(el => el.remove());
     }
 
     content.addEventListener('dragover', event => event.preventDefault());
