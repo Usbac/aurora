@@ -128,8 +128,7 @@ class Form {
         }
 
         if (form_id) {
-            document.querySelectorAll(`#${form_id} *[name] + span.field-error`)
-                .forEach(el => el.remove());
+            document.querySelectorAll(`#${form_id} .field-error`).forEach(el => el.remove());
         }
 
         return fetch(url, {
