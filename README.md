@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="public/assets/logo.svg" alt="Aurora logo" width="200">
+  <img src="public/assets/logo.svg" alt="Aurora logo" width="140">
   <br>
   Aurora
   <br>
