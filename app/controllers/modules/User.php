@@ -20,6 +20,12 @@ final class User extends \Aurora\App\ModuleBase
         'id' => 'users.id ASC',
     ];
 
+    /**
+     * Updates an existing user
+     * @param int $id the user id
+     * @param array $data the new data
+     * @return string|bool the id of the user on success, false otherwise
+     */
     public function save(int $id, array $data): int|false
     {
         $res = $this->db->update($this->table, [
@@ -38,6 +44,11 @@ final class User extends \Aurora\App\ModuleBase
         return $res ? $id : false;
     }
 
+    /**
+     * Adds a new user
+     * @param array $data the user data
+     * @return string|bool the id of the new user on success, false otherwise
+     */
     public function add(array $data): string|bool
     {
         $time = time();
@@ -54,6 +65,12 @@ final class User extends \Aurora\App\ModuleBase
         ]);
     }
 
+    /**
+     * Handles the login of an user
+     * @param string $email the user's email
+     * @param string $password the user's password
+     * @return array the array with the login errors, if empty it means the user has successfully logged in.
+     */
     public function handleLogin(string $email, string $password): array
     {
         $user = $this->get([
@@ -75,6 +92,13 @@ final class User extends \Aurora\App\ModuleBase
         return $errors;
     }
 
+    /**
+     * Sends an email to restore the password of an user
+     * @param string $email the user's email
+     * @param string $hash the hash to restore the password
+     * @param string $message the email's content
+     * @return array the array with the errors, if empty it means the email has been sent.
+     */
     public function requestPasswordRestore(string $email, string $hash, string $message): array
     {
         $user = $this->get([
@@ -102,6 +126,13 @@ final class User extends \Aurora\App\ModuleBase
         return $errors;
     }
 
+    /**
+     * Restores an user's password
+     * @param string $hash the hash to restore the password
+     * @param string $password the new password
+     * @param string $password_confirm the confirmation of the new password
+     * @return string the error message, if empty it means the password has been successfully been restored
+     */
     public function passwordRestore(string $hash, string $password, string $password_confirm): string
     {
         $restore = $this->db->query('SELECT * FROM password_restores WHERE hash = ?', $hash)->fetch();
@@ -129,6 +160,11 @@ final class User extends \Aurora\App\ModuleBase
         return $error;
     }
 
+    /**
+     * Returns an array with all the user fields that contain an error
+     * @param array $data the user fields
+     * @return array the array with the user fields that contain an error
+     */
     public function checkFields(array $data, $id): array
     {
         $errors = [];
@@ -174,6 +210,11 @@ final class User extends \Aurora\App\ModuleBase
         return $errors;
     }
 
+    /**
+     * Returns the query conditions to obtain users based on the given filters
+     * @param array $filters the filters
+     * @return string the query conditions
+     */
     public function getCondition(array $filters): string
     {
         $where = [];
@@ -194,11 +235,22 @@ final class User extends \Aurora\App\ModuleBase
         return implode(' AND ', $where);
     }
 
+    /**
+     * Returns the given password hashed
+     * @param string $password the password
+     * @return string the password hashed
+     */
     public function getPassword(string $password): string
     {
         return password_hash($password, PASSWORD_BCRYPT, [ 'cost' => 10 ]);
     }
 
+    /**
+     * Checks the given password and its confirmation
+     * @param string $password the password
+     * @param string $password_confirm the password confirmation
+     * @return string the error message, if empty it means both passwords are equal and valid
+     */
     private function checkPassword(string $password, string $password_confirm): string
     {
         if (strlen($password) < 8) {

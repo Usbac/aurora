@@ -12,21 +12,41 @@ final class Link extends \Aurora\App\ModuleBase
         'status' => 'links.status DESC, links.title ASC',
     ];
 
+    /**
+     * Returns the links that must be shown in the header
+     * @return array the links
+     */
     public function getHeaderLinks(): array
     {
         return $this->getPage(null, null, 'status', 'order');
     }
 
+    /**
+     * Adds a new link
+     * @param array $data the link data
+     * @return string|bool the id of the new link on success, false otherwise
+     */
     public function add(array $data): string|bool
     {
         return $this->db->insert($this->table, $this->getBaseData($data));
     }
 
+    /**
+     * Updates an existing link
+     * @param int $id the link id
+     * @param array $data the new data
+     * @return string|bool the id of the link on success, false otherwise
+     */
     public function save(int $id, array $data): bool
     {
         return $this->db->update($this->table, $this->getBaseData($data), $id) ? $id : false;
     }
 
+    /**
+     * Returns an array with all the link fields that contain an error
+     * @param array $data the link fields
+     * @return array the array with the link fields that contain an error
+     */
     public function checkFields(array $data): array
     {
         $errors = [];
@@ -43,6 +63,11 @@ final class Link extends \Aurora\App\ModuleBase
         return $errors;
     }
 
+    /**
+     * Returns the query conditions to obtain links based on the given filters
+     * @param array $filters the filters
+     * @return string the query conditions
+     */
     public function getCondition(array $filters): string
     {
         $where = [];
@@ -59,6 +84,11 @@ final class Link extends \Aurora\App\ModuleBase
         return implode(' AND ', $where);
     }
 
+    /**
+     * Returns the right data to add or save a link
+     * @param array $data the link data
+     * @return array the right data
+     */
     private function getBaseData(array $data): array
     {
         return [

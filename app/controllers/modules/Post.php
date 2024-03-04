@@ -24,12 +24,11 @@ final class Post extends \Aurora\App\ModuleBase
         'views' => 'views DESC, posts.title ASC',
     ];
 
-    protected function getRowData($data): mixed
-    {
-        $data['tags'] = $this->getTags(empty($data['tags_id']) ? [] : explode(',', $data['tags_id']));
-        return $data;
-    }
-
+    /**
+     * Adds a new post
+     * @param array $data the post data
+     * @return string|bool the id of the new post on success, false otherwise
+     */
     public function add(array $data): string|bool
     {
         try {
@@ -46,6 +45,12 @@ final class Post extends \Aurora\App\ModuleBase
         return $id;
     }
 
+    /**
+     * Updates an existing post
+     * @param int $id the post id
+     * @param array $data the new data
+     * @return string|bool the id of the post on success, false otherwise
+     */
     public function save(int $id, array $data): bool
     {
         try {
@@ -62,6 +67,11 @@ final class Post extends \Aurora\App\ModuleBase
         return $res;
     }
 
+    /**
+     * Returns an array with all the post fields that contain an error
+     * @param array $data the post fields
+     * @return array the array with the post fields that contain an error
+     */
     public function checkFields(array $data, $id): array
     {
         $errors = [];
@@ -90,6 +100,11 @@ final class Post extends \Aurora\App\ModuleBase
         return $errors;
     }
 
+    /**
+     * Returns the query conditions to obtain posts based on the given filters
+     * @param array $filters the filters
+     * @return string the query conditions
+     */
     public function getCondition(array $filters): string
     {
         $where = [];
@@ -114,6 +129,22 @@ final class Post extends \Aurora\App\ModuleBase
         return implode(' AND ', $where);
     }
 
+    /**
+     * Returns the post with additional data mapped into it
+     * @param mixed $data the post data
+     * @return mixed the post with additional data
+     */
+    protected function getRowData($data): mixed
+    {
+        $data['tags'] = $this->getTags(empty($data['tags_id']) ? [] : explode(',', $data['tags_id']));
+        return $data;
+    }
+
+    /**
+     * Returns the names of the tags with the given ids
+     * @param array $ids the tags ids
+     * @return array the name of the tags
+     */
     private function getTags(array $ids): array
     {
         static $tags = null;
@@ -134,6 +165,11 @@ final class Post extends \Aurora\App\ModuleBase
         return $result;
     }
 
+    /**
+     * Sets the tags for the post with the given id
+     * @param int $id the post id
+     * @param array $tags the tags ids
+     */
     private function setTags(int $id, array $tags): void
     {
         $this->db->delete('posts_to_tags', $id, 'post_id');
@@ -142,6 +178,11 @@ final class Post extends \Aurora\App\ModuleBase
         }
     }
 
+    /**
+     * Returns the right data to add or save a post
+     * @param array $data the post data
+     * @return array the right data
+     */
     private function getBaseData(array $data): array
     {
         return [

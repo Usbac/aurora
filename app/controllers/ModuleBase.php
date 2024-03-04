@@ -4,11 +4,40 @@ namespace Aurora\App;
 
 class ModuleBase
 {
+    /**
+     * SELECT statement
+     * @var string
+     */
     protected string $select = '*';
+
+    /**
+     * Table
+     * @var string
+     */
     protected string $table = '';
+
+    /**
+     * JOIN statement
+     * @var string
+     */
     protected string $join = '';
+
+    /**
+     * GROUP BY statement
+     * @var string
+     */
     protected string $group_by = '';
+
+    /**
+     * Relation with other tables columns
+     * @var array
+     */
     protected array $relations = [];
+
+    /**
+     * ORDER BY statements
+     * @var array
+     */
     protected array $orders = [];
 
     public function __construct(protected $db = null, protected $language = null)

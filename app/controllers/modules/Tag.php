@@ -14,16 +14,32 @@ final class Tag extends \Aurora\App\ModuleBase
         'posts' => 'COUNT(post_id) DESC, tags.name ASC',
     ];
 
+    /**
+     * Adds a new tag
+     * @param array $data the tag data
+     * @return string|bool the id of the new tag on success, false otherwise
+     */
     public function add(array $data): string|bool
     {
         return $this->db->insert($this->table, $this->getBaseData($data));
     }
 
+    /**
+     * Updates an existing tag
+     * @param int $id the tag id
+     * @param array $data the new data
+     * @return string|bool the id of the tag on success, false otherwise
+     */
     public function save(int $id, array $data): bool
     {
         return $this->db->update($this->table, $this->getBaseData($data), $id) ? $id : false;
     }
 
+    /**
+     * Returns an array with all the tag fields that contain an error
+     * @param array $data the tag fields
+     * @return array the array with the tag fields that contain an error
+     */
     public function checkFields(array $data, $id): array
     {
         $errors = [];
@@ -49,6 +65,11 @@ final class Tag extends \Aurora\App\ModuleBase
         return $errors;
     }
 
+    /**
+     * Returns the query conditions to obtain tags based on the given filters
+     * @param array $filters the filters
+     * @return string the query conditions
+     */
     public function getCondition(array $filters): string
     {
         $where = [];
@@ -61,6 +82,11 @@ final class Tag extends \Aurora\App\ModuleBase
         return implode(' AND ', $where);
     }
 
+    /**
+     * Returns the right data to add or save a tag
+     * @param array $data the tag data
+     * @return array the right data
+     */
     private function getBaseData(array $data): array
     {
         return [

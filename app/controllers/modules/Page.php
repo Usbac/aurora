@@ -16,16 +16,33 @@ final class Page extends \Aurora\App\ModuleBase
         'views' => 'views DESC, pages.title ASC',
     ];
 
+    /**
+     * Adds a new page
+     * @param array $data the page data
+     * @return string|bool the id of the new page on success, false otherwise
+     */
     public function add(array $data): string|bool
     {
         return $this->db->insert($this->table, $this->getBaseData($data));
     }
 
+    /**
+     * Updates an existing page
+     * @param int $id the page id
+     * @param array $data the new data
+     * @return string|bool the id of the page on success, false otherwise
+     */
     public function save(int $id, array $data): bool
     {
         return $this->db->update($this->table, $this->getBaseData($data), $id) ? $id : false;
     }
 
+    /**
+     * Returns an array with all the page fields that contain an error
+     * @param array $data the page fields
+     * @param mixed $id the page id
+     * @return array the array with the page fields that contain an error
+     */
     public function checkFields(array $data, $id): array
     {
         $errors = [];
@@ -46,6 +63,11 @@ final class Page extends \Aurora\App\ModuleBase
         return $errors;
     }
 
+    /**
+     * Returns the query conditions to obtain pages based on the given filters
+     * @param array $filters the filters
+     * @return string the query conditions
+     */
     public function getCondition(array $filters): string
     {
         $where = [];
@@ -62,6 +84,11 @@ final class Page extends \Aurora\App\ModuleBase
         return implode(' AND ', $where);
     }
 
+    /**
+     * Returns the right data to add or save a page
+     * @param array $data the page data
+     * @return array the right data
+     */
     private function getBaseData(array $data): array
     {
         return [
