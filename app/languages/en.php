@@ -124,6 +124,7 @@ return [
     'rename' => 'Rename',
     'repeated_email' => 'Email already in use, try a different one',
     'repeated_slug' => 'Slug already in use, try a different one',
+    'invalid_slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
     'reset_views' => 'Reset views count',
     'reset_views_confirm' => 'Are you sure about resetting the views count of all items?',
     'restore_your_password' => 'Restore your password',

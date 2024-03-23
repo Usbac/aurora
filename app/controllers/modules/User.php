@@ -178,8 +178,8 @@ final class User extends \Aurora\App\ModuleBase
             $errors['slug'] = $this->language->get('repeated_slug');
         }
 
-        if (empty($data['slug'])) {
-            $errors['slug'] = $this->language->get('invalid_value');
+        if (empty($data['slug']) || !\Aurora\System\Helper::isSlugValid($data['slug'])) {
+            $errors['slug'] = $this->language->get('invalid_slug');
         }
 
         if (!empty($this->get([ 'email' => $data['email'], '!id' => $id ]))) {
