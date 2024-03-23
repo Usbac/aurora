@@ -146,6 +146,16 @@ final class Helper
     }
 
     /**
+     * Returns true if the given slug is valid
+     * @param string $value the slug
+     * @return bool true if the given slug is valid
+     */
+    public static function isSlugValid(string $value): bool
+    {
+        return preg_match('/^[a-zA-Z0-9\-_]+$/', $value) === 1;
+    }
+
+    /**
      * Returns the new name for the given filename, used to handle filename collision. The suffix " ([number])" is used.
      * e.g., given "a.txt", if file "a.txt" exists then "a (2).txt" will be returned
      * @param string $filename the filename
