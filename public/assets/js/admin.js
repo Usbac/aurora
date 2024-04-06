@@ -247,23 +247,23 @@ class Dropdown {
 
     static init() {
         let updateActiveDropdown = () => {
-            const VERTICAL_MARGIN = 4;
+            const MARGIN = 4;
 
             if (!this.#active_dropdown) {
                 return;
             }
 
             let btn_rect = this.#active_dropdown.original_btn.getBoundingClientRect();
-            this.#active_dropdown.style.top = (btn_rect.top + btn_rect.height + VERTICAL_MARGIN) + 'px';
+            this.#active_dropdown.style.top = (btn_rect.top + btn_rect.height + MARGIN) + 'px';
             this.#active_dropdown.style.left = btn_rect.left + 'px';
             let dropdown_rect = this.#active_dropdown.getBoundingClientRect();
 
-            if ((dropdown_rect.x + dropdown_rect.width) >= (window.innerWidth - VERTICAL_MARGIN)) {
+            if ((dropdown_rect.x + dropdown_rect.width) >= (window.innerWidth - MARGIN)) {
                 this.#active_dropdown.style.left = ((btn_rect.x - dropdown_rect.width) + btn_rect.width) + 'px';
             }
 
-            if (dropdown_rect.y + dropdown_rect.height >= (window.innerHeight - VERTICAL_MARGIN)) {
-                this.#active_dropdown.style.top = (btn_rect.y - dropdown_rect.height - VERTICAL_MARGIN) + 'px';
+            if (dropdown_rect.y + dropdown_rect.height >= (window.innerHeight - MARGIN)) {
+                this.#active_dropdown.style.top = (btn_rect.y - dropdown_rect.height - MARGIN) + 'px';
             }
         }
 
