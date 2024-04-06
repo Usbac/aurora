@@ -706,7 +706,7 @@ textarea.code {
     display: none;
 }
 
-#snackbar[show] {
+#snackbar[data-show] {
     top: 20px;
 }
 
@@ -1158,7 +1158,7 @@ textarea.code {
     overflow: hidden;
 }
 
-.dropdown-menu[active] {
+.dropdown-menu[data-active] {
     display: flex;
 }
 

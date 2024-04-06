@@ -48,14 +48,14 @@ class Snackbar {
         }
 
         get('#snackbar > span').innerHTML = msg;
-        snackbar.setAttribute('show', true);
+        snackbar.dataset.show = true;
         this.#timeout = setTimeout(() => this.hide(), 5000);
     }
 
     static hide() {
         let snackbar = get('#snackbar');
         clearTimeout(this.#timeout);
-        snackbar.removeAttribute('show');
+        delete snackbar.dataset.show;
         setTimeout(() => snackbar.classList.remove('error'), 200);
     }
 }
@@ -285,7 +285,7 @@ class Dropdown {
             this.#active_dropdown = dropdown;
 
             if (this.#active_dropdown) {
-                this.#active_dropdown.setAttribute('active', true);
+                this.#active_dropdown.dataset.active = true;
                 this.#active_dropdown.original_btn = dropdown_btn;
                 document.body.appendChild(this.#active_dropdown);
                 updateActiveDropdown();
@@ -295,7 +295,7 @@ class Dropdown {
 
     static close() {
         if (this.#active_dropdown) {
-            this.#active_dropdown.removeAttribute('active');
+            delete this.#active_dropdown.dataset.active;
             this.#active_dropdown.original_btn.appendChild(this.#active_dropdown);
         }
     }
