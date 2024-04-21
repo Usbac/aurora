@@ -41,7 +41,7 @@
     <div class="listing-container">
         <div class="listing">
             <div class="listing-row header">
-                <?php foreach ($columns as $column): ?>
+                <?php foreach (array_filter($columns, fn($column) => !isset($column['condition']) || $column['condition']) as $column): ?>
                     <div class="<?= e($column['class'] ?? '') ?>" title="<?= e($column['title']) ?>"><?= e($column['title']) ?></div>
                 <?php endforeach ?>
             </div>
