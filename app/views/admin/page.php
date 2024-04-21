@@ -43,7 +43,9 @@
                 <?php if (\Aurora\System\Helper::isValidId($page['id'] ?? false)): ?>
                     <div class="extra-data">
                         <span><?= t('id') ?>: <?= e($page['id']) ?></span>
-                        <span><?= t('number_views') ?>: <?= e($page['views']) ?></span>
+                        <?php if (setting('views_count')): ?>
+                            <span><?= t('number_views') ?>: <?= e($page['views']) ?></span>
+                        <?php endif ?>
                     </div>
                 <?php endif ?>
             </div>

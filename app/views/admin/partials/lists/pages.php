@@ -14,9 +14,11 @@
         <div class="w20">
             <?= $this->dateFormat($page['edited_at']) ?>
         </div>
-        <div class="w10 numeric">
-            <?= e($page['views']) ?>
-        </div>
+        <?php if (setting('views_count')): ?>
+            <div class="w10 numeric">
+                <?= e($page['views']) ?>
+            </div>
+        <?php endif ?>
         <div class="w10 row-actions">
             <div class="three-dots" onclick="return false" dropdown>
                 <?= $this->include('icons/dots.svg') ?>

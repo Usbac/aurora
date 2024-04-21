@@ -134,7 +134,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('slug'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('edited'), 'class' => 'w20' ],
-                [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric' ],
+                [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => setting('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
             'filters' => [
@@ -226,7 +226,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('author'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('publish_date'), 'class' => 'w20' ],
-                [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric' ],
+                [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => setting('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
             'filters' => [

@@ -20,9 +20,11 @@
         <div class="w20">
             <?= e($this->dateFormat($post['published_at'])) ?>
         </div>
-        <div class="w10 numeric">
-            <?= e($post['views'] ? $post['views'] : '') ?>
-        </div>
+        <?php if (setting('views_count')): ?>
+            <div class="w10 numeric">
+                <?= e($post['views'] ? $post['views'] : '') ?>
+            </div>
+        <?php endif ?>
         <div class="w10 row-actions">
             <div class="three-dots" onclick="return false" dropdown>
                 <?= $this->include('icons/dots.svg') ?>
