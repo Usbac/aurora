@@ -32,7 +32,7 @@
 </div>
 <div id="image-dialog-listing" class="listing">
     <div class="listing-row header">
-        <div class="w60"></div>
+        <div class="w100"></div>
         <div class="w20" title="<?= t('information') ?>"><?= t('information') ?></div>
         <div class="w20" title="<?= t('last_modification') ?>"><?= t('last_modification') ?></div>
     </div>
@@ -46,7 +46,7 @@
                 onclick="ImageDialog.setImagePage(<?= e(js($file_path)) ?>)"
             <?php endif ?>
         >
-            <div class="w60 align-center">
+            <div class="w100 align-center">
                 <?php if ($file['is_file']): ?>
                     <a href="<?= e($file_path) ?>" target="_blank" class="pointer" onclick="event.stopPropagation()">
                         <img src="<?= e($file_path) ?>"/>

@@ -1,6 +1,6 @@
 <?php foreach ($tags as $tag): ?>
     <a href="/admin/tags/edit?id=<?= e($tag['id']) ?>" class="listing-row tag">
-        <div class="w50">
+        <div class="w100">
             <h3><?= e($tag['name']) ?></h3>
         </div>
         <div class="w30">

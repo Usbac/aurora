@@ -131,7 +131,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'title' => $lang->get('pages'),
             'show_add_button' => \Aurora\App\Permission::can('edit_pages'),
             'columns' => [
-                [ 'title' => '', 'class' => 'w40' ],
+                [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('slug'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('edited'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric' ],
@@ -223,7 +223,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'title' => $lang->get('posts'),
             'show_add_button' => \Aurora\App\Permission::can('edit_posts'),
             'columns' => [
-                [ 'title' => '', 'class' => 'w40' ],
+                [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('author'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('publish_date'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric' ],
@@ -315,7 +315,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'title' => $lang->get('users'),
             'show_add_button' => \Aurora\App\Permission::can('edit_users'),
             'columns' => [
-                [ 'title' => '', 'class' => 'w40' ],
+                [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('role'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('last_active'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
@@ -410,7 +410,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'title' => $lang->get('links'),
             'show_add_button' => \Aurora\App\Permission::can('edit_links'),
             'columns' => [
-                [ 'title' => '', 'class' => 'w40' ],
+                [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('url'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('status'), 'class' => 'w20' ],
                 [ 'title' => $lang->get('order'), 'class' => 'w10 numeric' ],
@@ -483,7 +483,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'title' => $lang->get('tags'),
             'show_add_button' => \Aurora\App\Permission::can('edit_tags'),
             'columns' => [
-                [ 'title' => '', 'class' => 'w50' ],
+                [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('slug'), 'class' => 'w30' ],
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
@@ -572,7 +572,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 'folders' => $folders,
             ]),
             'columns' => [
-                [ 'title' => '', 'class' => 'w50' ],
+                [ 'title' => '', 'class' => 'w100' ],
                 [ 'title' => $lang->get('information'), 'class' => 'w20 file-info' ],
                 [ 'title' => $lang->get('last_modification'), 'class' => 'w20' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],

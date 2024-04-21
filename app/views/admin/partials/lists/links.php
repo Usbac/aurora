@@ -1,6 +1,6 @@
 <?php foreach ($links as $link): ?>
     <a href="/admin/links/edit?id=<?= e($link['id']) ?>" class="listing-row">
-        <div class="w40">
+        <div class="w100">
             <h3><?= e($link['title']) ?></h3>
         </div>
         <div class="w20">

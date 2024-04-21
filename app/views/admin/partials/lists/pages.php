@@ -1,6 +1,6 @@
 <?php foreach ($pages as $page): ?>
     <a href="/admin/pages/edit?id=<?= e($page['id']) ?>" class="listing-row">
-        <div class="w40">
+        <div class="w100">
             <h3>
                 <?= e($page['title']) ?>
                 <?php if (!$page['status']): ?>

@@ -1,7 +1,7 @@
 <?php foreach ($files as $i => $file): ?>
     <?php $file_path = '/' . \Aurora\System\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
     <div class="listing-row file">
-        <div class="w50 align-center">
+        <div class="w100 align-center">
             <?php if ($file['is_image']): ?>
                 <a href="<?= e($file_path) ?>" target="_blank" class="pointer">
                     <img src="<?= e($file_path) ?>"/>
