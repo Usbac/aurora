@@ -38,6 +38,9 @@
         <input type="text" name="search" placeholder="<?= t('search') ?>" value="<?= e($_GET['search'] ?? '') ?>"/>
         <button type="submit"><?= $this->include('icons/glass.svg') ?></button>
     </form>
+    <?php if (!empty($extra_header)): ?>
+        <?= $this->include($extra_header) ?>
+    <?php endif ?>
     <div class="listing-container">
         <div class="listing">
             <div class="listing-row header">
