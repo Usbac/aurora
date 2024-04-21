@@ -134,6 +134,7 @@ return [
     'scheduled' => 'Scheduled',
     'search' => 'Search',
     'searching' => 'Searching',
+    'select' => 'Select',
     'select_file' => 'Select file',
     'server_info' => 'Server info',
     'settings' => 'Settings',

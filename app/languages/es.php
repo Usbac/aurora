@@ -134,6 +134,7 @@ return [
     'scheduled' => 'Programado',
     'search' => 'Buscar',
     'searching' => 'Buscando',
+    'select' => 'Seleccionar',
     'select_file' => 'Seleccionar archivo',
     'server_info' => 'Información del servidor',
     'settings' => 'Configuración',
