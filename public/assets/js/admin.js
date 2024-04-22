@@ -194,8 +194,8 @@ class Listing {
 
         let listing = get('#main-listing');
         let total_items = get('#total-items');
-        let btn = get('button.load-more');
-        btn.setLoading();
+        let btn_load_more = get('button.load-more');
+        btn_load_more.setLoading();
 
         if (this.#next_page == 1) {
             listing.innerHTML = LOADING_ICON;
@@ -205,20 +205,18 @@ class Listing {
             .then(res => res.json())
             .then(res => {
                 if (this.#next_page == 1) {
-                    if (!res.html) {
-                        res.html = '<h3 class="empty">' + LANG.no_results + '</h3>';
-                    }
-
-                    listing.innerHTML = res.html;
+                    listing.innerHTML = res.html
+                        ? res.html
+                        : '<h3 class="empty">' + LANG.no_results + '</h3>';
                 } else {
                     listing.insertAdjacentHTML('beforeend', res.html);
                 }
 
                 if (!res.next_page) {
-                    btn.classList.add('hidden');
+                    btn_load_more.classList.add('hidden');
                     this.#next_page = false;
                 } else {
-                    btn.classList.remove('hidden');
+                    btn_load_more.classList.remove('hidden');
                     this.#next_page++;
                 }
 
@@ -227,7 +225,7 @@ class Listing {
                 }
             })
             .finally(() => {
-                btn.resetState();
+                btn_load_more.resetState();
                 get('#main-listing > svg')?.remove();
             });
     }
