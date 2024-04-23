@@ -19,8 +19,9 @@
                             class="danger"
                             onclick="
                                 if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($tag['name'])) ?>))) {
-                                    Form.send('/admin/tags/remove/' + <?= e(js($tag['id'])) ?>, null, null, {
+                                    Form.send('/admin/tags/remove', null, null, {
                                         csrf: <?= e(js($this->csrfToken())) ?>,
+                                        id: <?= e(js($tag['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }
                             "

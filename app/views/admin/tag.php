@@ -73,8 +73,9 @@
                 return;
             }
 
-            Form.send('/admin/tags/remove/' + window.id, null, btn, {
+            Form.send('/admin/tags/remove', null, btn, {
                 csrf: <?= js($this->csrfToken()) ?>,
+                id: window.id,
             }).then(res => {
                 if (res.success) {
                     setTimeout(() => history.back(), 2000);

@@ -26,8 +26,9 @@
                             class="danger"
                             onclick="
                                 if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($link['title'])) ?>))) {
-                                    Form.send('/admin/links/remove/' + <?= e(js($link['id'])) ?>, null, null, {
+                                    Form.send('/admin/links/remove', null, null, {
                                         csrf: <?= e(js($this->csrfToken())) ?>,
+                                        id: <?= e(js($link['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }
                             "
