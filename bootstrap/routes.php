@@ -185,13 +185,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/pages/remove/{id}', function() use ($lang, $page_mod) {
+    $router->post('json:admin/pages/remove', function() use ($lang, $page_mod) {
         if (!\Aurora\App\Permission::can('edit_pages')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$page_mod->remove($_GET['id'])) {
+        if (!$page_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -270,13 +270,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/posts/remove/{id}', function() use ($lang, $post_mod) {
+    $router->post('json:admin/posts/remove', function() use ($lang, $post_mod) {
         if (!\Aurora\App\Permission::can('edit_posts')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$post_mod->remove($_GET['id'])) {
+        if (!$post_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -362,13 +362,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/users/remove/{id}', function() use ($lang, $user_mod) {
+    $router->post('json:admin/users/remove', function() use ($lang, $user_mod) {
         if (!\Aurora\App\Permission::can('edit_users')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$user_mod->remove($_GET['id'])) {
+        if (!$user_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -450,13 +450,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/links/remove/{id}', function() use ($lang, $link_mod) {
+    $router->post('json:admin/links/remove', function() use ($lang, $link_mod) {
         if (!\Aurora\App\Permission::can('edit_links')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$link_mod->remove($_GET['id'])) {
+        if (!$link_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -513,13 +513,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/tags/remove/{id}', function() use ($lang, $tag_mod) {
+    $router->post('json:admin/tags/remove', function() use ($lang, $tag_mod) {
         if (!\Aurora\App\Permission::can('edit_tags')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$tag_mod->remove($_GET['id'])) {
+        if (!$tag_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }

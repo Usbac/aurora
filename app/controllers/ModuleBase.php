@@ -141,18 +141,20 @@ class ModuleBase
     }
 
     /**
-     * Deletes the row with the given id
-     * @param int $id the row id
-     * @return bool true if the row has been deleted, false otherwise
+     * Deletes the rows with the given ids
+     * @param array $ids the row ids
+     * @return bool true if the rows have been deleted, false otherwise
      */
-    public function remove(int $id): bool
+    public function remove(array $ids): bool
     {
         try {
             $this->db->connection->beginTransaction();
 
-            $this->db->delete($this->table, $id);
-            foreach ($this->relations as $table => $field) {
-                $this->db->delete($table, $id, $field);
+            foreach ($ids as $id) {
+                $this->db->delete($this->table, $id);
+                foreach ($this->relations as $table => $field) {
+                    $this->db->delete($table, $id, $field);
+                }
             }
 
             $success = $this->db->connection->commit();
