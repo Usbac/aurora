@@ -122,8 +122,9 @@
     function deleteFile(i) {
         file_name = get('#file-name-' + i).innerText;
         if (confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(file_name))) {
-            Form.send('/admin/media/remove?path=' + path + '/' + file_name, null, null, {
+            Form.send('/admin/media/remove', null, null, {
                 csrf: csrf_token,
+                paths: path + '/' + file_name,
             }).then(res => Listing.handleResponse(res));
         }
     }

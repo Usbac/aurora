@@ -137,6 +137,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => setting('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/pages.php',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -229,6 +230,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => setting('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/posts.php',
             'filters' => [
                 'user' => [
                     'title' => $lang->get('author'),
@@ -321,6 +323,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/users.php',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -368,7 +371,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$user_mod->remove(explode(',', $_POST['id']))) {
+        if (!$user_mod->remove(array_filter(explode(',', $_POST['id']), fn($id) => $id != $_SESSION['user']['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -416,6 +419,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('order'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/links.php',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -488,6 +492,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/tags.php',
             'filters' => [
                 'order' => [
                     'title' => $lang->get('order_by'),
@@ -577,6 +582,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('last_modification'), 'class' => 'w20' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/media.php',
             'filters' => [
                 'order' => [
                     'title' => $lang->get('order_by'),
@@ -665,7 +671,9 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         }
 
         try {
-            $success = \Aurora\App\Media::remove($_GET['path'] ?? '');
+            foreach ((empty($_POST['paths']) ? [] : explode(':', $_POST['paths'])) as $path) {
+                $success = \Aurora\App\Media::remove($path);
+            }
         } catch (Exception $e) {
             $success = false;
         }

@@ -1,5 +1,5 @@
 <?php foreach ($links as $link): ?>
-    <a href="/admin/links/edit?id=<?= e($link['id']) ?>" class="listing-row">
+    <a data-id="<?= e($link['id']) ?>" href="/admin/links/edit?id=<?= e($link['id']) ?>" class="listing-row" onclick="Listing.toggleRow(this, event)">
         <div class="w100">
             <h3><?= e($link['title']) ?></h3>
         </div>

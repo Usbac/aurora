@@ -1,6 +1,6 @@
 <?php foreach ($files as $i => $file): ?>
     <?php $file_path = '/' . \Aurora\System\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
-    <div class="listing-row file">
+    <div data-id="<?= e($file['name']) ?>" class="listing-row file" onclick="Listing.toggleRow(this, event)">
         <div class="w100 align-center">
             <?php if ($file['is_image']): ?>
                 <a href="<?= e($file_path) ?>" target="_blank" class="pointer">
