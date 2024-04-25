@@ -677,13 +677,15 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             foreach ($paths as $path) {
                 $done += \Aurora\App\Media::remove($path);
             }
+
+            $success = $done == count($paths);
         } catch (Exception $e) {
             $success = false;
         }
 
         return json_encode([
             'success' => $success,
-            'errors' => $done == count($paths)
+            'errors' => $success
                 ? []
                 : [ $lang->get($done == 0 ? 'error_remove_item' : 'error_remove_some_items') ],
         ]);
