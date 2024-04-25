@@ -670,9 +670,12 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
+        $paths = empty($_POST['paths']) ? [] : explode(':', $_POST['paths']);
+        $done = 0;
+
         try {
-            foreach ((empty($_POST['paths']) ? [] : explode(':', $_POST['paths'])) as $path) {
-                $success = \Aurora\App\Media::remove($path);
+            foreach ($paths as $path) {
+                $done += \Aurora\App\Media::remove($path);
             }
         } catch (Exception $e) {
             $success = false;
@@ -680,7 +683,9 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         return json_encode([
             'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('error_remove_item') ],
+            'errors' => $done == count($paths)
+                ? []
+                : [ $lang->get($done == 0 ? 'error_remove_item' : 'error_remove_some_items') ],
         ]);
     });
 
