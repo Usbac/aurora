@@ -68,7 +68,7 @@ class Edit extends \Aurora\Bin\BaseCommand
         $status = $io->confirm('Active', $user['status']);
 
         $password = $io->askHidden('Password', function($val) {
-            if (!empty($val) && strlen((string) $val) < 8) {
+            if (!empty($val) && mb_strlen((string) $val) < 8) {
                 throw new \RuntimeException('You must type a password at least 8 characters long.');
             }
 

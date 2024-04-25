@@ -37,13 +37,13 @@ final class Media
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
         }
 
-        $content_path_length = strlen(\Aurora\System\Helper::getPath(self::$directory));
+        $content_path_length = mb_strlen(\Aurora\System\Helper::getPath(self::$directory));
 
         $files = array_map(function($file) use ($content_path_length) {
             $mime = mime_content_type($file);
             return [
                 'name'     => basename($file),
-                'path'     => substr($file, $content_path_length),
+                'path'     => mb_substr($file, $content_path_length),
                 'mime'     => $mime,
                 'is_file'  => is_file($file),
                 'is_image' => str_starts_with($mime, 'image/'),
@@ -53,7 +53,7 @@ final class Media
         }, glob("$path/*"));
 
         if (!empty($search)) {
-            $files = array_filter($files, fn($file) => stripos($file['name'], $search) !== false);
+            $files = array_filter($files, fn($file) => mb_stripos($file['name'], $search) !== false);
         }
 
         match ($order) {
@@ -196,7 +196,7 @@ final class Media
     public static function uploadFile($file, string $path): bool
     {
         $path = \Aurora\System\Helper::getPath($path);
-        $container_path = substr($path, 0, strrpos($path, '/') + 1);
+        $container_path = mb_substr($path, 0, mb_strrpos($path, '/') + 1);
 
         if (!$file) {
             throw new \InvalidArgumentException('File is empty');

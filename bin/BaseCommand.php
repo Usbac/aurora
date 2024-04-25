@@ -22,7 +22,7 @@ class BaseCommand extends Command
 
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($absolute_theme_dir)) as $file) {
             if ($file->isFile()) {
-                $view_files[] = substr($file->getPathname(), strlen($absolute_theme_dir) + 1);
+                $view_files[] = mb_substr($file->getPathname(), mb_strlen($absolute_theme_dir) + 1);
             }
         }
 

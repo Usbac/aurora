@@ -60,7 +60,7 @@ class Create extends \Aurora\Bin\BaseCommand
         $status = $io->confirm('Active');
 
         $password = $io->askHidden('Password', function($val) {
-            if (strlen((string) $val) < 8) {
+            if (mb_strlen((string) $val) < 8) {
                 throw new \RuntimeException('You must type a password at least 8 characters long.');
             }
 

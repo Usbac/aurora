@@ -172,7 +172,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($absolute_theme_dir)) as $file) {
             if ($file->isFile()) {
-                $view_files[] = substr($file->getPathname(), strlen($absolute_theme_dir) + 1);
+                $view_files[] = mb_substr($file->getPathname(), mb_strlen($absolute_theme_dir) + 1);
             }
         }
 
@@ -559,7 +559,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             ) as $file) {
             if ($file->isDir()) {
                 $folder_dir = $file->getPathname();
-                $folders[substr($folder_dir, strlen($root_dir) + 1)] = substr($folder_dir, strlen($content_dir) + 1);
+                $folders[mb_substr($folder_dir, mb_strlen($root_dir) + 1)] = mb_substr($folder_dir, mb_strlen($content_dir) + 1);
             }
         }
 
@@ -887,7 +887,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($absolute_path)) as $file) {
             $real_path = $file->getRealPath();
-            $relative_path = substr($real_path, strlen($absolute_path) + 1);
+            $relative_path = mb_substr($real_path, mb_strlen($absolute_path) + 1);
 
             if (!$file->isDir()) {
                 $zip->addFile($real_path, $relative_path);
