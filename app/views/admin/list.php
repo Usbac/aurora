@@ -68,8 +68,7 @@
             });
 
             window.history.replaceState('', '', '?' + params.toString());
-            Listing.setNextPage(1);
-            Listing.loadNextPage();
+            Listing.handleResponse({ success: true });
         });
 
         window.addEventListener('load', () => {
