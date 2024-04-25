@@ -176,6 +176,7 @@ class Form {
 }
 
 class Listing {
+    static #select_mode = false;
     static #next_page_url = '';
     static #next_page = 1;
 
@@ -185,6 +186,50 @@ class Listing {
 
     static setNextPage(page) {
         this.#next_page = page;
+    }
+
+    static toggleSelectMode(btn_el) {
+        let listing = get('#main-listing');
+        let batch_options = get('#batch-options');
+
+        if ('selectMode' in listing.dataset) {
+            delete listing.dataset.selectMode;
+            delete batch_options.dataset.selectMode;
+            this.getSelectedRows().map(el => this.toggleRow(el));
+        } else {
+            listing.dataset.selectMode = true;
+            batch_options.dataset.selectMode = true;
+        }
+
+        this.#select_mode = !this.#select_mode;
+        btn_el.innerText = LANG[this.#select_mode ? 'done' : 'select'];
+    }
+
+    static toggleRow(el, event = null) {
+        if (!this.#select_mode) {
+            return;
+        }
+
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if ('selected' in el.dataset) {
+            delete el.dataset.selected;
+        } else {
+            el.dataset.selected = true;
+        }
+
+        if (this.getSelectedRows().length == 0) {
+            get('#batch-options').dataset.disabled = true;
+        } else {
+            delete get('#batch-options').dataset.disabled;
+        }
+    }
+
+    static getSelectedRows() {
+        return [ ...document.querySelectorAll('.listing-row[data-selected="true"]') ];
     }
 
     static loadNextPage() {
@@ -198,6 +243,7 @@ class Listing {
         btn_load_more.setLoading();
 
         if (this.#next_page == 1) {
+            this.getSelectedRows().map(el => this.toggleRow(el));
             listing.innerHTML = LOADING_ICON;
         }
 
@@ -231,9 +277,10 @@ class Listing {
     }
 
     static handleResponse(res) {
+        document.querySelector('dialog[open]')?.close();
+        Dropdown.close();
+
         if (res.success) {
-            document.querySelector('dialog[open]')?.close();
-            Dropdown.close();
             this.setNextPage(1);
             this.loadNextPage();
         }
