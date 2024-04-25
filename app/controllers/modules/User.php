@@ -253,7 +253,7 @@ final class User extends \Aurora\App\ModuleBase
      */
     private function checkPassword(string $password, string $password_confirm): string
     {
-        if (strlen($password) < 8) {
+        if (mb_strlen($password) < 8) {
             return $this->language->get('bad_password');
         }
 

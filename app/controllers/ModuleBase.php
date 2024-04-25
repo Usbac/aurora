@@ -71,7 +71,7 @@ class ModuleBase
 
             if ($key[0] == '!') {
                 $compare = '!=';
-                $key = substr($key, 1);
+                $key = mb_substr($key, 1);
             }
 
             $where[] = $this->table . ".$key $compare ?";

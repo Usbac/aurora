@@ -21,7 +21,7 @@ final class Helper
     public static function getCurrentPath(): string
     {
         $url = trim($_GET['url'] ?? '', '/') . '?';
-        return substr($url, 0, strpos($url, '?'));
+        return mb_substr($url, 0, mb_strpos($url, '?'));
     }
 
     /**

@@ -162,7 +162,7 @@ final class Route
         // Remove content-type prefix from route
         foreach (self::PREFIXES as $key => $val) {
             if (str_starts_with($url, $key)) {
-                $url = substr($url, strlen($key));
+                $url = mb_substr($url, mb_strlen($key));
                 $content_type = $val;
             }
         }
