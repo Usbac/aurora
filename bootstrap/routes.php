@@ -670,7 +670,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        $paths = empty($_POST['paths']) ? [] : explode(':', $_POST['paths']);
+        $paths = json_decode($_POST['paths'] ?? '') ?? [];
         $done = 0;
 
         try {

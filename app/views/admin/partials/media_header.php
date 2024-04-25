@@ -124,7 +124,7 @@
         if (confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(file_name))) {
             Form.send('/admin/media/remove', null, null, {
                 csrf: csrf_token,
-                paths: path + '/' + file_name,
+                paths: JSON.stringify([ path + '/' + file_name ]),
             }).then(res => Listing.handleResponse(res));
         }
     }

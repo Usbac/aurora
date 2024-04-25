@@ -13,7 +13,7 @@
                         if (confirm(LANG.delete_confirm_selected)) {
                             Form.send('/admin/media/remove', null, null, {
                                 csrf: <?= e(js($this->csrfToken())) ?>,
-                                paths: ids.join(':'),
+                                paths: JSON.stringify(ids),
                             }).then(res => Listing.handleResponse(res));
                         }
                     "
