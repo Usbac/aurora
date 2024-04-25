@@ -137,8 +137,9 @@
     }
 
     function editFile() {
-        Form.send('/admin/media/save?path=' + path + '/' + file_name, 'edit-dialog', null, {
+        Form.send('/admin/media/save', 'edit-dialog', null, {
             csrf: csrf_token,
+            path: path + '/' + file_name,
         }).then(res => Listing.handleResponse(res));
     }
 
@@ -174,8 +175,9 @@
     }
 
     function duplicateFile() {
-        Form.send('/admin/media/duplicate?path=' + path + '/' + file_name, 'duplicate-dialog', null, {
+        Form.send('/admin/media/duplicate', 'duplicate-dialog', null, {
             csrf: csrf_token,
+            path: path + '/' + file_name,
         }).then(res => Listing.handleResponse(res));
     }
 
