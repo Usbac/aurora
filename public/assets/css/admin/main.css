@@ -389,6 +389,7 @@ button,
     text-decoration: none;
     font-size: var(--font-size-bg);
     font-weight: var(--font-semibold);
+    outline: none;
     min-height: 36px;
     min-width: 44px;
 }
