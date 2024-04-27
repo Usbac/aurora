@@ -108,6 +108,7 @@
     let csrf_token = <?= js($this->csrfToken()) ?>;
     let path = <?= js($_GET['path'] ?? \Aurora\System\Kernel::config('content')) ?>;
     let file_name = null;
+    let files_names = [];
     let content = get('.content');
 
     function uploadFile() {
@@ -119,12 +120,13 @@
         });
     }
 
-    function deleteFile(i) {
-        file_name = get('#file-name-' + i).innerText;
-        if (confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(file_name))) {
+    function deleteFiles(files) {
+        files_names = files.map(file => path + '/' + file);
+
+        if (confirm(files_names.length == 1 ? LANG.delete_confirm.sprintf(files_names[0]) : LANG.delete_confirm_selected)) {
             Form.send('/admin/media/remove', null, null, {
                 csrf: csrf_token,
-                paths: JSON.stringify([ path + '/' + file_name ]),
+                paths: JSON.stringify(files_names),
             }).then(res => Listing.handleResponse(res));
         }
     }
@@ -156,16 +158,17 @@
         }).then(res => Listing.handleResponse(res));
     }
 
-    function openMoveDialog(i) {
-        file_name = get('#file-name-' + i).innerText;
+    function openMoveDialog(files) {
+        files_names = files.map(file => path + '/' + file);
         let dialog = get('#move-dialog');
         removeErrors(dialog);
         dialog.showModal();
     }
 
     function moveFile() {
-        Form.send('/admin/media/move?path=' + path + '/' + file_name, 'move-dialog', null, {
+        Form.send('/admin/media/move', 'move-dialog', null, {
             csrf: csrf_token,
+            paths: JSON.stringify(files_names),
         }).then(res => Listing.handleResponse(res));
     }
 

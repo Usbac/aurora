@@ -2,20 +2,16 @@
     <div id="batch-options" data-disabled="true">
         <?php if (\Aurora\App\Permission::can('edit_media')): ?>
             <button
+                onclick="
+                        var files = Listing.getSelectedRows().map(el => el.dataset.id);
+                        return files.length == 0 ? false : openMoveDialog(files);
+                    "
+            >Move</button>
+            <button
                 class="danger"
                 onclick="
-                        let ids = Listing.getSelectedRows().map(el => path + '/' + el.dataset.id);
-
-                        if (ids.length == 0) {
-                            return false;
-                        }
-
-                        if (confirm(LANG.delete_confirm_selected)) {
-                            Form.send('/admin/media/remove', null, null, {
-                                csrf: <?= e(js($this->csrfToken())) ?>,
-                                paths: JSON.stringify(ids),
-                            }).then(res => Listing.handleResponse(res));
-                        }
+                        var files = Listing.getSelectedRows().map(el => el.dataset.id);
+                        return files.length == 0 ? false : deleteFiles(files);
                     "
             >Delete</button>
         <?php endif ?>

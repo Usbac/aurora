@@ -722,15 +722,24 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
+        $paths = json_decode($_POST['paths'] ?? '') ?? [];
+        $done = 0;
+
         try {
-            $success = \Aurora\App\Media::move($_GET['path'] ?? '', $_POST['name']);
+            foreach ($paths as $path) {
+                $done += \Aurora\App\Media::move($path, $_POST['name']);
+            }
+
+            $success = $done == count($paths);
         } catch (Exception $e) {
             $success = false;
         }
 
         return json_encode([
             'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('error_move_item') ],
+            'errors' => $success
+                ? []
+                : [ $lang->get($done == 0 ? 'error_move_item' : 'error_move_some_items') ],
         ]);
     });
 
