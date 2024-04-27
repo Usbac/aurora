@@ -50,6 +50,7 @@ return [
     'error_duplicate_item' => 'Error duplicating item. The name is invalid, the file does not comply with the server rules or the path is not writable.',
     'error_expired_restore' => 'Restore code has expired',
     'error_move_item' => 'Error moving item. The name is invalid, the file does not comply with the server rules or the path is not writable.',
+    'error_move_some_items' => 'Not all items could be moved.',
     'error_remove_item' => 'Unexpected error. The path may not be writable.',
     'error_remove_some_items' => 'Not all items could be removed.',
     'error_rename_item' => 'Error renaming item. The name is invalid, the file does not comply with the server rules or the path is not writable.',

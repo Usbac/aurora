@@ -50,6 +50,7 @@ return [
     'error_duplicate_item' => 'Error al duplicar el elemento. El nombre es inválido, el archivo no cumple con las reglas del servidor o no tiene permisos de escritura en esa ruta.',
     'error_expired_restore' => 'El código ha expirado',
     'error_move_item' => 'Error al mover el elemento. El nombre es inválido, el archivo no cumple con las reglas del servidor o no tiene permisos de escritura en esa ruta.',
+    'error_move_some_items' => 'No se pudieron mover todos los elementos.',
     'error_remove_item' => 'Error inesperado. Puede no tener permisos de escritura en esa ruta.',
     'error_remove_some_items' => 'No se pudieron eliminar todos los elementos.',
     'error_rename_item' => 'Error al renombrar el elemento. El nombre es inválido, el archivo no cumple con las reglas del servidor o no tiene permisos de escritura en esa ruta.',
