@@ -41,7 +41,7 @@ class Edit extends \Aurora\Bin\BaseCommand
                 return $val;
             }),
             'slug' => $io->ask('Slug', $page['slug'], function($val) use ($page_mod, $page) {
-                if (empty($val)) {
+                if (!empty($val) && !\Aurora\System\Helper::isSlugValid($val)) {
                     throw new \RuntimeException('You must type a valid slug.');
                 }
 
