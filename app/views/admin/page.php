@@ -112,8 +112,9 @@
                 return;
             }
 
-            Form.send('/admin/pages/remove/' + window.id, null, btn, {
-                csrf: <?= js($this->csrfToken()) ?>,
+            Form.send('/admin/pages/remove', null, btn, {
+                csrf: csrf_token,
+                id: window.id,
             }).then(res => {
                 if (res.success) {
                     setTimeout(() => history.back(), 2000);

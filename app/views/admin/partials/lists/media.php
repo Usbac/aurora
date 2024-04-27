@@ -1,6 +1,6 @@
 <?php foreach ($files as $i => $file): ?>
     <?php $file_path = '/' . \Aurora\System\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
-    <div class="listing-row file">
+    <div data-id="<?= e($file['name']) ?>" class="listing-row file" onclick="Listing.toggleRow(this, event)">
         <div class="w100 align-center">
             <?php if ($file['is_image']): ?>
                 <a href="<?= e($file_path) ?>" target="_blank" class="pointer">
@@ -33,9 +33,9 @@
                     <div onclick="copyPath(<?= e(js($this->url($file_path))) ?>)"><?= $this->include('icons/clipboard.svg') ?> <?= t('copy_path') ?></div>
                     <?php if (\Aurora\App\Permission::can('edit_media')): ?>
                         <div onclick="openDuplicateDialog(<?= e(js($i)) ?>)"><?= $this->include('icons/duplicate.svg') ?> <?= t('duplicate') ?>…</div>
-                        <div onclick="openMoveDialog(<?= e(js($i)) ?>)"><?= $this->include('icons/move_file.svg') ?> <?= t('move') ?>…</div>
+                        <div onclick="openMoveDialog([ <?= e(js($file['name'])) ?> ])"><?= $this->include('icons/move_file.svg') ?> <?= t('move') ?>…</div>
                         <div onclick="openEditFileDialog(<?= e(js($i)) ?>)"><?= $this->include('icons/pencil.svg') ?> <?= t('rename') ?>…</div>
-                        <div onclick="deleteFile(<?= e(js($i)) ?>)" class="danger"><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
+                        <div onclick="deleteFiles(<?= e(js($file['name'])) ?>)" class="danger"><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
                     <?php endif ?>
                 </div>
             </div>

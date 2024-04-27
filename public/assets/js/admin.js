@@ -176,8 +176,21 @@ class Form {
 }
 
 class Listing {
+    static #select_mode = false;
     static #next_page_url = '';
     static #next_page = 1;
+
+    static initListeners() {
+        window.addEventListener('keydown', e => {
+            if (document.activeElement.tagName == 'INPUT') {
+                return;
+            }
+
+            if ((e.key == 'Escape' && this.#select_mode) || e.key == 's') {
+                this.toggleSelectMode(get('.batch-options-container > button'));
+            }
+        });
+    }
 
     static setNextPageUrl(url) {
         this.#next_page_url = url;
@@ -187,6 +200,50 @@ class Listing {
         this.#next_page = page;
     }
 
+    static toggleSelectMode(btn_el) {
+        let listing = get('#main-listing');
+        let batch_options = get('#batch-options');
+
+        if ('selectMode' in listing.dataset) {
+            delete listing.dataset.selectMode;
+            delete batch_options.dataset.selectMode;
+            this.getSelectedRows().map(el => this.toggleRow(el));
+        } else {
+            listing.dataset.selectMode = true;
+            batch_options.dataset.selectMode = true;
+        }
+
+        this.#select_mode = !this.#select_mode;
+        btn_el.innerText = LANG[this.#select_mode ? 'done' : 'select'];
+    }
+
+    static toggleRow(el, event = null) {
+        if (!this.#select_mode) {
+            return;
+        }
+
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        if ('selected' in el.dataset) {
+            delete el.dataset.selected;
+        } else {
+            el.dataset.selected = true;
+        }
+
+        if (this.getSelectedRows().length == 0) {
+            get('#batch-options').dataset.disabled = true;
+        } else {
+            delete get('#batch-options').dataset.disabled;
+        }
+    }
+
+    static getSelectedRows() {
+        return [ ...document.querySelectorAll('.listing-row[data-selected="true"]') ];
+    }
+
     static loadNextPage() {
         if (!this.#next_page) {
             return;
@@ -194,10 +251,11 @@ class Listing {
 
         let listing = get('#main-listing');
         let total_items = get('#total-items');
-        let btn = get('button.load-more');
-        btn.setLoading();
+        let btn_load_more = get('button.load-more');
+        btn_load_more.setLoading();
 
         if (this.#next_page == 1) {
+            this.getSelectedRows().map(el => this.toggleRow(el));
             listing.innerHTML = LOADING_ICON;
         }
 
@@ -205,20 +263,18 @@ class Listing {
             .then(res => res.json())
             .then(res => {
                 if (this.#next_page == 1) {
-                    if (!res.html) {
-                        res.html = '<h3 class="empty">' + LANG.no_results + '</h3>';
-                    }
-
-                    listing.innerHTML = res.html;
+                    listing.innerHTML = res.html
+                        ? res.html
+                        : '<h3 class="empty">' + LANG.no_results + '</h3>';
                 } else {
                     listing.insertAdjacentHTML('beforeend', res.html);
                 }
 
                 if (!res.next_page) {
-                    btn.classList.add('hidden');
+                    btn_load_more.classList.add('hidden');
                     this.#next_page = false;
                 } else {
-                    btn.classList.remove('hidden');
+                    btn_load_more.classList.remove('hidden');
                     this.#next_page++;
                 }
 
@@ -227,15 +283,16 @@ class Listing {
                 }
             })
             .finally(() => {
-                btn.resetState();
+                btn_load_more.resetState();
                 get('#main-listing > svg')?.remove();
             });
     }
 
     static handleResponse(res) {
+        document.querySelector('dialog[open]')?.close();
+        Dropdown.close();
+
         if (res.success) {
-            document.querySelector('dialog[open]')?.close();
-            Dropdown.close();
             this.setNextPage(1);
             this.loadNextPage();
         }

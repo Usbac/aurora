@@ -105,9 +105,9 @@
 </dialog>
 
 <script>
-    let csrf_token = <?= js($this->csrfToken()) ?>;
     let path = <?= js($_GET['path'] ?? \Aurora\System\Kernel::config('content')) ?>;
     let file_name = null;
+    let files_names = [];
     let content = get('.content');
 
     function uploadFile() {
@@ -119,11 +119,15 @@
         });
     }
 
-    function deleteFile(i) {
-        file_name = get('#file-name-' + i).innerText;
-        if (confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(file_name))) {
-            Form.send('/admin/media/remove?path=' + path + '/' + file_name, null, null, {
+    function deleteFiles(files) {
+        if (confirm(typeof files === 'string' ? LANG.delete_confirm.sprintf(files) : LANG.delete_confirm_selected)) {
+            if (typeof files === 'string') {
+                files = [ files ];
+            }
+
+            Form.send('/admin/media/remove', null, null, {
                 csrf: csrf_token,
+                paths: JSON.stringify(files.map(file => path + '/' + file)),
             }).then(res => Listing.handleResponse(res));
         }
     }
@@ -136,8 +140,9 @@
     }
 
     function editFile() {
-        Form.send('/admin/media/save?path=' + path + '/' + file_name, 'edit-dialog', null, {
+        Form.send('/admin/media/save', 'edit-dialog', null, {
             csrf: csrf_token,
+            path: path + '/' + file_name,
         }).then(res => Listing.handleResponse(res));
     }
 
@@ -154,16 +159,17 @@
         }).then(res => Listing.handleResponse(res));
     }
 
-    function openMoveDialog(i) {
-        file_name = get('#file-name-' + i).innerText;
+    function openMoveDialog(files) {
+        files_names = files.map(file => path + '/' + file);
         let dialog = get('#move-dialog');
         removeErrors(dialog);
         dialog.showModal();
     }
 
     function moveFile() {
-        Form.send('/admin/media/move?path=' + path + '/' + file_name, 'move-dialog', null, {
+        Form.send('/admin/media/move', 'move-dialog', null, {
             csrf: csrf_token,
+            paths: JSON.stringify(files_names),
         }).then(res => Listing.handleResponse(res));
     }
 
@@ -173,8 +179,9 @@
     }
 
     function duplicateFile() {
-        Form.send('/admin/media/duplicate?path=' + path + '/' + file_name, 'duplicate-dialog', null, {
+        Form.send('/admin/media/duplicate', 'duplicate-dialog', null, {
             csrf: csrf_token,
+            path: path + '/' + file_name,
         }).then(res => Listing.handleResponse(res));
     }
 
@@ -212,7 +219,7 @@
 
         document.body.style.cursor = 'wait';
         let data = new FormData();
-        data.append('csrf', <?= js($this->csrfToken()) ?>);
+        data.append('csrf', csrf_token);
         Array.from(event.dataTransfer.files).map(file => data.append('file[]', file));
 
         fetch('/admin/media/upload' + window.location.search, {

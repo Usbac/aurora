@@ -389,6 +389,7 @@ button,
     text-decoration: none;
     font-size: var(--font-size-bg);
     font-weight: var(--font-semibold);
+    outline: none;
     min-height: 36px;
     min-width: 44px;
 }
@@ -815,7 +816,7 @@ textarea.code {
 .admin > .content {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 20px;
     --content-spacing: 34px;
     padding: var(--content-spacing);
     position: relative;
@@ -991,9 +992,6 @@ textarea.code {
 
 .filters > div {
     max-width: 140px;
-}
-
-.filters > div {
     margin-right: 12px;
 }
 
@@ -1031,6 +1029,42 @@ textarea.code {
     animation: rotation 1s infinite linear;
     align-self: center;
     margin-top: 40px;
+}
+
+.batch-options-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 22px;
+}
+
+.batch-options-container > div {
+    display: flex;
+    gap: 10px;
+}
+
+.batch-options-container button {
+    padding: 0;
+    background: none;
+    font-weight: var(--font-bold);
+    font-size: var(--font-size-bg);
+    min-height: 20px;
+    cursor: pointer !important;
+    color: #007FFF;
+}
+
+.batch-options-container button.danger {
+    color: var(--danger-color);
+}
+
+#batch-options[data-disabled="true"] button {
+    opacity: 0.3;
+    cursor: default;
+}
+
+#batch-options:not([data-select-mode="true"]),
+.listing[data-select-mode="true"] .three-dots {
+    visibility: hidden;
 }
 
 .row-actions {
@@ -1080,6 +1114,11 @@ textarea.code {
 
 .listing-row:not(.header):hover {
     background: var(--fourth-color);
+}
+
+.listing-row[data-selected="true"] {
+    background-color: #50a8ff9e !important;
+    border-bottom: 1px #3c98f49e solid;
 }
 
 .subtitle {

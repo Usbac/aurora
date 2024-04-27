@@ -1,5 +1,5 @@
 <?php foreach ($pages as $page): ?>
-    <a href="/admin/pages/edit?id=<?= e($page['id']) ?>" class="listing-row">
+    <a data-id="<?= e($page['id']) ?>" href="/admin/pages/edit?id=<?= e($page['id']) ?>" class="listing-row" onclick="Listing.toggleRow(this, event)">
         <div class="w100">
             <h3>
                 <?= e($page['title']) ?>
@@ -29,8 +29,9 @@
                             class="danger"
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($page['title'])) ?>))) {
-                                    Form.send('/admin/pages/remove/' + <?= e(js($page['id'])) ?>, null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                    Form.send('/admin/pages/remove', null, null, {
+                                        csrf: csrf_token,
+                                        id: <?= e(js($page['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }
                             "

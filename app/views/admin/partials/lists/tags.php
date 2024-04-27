@@ -1,5 +1,5 @@
 <?php foreach ($tags as $tag): ?>
-    <a href="/admin/tags/edit?id=<?= e($tag['id']) ?>" class="listing-row tag">
+    <a data-id="<?= e($tag['id']) ?>" href="/admin/tags/edit?id=<?= e($tag['id']) ?>" class="listing-row tag" onclick="Listing.toggleRow(this, event)">
         <div class="w100">
             <h3><?= e($tag['name']) ?></h3>
         </div>
@@ -19,8 +19,9 @@
                             class="danger"
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($tag['name'])) ?>))) {
-                                    Form.send('/admin/tags/remove/' + <?= e(js($tag['id'])) ?>, null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                    Form.send('/admin/tags/remove', null, null, {
+                                        csrf: csrf_token,
+                                        id: <?= e(js($tag['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }
                             "

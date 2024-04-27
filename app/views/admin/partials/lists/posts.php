@@ -1,5 +1,5 @@
 <?php foreach ($posts as $post): ?>
-    <a href="/admin/posts/edit?id=<?= e($post['id']) ?>" class="listing-row post">
+    <a data-id="<?= e($post['id']) ?>" href="/admin/posts/edit?id=<?= e($post['id']) ?>" class="listing-row post" onclick="Listing.toggleRow(this, event)">
         <div class="w100 align-center">
             <img src="<?= e($this->getContentUrl($post['image'] ?? '')) ?>" alt="<?= e($post['image_alt'] ?? '') ?>" <?php if (empty($post['image'])): ?> style="visibility: hidden;" <?php endif ?>/>
             <div class="main-data">
@@ -35,8 +35,9 @@
                             class="danger"
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($post['title'])) ?>))) {
-                                    Form.send('/admin/posts/remove/' + <?= e(js($post['id'])) ?>, null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                    Form.send('/admin/posts/remove', null, null, {
+                                        csrf: csrf_token,
+                                        id: <?= e(js($post['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }
                             "

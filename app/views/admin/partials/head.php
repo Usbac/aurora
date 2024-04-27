@@ -8,5 +8,6 @@
 <link id="css-dark" rel="stylesheet" href="<?= e($this->getFileQuery('/public/assets/css/admin/dark.css')) ?>" <?php if (($_COOKIE['theme'] ?? '') !== 'dark'): ?> disabled <?php endif ?>>
 <script>
     window.LANG = <?= js(t()) ?>;
+    window.csrf_token = <?= js($this->csrfToken()) ?>;
 </script>
 <script src="<?= e($this->getFileQuery('/public/assets/js/admin.js')) ?>"></script>

@@ -137,6 +137,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => setting('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/pages.php',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -185,13 +186,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/pages/remove/{id}', function() use ($lang, $page_mod) {
+    $router->post('json:admin/pages/remove', function() use ($lang, $page_mod) {
         if (!\Aurora\App\Permission::can('edit_pages')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$page_mod->remove($_GET['id'])) {
+        if (!$page_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -229,6 +230,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => setting('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/posts.php',
             'filters' => [
                 'user' => [
                     'title' => $lang->get('author'),
@@ -270,13 +272,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/posts/remove/{id}', function() use ($lang, $post_mod) {
+    $router->post('json:admin/posts/remove', function() use ($lang, $post_mod) {
         if (!\Aurora\App\Permission::can('edit_posts')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$post_mod->remove($_GET['id'])) {
+        if (!$post_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -321,6 +323,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/users.php',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -362,13 +365,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/users/remove/{id}', function() use ($lang, $user_mod) {
+    $router->post('json:admin/users/remove', function() use ($lang, $user_mod) {
         if (!\Aurora\App\Permission::can('edit_users')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$user_mod->remove($_GET['id'])) {
+        if (!$user_mod->remove(array_filter(explode(',', $_POST['id']), fn($id) => $id != $_SESSION['user']['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -416,6 +419,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('order'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/links.php',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -450,13 +454,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/links/remove/{id}', function() use ($lang, $link_mod) {
+    $router->post('json:admin/links/remove', function() use ($lang, $link_mod) {
         if (!\Aurora\App\Permission::can('edit_links')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$link_mod->remove($_GET['id'])) {
+        if (!$link_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -488,6 +492,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/tags.php',
             'filters' => [
                 'order' => [
                     'title' => $lang->get('order_by'),
@@ -513,13 +518,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/tags/remove/{id}', function() use ($lang, $tag_mod) {
+    $router->post('json:admin/tags/remove', function() use ($lang, $tag_mod) {
         if (!\Aurora\App\Permission::can('edit_tags')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$tag_mod->remove($_GET['id'])) {
+        if (!$tag_mod->remove(explode(',', $_POST['id']))) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }
@@ -577,6 +582,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('last_modification'), 'class' => 'w20' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
+            'extra_header' => 'admin/partials/extra_headers/media.php',
             'filters' => [
                 'order' => [
                     'title' => $lang->get('order_by'),
@@ -664,15 +670,24 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
+        $paths = json_decode($_POST['paths'] ?? '') ?? [];
+        $done = 0;
+
         try {
-            $success = \Aurora\App\Media::remove($_GET['path'] ?? '');
+            foreach ($paths as $path) {
+                $done += \Aurora\App\Media::remove($path);
+            }
+
+            $success = $done == count($paths);
         } catch (Exception $e) {
             $success = false;
         }
 
         return json_encode([
             'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('error_remove_item') ],
+            'errors' => $success
+                ? []
+                : [ $lang->get($done == 0 ? 'error_remove_item' : 'error_remove_some_items') ],
         ]);
     });
 
@@ -690,7 +705,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         }
 
         try {
-            $success = \Aurora\App\Media::rename($_GET['path'] ?? '', $_POST['name']);
+            $success = \Aurora\App\Media::rename($_POST['path'] ?? '', $_POST['name']);
         } catch (Exception $e) {
             $success = false;
         }
@@ -707,15 +722,24 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
+        $paths = json_decode($_POST['paths'] ?? '') ?? [];
+        $done = 0;
+
         try {
-            $success = \Aurora\App\Media::move($_GET['path'] ?? '', $_POST['name']);
+            foreach ($paths as $path) {
+                $done += \Aurora\App\Media::move($path, $_POST['name']);
+            }
+
+            $success = $done == count($paths);
         } catch (Exception $e) {
             $success = false;
         }
 
         return json_encode([
             'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('error_move_item') ],
+            'errors' => $success
+                ? []
+                : [ $lang->get($done == 0 ? 'error_move_item' : 'error_move_some_items') ],
         ]);
     });
 
@@ -733,7 +757,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         }
 
         try {
-            $success = \Aurora\App\Media::duplicate($_GET['path'] ?? '', $_POST['name']);
+            $success = \Aurora\App\Media::duplicate($_POST['path'] ?? '', $_POST['name']);
         } catch (Exception $e) {
             $success = false;
         }

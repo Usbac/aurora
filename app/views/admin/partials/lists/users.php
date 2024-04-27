@@ -1,5 +1,5 @@
 <?php foreach ($users as $user): ?>
-    <a href="/admin/users/edit?id=<?= e($user['id']) ?>" class="listing-row user">
+    <a data-id="<?= e($user['id']) ?>" href="/admin/users/edit?id=<?= e($user['id']) ?>" class="listing-row user" onclick="Listing.toggleRow(this, event)">
         <div class="w100 align-center">
             <div class="user-image">
                 <img src="<?= e($this->getContentUrl($user['image'] ?? '')) ?>" alt="<?= e($user['name'] ?? '') ?>" <?php if (empty($user['image'])): ?> style="visibility: hidden;" <?php endif ?>/>
@@ -40,8 +40,9 @@
                                 class="danger"
                                 onclick="
                                     if (confirm(LANG.delete_confirm.sprintf(<?= e(js($user['name'])) ?>))) {
-                                        Form.send('/admin/users/remove/' + <?= e(js($user['id'])) ?>, null, null, {
-                                            csrf: <?= e(js($this->csrfToken())) ?>,
+                                        Form.send('/admin/users/remove', null, null, {
+                                            csrf: csrf_token,
+                                            id: <?= e(js($user['id'])) ?>,
                                         }).then(res => Listing.handleResponse(res));
                                     }
                                 "

@@ -252,7 +252,7 @@
             }
 
             Form.send('/admin/settings/update', 'update', null, {
-                csrf: <?= js($this->csrfToken()) ?>,
+                csrf: csrf_token,
             }).then(res => {
                 if (res.success) {
                     setTimeout(() => location.reload(), 2000);

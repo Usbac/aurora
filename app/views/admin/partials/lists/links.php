@@ -1,5 +1,5 @@
 <?php foreach ($links as $link): ?>
-    <a href="/admin/links/edit?id=<?= e($link['id']) ?>" class="listing-row">
+    <a data-id="<?= e($link['id']) ?>" href="/admin/links/edit?id=<?= e($link['id']) ?>" class="listing-row" onclick="Listing.toggleRow(this, event)">
         <div class="w100">
             <h3><?= e($link['title']) ?></h3>
         </div>
@@ -26,8 +26,9 @@
                             class="danger"
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($link['title'])) ?>))) {
-                                    Form.send('/admin/links/remove/' + <?= e(js($link['id'])) ?>, null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                    Form.send('/admin/links/remove', null, null, {
+                                        csrf: csrf_token,
+                                        id: <?= e(js($link['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }
                             "
