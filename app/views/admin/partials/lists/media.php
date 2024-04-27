@@ -35,7 +35,7 @@
                         <div onclick="openDuplicateDialog(<?= e(js($i)) ?>)"><?= $this->include('icons/duplicate.svg') ?> <?= t('duplicate') ?>…</div>
                         <div onclick="openMoveDialog([ <?= e(js($file['name'])) ?> ])"><?= $this->include('icons/move_file.svg') ?> <?= t('move') ?>…</div>
                         <div onclick="openEditFileDialog(<?= e(js($i)) ?>)"><?= $this->include('icons/pencil.svg') ?> <?= t('rename') ?>…</div>
-                        <div onclick="deleteFiles([ <?= e(js($file['name'])) ?> ])" class="danger"><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
+                        <div onclick="deleteFiles(<?= e(js($file['name'])) ?>)" class="danger"><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
                     <?php endif ?>
                 </div>
             </div>

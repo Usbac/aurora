@@ -120,12 +120,14 @@
     }
 
     function deleteFiles(files) {
-        files_names = files.map(file => path + '/' + file);
+        if (confirm(typeof files === 'string' ? LANG.delete_confirm.sprintf(files) : LANG.delete_confirm_selected)) {
+            if (typeof files === 'string') {
+                files = [ files ];
+            }
 
-        if (confirm(files_names.length == 1 ? LANG.delete_confirm.sprintf(files_names[0]) : LANG.delete_confirm_selected)) {
             Form.send('/admin/media/remove', null, null, {
                 csrf: csrf_token,
-                paths: JSON.stringify(files_names),
+                paths: JSON.stringify(files.map(file => path + '/' + file)),
             }).then(res => Listing.handleResponse(res));
         }
     }
