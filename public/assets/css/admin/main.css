@@ -1034,12 +1034,12 @@ textarea.code {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 18px;
+    gap: 22px;
 }
 
-.batch-options-container > button {
-    color: #007FFF;
-    cursor: pointer !important;
+.batch-options-container > div {
+    display: flex;
+    gap: 10px;
 }
 
 .batch-options-container button {
@@ -1048,7 +1048,8 @@ textarea.code {
     font-weight: var(--font-bold);
     font-size: var(--font-size-bg);
     min-height: 20px;
-    cursor: pointer;
+    cursor: pointer !important;
+    color: #007FFF;
 }
 
 .batch-options-container button.danger {
