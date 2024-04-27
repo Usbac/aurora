@@ -180,6 +180,18 @@ class Listing {
     static #next_page_url = '';
     static #next_page = 1;
 
+    static initListeners() {
+        window.addEventListener('keydown', e => {
+            if (document.activeElement.tagName == 'INPUT') {
+                return;
+            }
+
+            if ((e.key == 'Escape' && this.#select_mode) || e.key == 's') {
+                this.toggleSelectMode(get('.batch-options-container > button'));
+            }
+        });
+    }
+
     static setNextPageUrl(url) {
         this.#next_page_url = url;
     }
