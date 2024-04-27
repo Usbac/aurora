@@ -107,7 +107,7 @@
         }
 
         function remove(btn) {
-            if (!confirm(<?= js(t('delete_confirm', false)) ?>.sprintf(<?= js($user['name'] ?? '') ?>))) {
+            if (!confirm(LANG.delete_confirm.sprintf(<?= js($user['name'] ?? '') ?>))) {
                 return;
             }
 
