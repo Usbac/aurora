@@ -31,7 +31,7 @@ return [
     'default' => 'Default',
     'delete' => 'Delete',
     'delete_confirm' => 'Are you sure about deleting "%s"?',
-    'delete_confirm_selected' => 'Are you sure about deleting the selected elements?',
+    'delete_confirm_selected' => 'Are you sure about deleting the selected element(s)?',
     'description' => 'Description',
     'done' => 'Done',
     'download_db' => 'Download database',

@@ -31,7 +31,7 @@ return [
     'default' => 'Defecto',
     'delete' => 'Eliminar',
     'delete_confirm' => '¿Está seguro de eliminar "%s"?',
-    'delete_confirm_selected' => '¿Está seguro de eliminar los elementos seleccionados?',
+    'delete_confirm_selected' => '¿Está seguro de eliminar los elemento(s) seleccionado(s)?',
     'description' => 'Descripción',
     'done' => 'Listo',
     'download_db' => 'Descargar base de datos',
