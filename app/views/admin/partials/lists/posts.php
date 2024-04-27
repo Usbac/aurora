@@ -34,7 +34,7 @@
                         <div
                             class="danger"
                             onclick="
-                                if (confirm(<?= e(js(t('delete_confirm', false))) ?>.sprintf(<?= e(js($post['title'])) ?>))) {
+                                if (confirm(LANG.delete_confirm.sprintf(<?= e(js($post['title'])) ?>))) {
                                     Form.send('/admin/posts/remove/' + <?= e(js($post['id'])) ?>, null, null, {
                                         csrf: <?= e(js($this->csrfToken())) ?>,
                                     }).then(res => Listing.handleResponse(res));
