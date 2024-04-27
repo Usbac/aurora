@@ -41,7 +41,7 @@
                                 onclick="
                                     if (confirm(LANG.delete_confirm.sprintf(<?= e(js($user['name'])) ?>))) {
                                         Form.send('/admin/users/remove', null, null, {
-                                            csrf: <?= e(js($this->csrfToken())) ?>,
+                                            csrf: csrf_token,
                                             id: <?= e(js($user['id'])) ?>,
                                         }).then(res => Listing.handleResponse(res));
                                     }

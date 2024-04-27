@@ -20,7 +20,7 @@
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($tag['name'])) ?>))) {
                                     Form.send('/admin/tags/remove', null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                        csrf: csrf_token,
                                         id: <?= e(js($tag['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }

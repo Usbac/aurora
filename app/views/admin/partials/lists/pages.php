@@ -30,7 +30,7 @@
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($page['title'])) ?>))) {
                                     Form.send('/admin/pages/remove', null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                        csrf: csrf_token,
                                         id: <?= e(js($page['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }

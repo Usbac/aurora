@@ -12,7 +12,7 @@
 
                         if (confirm(LANG.delete_confirm_selected)) {
                             Form.send('/admin/tags/remove', null, null, {
-                                csrf: <?= e(js($this->csrfToken())) ?>,
+                                csrf: csrf_token,
                                 id: ids,
                             }).then(res => Listing.handleResponse(res));
                         }

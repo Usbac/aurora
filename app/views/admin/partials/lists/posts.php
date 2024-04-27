@@ -36,7 +36,7 @@
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($post['title'])) ?>))) {
                                     Form.send('/admin/posts/remove', null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                        csrf: csrf_token,
                                         id: <?= e(js($post['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }

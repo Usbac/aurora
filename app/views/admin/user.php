@@ -112,7 +112,7 @@
             }
 
             Form.send('/admin/users/remove', null, btn, {
-                csrf: <?= js($this->csrfToken()) ?>,
+                csrf: csrf_token,
                 id: window.id,
             }).then(res => {
                 if (res.success) {

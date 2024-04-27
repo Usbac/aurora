@@ -105,7 +105,6 @@
 </dialog>
 
 <script>
-    let csrf_token = <?= js($this->csrfToken()) ?>;
     let path = <?= js($_GET['path'] ?? \Aurora\System\Kernel::config('content')) ?>;
     let file_name = null;
     let files_names = [];
@@ -218,7 +217,7 @@
 
         document.body.style.cursor = 'wait';
         let data = new FormData();
-        data.append('csrf', <?= js($this->csrfToken()) ?>);
+        data.append('csrf', csrf_token);
         Array.from(event.dataTransfer.files).map(file => data.append('file[]', file));
 
         fetch('/admin/media/upload' + window.location.search, {

@@ -27,7 +27,7 @@
                             onclick="
                                 if (confirm(LANG.delete_confirm.sprintf(<?= e(js($link['title'])) ?>))) {
                                     Form.send('/admin/links/remove', null, null, {
-                                        csrf: <?= e(js($this->csrfToken())) ?>,
+                                        csrf: csrf_token,
                                         id: <?= e(js($link['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));
                                 }
