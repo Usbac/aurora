@@ -14,7 +14,10 @@
                     <?php endif ?>
                 <?php endforeach ?>
             </div>
-            <span id="total-items">&nbsp;</span>
+            <div>
+                <span id="total-items">&nbsp;</span>
+                <span id="selected-items"></span>
+            </div>
         </div>
     </div>
 </div>

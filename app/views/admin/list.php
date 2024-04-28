@@ -15,6 +15,7 @@
                 <div>
                     <h2><?= e($title) ?></h2>
                     <span id="total-items">&nbsp;</span>
+                    <span id="selected-items"></span>
                 </div>
             </div>
             <?php if (!empty($show_add_button)): ?>

@@ -232,16 +232,19 @@ class Listing {
     static toggleSelectMode(btn_el) {
         let listing = get('#main-listing');
         let batch_options = get('#batch-options');
+        let selected_items = get('#selected-items');
 
         if ('selectMode' in listing.dataset) {
             delete listing.dataset.selectMode;
             batch_options.style.visibility = 'hidden';
             this.getSelectedRows().map(el => this.toggleRow(el));
             this.#prev_selected_row = null;
+            selected_items.style.visibility = 'hidden';
         } else {
             listing.dataset.selectMode = true;
             batch_options.style.visibility = 'visible';
             batch_options.querySelectorAll('button').forEach(el => el.setAttribute('disabled', true));
+            selected_items.style.visibility = 'visible';
         }
 
         this.#select_mode = !this.#select_mode;
@@ -275,10 +278,11 @@ class Listing {
         }
 
         this.#prev_selected_row = row;
-        let rows_selected = this.getSelectedRows().length > 0;
-        get('#batch-options').querySelectorAll('button').forEach(el => rows_selected
+        let rows_selected_count = this.getSelectedRows().length;
+        get('#batch-options').querySelectorAll('button').forEach(el => rows_selected_count > 0
             ? el.removeAttribute('disabled')
             : el.setAttribute('disabled', true));
+        get('#selected-items').innerText = rows_selected_count == 0 ? '' : (rows_selected_count + ' Selected');
     }
 
     static getSelectedRows() {

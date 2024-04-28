@@ -868,6 +868,12 @@ textarea.code {
     margin-right: 12px;
 }
 
+#selected-items {
+    visibility: hidden;
+    margin-left: 6px;
+    font-variant-numeric: tabular-nums;
+}
+
 .current-user {
     display: flex;
     flex-direction: row;
