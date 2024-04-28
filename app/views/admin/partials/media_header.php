@@ -203,7 +203,7 @@
     }
 
     function downloadAll() {
-        if (confirm(<?= js(t('download_media_description', false)) ?>)) {
+        if (confirm(LANG.download_media_description)) {
             location = '/admin/settings/media_download?path=' + path;
         }
     }

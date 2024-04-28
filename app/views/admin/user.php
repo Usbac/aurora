@@ -20,7 +20,7 @@
                         <?= $this->include('icons/trash.svg') ?>
                     </button>
                     <?php if (\Aurora\App\Permission::impersonate($user)): ?>
-                        <button onclick="if (confirm(<?= e(js(t('impersonate_confirm', false))) ?>)) location.href = '/admin/users/impersonate?id=' + <?= e(js($user['id'])) ?>"><?= $this->include('icons/users.svg') ?></button>
+                        <button onclick="if (confirm(LANG.impersonate_confirm)) location.href = '/admin/users/impersonate?id=' + <?= e(js($user['id'])) ?>"><?= $this->include('icons/users.svg') ?></button>
                     <?php endif ?>
                 <?php endif ?>
                 <button onclick="window.open(<?= e(js('/' . setting('blog_url') . '/author/' . $user['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?></button>

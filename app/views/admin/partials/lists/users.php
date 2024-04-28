@@ -33,7 +33,7 @@
                     <div onclick="window.open(<?= e(js('/' . setting('blog_url') . '/author/' . $user['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= t('view') ?></div>
                     <?php if ($user['id'] != $_SESSION['user']['id']): ?>
                         <?php if (\Aurora\App\Permission::impersonate($user)): ?>
-                            <div onclick="if (confirm(<?= e(js(t('impersonate_confirm', false))) ?>)) location.href = '/admin/users/impersonate?id=' + <?= e(js($user['id'])) ?>"><?= $this->include('icons/users.svg') ?> <?= t('impersonate') ?></div>
+                            <div onclick="if (confirm(LANG.impersonate_confirm)) location.href = '/admin/users/impersonate?id=' + <?= e(js($user['id'])) ?>"><?= $this->include('icons/users.svg') ?> <?= t('impersonate') ?></div>
                         <?php endif ?>
                         <?php if (\Aurora\App\Permission::can('edit_users')): ?>
                             <div
