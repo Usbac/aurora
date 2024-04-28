@@ -17,15 +17,15 @@ Aurora is a modern and lightweight CMS made in PHP, focused on both developers a
 
 ## Features
 
-- ✨ **Simple**: Easy to set up and use. Aurora can be installed by moving its files to the root folder of your web server!
+- ✨ **User-Friendly**: Aurora is designed to be simple and straightforward, making it a breeze to set up and use. Just move its files to your web server's root folder to get started!
 
-- 🗜️ **Compact**: The Aurora codebase is extremely small and simple to understand, having less than 8k loc in total. In addition, it does not rely on any single external dependency other than the default WYSIWYG editor.
+- 🗜️ **Lightweight**: The Aurora codebase is incredibly compact, totaling less than 8k lines of code (loc), making it easy to grasp and work with. It doesn't rely on any external dependencies apart from the default WYSIWYG editor.
 
-- 🦄 **Elegant**: Aurora is written in clean and modern PHP. It follows the best coding practices and standards, making it extremely easy for developers to understand and modify.
+- 🦄 **Stylish**: Written in clean, modern PHP, Aurora adheres to the highest coding standards, ensuring it's both elegant and easy for developers to understand and customize.
 
-- 🛠️ **Comprenhensive**: Its admin panel (and CLI) offers you everything you may ever need to manage your next website without touching any code. With it you can create posts, modify pages, manage files, create/import backups, handle several users with their roles and much more.
+- 🛠️ **Comprehensive**: With its intuitive admin panel and command-line interface (CLI), Aurora offers everything you need to manage your website without delving into the code. From creating posts and editing pages to handling user roles and backups.
 
-- 📦 **Modular**: Aurora allows you to modify not only the default DBMS but also things like the WYSIWYG editor of the admin panel.
+- 📦 **Modular**: Aurora's modular design allows you to customize not only the default database management system (DBMS) but also elements like the WYSIWYG editor in the admin panel.
 
 ## Requirements
 
