@@ -17,15 +17,15 @@ Aurora is a modern and lightweight CMS made in PHP, focused on both developers a
 
 ## Features
 
-- ✨ **Simple**: Easy to set up and use. No complicated settings or configurations. Aurora can be installed by simply moving its files to your web server root!
+- ✨ **Simple**: Easy to set up and use. Aurora can be installed by moving its files to the root folder of your web server!
 
 - 🗜️ **Compact**: The Aurora codebase is extremely small and simple to understand, having less than 8k loc in total. In addition, it does not rely on any single external dependency other than the default WYSIWYG editor.
 
-- 🦄 **Elegant**: Aurora is written in clean, easy-to-understand and modern PHP code. It follows the best coding practices and standards, making it extremely easy for developers to understand and modify.
+- 🦄 **Elegant**: Aurora is written in clean and modern PHP. It follows the best coding practices and standards, making it extremely easy for developers to understand and modify.
 
-- 🛠️ **Comprenhensive**: Its admin panel (and CLI) offers you everything you may ever need to manage your next website without touching any code. With it you can create posts, modify pages, manage files, export/import backups, handle several users with their roles and much more.
+- 🛠️ **Comprenhensive**: Its admin panel (and CLI) offers you everything you may ever need to manage your next website without touching any code. With it you can create posts, modify pages, manage files, create/import backups, handle several users with their roles and much more.
 
-- 📦 **Modular**: Aurora allows you to modify not only the default DBMS but also things like the WYSIWYG editor used in the admin panel.
+- 📦 **Modular**: Aurora allows you to modify not only the default DBMS but also things like the WYSIWYG editor of the admin panel.
 
 ## Requirements
 
