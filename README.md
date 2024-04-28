@@ -13,7 +13,7 @@
 <img src="https://img.shields.io/badge/license-MIT-orange.svg">
 </p>
 
-Aurora is a modern and lightweight CMS made in PHP, focused on both developers and content managers. Extremely simple to install, use and modify.
+Aurora is a cutting-edge CMS crafted in PHP, tailored for developers and content managers alike. It boasts a sleek and lightweight design, ensuring seamless installation, effortless usability, and convenient customization.
 
 ## Features
 
