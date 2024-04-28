@@ -119,7 +119,7 @@ code {
     color: var(--danger-color);
 }
 
-*:disabled {
+*:not(.loading):disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -1057,6 +1057,7 @@ textarea.code {
     font-size: var(--font-size-bg);
     min-height: 20px;
     color: #007FFF;
+    background-color: transparent !important;
 }
 
 .batch-options-container button.danger {
