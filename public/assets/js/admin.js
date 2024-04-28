@@ -209,7 +209,7 @@ class Listing {
     static #next_page = 1;
     static #prev_selected_row = null;
 
-    static initListeners() {
+    static init() {
         window.addEventListener('keydown', e => {
             if (document.activeElement.tagName == 'INPUT') {
                 return;

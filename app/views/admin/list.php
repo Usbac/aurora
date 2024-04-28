@@ -73,7 +73,7 @@
         });
 
         window.addEventListener('load', () => {
-            Listing.initListeners();
+            Listing.init();
             Listing.setNextPageUrl(<?= js("$current_path/page") ?>);
             Listing.loadNextPage();
         });
