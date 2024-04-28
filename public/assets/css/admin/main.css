@@ -1057,6 +1057,10 @@ textarea.code {
     color: var(--danger-color);
 }
 
+.listing[data-select-mode="true"] {
+    user-select: none;
+}
+
 .listing[data-select-mode="true"] .three-dots {
     visibility: hidden;
 }

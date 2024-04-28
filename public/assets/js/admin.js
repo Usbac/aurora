@@ -31,6 +31,34 @@ Element.prototype.resetState = function() {
     }
 };
 
+Element.prototype.getElementsBetween = function(el) {
+    if (el === this) {
+        return [];
+    }
+
+    const elements = [ ...this.parentElement.children ];
+    const result = [];
+    let start = null;
+    let end = null;
+
+    if (elements.indexOf(this) > elements.indexOf(el)) {
+        start = el;
+        end = this;
+    } else {
+        start = this;
+        end = el;
+    }
+
+    let next = start.nextElementSibling;
+
+    while (next && next !== end) {
+        result.push(next);
+        next = next.nextElementSibling;
+    }
+
+    return result;
+};
+
 class Snackbar {
     static #timeout = null;
 
@@ -179,6 +207,7 @@ class Listing {
     static #select_mode = false;
     static #next_page_url = '';
     static #next_page = 1;
+    static #prev_selected_row = null;
 
     static initListeners() {
         window.addEventListener('keydown', e => {
@@ -208,6 +237,7 @@ class Listing {
             delete listing.dataset.selectMode;
             batch_options.style.visibility = 'hidden';
             this.getSelectedRows().map(el => this.toggleRow(el));
+            this.#prev_selected_row = null;
         } else {
             listing.dataset.selectMode = true;
             batch_options.style.visibility = 'visible';
@@ -218,7 +248,7 @@ class Listing {
         btn_el.innerText = LANG[this.#select_mode ? 'done' : 'select'];
     }
 
-    static toggleRow(el, event = null) {
+    static toggleRow(row, event = null) {
         if (!this.#select_mode) {
             return;
         }
@@ -226,14 +256,25 @@ class Listing {
         if (event) {
             event.preventDefault();
             event.stopPropagation();
+
+            if (event.shiftKey && this.#prev_selected_row) {
+                [ this.#prev_selected_row, ...row.getElementsBetween(this.#prev_selected_row) ].forEach(el => {
+                    if ('selected' in row.dataset) {
+                        delete el.dataset.selected;
+                    } else {
+                        el.dataset.selected = true;
+                    }
+                });
+            }
         }
 
-        if ('selected' in el.dataset) {
-            delete el.dataset.selected;
+        if ('selected' in row.dataset) {
+            delete row.dataset.selected;
         } else {
-            el.dataset.selected = true;
+            row.dataset.selected = true;
         }
 
+        this.#prev_selected_row = row;
         let rows_selected = this.getSelectedRows().length > 0;
         get('#batch-options').querySelectorAll('button').forEach(el => rows_selected
             ? el.removeAttribute('disabled')
