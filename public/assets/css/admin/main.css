@@ -1041,6 +1041,7 @@ textarea.code {
 .batch-options-container > div {
     display: flex;
     gap: 10px;
+    visibility: hidden;
 }
 
 .batch-options-container button {
@@ -1049,7 +1050,6 @@ textarea.code {
     font-weight: var(--font-bold);
     font-size: var(--font-size-bg);
     min-height: 20px;
-    cursor: pointer !important;
     color: #007FFF;
 }
 
@@ -1057,12 +1057,6 @@ textarea.code {
     color: var(--danger-color);
 }
 
-#batch-options[data-disabled="true"] button {
-    opacity: 0.3;
-    cursor: default;
-}
-
-#batch-options:not([data-select-mode="true"]),
 .listing[data-select-mode="true"] .three-dots {
     visibility: hidden;
 }

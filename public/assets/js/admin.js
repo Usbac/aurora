@@ -206,11 +206,12 @@ class Listing {
 
         if ('selectMode' in listing.dataset) {
             delete listing.dataset.selectMode;
-            delete batch_options.dataset.selectMode;
+            batch_options.style.visibility = 'hidden';
             this.getSelectedRows().map(el => this.toggleRow(el));
         } else {
             listing.dataset.selectMode = true;
-            batch_options.dataset.selectMode = true;
+            batch_options.style.visibility = 'visible';
+            batch_options.querySelectorAll('button').forEach(el => el.setAttribute('disabled', true));
         }
 
         this.#select_mode = !this.#select_mode;
@@ -233,11 +234,10 @@ class Listing {
             el.dataset.selected = true;
         }
 
-        if (this.getSelectedRows().length == 0) {
-            get('#batch-options').dataset.disabled = true;
-        } else {
-            delete get('#batch-options').dataset.disabled;
-        }
+        let rows_selected = this.getSelectedRows().length > 0;
+        get('#batch-options').querySelectorAll('button').forEach(el => rows_selected
+            ? el.removeAttribute('disabled')
+            : el.setAttribute('disabled', true));
     }
 
     static getSelectedRows() {

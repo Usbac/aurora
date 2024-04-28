@@ -1,5 +1,5 @@
 <div class="batch-options-container">
-    <div id="batch-options" data-disabled="true">
+    <div id="batch-options">
         <?php if (\Aurora\App\Permission::can('edit_users')): ?>
             <button
                 class="danger"
