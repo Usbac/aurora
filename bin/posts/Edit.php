@@ -33,6 +33,10 @@ class Edit extends \Aurora\Bin\BaseCommand
             return Command::INVALID;
         }
 
+        $tags = empty($post['tags'])
+            ? []
+            : $this->config['db']->query('SELECT * FROM tags WHERE slug IN (' . implode(', ', array_fill(0, count($post['tags']), '?')) . ')', ...array_keys($post['tags']))->fetchAll();
+
         $res = $post_mod->save($post['id'], [
             'title' => $title = $io->ask('Title', $post['title'], function($val) {
                 if (empty($val)) {
@@ -62,7 +66,7 @@ class Edit extends \Aurora\Bin\BaseCommand
             'meta_description' => $io->ask('Meta description', $post['meta_description']),
             'canonical_url' => $io->ask('Canonical URL', $post['canonical_url']),
             'html' => $post['html'],
-            'tags' => explode(',', $post['tags_id']),
+            'tags' => explode(',', $io->ask('Tags (ids, separated by comma)', implode(',', array_column($tags, 'id')))),
         ]);
 
         if (!$res) {
