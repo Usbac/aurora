@@ -21,6 +21,7 @@ class Edit extends \Aurora\Bin\BaseCommand
     {
         $io = new SymfonyStyle($input, $output);
         $users = $this->config['db']->query('SELECT id, slug FROM users ORDER BY name ASC')->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $users[0] = '';
         $post_mod = new \Aurora\App\Modules\Post($this->config['db']);
         $id = $input->getArgument('id');
 

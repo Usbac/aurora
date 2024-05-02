@@ -20,6 +20,7 @@ class Create extends \Aurora\Bin\BaseCommand
         $io = new SymfonyStyle($input, $output);
         $post_mod = new \Aurora\App\Modules\Post($this->config['db']);
         $users = $this->config['db']->query('SELECT id, slug FROM users ORDER BY name ASC')->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $users[0] = '';
 
         $res = $post_mod->add([
             'title' => $title = $io->ask('Title', null, function($val) {
