@@ -66,7 +66,7 @@ class Edit extends \Aurora\Bin\BaseCommand
             'meta_description' => $io->ask('Meta description', $post['meta_description']),
             'canonical_url' => $io->ask('Canonical URL', $post['canonical_url']),
             'html' => $post['html'],
-            'tags' => explode(',', $io->ask('Tags (ids, separated by comma)', implode(',', array_column($tags, 'id')))),
+            'tags' => explode(',', $io->ask('Tags (ids, separated by comma)', implode(',', array_column($tags, 'id'))) ?? ''),
         ]);
 
         if (!$res) {

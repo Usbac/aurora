@@ -50,7 +50,7 @@ class Create extends \Aurora\Bin\BaseCommand
             'meta_description' => $io->ask('Meta description'),
             'canonical_url' => $io->ask('Canonical URL'),
             'html' => '',
-            'tags' => explode(',', $io->ask('Tags (ids, separated by comma)')),
+            'tags' => explode(',', $io->ask('Tags (ids, separated by comma)') ?? ''),
         ]);
 
         if (!$res) {
