@@ -4,7 +4,7 @@ namespace Aurora\System;
 
 final class Kernel
 {
-    public const VERSION = '0.1.11';
+    public const VERSION = '0.2.0';
 
     /**
      * System configuration
