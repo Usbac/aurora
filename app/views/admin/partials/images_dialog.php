@@ -25,6 +25,7 @@
                 type="file"
                 class="hidden"
                 name="file"
+                accept="image/*"
                 oninput="let path = <?= e(js($path)) ?>; Form.send(`/admin/media/upload?path=${path}`, 'image-dialog-file-form', get('#image-dialog-file-button')).then(() => ImageDialog.setImagePage(path));"
             />
         </div>
