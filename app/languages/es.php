@@ -100,6 +100,7 @@ return [
     'new_password' => 'Nueva contraseña',
     'no' => 'No',
     'no_active_user' => 'No hay un usuario activo con ese correo',
+    'no_items' => 'No hay elementos',
     'no_permission' => 'No tienes permiso para realizar esta acción',
     'no_results' => 'No hay resultados',
     'not_found' => 'No encontrado',

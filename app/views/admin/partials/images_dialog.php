@@ -69,4 +69,7 @@
             </div>
         </div>
     <?php endforeach ?>
+    <?php if (empty($files)): ?>
+        <span class="empty"><?= t('no_items') ?></span>
+    <?php endif ?>
 </div>

@@ -99,6 +99,7 @@ return [
     'new_password' => 'New password',
     'no' => 'No',
     'no_active_user' => 'There is no active user with that email address',
+    'no_items' => 'No items',
     'no_permission' => 'You do not have permissions to perform this action',
     'no_results' => 'No results',
     'not_found' => 'Not found',
