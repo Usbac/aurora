@@ -22,7 +22,7 @@ But one goal of the CMS is to NOT release a major version unless there's a big i
 
 ## What is the database engine used?
 
-Aurora uses [SQLite](https://www.sqlite.org/index.html) as its database engine, but it can be changed to any other engine supported by [PDO](https://www.php.net/manual/en/book.pdo.php) in the `/bootstrap/index.php` file.
+Aurora uses [SQLite](https://www.sqlite.org/index.html) as its database engine, but it can be changed to any other engine supported by [PDO](https://www.php.net/manual/en/book.pdo.php) in the `/app/bootstrap/index.php` file.
 
 ## What are the recommended file permissions for Aurora?
 

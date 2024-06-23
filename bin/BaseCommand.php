@@ -10,7 +10,7 @@ class BaseCommand extends Command
 
     public function __construct()
     {
-        $this->config = require(__DIR__ . '/../bootstrap/config.php');
+        $this->config = require(__DIR__ . '/../app/bootstrap/config.php');
         parent::__construct();
     }
 

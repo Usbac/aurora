@@ -1,12 +1,8 @@
 The Aurora codebase is structured in several directories.
 
-- `app` - Contains the code related to the controllers, languages and views.
+- `app` - Contains the code related to the project configuration, database, controllers, languages and views.
 
 - `bin` Contains the CLI code.
-
-- `bootstrap` - Contains the project configuration, routes and everything else related to the web app initialization.
-
-- `database` - Contains the database file and everything related to the database.
 
 - `docs` - Contains the Aurora documentation.
 
@@ -36,6 +32,6 @@ Aurora is built with simplicity in mind. The workflow is very straightforward:
 
 2. `/public/index.php` is executed and initializes the web app.
 
-3. `/bootstrap/config.php` is requested and loads the configuration, routes and everything else related to the web app initialization in the `bootstrap` property.
+3. `/app/bootstrap/config.php` is requested and loads the configuration, routes and everything else related to the web app initialization in the `app/bootstrap` property.
 
-4. The requested route is matched and the corresponding route defined in `/bootstrap/routes.php` is executed (each route normally calls the modules defined in `/app/controllers/modules`).
+4. The requested route is matched and the corresponding route defined in `/app/bootstrap/routes.php` is executed (each route normally calls the modules defined in `/app/controllers/modules`).

@@ -1,6 +1,6 @@
 <?php
 
-$db_folder = \Aurora\System\Helper::getPath('database');
+$db_folder = \Aurora\System\Helper::getPath('app/database');
 $db_file = "$db_folder/db.sqlite";
 $db_exists = file_exists($db_file);
 if (!$db_exists) {

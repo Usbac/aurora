@@ -1,4 +1,4 @@
-The configuration file is located at `/bootstrap/config.php`. It must return an array containing the configuration values.
+The configuration file is located at `/app/bootstrap/config.php`. It must return an array containing the configuration values.
 
 _All configuration values are mandatory._
 
@@ -26,7 +26,7 @@ Database connection.
 #### Example
 
 ```php
-new \Aurora\System\DB("sqlite:database/db.sqlite");
+new \Aurora\System\DB("sqlite:app/database/db.sqlite");
 ```
 
 ### `content`
