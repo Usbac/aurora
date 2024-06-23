@@ -432,6 +432,7 @@ class ImageDialog {
 
             this.#dialog_el.innerHTML = LOADING_ICON;
             let data = new FormData();
+            data.append('csrf', csrf_token);
             Array.from(event.dataTransfer.files).map(file => data.append('file[]', file));
 
             fetch('/admin/media/upload?path=' + this.#current_path, {
