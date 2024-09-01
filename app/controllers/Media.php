@@ -4,7 +4,7 @@ namespace Aurora\App;
 
 final class Media
 {
-    private const FOLDER_PERMISSION = 0755;
+    public const FOLDER_PERMISSION = 0755;
 
     /**
      * The content directory relative to the project root directory
