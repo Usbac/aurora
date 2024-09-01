@@ -553,6 +553,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         $path = $_GET['path'] ?? Kernel::config('content');
         $absolute_path = \Aurora\System\Helper::getPath($path);
 
+        if ($path == Kernel::config('content') && !file_exists($absolute_path)) {
+            mkdir($absolute_path, \Aurora\App\Media::FOLDER_PERMISSION);
+        }
+
         if (!\Aurora\App\Media::isValidPath($absolute_path) || !file_exists($absolute_path)) {
             http_response_code(404);
             return;
