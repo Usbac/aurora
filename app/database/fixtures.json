@@ -210,7 +210,7 @@
             },
             {
                 "key": "editor_code",
-                "value": "<script src=\"\/public\/assets\/js\/tinymce\/tinymce.min.js\"><\/script>\n        <script>let selector = \"textarea#html\";\n        tinymce.init({\n            selector: selector,\n            plugins: [ \"image\", \"wordcount\", \"autoresize\", \"code\", \"link\", \"lists\" ],\n            images_upload_url: \"\/admin\/posts\/upload_image\",\n            setup: editor => editor.on(\"Change Keyup\", () => get(selector).innerHTML = editor.getContent()),\n        });\n        <\/script>"
+                "value": "<script src=\"\/public\/assets\/js\/tinymce\/tinymce.min.js\"><\/script>\n        <script>let selector = \"textarea#html\";\n        tinymce.init({\n            selector: selector,\n            plugins: [ \"image\", \"wordcount\", \"autoresize\", \"code\", \"link\", \"lists\" ],\n            images_upload_url: \"\/admin\/posts\/upload_image\",\n            setup: editor => editor.on(\"Change Keyup\", () => get(selector).innerHTML = editor.getContent()),\n            skin: get('#toggle-theme').dataset.theme == 'dark' ? 'oxide-dark' : 'oxide',\n            content_css: get('#toggle-theme').dataset.theme == 'dark' ? 'dark' : 'default', \n        });\n        <\/script>"
             }
         ],
         "tags": [
