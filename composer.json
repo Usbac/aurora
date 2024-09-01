@@ -14,7 +14,10 @@
         }
     ],
     "scripts": {
-        "post-autoload-dump": "php -r \"require './vendor/autoload.php'; \\Aurora\\System\\Helper::copy('vendor/tinymce/tinymce', 'public/assets/js/tinymce');\""
+        "post-autoload-dump": [
+            "cp -a vendor/tinymce/tinymce/. public/assets/js/tinymce",
+            "mkdir -p public/content"
+        ]
     },
     "require": {
         "php": ">=8.0.0",
