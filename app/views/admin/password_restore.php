@@ -5,7 +5,8 @@
     <?= $this->include('admin/partials/head.php') ?>
 </head>
 <body class="login-page">
-    <form id="restore-form" class="v-spacing">
+    <?= $this->include('admin/partials/snackbar.php') ?>
+    <form id="restore-form" class="card v-spacing">
         <div class="input-group">
             <label for="password"><?= t('new_password') ?></label>
             <input id="password" type="password" name="password" value=""/>
