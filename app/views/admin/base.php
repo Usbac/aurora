@@ -62,10 +62,8 @@
     <noscript class="warning">Looks like JavaScript is disabled or your browser does not support it. JavaScript is required for the site to work properly.</noscript>
     <div class="nav-background" onclick="document.body.toggleAttribute('nav-open')"></div>
     <?= $this->include('admin/partials/snackbar.php') ?>
-    <div class="content">
-        <?php $this->sectionStart('content') ?>
-        <?php $this->sectionEnd() ?>
-    </div>
+    <?php $this->sectionStart('content') ?>
+    <?php $this->sectionEnd() ?>
 </body>
 </html>
 <script>

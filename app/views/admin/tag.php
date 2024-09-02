@@ -5,6 +5,7 @@
 <?php $this->sectionEnd() ?>
 
 <?php $this->sectionStart('content') ?>
+<form id="tag-form" class="content">
     <div>
         <div class="page-title">
             <?= $this->include('admin/partials/menu_btn.php') ?>
@@ -12,15 +13,15 @@
         </div>
         <div class="buttons">
             <?php if (\Aurora\System\Helper::isValidId($tag['id'] ?? false)): ?>
-                <button class="delete" onclick="remove(this);" <?php if (!\Aurora\App\Permission::can('edit_tags')): ?> disabled <?php endif ?>>
+                <button type="button" class="delete" onclick="remove(this);" <?php if (!\Aurora\App\Permission::can('edit_tags')): ?> disabled <?php endif ?>>
                     <?= $this->include('icons/trash.svg') ?>
                 </button>
-                <button onclick="window.open(<?= e(js('/' . setting('blog_url') . '/tag/' . $tag['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?></button>
+                <button type="button" onclick="window.open(<?= e(js('/' . setting('blog_url') . '/tag/' . $tag['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?></button>
             <?php endif ?>
-            <button onclick="save()" <?php if (!\Aurora\App\Permission::can('edit_tags')): ?> disabled <?php endif ?>><?= t('save') ?></button>
+            <button type="submit" <?php if (!\Aurora\App\Permission::can('edit_tags')): ?> disabled <?php endif ?>><?= t('save') ?></button>
         </div>
     </div>
-    <div id="tag-form" class="grid small-form">
+    <div class="grid small-form">
         <div class="card v-spacing">
             <div class="input-group">
                 <label for="name"><?= t('name') ?></label>
@@ -53,20 +54,22 @@
         </div>
         <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
     </div>
+</form>
 <?php $this->sectionEnd() ?>
 
 <?php $this->sectionStart('extra') ?>
     <script>
         window.id = <?= js($tag['id'] ?? '') ?>;
 
-        function save() {
+        document.getElementById('tag-form').addEventListener('submit', event => {
+            event.preventDefault();
             updateSlug();
-            Form.send('/admin/tags/save?id=' + window.id, 'tag-form').then(res => {
+            Form.send('/admin/tags/save?id=' + window.id, 'tag-form', event.target.querySelector('[type="submit"]')).then(res => {
                 if (typeof res?.id !== 'undefined') {
                     window.id = res.id;
                 }
             });
-        }
+        });
 
         function remove(btn) {
             if (!confirm(LANG.delete_confirm.sprintf(<?= js($tag['name'] ?? '') ?>))) {

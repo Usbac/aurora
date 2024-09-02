@@ -5,7 +5,7 @@
     <?= $this->include('admin/partials/head.php') ?>
 </head>
 <body class="login-page">
-    <div id="restore-form" class="v-spacing">
+    <form id="restore-form" class="v-spacing">
         <div class="input-group">
             <label for="password"><?= t('new_password') ?></label>
             <input id="password" type="password" name="password" value=""/>
@@ -16,16 +16,17 @@
         </div>
         <input type="hidden" name="hash" value="<?= e($_GET['hash']) ?>"/>
         <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
-        <button onclick="passwordRestore()"><?= t('restore_your_password') ?></button>
-    </div>
+        <button type="submit"><?= t('restore_your_password') ?></button>
+    </form>
 </body>
 </html>
 <script>
-    function passwordRestore() {
-        Form.send('/admin/password_restore', 'restore-form').then(res => {
+    document.getElementById('restore-form').addEventListener('submit', event => {
+        event.preventDefault();
+        Form.send('/admin/password_restore', 'restore-form', event.target.querySelector('[type="submit"]')).then(res => {
             if (res.success) {
                 setTimeout(() => location.href = '/admin/dashboard', 2000);
             }
         });
-    }
+    });
 </script>
