@@ -48,7 +48,7 @@ return [
     'error' => 'Error',
     'error_create_folder' => 'Error creating folder. The name is invalid, the file does not comply with the server rules or the path is not writable.',
     'error_duplicate_item' => 'Error duplicating item. The name is invalid, the file does not comply with the server rules or the path is not writable.',
-    'error_expired_restore' => 'Restore code has expired',
+    'error_expired_restore' => 'Restore code is no longer valid',
     'error_move_item' => 'Error moving item. The name is invalid, the file does not comply with the server rules or the path is not writable.',
     'error_move_some_items' => 'Not all items could be moved.',
     'error_remove_item' => 'Unexpected error. The path may not be writable.',
