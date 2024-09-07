@@ -33,7 +33,7 @@
             <div class="grid tab-content" data-tab="#general">
                 <div class="card v-spacing">
                     <div class="input-group">
-                        <label for="logo"><?= t('logo') ?></label>
+                        <label><?= t('logo') ?></label>
                         <img src="<?= e(!empty(setting('logo')) ? $this->getContentUrl(setting('logo')) : '/public/assets/no-image.svg') ?>" class="logo pointer <?php if (empty(setting('logo'))): ?>empty-img<?php endif ?>" alt="logo"/>
                         <input id="settings-logo-input" type="hidden" name="logo" value="<?= e(setting('logo')) ?>"/>
                     </div>
