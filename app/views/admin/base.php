@@ -9,7 +9,7 @@
 <body class="admin">
     <nav>
         <header>
-            <img src="/public/assets/logo.svg"/>
+            <img src="/public/assets/logo.svg" alt=""/>
             <h1>Aurora</h1>
         </header>
         <div class="admin-options">
