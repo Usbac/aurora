@@ -27,7 +27,7 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="title"><?= t('title') ?></label>
-                        <input id="title" type="text" name="title" value="<?= e($post['title'] ?? '') ?>" char-count/>
+                        <input id="title" type="text" name="title" value="<?= e($post['title'] ?? '') ?>" data-char-count/>
                     </div>
                     <?php if (!empty($post['image'])): ?>
                         <img src="<?= e($this->getContentUrl($post['image'])) ?>" class="pointer post-image"/>
@@ -42,12 +42,12 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="slug"><?= t('slug') ?></label>
-                        <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($post['slug'] ?? '') ?>" maxlength="255" char-count/>
+                        <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($post['slug'] ?? '') ?>" maxlength="255" data-char-count/>
                         <a id="post-link" target="_blank"></a>
                     </div>
                     <div class="input-group">
                         <label for="description"><?= t('description') ?></label>
-                        <textarea id="description" name="description" char-count><?= e($post['description'] ?? '') ?></textarea>
+                        <textarea id="description" name="description" data-char-count><?= e($post['description'] ?? '') ?></textarea>
                     </div>
                     <?php if (\Aurora\Core\Helper::isValidId($post['id'] ?? false)): ?>
                         <div class="extra-data">
@@ -98,11 +98,11 @@
                     </div>
                     <div class="input-group">
                         <label for="meta-title"><?= t('meta_title') ?></label>
-                        <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($post['meta_title'] ?? '') ?>" char-count/>
+                        <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($post['meta_title'] ?? '') ?>" data-char-count/>
                     </div>
                     <div class="input-group">
                         <label for="meta-description"><?= t('meta_description') ?></label>
-                        <textarea id="meta-description" name="meta_description" char-count><?= e($post['meta_description'] ?? '') ?></textarea>
+                        <textarea id="meta-description" name="meta_description" data-char-count><?= e($post['meta_description'] ?? '') ?></textarea>
                     </div>
                     <div class="input-group">
                         <label for="canonical-url"><?= t('canonical_url') ?></label>

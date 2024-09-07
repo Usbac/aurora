@@ -40,7 +40,7 @@
                     <div class="input-group-container">
                         <div class="input-group">
                             <label for="title"><?= t('title') ?></label>
-                            <input id="title" name="title" type="text" value="<?= e(setting('title')) ?>" char-count/>
+                            <input id="title" name="title" type="text" value="<?= e(setting('title')) ?>" data-char-count/>
                         </div>
                         <div class="input-group">
                             <label for="blog-url"><?= t('blog_url') ?></label>
@@ -92,15 +92,15 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="meta_title"><?= t('meta_title') ?></label>
-                        <input id="meta_title" name="meta_title" type="text" value="<?= e(setting('meta_title')) ?>" char-count/>
+                        <input id="meta_title" name="meta_title" type="text" value="<?= e(setting('meta_title')) ?>" data-char-count/>
                     </div>
                     <div class="input-group">
                         <label for="description"><?= t('description') ?></label>
-                        <textarea id="description" name="description" char-count><?= e(setting('description')) ?></textarea>
+                        <textarea id="description" name="description" data-char-count><?= e(setting('description')) ?></textarea>
                     </div>
                     <div class="input-group">
                         <label for="meta_description"><?= t('meta_description') ?></label>
-                        <textarea id="meta_description" name="meta_description" char-count><?= e(setting('meta_description')) ?></textarea>
+                        <textarea id="meta_description" name="meta_description" data-char-count><?= e(setting('meta_description')) ?></textarea>
                     </div>
                     <div class="input-group">
                         <label for="meta_keywords"><?= t('meta_keywords') ?></label>

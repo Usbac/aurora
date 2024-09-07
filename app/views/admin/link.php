@@ -25,7 +25,7 @@
             <div class="card v-spacing">
                 <div class="input-group">
                     <label for="title"><?= t('title') ?></label>
-                    <input id="title" name="title" type="text" value="<?= e($link['title'] ?? '') ?>" char-count/>
+                    <input id="title" name="title" type="text" value="<?= e($link['title'] ?? '') ?>" data-char-count/>
                 </div>
                 <div class="input-group">
                     <label for="url"><?= t('url') ?></label>

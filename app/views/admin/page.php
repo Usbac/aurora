@@ -27,7 +27,7 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="title"><?= t('title') ?></label>
-                        <input id="title" type="text" name="title" value="<?= e($page['title'] ?? '') ?>" char-count/>
+                        <input id="title" type="text" name="title" value="<?= e($page['title'] ?? '') ?>" data-char-count/>
                     </div>
                 </div>
                 <div id="page-editor">
@@ -38,7 +38,7 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="slug"><?= t('slug') ?></label>
-                        <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($page['slug'] ?? '') ?>" maxlength="255" char-count/>
+                        <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($page['slug'] ?? '') ?>" maxlength="255" data-char-count/>
                         <a id="page-link" target="_blank"></a>
                     </div>
                     <?php if (\Aurora\Core\Helper::isValidId($page['id'] ?? false)): ?>
@@ -78,11 +78,11 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="meta-title"><?= t('meta_title') ?></label>
-                        <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($page['meta_title'] ?? '') ?>" char-count/>
+                        <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($page['meta_title'] ?? '') ?>" data-char-count/>
                     </div>
                     <div class="input-group">
                         <label for="meta-description"><?= t('meta_description') ?></label>
-                        <textarea id="meta-description" name="meta_description" char-count><?= e($page['meta_description'] ?? '') ?></textarea>
+                        <textarea id="meta-description" name="meta_description" data-char-count><?= e($page['meta_description'] ?? '') ?></textarea>
                     </div>
                     <div class="input-group">
                         <label for="canonical-url"><?= t('canonical_url') ?></label>

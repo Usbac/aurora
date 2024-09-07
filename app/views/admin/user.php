@@ -55,7 +55,7 @@
                     </div>
                     <div class="input-group">
                         <label for="slug"><?= t('slug') ?></label>
-                        <input id="slug" name="slug" type="text" value="<?= e($user['slug'] ?? '') ?>" maxlength="255" char-count/>
+                        <input id="slug" name="slug" type="text" value="<?= e($user['slug'] ?? '') ?>" maxlength="255" data-char-count/>
                     </div>
                     <div class="input-group">
                         <label for="email"><?= t('email') ?></label>

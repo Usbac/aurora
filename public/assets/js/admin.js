@@ -192,7 +192,7 @@ class Form {
     }
 
     static initCharCounters() {
-        document.querySelectorAll('*[char-count]').forEach(input => {
+        document.querySelectorAll('*[data-char-count]').forEach(input => {
             let count_el = document.createElement('span');
             count_el.classList.add('char-counter');
 
