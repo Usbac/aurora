@@ -2,8 +2,7 @@
 <html lang="<?= e(\Aurora\System\Container::get('language')->getCode()) ?>">
 <head>
     <title>
-        <?php $this->sectionStart('title') ?>
-        <?php $this->sectionEnd() ?>
+        <?php $this->sectionStart('title') ?><?php $this->sectionEnd() ?> - <?= e(setting('title')) ?>
     </title>
     <?= $this->include('admin/partials/head.php') ?>
 </head>

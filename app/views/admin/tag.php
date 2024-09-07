@@ -1,7 +1,7 @@
 <?php $this->extend('admin/base.php') ?>
 
 <?php $this->sectionStart('title') ?>
-    <?= t('tag') . ' - ' . e(setting('title')) ?>
+    <?= t('tag') ?>
 <?php $this->sectionEnd() ?>
 
 <?php $this->sectionStart('content') ?>

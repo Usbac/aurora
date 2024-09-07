@@ -3,7 +3,7 @@
 <?php $this->sectionStart('title') ?>
     <?php $current_user = !empty($user) && $user['id'] == $_SESSION['user']['id'] ?>
     <?php $title = t($current_user ? 'your_user' : 'user'); ?>
-    <?= "$title - " . e(setting('title')) ?>
+    <?= $title ?>
 <?php $this->sectionEnd() ?>
 
 <?php $this->sectionStart('content') ?>
