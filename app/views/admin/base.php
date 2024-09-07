@@ -63,33 +63,33 @@
     <?= $this->include('admin/partials/snackbar.php') ?>
     <?php $this->sectionStart('content') ?>
     <?php $this->sectionEnd() ?>
-</body>
-</html>
-<script>
-    window.addEventListener('load', () => {
-        updateMetaThemeColor(<?= js(($_COOKIE['theme'] ?? '') !== 'dark') ?>);
+    <script>
+        window.addEventListener('load', () => {
+            updateMetaThemeColor(<?= js(($_COOKIE['theme'] ?? '') !== 'dark') ?>);
 
-        document.querySelectorAll('.admin-options > a').forEach(el => {
-            if (location.pathname.startsWith(el.getAttribute('href'))) {
-                el.dataset.checked = true;
-            }
+            document.querySelectorAll('.admin-options > a').forEach(el => {
+                if (location.pathname.startsWith(el.getAttribute('href'))) {
+                    el.dataset.checked = true;
+                }
+            });
+
+            Dropdown.init();
         });
 
-        Dropdown.init();
-    });
+        function updateMetaThemeColor(light) {
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', light ? '#ffffff' : '#171821');
+        }
 
-    function updateMetaThemeColor(light) {
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', light ? '#ffffff' : '#171821');
-    }
+        document.getElementById('toggle-theme').addEventListener('click', () => {
+            let is_light_enabled = get('#css-dark').toggleAttribute('disabled');
+            let theme = is_light_enabled ? 'light' : 'dark';
 
-    document.getElementById('toggle-theme').addEventListener('click', () => {
-        let is_light_enabled = get('#css-dark').toggleAttribute('disabled');
-        let theme = is_light_enabled ? 'light' : 'dark';
-
-        updateMetaThemeColor(is_light_enabled);
-        get('#toggle-theme').dataset.theme = theme;
-        document.cookie = 'theme=' + theme + ';path=/';
-    });
-</script>
-<?php $this->sectionStart('extra') ?>
-<?php $this->sectionEnd() ?>
+            updateMetaThemeColor(is_light_enabled);
+            get('#toggle-theme').dataset.theme = theme;
+            document.cookie = 'theme=' + theme + ';path=/';
+        });
+    </script>
+    <?php $this->sectionStart('extra') ?>
+    <?php $this->sectionEnd() ?>
+</body>
+</html>

@@ -19,15 +19,15 @@
         <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
         <button type="submit"><?= t('restore_your_password') ?></button>
     </form>
+    <script>
+        document.getElementById('restore-form').addEventListener('submit', event => {
+            event.preventDefault();
+            Form.send('/admin/password_restore', 'restore-form', event.target.querySelector('[type="submit"]')).then(res => {
+                if (res.success) {
+                    setTimeout(() => location.href = '/admin/dashboard', 2000);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-<script>
-    document.getElementById('restore-form').addEventListener('submit', event => {
-        event.preventDefault();
-        Form.send('/admin/password_restore', 'restore-form', event.target.querySelector('[type="submit"]')).then(res => {
-            if (res.success) {
-                setTimeout(() => location.href = '/admin/dashboard', 2000);
-            }
-        });
-    });
-</script>

@@ -114,7 +114,6 @@
         </div>
     </div>
 </div>
-
 <script>
     let path = <?= js($_GET['path'] ?? \Aurora\Core\Kernel::config('content')) ?>;
     let file_name = null;

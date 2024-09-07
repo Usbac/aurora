@@ -9,13 +9,17 @@
         <?php $current_path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'); ?>
         <nav id="menu">
             <ul class="close">
-                <button class="pointer" onclick="document.body.toggleAttribute('nav-open')">
-                    <?= $this->include('icons/x.svg') ?>
-                </button>
+                <li>
+                    <button class="pointer" onclick="document.body.toggleAttribute('nav-open')">
+                        <?= $this->include('icons/x.svg') ?>
+                    </button>
+                </li>
             </ul>
             <?php foreach ($header_links as $link): ?>
                 <ul>
-                    <a href="<?= e($link['url']) ?>" <?php if ($current_path == trim($link['url'], '/')): ?> active <?php endif ?>><?= e($link['title']) ?></a>
+                    <li>
+                        <a href="<?= e($link['url']) ?>" <?php if ($current_path == trim($link['url'], '/')): ?> data-active <?php endif ?>><?= e($link['title']) ?></a>
+                    </li>
                 </ul>
             <?php endforeach ?>
         </nav>

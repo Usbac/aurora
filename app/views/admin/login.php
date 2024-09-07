@@ -34,24 +34,24 @@
         <button type="submit"><?= t('get_new_password') ?></button>
         <button class="pointer light" onclick="get('#login-form').classList.remove('hidden'); get('#restore-form').classList.add('hidden');"><?= t('go_back') ?></button>
     </form>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', event => {
+            event.preventDefault();
+            Form.send('/admin/login', 'login-form', event.target.querySelector('[type="submit"]')).then(res => {
+                if (res.success) {
+                    setTimeout(() => location.reload(), 3000);
+                }
+            });
+        });
+
+        document.getElementById('restore-form').addEventListener('submit', event => {
+            event.preventDefault();
+            Form.send('/admin/send_password_restore', 'restore-form', event.target.querySelector('[type="submit"]')).then(res => {
+                if (res.success) {
+                    get('#restore-email').value = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-<script>
-    document.getElementById('login-form').addEventListener('submit', event => {
-        event.preventDefault();
-        Form.send('/admin/login', 'login-form', event.target.querySelector('[type="submit"]')).then(res => {
-            if (res.success) {
-                setTimeout(() => location.reload(), 3000);
-            }
-        });
-    });
-
-    document.getElementById('restore-form').addEventListener('submit', event => {
-        event.preventDefault();
-        Form.send('/admin/send_password_restore', 'restore-form', event.target.querySelector('[type="submit"]')).then(res => {
-            if (res.success) {
-                get('#restore-email').value = '';
-            }
-        });
-    });
-</script>

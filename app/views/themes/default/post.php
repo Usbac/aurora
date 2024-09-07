@@ -15,7 +15,7 @@
 <body>
     <?= $this->include('themes/default/partials/header.php') ?>
     <main class="post">
-        <section class="narrow post-top">
+        <div class="section narrow post-top">
             <div class="post-tags">
                 <?php foreach ($post['tags'] as $tag_slug => $tag_title): ?>
                     <a href="<?= e('/' . setting('blog_url') . '/tag/' . $tag_slug) ?>"><?= e($tag_title) ?></a>
@@ -33,7 +33,7 @@
                     <div>
                         <?php $user_url = '/' . setting('blog_url') . '/author/' . $post['user_slug'] ?>
                         <a href="<?= e($user_url) ?>" class="pointer">
-                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>"/>
+                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
                         </a>
                         <a href="<?= e($user_url) ?>"><?= e($post['user_name']) ?></a>
                     </div>
@@ -41,17 +41,17 @@
                 <span><?= e($this->dateFormat($post['published_at'])) ?></span>
                 <span><?= e($this->getReadTime($post['html'])) ?> <?= t('minutes_read') ?></span>
             </div>
-        </section>
-        <section class="narrow post-html">
+        </div>
+        <div class="section narrow post-html">
             <article><?= $post['html'] ?></article>
-        </section>
+        </div>
         <?php if (!empty(setting('post_code'))): ?>
-            <section>
+            <div class="section">
                 <?= setting('post_code') ?>
-            </section>
+            </div>
         <?php endif ?>
         <?php if (!empty($related_posts)): ?>
-            <section class="post-related">
+            <div class="section post-related">
                 <h2><?= t('related_posts') ?></h2>
                 <div>
                     <?php foreach ($related_posts as $related): ?>
@@ -76,7 +76,7 @@
                         </div>
                     <?php endforeach ?>
                 </div>
-            </section>
+            </div>
         <?php endif ?>
     </main>
     <?= $this->include('themes/default/partials/footer.php') ?>

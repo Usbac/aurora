@@ -45,6 +45,10 @@ header > * {
     margin: 0 40px;
 }
 
+header ul {
+    list-style-type: none;
+}
+
 .logo-img {
     display: flex;
     align-items: center;
@@ -92,11 +96,11 @@ header nav a {
     text-align: center;
 }
 
-header nav a[active] {
+header nav a[data-active] {
     color: var(--main-color);
 }
 
-header nav a[active]:before,
+header nav a[data-active]:before,
 header nav a:hover:before {
     width: 100%;
 }
@@ -318,7 +322,7 @@ button:not(.loading):hover {
     margin-bottom: 12px;
 }
 
-section {
+.section {
     min-width: var(--section-max-width);
     max-width: var(--section-max-width);
     margin: 0 auto;
@@ -495,7 +499,7 @@ article a {
         margin: 0 30px;
     }
 
-    section {
+    .section {
         min-width: initial;
         flex-direction: column;
         align-items: center;
@@ -504,7 +508,7 @@ article a {
         margin-right: var(--mobile-margin);
     }
 
-    section > img {
+    .section > img {
         max-width: 100%;
     }
 
