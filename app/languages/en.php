@@ -103,6 +103,7 @@ return [
     'no_items' => 'No items',
     'no_permission' => 'You do not have permissions to perform this action',
     'no_results' => 'No results',
+    'none' => 'None',
     'not_found' => 'Not found',
     'not_found_desc' => 'The content you are looking for does not exist.',
     'number_posts' => 'No. posts',

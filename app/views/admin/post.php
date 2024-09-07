@@ -62,7 +62,7 @@
                     <div class="input-group">
                         <label for="user_id"><?= t('author') ?></label>
                         <select id="user_id" name="user_id">
-                            <option value=""></option>
+                            <option value=""><?= t('none') ?></option>
                             <?php foreach ($users as $user): ?>
                                 <option value="<?= e($user['id']) ?>" <?php if (\Aurora\Core\Helper::isValidId($post['user_id'] ?? false) && $post['user_id'] == $user['id']): ?> selected <?php endif ?>><?= e($user['name']) ?></option>
                             <?php endforeach ?>

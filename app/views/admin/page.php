@@ -68,7 +68,7 @@
                     <div class="input-group">
                         <label for="static-file"><?= t('static_file') ?></label>
                         <select id="static-file" name="static_file">
-                            <option value=""></option>
+                            <option value=""><?= t('none') ?></option>
                             <?php foreach ($view_files as $file): ?>
                                 <option value="<?= e($file) ?>" <?php if (($page['static_file'] ?? '') == $file): ?> selected <?php endif ?>><?= e($file) ?></option>
                             <?php endforeach ?>
