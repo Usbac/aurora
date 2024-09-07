@@ -30,82 +30,90 @@
     </div>
 </div>
 
-<dialog id="edit-dialog">
-    <div class="top">
-        <div class="title">
-            <h2><?= t('rename') ?></h2>
-            <span onclick="get('#edit-dialog').close()">
-                <?= $this->include('icons/x.svg') ?>
-            </span>
+<div id="edit-dialog" class="dialog">
+    <div>
+        <div class="top">
+            <div class="title">
+                <h2><?= t('rename') ?></h2>
+                <span onclick="Dialog.close(get('#edit-dialog'))">
+                    <?= $this->include('icons/x.svg') ?>
+                </span>
+            </div>
+        </div>
+        <div class="content input-group">
+            <label for="file-name-input"><?= t('name') ?></label>
+            <input id="file-name-input" type="text" name="name"/>
+        </div>
+        <div class="bottom">
+            <button class="light" onclick="Dialog.close(get('#edit-dialog'))"><?= t('cancel') ?></button>
+            <button onclick="editFile()"><?= t('save') ?></button>
         </div>
     </div>
-    <div class="content input-group">
-        <label for="file-name-input"><?= t('name') ?></label>
-        <input id="file-name-input" type="text" name="name"/>
-    </div>
-    <div class="bottom">
-        <button class="light" onclick="get('#edit-dialog').close()"><?= t('cancel') ?></button>
-        <button onclick="editFile()"><?= t('save') ?></button>
-    </div>
-</dialog>
-<dialog id="folder-dialog">
-    <div class="top">
-        <div class="title">
-            <h2><?= t('create_folder') ?></h2>
-            <span onclick="get('#folder-dialog').close()">
-                <?= $this->include('icons/x.svg') ?>
-            </span>
+</div>
+<div id="folder-dialog" class="dialog">
+    <div>
+        <div class="top">
+            <div class="title">
+                <h2><?= t('create_folder') ?></h2>
+                <span onclick="Dialog.close(get('#folder-dialog'))">
+                    <?= $this->include('icons/x.svg') ?>
+                </span>
+            </div>
+        </div>
+        <div class="content input-group">
+            <label for="folder-input"><?= t('name') ?></label>
+            <input id="folder-input" type="text" name="name"/>
+        </div>
+        <div class="bottom">
+            <button class="light" onclick="Dialog.close(get('#folder-dialog'))"><?= t('cancel') ?></button>
+            <button onclick="createFolder()"><?= t('create') ?></button>
         </div>
     </div>
-    <div class="content input-group">
-        <label for="folder-input"><?= t('name') ?></label>
-        <input id="folder-input" type="text" name="name"/>
-    </div>
-    <div class="bottom">
-        <button class="light" onclick="get('#folder-dialog').close()"><?= t('cancel') ?></button>
-        <button onclick="createFolder()"><?= t('create') ?></button>
-    </div>
-</dialog>
-<dialog id="move-dialog">
-    <div class="top">
-        <div class="title">
-            <h2><?= t('move') ?></h2>
-            <span onclick="get('#move-dialog').close()">
-                <?= $this->include('icons/x.svg') ?>
-            </span>
+</div>
+<div id="move-dialog" class="dialog">
+    <div>
+        <div class="top">
+            <div class="title">
+                <h2><?= t('move') ?></h2>
+                <span onclick="Dialog.close(get('#move-dialog'))">
+                    <?= $this->include('icons/x.svg') ?>
+                </span>
+            </div>
+        </div>
+        <div class="content input-group">
+            <label for="move-input"><?= t('folder') ?></label>
+            <select id="move-input" name="name">
+                <?php foreach ($folders as $full_path => $relative_path): ?>
+                    <option value="<?= e($full_path) ?>"><?= e($relative_path) ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+        <div class="bottom">
+            <button class="light" onclick="Dialog.close(get('#move-dialog'))"><?= t('cancel') ?></button>
+            <button onclick="moveFile()"><?= t('move') ?></button>
         </div>
     </div>
-    <div class="content input-group">
-        <label for="move-input"><?= t('folder') ?></label>
-        <select id="move-input" name="name">
-            <?php foreach ($folders as $full_path => $relative_path): ?>
-                <option value="<?= e($full_path) ?>"><?= e($relative_path) ?></option>
-            <?php endforeach ?>
-        </select>
-    </div>
-    <div class="bottom">
-        <button class="light" onclick="get('#move-dialog').close()"><?= t('cancel') ?></button>
-        <button onclick="moveFile()"><?= t('move') ?></button>
-    </div>
-</dialog>
-<dialog id="duplicate-dialog">
-    <div class="top">
-        <div class="title">
-            <h2><?= t('duplicate') ?></h2>
-            <span onclick="get('#duplicate-dialog').close()">
-                <?= $this->include('icons/x.svg') ?>
-            </span>
+</div>
+<div id="duplicate-dialog" class="dialog">
+    <div>
+        <div class="top">
+            <div class="title">
+                <h2><?= t('duplicate') ?></h2>
+                <span onclick="Dialog.close(get('#duplicate-dialog'))">
+                    <?= $this->include('icons/x.svg') ?>
+                </span>
+            </div>
+        </div>
+        <div class="content input-group">
+            <label for="duplicate-input"><?= t('name') ?></label>
+            <input id="duplicate-input" type="text" name="name"/>
+        </div>
+        <div class="bottom">
+            <button class="light" onclick="Dialog.close(get('#duplicate-dialog'))"><?= t('cancel') ?></button>
+            <button onclick="duplicateFile()"><?= t('save') ?></button>
         </div>
     </div>
-    <div class="content input-group">
-        <label for="duplicate-input"><?= t('name') ?></label>
-        <input id="duplicate-input" type="text" name="name"/>
-    </div>
-    <div class="bottom">
-        <button class="light" onclick="get('#duplicate-dialog').close()"><?= t('cancel') ?></button>
-        <button onclick="duplicateFile()"><?= t('save') ?></button>
-    </div>
-</dialog>
+</div>
 
 <script>
     let path = <?= js($_GET['path'] ?? \Aurora\System\Kernel::config('content')) ?>;
@@ -139,7 +147,7 @@
         file_name = get('#file-name-input').value = get('#file-name-' + i).innerText;
         let dialog = get('#edit-dialog');
         removeErrors(dialog);
-        dialog.showModal();
+        Dialog.show(dialog);
     }
 
     function editFile() {
@@ -153,7 +161,7 @@
         get('#folder-input').value = '';
         let dialog = get('#folder-dialog');
         removeErrors(dialog);
-        dialog.showModal();
+        Dialog.show(dialog);
     }
 
     function createFolder() {
@@ -166,7 +174,7 @@
         files_names = files.map(file => path + '/' + file);
         let dialog = get('#move-dialog');
         removeErrors(dialog);
-        dialog.showModal();
+        Dialog.show(dialog);
     }
 
     function moveFile() {
@@ -178,7 +186,7 @@
 
     function openDuplicateDialog(i) {
         file_name = get('#duplicate-input').value = get('#file-name-' + i).innerText;
-        get('#duplicate-dialog').showModal();
+        Dialog.show(get('#duplicate-dialog'));
     }
 
     function duplicateFile() {

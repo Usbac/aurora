@@ -132,7 +132,7 @@ input[disabled] + .slider {
 .pointer:hover,
 button:hover:not(:disabled):not(.loading),
 .button:hover:not(:disabled):not(.loading) {
-    opacity: 0.8;
+    opacity: 0.9;
     cursor: pointer;
 }
 
@@ -242,59 +242,79 @@ dialog::backdrop {
     animation: backdrop-fade .2s ease forwards;
 }
 
-dialog {
-    border-radius: 12px;
-    border: none;
-    padding: 0;
-    min-width: 540px;
-    outline: none;
-    background-color: var(--background-color);
+.dialog {
+    display: none;
+    position: fixed;
+    background-color: rgb(0 0 0 / 50%);
+    backdrop-filter: blur(3px);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: calc(var(--nav-z-index) + 1);
 }
 
-dialog > .loading-icon {
+.dialog.open {
+    display: flex;
+}
+
+.dialog > div {
+    position: fixed;
+    border-radius: 12px;
+    background-color: var(--background-color);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: min(540px, calc(100vw - var(--content-spacing)));
+    max-height: calc(100vh - var(--content-spacing));
+    max-width: calc(100vw - var(--content-spacing));
+    overflow: scroll;
+}
+
+.dialog > div > .loading-icon {
     --size: 50px;
     position: absolute;
     top: calc(50% - (var(--size) / 2));
     left: calc(50% - (var(--size) / 2));
 }
 
-dialog .content {
+.dialog .content {
     width: initial;
     padding: 0 20px 20px 20px;
 }
 
-dialog .title {
+.dialog .title {
     display: flex;
     justify-content: space-between;
     padding: 20px;
 }
 
-dialog .title svg {
-    width: 22px;
-    height: 22px;
+.dialog .title svg {
+    width: 26px;
+    height: 26px;
     cursor: pointer;
     fill: var(--main-color);
 }
 
-dialog .top {
+.dialog .top {
     position: sticky;
     top: 0;
     left: 0;
     background: var(--background-color);
 }
 
-dialog .bottom {
+.dialog .bottom {
     display: flex;
     justify-content: flex-end;
     padding: 0 20px 20px 20px;
     gap: 10px;
 }
 
-dialog .bottom button {
+.dialog .bottom button {
     min-width: 70px;
 }
 
-.image-dialog {
+.image-dialog > div {
     height: 90vh;
     width: 800px;
 }
@@ -679,7 +699,7 @@ textarea.code {
     align-items: center;
     gap: 10px;
     position: fixed;
-    z-index: 10;
+    z-index: calc(var(--nav-z-index) + 2);
     top: -80px;
     left: 50%;
     transform: translateX(-50%);

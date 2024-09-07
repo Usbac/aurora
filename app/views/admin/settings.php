@@ -208,7 +208,9 @@
             </div>
             <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
         </div>
-        <dialog id="image-dialog" class="image-dialog"></dialog>
+        <div id="image-dialog" class="dialog image-dialog">
+            <div></div>
+        </div>
     </form>
 <?php $this->sectionEnd() ?>
 

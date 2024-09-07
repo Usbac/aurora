@@ -334,7 +334,7 @@ class Listing {
     }
 
     static handleResponse(res) {
-        document.querySelector('dialog[open]')?.close();
+        Dialog.close(get('.dialog.open'));
         Dropdown.close();
 
         if (res.success) {
@@ -403,15 +403,29 @@ class Dropdown {
     }
 }
 
+class Dialog {
+    static show(container) {
+        container.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    static close(container) {
+        container.classList.remove('open');
+        document.body.style.overflow = 'auto';
+    }
+}
+
 class ImageDialog {
     static #input_el = null;
     static #img_el = null;
+    static #dialog_container = null;
     static #dialog_el = null;
     static #content_path = '';
     static #current_path = '';
 
-    static init(dialog_el, input_el, img_el, content_path) {
-        this.#dialog_el = dialog_el;
+    static init(dialog_container, input_el, img_el, content_path) {
+        this.#dialog_container = dialog_container;
+        this.#dialog_el = dialog_container.querySelector('div');
         this.#input_el = input_el;
         this.#img_el = img_el;
         this.#content_path = content_path;
@@ -419,15 +433,15 @@ class ImageDialog {
 
         img_el.addEventListener('click', () => {
             this.#dialog_el.innerHTML = LOADING_ICON;
-            this.#dialog_el.showModal();
+            Dialog.show(this.#dialog_container);
             this.setImagePage(content_path);
         });
 
-        dialog_el.addEventListener('dragover', event => {
+        this.#dialog_el.addEventListener('dragover', event => {
             event.preventDefault();
         }, false);
 
-        dialog_el.addEventListener('drop', event => {
+        this.#dialog_el.addEventListener('drop', event => {
             event.preventDefault();
 
             this.#dialog_el.innerHTML = LOADING_ICON;
@@ -457,7 +471,7 @@ class ImageDialog {
             .then(async res => {
                 if (res.status != 200) {
                     alert(LANG.unexpected_error);
-                    this.close();
+                    Dialog.close(this);
                     return;
                 }
 
@@ -478,6 +492,6 @@ class ImageDialog {
     }
 
     static close() {
-        this.#dialog_el.close();
+        Dialog.close(this.#dialog_container);
     }
 }
