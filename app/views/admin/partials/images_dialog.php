@@ -17,8 +17,8 @@
             <?php endforeach ?>
         </div>
         <div id="image-dialog-file-form">
-            <button class="light" onclick="ImageDialog.close(); ImageDialog.clearImage();"><?= t('remove_image') ?></button>
-            <button id="image-dialog-file-button" onclick="get('#image-input-file').click()" <?php if (!\Aurora\App\Permission::can('edit_media')): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
+            <button type="button" class="light" onclick="ImageDialog.close(); ImageDialog.clearImage();"><?= t('remove_image') ?></button>
+            <button type="button" id="image-dialog-file-button" onclick="get('#image-input-file').click()" <?php if (!\Aurora\App\Permission::can('edit_media')): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
             <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
             <input
                 id="image-input-file"
