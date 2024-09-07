@@ -334,7 +334,12 @@ class Listing {
     }
 
     static handleResponse(res) {
-        Dialog.close(get('.dialog.open'));
+        let open_dialog = get('.dialog.open');
+
+        if (open_dialog) {
+            Dialog.close(open_dialog);
+        }
+
         Dropdown.close();
 
         if (res.success) {
