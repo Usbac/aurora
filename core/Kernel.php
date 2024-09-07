@@ -1,6 +1,6 @@
 <?php
 
-namespace Aurora\System;
+namespace Aurora\Core;
 
 final class Kernel
 {
@@ -14,9 +14,9 @@ final class Kernel
 
     /**
      * Route system
-     * @var \Aurora\System\Route
+     * @var \Aurora\Core\Route
      */
-    public \Aurora\System\Route $router;
+    public \Aurora\Core\Route $router;
 
     /**
      * @param array $config the system configuration.

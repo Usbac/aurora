@@ -29,7 +29,7 @@ class Create extends \Aurora\Bin\BaseCommand
                 return $val;
             }),
             'slug' => $io->ask('Slug', null, function($val) use ($tag_mod) {
-                if (empty($val) || !\Aurora\System\Helper::isSlugValid($val)) {
+                if (empty($val) || !\Aurora\Core\Helper::isSlugValid($val)) {
                     throw new \RuntimeException('You must type a valid slug.');
                 }
 

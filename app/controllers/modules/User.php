@@ -118,7 +118,7 @@ final class User extends \Aurora\App\ModuleBase
                 'created_at' => time(),
             ]);
 
-            if (!\Aurora\System\Kernel::config('mail')($email, $this->language->get('restore_your_password'), $message)) {
+            if (!\Aurora\Core\Kernel::config('mail')($email, $this->language->get('restore_your_password'), $message)) {
                 $errors['email'] = $this->language->get('error_sending_email');
             }
         }
@@ -178,7 +178,7 @@ final class User extends \Aurora\App\ModuleBase
             $errors['slug'] = $this->language->get('repeated_slug');
         }
 
-        if (empty($data['slug']) || !\Aurora\System\Helper::isSlugValid($data['slug'])) {
+        if (empty($data['slug']) || !\Aurora\Core\Helper::isSlugValid($data['slug'])) {
             $errors['slug'] = $this->language->get('invalid_slug');
         }
 

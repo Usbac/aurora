@@ -23,7 +23,7 @@ class Edit extends \Aurora\Bin\BaseCommand
         $tag_mod = new \Aurora\App\Modules\Tag($this->config['db']);
         $id = $input->getArgument('id');
 
-        $tag = $tag_mod->get(\Aurora\System\Helper::isValidId($id)
+        $tag = $tag_mod->get(\Aurora\Core\Helper::isValidId($id)
             ? [ 'id' => $id ]
             : [ 'slug' => $id ]);
 
@@ -41,7 +41,7 @@ class Edit extends \Aurora\Bin\BaseCommand
                 return $val;
             }),
             'slug' => $io->ask('Slug', $tag['slug'], function($val) use ($tag_mod, $tag) {
-                if (empty($val) || !\Aurora\System\Helper::isSlugValid($val)) {
+                if (empty($val) || !\Aurora\Core\Helper::isSlugValid($val)) {
                     throw new \RuntimeException('You must type a valid slug.');
                 }
 

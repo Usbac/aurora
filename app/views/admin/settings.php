@@ -26,8 +26,8 @@
                         <a href="#code"><?= $this->include('icons/code.svg') ?> <?= t('code') ?></a>
                         <a href="#update"><?= $this->include('icons/sync.svg') ?> <?= t('update') ?></a>
                     </div>
-                    <p class="version"><?= t('version') ?>: <?= e(\Aurora\System\Kernel::VERSION) ?></p>
-                    <input type="hidden" name="version" value="<?= e(\Aurora\System\Kernel::VERSION) ?>"/>
+                    <p class="version"><?= t('version') ?>: <?= e(\Aurora\Core\Kernel::VERSION) ?></p>
+                    <input type="hidden" name="version" value="<?= e(\Aurora\Core\Kernel::VERSION) ?>"/>
                 </div>
             </div>
             <div class="grid tab-content" data-tab="#general">
@@ -159,16 +159,16 @@
                     </div>
                     <div class="input-group">
                         <label><?= t('root_folder') ?></label>
-                        <span><?= e(rtrim(\Aurora\System\Helper::getPath(), '/')) ?></span>
+                        <span><?= e(rtrim(\Aurora\Core\Helper::getPath(), '/')) ?></span>
                     </div>
                     <div class="input-group">
                         <label><?= t('memory_limit') ?></label>
-                        <span><?= e(\Aurora\System\Helper::getByteSize(\Aurora\System\Helper::getPhpSize(ini_get('memory_limit')))) ?></span>
+                        <span><?= e(\Aurora\Core\Helper::getByteSize(\Aurora\Core\Helper::getPhpSize(ini_get('memory_limit')))) ?></span>
                     </div>
                     <div class="input-group">
                         <label><?= t('file_size_upload_limit') ?></label>
                         <span class="description"><?= t('file_size_upload_limit_description', false) ?></span>
-                        <span><?= e(\Aurora\System\Helper::getByteSize(\Aurora\App\Media::getMaxUploadFileSize())) ?></span>
+                        <span><?= e(\Aurora\Core\Helper::getByteSize(\Aurora\App\Media::getMaxUploadFileSize())) ?></span>
                     </div>
                 </div>
             </div>
@@ -287,7 +287,7 @@
         });
 
         window.addEventListener('load', () => {
-            ImageDialog.init(get('#image-dialog'), get('#settings-logo-input'), get('img.logo'), <?= js(\Aurora\System\Kernel::config('content')) ?>);
+            ImageDialog.init(get('#image-dialog'), get('#settings-logo-input'), get('img.logo'), <?= js(\Aurora\Core\Kernel::config('content')) ?>);
             Form.initCharCounters();
             Form.initFileInput(document.querySelector('#db-upload > .input-file'));
 

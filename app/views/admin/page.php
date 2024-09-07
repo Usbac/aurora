@@ -13,7 +13,7 @@
                 <h2><?= t('page') ?></h2>
             </div>
             <div class="buttons">
-                <?php if (\Aurora\System\Helper::isValidId($page['id'] ?? false)): ?>
+                <?php if (\Aurora\Core\Helper::isValidId($page['id'] ?? false)): ?>
                     <button type="button" class="delete" onclick="remove(this);" <?php if (!$can_edit_page): ?> disabled <?php endif ?>>
                         <?= $this->include('icons/trash.svg') ?>
                     </button>
@@ -41,7 +41,7 @@
                         <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($page['slug'] ?? '') ?>" maxlength="255" char-count/>
                         <a id="page-link" target="_blank"></a>
                     </div>
-                    <?php if (\Aurora\System\Helper::isValidId($page['id'] ?? false)): ?>
+                    <?php if (\Aurora\Core\Helper::isValidId($page['id'] ?? false)): ?>
                         <div class="extra-data">
                             <span><?= t('id') ?>: <?= e($page['id']) ?></span>
                             <?php if (setting('views_count')): ?>

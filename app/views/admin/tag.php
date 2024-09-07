@@ -12,7 +12,7 @@
             <h2><?= t('tag') ?></h2>
         </div>
         <div class="buttons">
-            <?php if (\Aurora\System\Helper::isValidId($tag['id'] ?? false)): ?>
+            <?php if (\Aurora\Core\Helper::isValidId($tag['id'] ?? false)): ?>
                 <button type="button" class="delete" onclick="remove(this);" <?php if (!\Aurora\App\Permission::can('edit_tags')): ?> disabled <?php endif ?>>
                     <?= $this->include('icons/trash.svg') ?>
                 </button>
@@ -35,7 +35,7 @@
                 <label for="description"><?= t('description') ?></label>
                 <textarea id="description" name="description" char-count><?= e($tag['description'] ?? '') ?></textarea>
             </div>
-            <?php if (\Aurora\System\Helper::isValidId($tag['id'] ?? false)): ?>
+            <?php if (\Aurora\Core\Helper::isValidId($tag['id'] ?? false)): ?>
                 <div class="extra-data">
                     <span><?= t('id') ?>: <?= e($tag['id']) ?></span>
                     <span><?= t('number_posts') ?>: <?= e($tag['posts']) ?></span>

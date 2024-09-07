@@ -31,13 +31,13 @@ final class Media
      */
     public static function getFiles(string $path, string $search = '', string $order = 'name'): array
     {
-        $path = \Aurora\System\Helper::getPath($path);
+        $path = \Aurora\Core\Helper::getPath($path);
 
         if (!self::isValidPath($path)) {
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
         }
 
-        $content_path_length = mb_strlen(\Aurora\System\Helper::getPath(self::$directory));
+        $content_path_length = mb_strlen(\Aurora\Core\Helper::getPath(self::$directory));
 
         $files = array_map(function($file) use ($content_path_length) {
             $mime = mime_content_type($file);
@@ -77,7 +77,7 @@ final class Media
      */
     public static function addFolder(string $path, string $name): bool
     {
-        $path = \Aurora\System\Helper::getPath($path);
+        $path = \Aurora\Core\Helper::getPath($path);
 
         if (empty(trim($name))) {
             throw new \InvalidArgumentException('Folder name is empty');
@@ -98,7 +98,7 @@ final class Media
      */
     public static function remove(string $path): bool
     {
-        $path = \Aurora\System\Helper::getPath($path);
+        $path = \Aurora\Core\Helper::getPath($path);
 
         if (!self::isValidPath($path)) {
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
@@ -116,7 +116,7 @@ final class Media
      */
     public static function rename(string $path, string $name): bool
     {
-        $path = \Aurora\System\Helper::getPath($path);
+        $path = \Aurora\Core\Helper::getPath($path);
 
         if (!self::isValidPath($path)) {
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
@@ -134,8 +134,8 @@ final class Media
      */
     public static function move(string $path, string $folder): bool
     {
-        $path = \Aurora\System\Helper::getPath($path);
-        $folder = \Aurora\System\Helper::getPath($folder);
+        $path = \Aurora\Core\Helper::getPath($path);
+        $folder = \Aurora\Core\Helper::getPath($folder);
 
         if (!self::isValidPath($path)) {
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
@@ -157,7 +157,7 @@ final class Media
      */
     public static function duplicate(string $path, string $name): bool
     {
-        $source = \Aurora\System\Helper::getPath($path);
+        $source = \Aurora\Core\Helper::getPath($path);
         $destination = dirname($source) . "/$name";
 
         if (!self::isValidPath($source)) {
@@ -169,10 +169,10 @@ final class Media
         }
 
         if ($source === $destination) {
-            $destination = \Aurora\System\Helper::getNewFilename($destination);
+            $destination = \Aurora\Core\Helper::getNewFilename($destination);
         }
 
-        return \Aurora\System\Helper::copy($source, $destination);
+        return \Aurora\Core\Helper::copy($source, $destination);
     }
 
     /**
@@ -182,7 +182,7 @@ final class Media
      */
     public static function isValidPath(string $path): bool
     {
-        $content_dir = \Aurora\System\Helper::getPath(self::$directory);
+        $content_dir = \Aurora\Core\Helper::getPath(self::$directory);
 
         return $path !== '' && strncmp($path, $content_dir, strlen($content_dir)) === 0;
     }
@@ -195,7 +195,7 @@ final class Media
      */
     public static function uploadFile($file, string $path): bool
     {
-        $path = \Aurora\System\Helper::getPath($path);
+        $path = \Aurora\Core\Helper::getPath($path);
         $container_path = mb_substr($path, 0, mb_strrpos($path, '/') + 1);
 
         if (!$file) {
@@ -219,7 +219,7 @@ final class Media
      */
     public static function getMaxUploadFileSize(): mixed
     {
-        return min(array_map(fn($key) => \Aurora\System\Helper::getPhpSize(ini_get($key)), [ 'post_max_size', 'upload_max_filesize' ]));
+        return min(array_map(fn($key) => \Aurora\Core\Helper::getPhpSize(ini_get($key)), [ 'post_max_size', 'upload_max_filesize' ]));
     }
 
     /**

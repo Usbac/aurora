@@ -17,7 +17,7 @@ class BaseCommand extends Command
     protected function getThemeFiles()
     {
         $theme = $this->config['db']->query('SELECT value FROM settings WHERE `key` = "theme"')->fetch()['value'];
-        $absolute_theme_dir = \Aurora\System\Helper::getPath($this->config['views'] . "/themes/$theme");
+        $absolute_theme_dir = \Aurora\Core\Helper::getPath($this->config['views'] . "/themes/$theme");
         $view_files = [ '' ];
 
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($absolute_theme_dir)) as $file) {

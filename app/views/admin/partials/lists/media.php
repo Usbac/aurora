@@ -1,5 +1,5 @@
 <?php foreach ($files as $i => $file): ?>
-    <?php $file_path = '/' . \Aurora\System\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
+    <?php $file_path = '/' . \Aurora\Core\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
     <div data-id="<?= e($file['name']) ?>" class="listing-row file" onclick="Listing.toggleRow(this, event)">
         <div class="w100 align-center">
             <?php if ($file['is_image']): ?>
@@ -19,7 +19,7 @@
         </div>
         <div class="w20 file-info">
             <?php if ($file['is_file']): ?>
-                <p><?= e(\Aurora\System\Helper::getByteSize($file['size'])) ?></p>
+                <p><?= e(\Aurora\Core\Helper::getByteSize($file['size'])) ?></p>
             <?php endif ?>
             <p><?= e($file['mime']) ?></p>
         </div>

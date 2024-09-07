@@ -4,7 +4,7 @@ final class RouteTest extends \PHPUnit\Framework\TestCase
 {
     public function testCode(): void
     {
-        $route = new \Aurora\System\Route();
+        $route = new \Aurora\Core\Route();
         $route->code(200, fn() => 'Success');
         $route->code(301, fn() => 'Redirect');
         $route->code(404, fn() => 'Not found');
@@ -31,7 +31,7 @@ final class RouteTest extends \PHPUnit\Framework\TestCase
      */
     public function testRouting(): void
     {
-        $route = new \Aurora\System\Route();
+        $route = new \Aurora\Core\Route();
         $route->get('admin', fn() => 'Admin');
         $route->get('admin/users', fn() => 'Users');
         $route->get('json:api/admin/users', fn() => json_encode([ 'John', 'Alex', 'Kia' ]));

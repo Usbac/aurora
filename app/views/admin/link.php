@@ -12,7 +12,7 @@
                 <h2><?= t('link') ?></h2>
             </div>
             <div class="buttons">
-                <?php if (\Aurora\System\Helper::isValidId($link['id'] ?? false)): ?>
+                <?php if (\Aurora\Core\Helper::isValidId($link['id'] ?? false)): ?>
                     <button type="button" class="delete" onclick="remove(this);" <?php if (!\Aurora\App\Permission::can('edit_links')): ?> disabled <?php endif ?>>
                         <?= $this->include('icons/trash.svg') ?>
                     </button>
@@ -42,7 +42,7 @@
                         <button type="button" class="slider" onclick="get('#status').click()"></button>
                     </div>
                 </div>
-                <?php if (\Aurora\System\Helper::isValidId($link['id'] ?? false)): ?>
+                <?php if (\Aurora\Core\Helper::isValidId($link['id'] ?? false)): ?>
                     <div class="extra-data">
                         <span><?= t('id') ?>: <?= e($link['id']) ?></span>
                     </div>

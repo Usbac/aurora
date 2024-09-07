@@ -4,7 +4,7 @@ final class LanguageTest extends \PHPUnit\Framework\TestCase
 {
     public function testCode(): void
     {
-        $lang = new \Aurora\System\Language();
+        $lang = new \Aurora\Core\Language();
         $this->assertEquals($lang->getCode(), '');
         $lang->setCode('en');
         $this->assertEquals($lang->getCode(), 'en');
@@ -12,7 +12,7 @@ final class LanguageTest extends \PHPUnit\Framework\TestCase
 
     public function testGet(): void
     {
-        $lang = new \Aurora\System\Language([
+        $lang = new \Aurora\Core\Language([
             'en' => [
                 'hello' => 'Hello',
                 'world' => 'World',
@@ -36,7 +36,7 @@ final class LanguageTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAll(): void
     {
-        $lang = new \Aurora\System\Language([
+        $lang = new \Aurora\Core\Language([
             'en' => [
                 'hello' => 'Hello',
                 'world' => 'World',

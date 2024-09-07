@@ -10,7 +10,7 @@
             <?php $folders = explode('/', trim($path, '/')) ?>
             <?php foreach ($folders as $i => $folder): ?>
                 <?php $folder_path = implode('/', array_slice($folders, 0, $i + 1)) ?>
-                <?php if (\Aurora\App\Media::isValidPath(\Aurora\System\Helper::getPath($folder_path))): ?>
+                <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
                     <a href="#" class="pointer" onclick="ImageDialog.setImagePage(<?= e(js($folder_path)) ?>)"><?= e($folder) ?></a>
                     <span>/</span>
                 <?php endif ?>
@@ -38,7 +38,7 @@
         <div class="w20" title="<?= t('last_modification') ?>"><?= t('last_modification') ?></div>
     </div>
     <?php foreach ($files as $i => $file): ?>
-        <?php $file_path = '/' . \Aurora\System\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
+        <?php $file_path = '/' . \Aurora\Core\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
         <div
             class="listing-row file"
             <?php if ($file['is_file']): ?>
@@ -61,7 +61,7 @@
             </div>
             <div class="w20 file-info">
                 <?php if ($file['is_file']): ?>
-                    <p><?= e(\Aurora\System\Helper::getByteSize($file['size'])) ?></p>
+                    <p><?= e(\Aurora\Core\Helper::getByteSize($file['size'])) ?></p>
                 <?php endif ?>
                 <p><?= e($file['mime']) ?></p>
             </div>

@@ -13,7 +13,7 @@ final class ViewHelper
      */
     public function getFileQuery(string $filename): string
     {
-        return "$filename?v=" . filemtime(\Aurora\System\Helper::getPath($filename));
+        return "$filename?v=" . filemtime(\Aurora\Core\Helper::getPath($filename));
     }
 
     /**
@@ -37,7 +37,7 @@ final class ViewHelper
 
         return $host && $host !== $_SERVER['HTTP_HOST']
             ? $url
-            : \Aurora\System\Helper::getUrl(\Aurora\System\Kernel::config('content') . '/' . trim($url, '/'));
+            : \Aurora\Core\Helper::getUrl(\Aurora\Core\Kernel::config('content') . '/' . trim($url, '/'));
     }
 
     /**
@@ -50,7 +50,7 @@ final class ViewHelper
         static $formatter = null;
 
         if ($formatter === null) {
-            $formatter = new \IntlDateFormatter(\Aurora\System\Container::get('language')->getCode(), 0, 0);
+            $formatter = new \IntlDateFormatter(\Aurora\Core\Container::get('language')->getCode(), 0, 0);
         }
 
         $formatter->setPattern(\Aurora\App\Setting::get('date_format') ?? '');
@@ -58,11 +58,11 @@ final class ViewHelper
     }
 
     /**
-     * @see \Aurora\System\Helper::getUrl
+     * @see \Aurora\Core\Helper::getUrl
      */
     public function url(string $path = ''): string
     {
-        return \Aurora\System\Helper::getUrl($path);
+        return \Aurora\Core\Helper::getUrl($path);
     }
 
     /**

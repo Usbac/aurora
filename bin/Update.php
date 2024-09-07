@@ -27,8 +27,8 @@ class Update extends \Aurora\Bin\BaseCommand
             return Command::FAILURE;
         }
 
-        if (empty($latest_release) || \Aurora\System\Kernel::VERSION == $latest_release['version']) {
-            $io->success('You already have the latest version (' . \Aurora\System\Kernel::VERSION . ') compatible with your Aurora installation.');
+        if (empty($latest_release) || \Aurora\Core\Kernel::VERSION == $latest_release['version']) {
+            $io->success('You already have the latest version (' . \Aurora\Core\Kernel::VERSION . ') compatible with your Aurora installation.');
             return Command::SUCCESS;
         }
 

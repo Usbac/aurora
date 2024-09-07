@@ -13,7 +13,7 @@
                 <h2><?= t('post') ?></h2>
             </div>
             <div class="buttons">
-                <?php if (\Aurora\System\Helper::isValidId($post['id'] ?? false)): ?>
+                <?php if (\Aurora\Core\Helper::isValidId($post['id'] ?? false)): ?>
                     <button type="button" class="delete" onclick="remove(this);" <?php if (!$can_edit_post): ?> disabled <?php endif ?>>
                         <?= $this->include('icons/trash.svg') ?>
                     </button>
@@ -49,7 +49,7 @@
                         <label for="description"><?= t('description') ?></label>
                         <textarea id="description" name="description" char-count><?= e($post['description'] ?? '') ?></textarea>
                     </div>
-                    <?php if (\Aurora\System\Helper::isValidId($post['id'] ?? false)): ?>
+                    <?php if (\Aurora\Core\Helper::isValidId($post['id'] ?? false)): ?>
                         <div class="extra-data">
                             <span><?= t('id') ?>: <?= e($post['id']) ?></span>
                             <?php if (setting('views_count')): ?>
@@ -68,7 +68,7 @@
                         <select id="user_id" name="user_id">
                             <option value=""></option>
                             <?php foreach ($users as $user): ?>
-                                <option value="<?= e($user['id']) ?>" <?php if (\Aurora\System\Helper::isValidId($post['user_id'] ?? false) && $post['user_id'] == $user['id']): ?> selected <?php endif ?>><?= e($user['name']) ?></option>
+                                <option value="<?= e($user['id']) ?>" <?php if (\Aurora\Core\Helper::isValidId($post['user_id'] ?? false) && $post['user_id'] == $user['id']): ?> selected <?php endif ?>><?= e($user['name']) ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -169,7 +169,7 @@
         }
 
         window.addEventListener('load', () => {
-            ImageDialog.init(get('#image-dialog'), get('#post-image-input'), get('img.post-image'), <?= js(\Aurora\System\Kernel::config('content')) ?>);
+            ImageDialog.init(get('#image-dialog'), get('#post-image-input'), get('img.post-image'), <?= js(\Aurora\Core\Kernel::config('content')) ?>);
             Form.initCharCounters();
             updateUrl();
         });

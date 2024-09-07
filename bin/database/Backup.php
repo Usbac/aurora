@@ -23,7 +23,7 @@ class Backup extends \Aurora\Bin\BaseCommand
         $file_content = json_encode([
             'meta' => [
                 'created' => date('Y-m-d H:i:s'),
-                'version' => \Aurora\System\Kernel::VERSION,
+                'version' => \Aurora\Core\Kernel::VERSION,
             ],
             'tables' => (new \Aurora\App\Migration($this->config['db']))->export(),
         ]);
