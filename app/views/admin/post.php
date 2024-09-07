@@ -13,7 +13,7 @@
                 <h2><?= t('post') ?></h2>
             </div>
             <div class="buttons">
-                <?php if (\Aurora\System\Helper::isValidId($post['id'] ?? false)): ?>
+                <?php if (\Aurora\Core\Helper::isValidId($post['id'] ?? false)): ?>
                     <button type="button" class="delete" onclick="remove(this);" <?php if (!$can_edit_post): ?> disabled <?php endif ?>>
                         <?= $this->include('icons/trash.svg') ?>
                     </button>
@@ -27,13 +27,9 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="title"><?= t('title') ?></label>
-                        <input id="title" type="text" name="title" value="<?= e($post['title'] ?? '') ?>" char-count/>
+                        <input id="title" type="text" name="title" value="<?= e($post['title'] ?? '') ?>" data-char-count/>
                     </div>
-                    <?php if (!empty($post['image'])): ?>
-                        <img src="<?= e($this->getContentUrl($post['image'])) ?>" class="pointer post-image"/>
-                    <?php else: ?>
-                        <img src="/public/assets/no-image.svg" class="pointer post-image empty-img"/>
-                    <?php endif ?>
+                    <img src="<?= e(!empty($post['image']) ? $this->getContentUrl($post['image']) : '/public/assets/no-image.svg') ?>" class="pointer post-image <?php if (empty($post['image'])): ?>empty-img<?php endif ?>" alt="<?= t('post_image') ?>"/>
                     <input id="post-image-input" type="hidden" name="image" value="<?= e($post['image'] ?? '') ?>"/>
                 </div>
                 <textarea id="html" name="html"><?= $post['html'] ?? '' ?></textarea>
@@ -42,14 +38,14 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="slug"><?= t('slug') ?></label>
-                        <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($post['slug'] ?? '') ?>" maxlength="255" char-count/>
+                        <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($post['slug'] ?? '') ?>" maxlength="255" data-char-count/>
                         <a id="post-link" target="_blank"></a>
                     </div>
                     <div class="input-group">
                         <label for="description"><?= t('description') ?></label>
-                        <textarea id="description" name="description" char-count><?= e($post['description'] ?? '') ?></textarea>
+                        <textarea id="description" name="description" data-char-count><?= e($post['description'] ?? '') ?></textarea>
                     </div>
-                    <?php if (\Aurora\System\Helper::isValidId($post['id'] ?? false)): ?>
+                    <?php if (\Aurora\Core\Helper::isValidId($post['id'] ?? false)): ?>
                         <div class="extra-data">
                             <span><?= t('id') ?>: <?= e($post['id']) ?></span>
                             <?php if (setting('views_count')): ?>
@@ -66,9 +62,9 @@
                     <div class="input-group">
                         <label for="user_id"><?= t('author') ?></label>
                         <select id="user_id" name="user_id">
-                            <option value=""></option>
+                            <option value=""><?= t('none') ?></option>
                             <?php foreach ($users as $user): ?>
-                                <option value="<?= e($user['id']) ?>" <?php if (\Aurora\System\Helper::isValidId($post['user_id'] ?? false) && $post['user_id'] == $user['id']): ?> selected <?php endif ?>><?= e($user['name']) ?></option>
+                                <option value="<?= e($user['id']) ?>" <?php if (\Aurora\Core\Helper::isValidId($post['user_id'] ?? false) && $post['user_id'] == $user['id']): ?> selected <?php endif ?>><?= e($user['name']) ?></option>
                             <?php endforeach ?>
                         </select>
                     </div>
@@ -85,7 +81,7 @@
                             <div class="checkbox">
                                 <?php $post_tags = $post['tags'] ?? [] ?>
                                 <?php foreach ($tags as $tag): ?>
-                                    <label><input type="checkbox" multiselect name="tags" value="<?= e($tag['id']) ?>" <?php if (array_key_exists($tag['slug'], $post_tags)): ?> checked <?php endif ?>><?= e($tag['name']) ?></label>
+                                    <label><input type="checkbox" data-multiselect name="tags" value="<?= e($tag['id']) ?>" <?php if (array_key_exists($tag['slug'], $post_tags)): ?> checked <?php endif ?>><?= e($tag['name']) ?></label>
                                 <?php endforeach ?>
                             </div>
                         </div>
@@ -98,11 +94,11 @@
                     </div>
                     <div class="input-group">
                         <label for="meta-title"><?= t('meta_title') ?></label>
-                        <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($post['meta_title'] ?? '') ?>" char-count/>
+                        <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($post['meta_title'] ?? '') ?>" data-char-count/>
                     </div>
                     <div class="input-group">
                         <label for="meta-description"><?= t('meta_description') ?></label>
-                        <textarea id="meta-description" name="meta_description" char-count><?= e($post['meta_description'] ?? '') ?></textarea>
+                        <textarea id="meta-description" name="meta_description" data-char-count><?= e($post['meta_description'] ?? '') ?></textarea>
                     </div>
                     <div class="input-group">
                         <label for="canonical-url"><?= t('canonical_url') ?></label>
@@ -169,7 +165,7 @@
         }
 
         window.addEventListener('load', () => {
-            ImageDialog.init(get('#image-dialog'), get('#post-image-input'), get('img.post-image'), <?= js(\Aurora\System\Kernel::config('content')) ?>);
+            ImageDialog.init(get('#image-dialog'), get('#post-image-input'), get('img.post-image'), <?= js(\Aurora\Core\Kernel::config('content')) ?>);
             Form.initCharCounters();
             updateUrl();
         });

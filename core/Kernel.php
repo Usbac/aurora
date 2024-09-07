@@ -1,10 +1,10 @@
 <?php
 
-namespace Aurora\System;
+namespace Aurora\Core;
 
 final class Kernel
 {
-    public const VERSION = '0.2.1';
+    public const VERSION = '0.3.0';
 
     /**
      * System configuration
@@ -14,9 +14,9 @@ final class Kernel
 
     /**
      * Route system
-     * @var \Aurora\System\Route
+     * @var \Aurora\Core\Route
      */
-    public \Aurora\System\Route $router;
+    public \Aurora\Core\Route $router;
 
     /**
      * @param array $config the system configuration.

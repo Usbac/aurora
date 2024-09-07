@@ -4,7 +4,7 @@ final class KernelTest extends \PHPUnit\Framework\TestCase
 {
     public function testConfig(): void
     {
-        $kernel = new \Aurora\System\Kernel([
+        $kernel = new \Aurora\Core\Kernel([
             'bootstrap' => fn() => null,
             'content' => 'tests/fixtures/content',
             'mail' => fn($to, $subject, $message) => mail($to, $subject, $message),
@@ -22,8 +22,8 @@ final class KernelTest extends \PHPUnit\Framework\TestCase
      */
     public function testInit(): void
     {
-        $kernel = new \Aurora\System\Kernel([
-            'bootstrap' => function (\Aurora\System\Kernel $kernel) {
+        $kernel = new \Aurora\Core\Kernel([
+            'bootstrap' => function (\Aurora\Core\Kernel $kernel) {
                 $kernel->router->get('blog', fn() => 'Blog');
                 $kernel->router->get('blog/hello', fn() => 'Hello');
                 $kernel->router->code(404, fn() => 'Not found');

@@ -15,7 +15,7 @@
                 <h2><?= $title ?></h2>
             </div>
             <div class="buttons">
-                <?php if (\Aurora\System\Helper::isValidId($user['id'] ?? false)): ?>
+                <?php if (\Aurora\Core\Helper::isValidId($user['id'] ?? false)): ?>
                     <?php if (!$current_user): ?>
                         <button type="button" class="delete" onclick="remove(this);" <?php if (!$can_edit_user): ?> disabled <?php endif ?>>
                             <?= $this->include('icons/trash.svg') ?>
@@ -39,7 +39,7 @@
                     <?php endif ?>
                 </div>
                 <input id="user-image-input" type="hidden" name="image" value="<?= e($user['image'] ?? '') ?>"/>
-                <?php if (\Aurora\System\Helper::isValidId($user['id'] ?? false)): ?>
+                <?php if (\Aurora\Core\Helper::isValidId($user['id'] ?? false)): ?>
                     <div class="extra-info">
                         <p><?= t('id') ?>: <?= e($user['id']) ?></p>
                         <p><?= t('number_posts') ?>: <?= e($user['posts']) ?></p>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="input-group">
                         <label for="slug"><?= t('slug') ?></label>
-                        <input id="slug" name="slug" type="text" value="<?= e($user['slug'] ?? '') ?>" maxlength="255" char-count/>
+                        <input id="slug" name="slug" type="text" value="<?= e($user['slug'] ?? '') ?>" maxlength="255" data-char-count/>
                     </div>
                     <div class="input-group">
                         <label for="email"><?= t('email') ?></label>
@@ -135,7 +135,7 @@
         }
 
         window.addEventListener('load', () => {
-            ImageDialog.init(get('#image-dialog'), get('#user-image-input'), get('.user-image > img'), <?= js(\Aurora\System\Kernel::config('content')) ?>);
+            ImageDialog.init(get('#image-dialog'), get('#user-image-input'), get('.user-image > img'), <?= js(\Aurora\Core\Kernel::config('content')) ?>);
             Form.initCharCounters();
         });
     </script>

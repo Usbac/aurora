@@ -5,7 +5,7 @@
 <meta name="keywords" content="<?= e(setting('meta_keywords') ?? '') ?>"/>
 <meta property="og:image" content="<?= e($this->getContentUrl(empty($post['image']) ? setting('logo') : $post['image'])) ?>"/>
 <meta property="og:site_name" content="<?= e(setting('title')) ?>"/>
-<meta property="og:url" content="<?= e($this->url(\Aurora\System\Helper::getCurrentPath())) ?>"/>
+<meta property="og:url" content="<?= e($this->url(\Aurora\Core\Helper::getCurrentPath())) ?>"/>
 <meta name="theme-color" content="#f5f5f5e6">
 <link rel="icon" type="image/x-icon" href="/public/assets/favicon.ico">
 <link rel="stylesheet" href="<?= e($this->getFileQuery('/public/assets/css/themes/default/main.css')) ?>">

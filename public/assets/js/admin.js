@@ -100,7 +100,7 @@ class Form {
             let value = el.value;
 
             if (type == 'checkbox') {
-                if (el.hasAttribute('multiselect')) {
+                if (el.hasAttribute('data-multiselect')) {
                     key += '[]';
                     value = el.checked ? el.getAttribute('value') : undefined;
                 } else {
@@ -192,7 +192,7 @@ class Form {
     }
 
     static initCharCounters() {
-        document.querySelectorAll('*[char-count]').forEach(input => {
+        document.querySelectorAll('*[data-char-count]').forEach(input => {
             let count_el = document.createElement('span');
             count_el.classList.add('char-counter');
 

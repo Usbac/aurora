@@ -6,7 +6,7 @@
     ],
     "type": "project",
     "license": "MIT",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "authors": [
         {
             "name": "Usbac",
@@ -28,7 +28,7 @@
         "psr-4": {
             "Aurora\\App\\": "app/controllers",
             "Aurora\\Bin\\": "bin",
-            "Aurora\\System\\": "system"
+            "Aurora\\Core\\": "core"
         }
     },
     "require-dev": {

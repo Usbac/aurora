@@ -3,9 +3,9 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-ini_set('error_log', \Aurora\System\Helper::getPath('cli.log'));
+ini_set('error_log', \Aurora\Core\Helper::getPath('cli.log'));
 
-$app = new Symfony\Component\Console\Application('Aurora', \Aurora\System\Kernel::VERSION);
+$app = new Symfony\Component\Console\Application('Aurora', \Aurora\Core\Kernel::VERSION);
 
 $app->add(new Aurora\Bin\Database\Backup());
 $app->add(new Aurora\Bin\Database\Restore());

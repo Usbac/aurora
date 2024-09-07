@@ -6,7 +6,7 @@
 
 <?php $this->sectionStart('content') ?>
     <div class="content">
-        <?php $current_path = '/' . \Aurora\System\Helper::getCurrentPath(); ?>
+        <?php $current_path = '/' . \Aurora\Core\Helper::getCurrentPath(); ?>
         <div>
             <?php if (isset($custom_header)): ?>
                 <?= $custom_header ?>

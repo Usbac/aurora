@@ -12,7 +12,7 @@
             <h2><?= t('tag') ?></h2>
         </div>
         <div class="buttons">
-            <?php if (\Aurora\System\Helper::isValidId($tag['id'] ?? false)): ?>
+            <?php if (\Aurora\Core\Helper::isValidId($tag['id'] ?? false)): ?>
                 <button type="button" class="delete" onclick="remove(this);" <?php if (!\Aurora\App\Permission::can('edit_tags')): ?> disabled <?php endif ?>>
                     <?= $this->include('icons/trash.svg') ?>
                 </button>
@@ -29,13 +29,13 @@
             </div>
             <div class="input-group">
                 <label for="slug"><?= t('slug') ?></label>
-                <input id="slug" name="slug" type="text" value="<?= e($tag['slug'] ?? '') ?>" maxlength="255" char-count/>
+                <input id="slug" name="slug" type="text" value="<?= e($tag['slug'] ?? '') ?>" maxlength="255" data-char-count/>
             </div>
             <div class="input-group">
                 <label for="description"><?= t('description') ?></label>
-                <textarea id="description" name="description" char-count><?= e($tag['description'] ?? '') ?></textarea>
+                <textarea id="description" name="description" data-char-count><?= e($tag['description'] ?? '') ?></textarea>
             </div>
-            <?php if (\Aurora\System\Helper::isValidId($tag['id'] ?? false)): ?>
+            <?php if (\Aurora\Core\Helper::isValidId($tag['id'] ?? false)): ?>
                 <div class="extra-data">
                     <span><?= t('id') ?>: <?= e($tag['id']) ?></span>
                     <span><?= t('number_posts') ?>: <?= e($tag['posts']) ?></span>
@@ -45,11 +45,11 @@
         <div class="card v-spacing">
             <div class="input-group">
                 <label for="meta-title"><?= t('meta_title') ?></label>
-                <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($tag['meta_title'] ?? '') ?>" char-count/>
+                <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($tag['meta_title'] ?? '') ?>" data-char-count/>
             </div>
             <div class="input-group">
                 <label for="meta-description"><?= t('meta_description') ?></label>
-                <textarea id="meta-description" name="meta_description" char-count><?= e($tag['meta_description'] ?? '') ?></textarea>
+                <textarea id="meta-description" name="meta_description" data-char-count><?= e($tag['meta_description'] ?? '') ?></textarea>
             </div>
         </div>
         <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>

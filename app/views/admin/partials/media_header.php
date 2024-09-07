@@ -8,7 +8,7 @@
                 <?php $paths = explode('/', trim($path, '/')) ?>
                 <?php foreach ($paths as $i => $folder): ?>
                     <?php $folder_path = implode('/', array_slice($paths, 0, $i + 1)) ?>
-                    <?php if (\Aurora\App\Media::isValidPath(\Aurora\System\Helper::getPath($folder_path))): ?>
+                    <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
                         <a href="/admin/media?path=<?= e($folder_path) ?>" class="pointer"><?= e($folder) ?></a>
                         <span>/</span>
                     <?php endif ?>
@@ -114,9 +114,8 @@
         </div>
     </div>
 </div>
-
 <script>
-    let path = <?= js($_GET['path'] ?? \Aurora\System\Kernel::config('content')) ?>;
+    let path = <?= js($_GET['path'] ?? \Aurora\Core\Kernel::config('content')) ?>;
     let file_name = null;
     let files_names = [];
     let content = get('.content');

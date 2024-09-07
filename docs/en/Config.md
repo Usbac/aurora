@@ -10,12 +10,12 @@ _Configuration values related to paths must be relative to the Aurora root direc
 
 Closure that will be executed when the web app is initialized.
 
-It can receive an instance of the `\Aurora\System\Kernel` class as argument.
+It can receive an instance of the `\Aurora\Core\Kernel` class as argument.
 
 #### Example
 
 ```php
-function (\Aurora\System\Kernel $kernel) {
+function (\Aurora\Core\Kernel $kernel) {
 }
 ```
 
@@ -26,7 +26,7 @@ Database connection.
 #### Example
 
 ```php
-new \Aurora\System\DB("sqlite:app/database/db.sqlite");
+new \Aurora\Core\DB("sqlite:app/database/db.sqlite");
 ```
 
 ### `content`

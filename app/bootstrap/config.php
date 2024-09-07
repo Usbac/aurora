@@ -1,13 +1,13 @@
 <?php
 
-$db_folder = \Aurora\System\Helper::getPath('app/database');
+$db_folder = \Aurora\Core\Helper::getPath('app/database');
 $db_file = "$db_folder/db.sqlite";
 $db_exists = file_exists($db_file);
 if (!$db_exists) {
     file_put_contents($db_file, '');
 }
 
-$db = new \Aurora\System\DB("sqlite:$db_file");
+$db = new \Aurora\Core\DB("sqlite:$db_file");
 
 if (!$db_exists) {
     (new \Aurora\App\Migration($db))->import(json_decode(file_get_contents("$db_folder/fixtures.json"), true)['tables']);

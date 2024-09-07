@@ -1,6 +1,6 @@
 <?php
 
-namespace Aurora\System;
+namespace Aurora\Core;
 
 /**
  * @method void get(string|array $url, \Closure $func)

@@ -12,9 +12,9 @@ final class Update
         'app/languages',
         'app/views',
         'bin',
+        'core',
         'docs',
         'public',
-        'system',
         'tests',
         '.htaccess',
         'aurora',
@@ -51,7 +51,7 @@ final class Update
         }
 
         foreach (self::UPDATE_DIRECTORIES as $dir) {
-            if (!\Aurora\System\Helper::copy("$new_version_dir/$dir", \Aurora\System\Helper::getPath("/$dir"))) {
+            if (!\Aurora\Core\Helper::copy("$new_version_dir/$dir", \Aurora\Core\Helper::getPath("/$dir"))) {
                 return self::ERROR_COPY;
             }
         }
@@ -73,7 +73,7 @@ final class Update
             return self::ERROR_CONNECTION;
         }
 
-        $current_version = explode('.', \Aurora\System\Kernel::VERSION);
+        $current_version = explode('.', \Aurora\Core\Kernel::VERSION);
         $latest_release = [];
 
         foreach (json_decode($releases, true) as $release) {

@@ -23,7 +23,7 @@ class Delete extends \Aurora\Bin\BaseCommand
         $page_mod = new \Aurora\App\Modules\Page($this->config['db']);
         $id = $input->getArgument('id');
 
-        $page = $page_mod->get(\Aurora\System\Helper::isValidId($id)
+        $page = $page_mod->get(\Aurora\Core\Helper::isValidId($id)
             ? [ 'id' => $id ]
             : [ 'slug' => $id ]);
 

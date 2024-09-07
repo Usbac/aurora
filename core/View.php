@@ -1,6 +1,6 @@
 <?php
 
-namespace Aurora\System;
+namespace Aurora\Core;
 
 final class View
 {

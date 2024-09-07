@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(\Aurora\System\Container::get('language')->getCode()) ?>">
+<html lang="<?= e(\Aurora\Core\Container::get('language')->getCode()) ?>">
 <head>
     <title><?= t('restore_your_password') . ' - ' . e(setting('title')) ?></title>
     <?= $this->include('admin/partials/head.php') ?>
@@ -19,15 +19,15 @@
         <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
         <button type="submit"><?= t('restore_your_password') ?></button>
     </form>
+    <script>
+        document.getElementById('restore-form').addEventListener('submit', event => {
+            event.preventDefault();
+            Form.send('/admin/password_restore', 'restore-form', event.target.querySelector('[type="submit"]')).then(res => {
+                if (res.success) {
+                    setTimeout(() => location.href = '/admin/dashboard', 2000);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-<script>
-    document.getElementById('restore-form').addEventListener('submit', event => {
-        event.preventDefault();
-        Form.send('/admin/password_restore', 'restore-form', event.target.querySelector('[type="submit"]')).then(res => {
-            if (res.success) {
-                setTimeout(() => location.href = '/admin/dashboard', 2000);
-            }
-        });
-    });
-</script>

@@ -23,7 +23,7 @@ class Delete extends \Aurora\Bin\BaseCommand
         $user_mod = new \Aurora\App\Modules\User($this->config['db']);
         $id = $input->getArgument('id');
 
-        $user = $user_mod->get(\Aurora\System\Helper::isValidId($id)
+        $user = $user_mod->get(\Aurora\Core\Helper::isValidId($id)
             ? [ 'id' => $id ]
             : [ 'email' => $id ]);
 

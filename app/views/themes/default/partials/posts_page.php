@@ -24,7 +24,7 @@
                     <div>
                         <?php $user_url = '/' . setting('blog_url') . '/author/' . $post['user_slug'] ?>
                         <a href="<?= e($user_url) ?>" class="pointer">
-                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>"/>
+                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
                         </a>
                         <a href="<?= e($user_url) ?>"><?= e($post['user_name']) ?></a>
                     </div>

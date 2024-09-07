@@ -2,14 +2,14 @@
 
 final class DBTest extends \PHPUnit\Framework\TestCase
 {
-    private static \Aurora\System\DB $db;
+    private static \Aurora\Core\DB $db;
 
     public function testQuery(): void
     {
         $db_file = dirname(__DIR__) . '/fixtures/db.sqlite';
         file_put_contents($db_file, '');
 
-        self::$db = new \Aurora\System\DB("sqlite:$db_file");
+        self::$db = new \Aurora\Core\DB("sqlite:$db_file");
 
         $this->assertInstanceOf(\PDOStatement::class, self::$db->query('CREATE TABLE users (
             `id` INTEGER PRIMARY KEY,

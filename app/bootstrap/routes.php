@@ -1,6 +1,6 @@
 <?php
 
-use Aurora\System\{DB, Helper, Kernel, Language, Route, View};
+use Aurora\Core\{DB, Helper, Kernel, Language, Route, View};
 
 const ITEMS_PER_PAGE = 20;
 
@@ -15,14 +15,14 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     $theme_dir = 'themes/' . \Aurora\App\Setting::get('theme');
 
     $router->middleware('*', function() use ($db) {
-        if (\Aurora\System\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
+        if (\Aurora\Core\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
             $_SESSION['user'] = $db->query('SELECT * FROM users WHERE id = ? AND status', $_SESSION['user']['id'])
                 ->fetch();
         }
     });
 
     $router->middleware('*', function() use ($view, $lang, $theme_dir) {
-        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !\Aurora\System\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
+        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !\Aurora\Core\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
             echo $view->get("$theme_dir/information.php", [
                 'description' => $lang->get('under_maintenance'),
                 'subdescription' => $lang->get('come_back_soon'),
@@ -32,7 +32,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->middleware('*', function() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !\Aurora\System\Helper::isCsrfTokenValid($_POST['csrf'] ?? '')) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !\Aurora\Core\Helper::isCsrfTokenValid($_POST['csrf'] ?? '')) {
             echo json_encode([ 'reload' => true ]);
             exit;
         }
@@ -51,19 +51,19 @@ return function (Route $router, DB $db, View $view, Language $lang) {
      */
 
      $router->middleware('admin/*', function() use ($db) {
-        if ((!\Aurora\System\Helper::isValidId($_SESSION['user']['id'] ?? false) || !($_SESSION['user']['status'] ?? false)) &&
+        if ((!\Aurora\Core\Helper::isValidId($_SESSION['user']['id'] ?? false) || !($_SESSION['user']['status'] ?? false)) &&
             !in_array(Helper::getCurrentPath(), [ 'admin', 'admin/login', 'admin/send_password_restore', 'admin/new_password', 'admin/password_restore' ])) {
             header('Location: /admin');
             exit;
         }
 
-        if (\Aurora\System\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
+        if (\Aurora\Core\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
             $db->update('users', [ 'last_active' => time() ], $_SESSION['user']['id']);
         }
     });
 
     $router->get('admin', function() use ($view) {
-        if (\Aurora\System\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
+        if (\Aurora\Core\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
             header('Location: /admin/dashboard');
         }
 
@@ -162,7 +162,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/pages/edit', function() use ($view, $link_mod, $page_mod, $theme_dir) {
-        $page = \Aurora\System\Helper::isValidId($_GET['id'] ?? false) ? $page_mod->get([ 'id' => $_GET['id'] ]) : [];
+        $page = \Aurora\Core\Helper::isValidId($_GET['id'] ?? false) ? $page_mod->get([ 'id' => $_GET['id'] ]) : [];
         if (!$page && isset($_GET['id'])) {
             http_response_code(404);
             return;
@@ -259,7 +259,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/posts/edit', function() use ($view, $user_mod, $tag_mod, $post_mod) {
-        $post = \Aurora\System\Helper::isValidId($_GET['id'] ?? false) ? $post_mod->get([ 'id' => $_GET['id'] ]) : [];
+        $post = \Aurora\Core\Helper::isValidId($_GET['id'] ?? false) ? $post_mod->get([ 'id' => $_GET['id'] ]) : [];
         if (!$post && isset($_GET['id'])) {
             http_response_code(404);
             return;
@@ -353,7 +353,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/users/edit', function() use ($db, $view, $user_mod) {
-        $user = \Aurora\System\Helper::isValidId($_GET['id'] ?? false) ? $user_mod->get([ 'id' => $_GET['id'] ]) : [];
+        $user = \Aurora\Core\Helper::isValidId($_GET['id'] ?? false) ? $user_mod->get([ 'id' => $_GET['id'] ]) : [];
         if (!$user && isset($_GET['id'])) {
             http_response_code(404);
             return;
@@ -443,7 +443,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/links/edit', function() use ($view, $link_mod) {
-        $link = \Aurora\System\Helper::isValidId($_GET['id'] ?? false) ? $link_mod->get([ 'id' => $_GET['id'] ]) : [];
+        $link = \Aurora\Core\Helper::isValidId($_GET['id'] ?? false) ? $link_mod->get([ 'id' => $_GET['id'] ]) : [];
         if (!$link && isset($_GET['id'])) {
             http_response_code(404);
             return;
@@ -507,7 +507,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/tags/edit', function() use ($view, $tag_mod) {
-        $tag = \Aurora\System\Helper::isValidId($_GET['id'] ?? false) ? $tag_mod->get([ 'id' => $_GET['id'] ]) : [];
+        $tag = \Aurora\Core\Helper::isValidId($_GET['id'] ?? false) ? $tag_mod->get([ 'id' => $_GET['id'] ]) : [];
         if (!$tag && isset($_GET['id'])) {
             http_response_code(404);
             return;
@@ -551,7 +551,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         $root_dir = Helper::getPath();
         $content_dir = Helper::getPath(Kernel::config('content'));
         $path = $_GET['path'] ?? Kernel::config('content');
-        $absolute_path = \Aurora\System\Helper::getPath($path);
+        $absolute_path = \Aurora\Core\Helper::getPath($path);
 
         if ($path == Kernel::config('content') && !file_exists($absolute_path)) {
             mkdir($absolute_path, \Aurora\App\Media::FOLDER_PERMISSION);
@@ -845,7 +845,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             ]);
         }
 
-        $success = \Aurora\System\Helper::isValidId($id)
+        $success = \Aurora\Core\Helper::isValidId($id)
             ? $mod->save($id, $_POST)
             : ($id = $mod->add($_POST)) !== false;
 
@@ -866,7 +866,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'meta' => [
                 'created' => date('Y-m-d H:i:s'),
-                'version' => \Aurora\System\Kernel::VERSION,
+                'version' => \Aurora\Core\Kernel::VERSION,
             ],
             'tables' => (new \Aurora\App\Migration($db))->export(),
         ]);

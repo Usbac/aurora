@@ -23,7 +23,7 @@ class Edit extends \Aurora\Bin\BaseCommand
         $link_mod = new \Aurora\App\Modules\Link($this->config['db']);
         $id = $input->getArgument('id');
 
-        $link = $link_mod->get(\Aurora\System\Helper::isValidId($id)
+        $link = $link_mod->get(\Aurora\Core\Helper::isValidId($id)
             ? [ 'id' => $id ]
             : [ 'slug' => $id ]);
 
