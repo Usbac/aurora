@@ -813,7 +813,7 @@ textarea.code {
     background-color: #191a23;
 }
 
-.admin-options a[separator] {
+.admin-options a[data-separator] {
     margin-top: 20px;
 }
 
