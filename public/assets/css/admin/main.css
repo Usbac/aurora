@@ -340,10 +340,6 @@ dialog::backdrop {
     font-size: var(--font-size-bg);
 }
 
-.image-dialog .listing-row {
-    padding: 16px 20px !important;
-}
-
 .image-dialog .listing-row:not(.header):hover {
     cursor: pointer;
 }
@@ -1102,7 +1098,6 @@ textarea.code {
     display: flex;
     text-transform: uppercase;
     font-weight: var(--font-semibold);
-    padding: 0 16px 16px 16px;
 }
 
 .listing-row.header * {
@@ -1116,7 +1111,7 @@ textarea.code {
     display: flex;
     align-items: center;
     border-bottom: 1px var(--border-color) solid;
-    padding: 16px;
+    padding: 15px;
     text-decoration: none;
     color: var(--main-color);
     gap: 16px;
@@ -1460,18 +1455,14 @@ textarea.code {
         overflow-x: scroll;
     }
 
-    .grid-two-columns {
-        grid-template-columns: 1fr !important;
+    .grid.grid-two-columns {
+        grid-template-columns: 1fr;
     }
 }
 
 @media screen and (max-width: 800px) {
     .card {
         padding: 20px 14px;
-    }
-
-    dialog {
-        min-width: calc(100% - (14px * 2)) !important;
     }
 }
 
