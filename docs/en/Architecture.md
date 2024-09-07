@@ -8,7 +8,7 @@ The Aurora codebase is structured in several directories.
 
 - `public` - Contains the public files and resources, such as images, stylesheets and javascript files.
 
-- `system` - Contains the core code of Aurora. Like the router, database abstraction layer, language manager, etc.
+- `core` - Contains the core code of Aurora. Like the router, database abstraction layer, language manager, etc.
 
 - `tests` - Contains all the code related to the automated tests.
 
