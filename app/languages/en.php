@@ -75,6 +75,7 @@ return [
     'invalid_value' => 'Invalid value',
     'item' => 'Item',
     'items' => 'Items',
+    'js_disabled' => 'Looks like JavaScript is disabled or your browser does not support it. JavaScript is required for the site to work properly.',
     'last_active' => 'Last active',
     'last_modification' => 'Last modification',
     'latest_published_posts' => 'Latest published posts',
