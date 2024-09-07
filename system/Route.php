@@ -37,11 +37,13 @@ final class Route
 
     /**
      * List of middlewares
+     * @var array
      */
     private array $middlewares = [];
 
     /**
      * List of routes for status codes
+     * @var array
      */
     private array $codes = [];
 

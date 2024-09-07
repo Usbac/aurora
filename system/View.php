@@ -4,14 +4,34 @@ namespace Aurora\System;
 
 final class View
 {
+    /**
+     * Data for the current context
+     * @var array
+     */
     private array $data = [];
 
+    /**
+     * Parent template
+     * @var string
+     */
     private string $parent = '';
 
+    /**
+     * Inside the parent template
+     * @var bool
+     */
     private bool $inside_parent = false;
 
+    /**
+     * List of sections
+     * @var array
+     */
     private array $sections = [];
 
+    /**
+     * Sections stack to keep track of the current section in the template
+     * @var array
+     */
     private array $sections_stack = [];
 
     public function __construct(private string $templates_dir, private ?object $helper = null)
