@@ -120,6 +120,7 @@ return [
     'post' => 'Post',
     'post_code' => 'Posts code',
     'post_code_description' => 'Code here will be injected at the bottom of all post pages. Useful for things like adding a comment system.',
+    'post_image' => 'Post image',
     'posts' => 'Posts',
     'publish_date' => 'Publish date',
     'published' => 'Published',

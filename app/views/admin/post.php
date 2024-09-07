@@ -29,11 +29,7 @@
                         <label for="title"><?= t('title') ?></label>
                         <input id="title" type="text" name="title" value="<?= e($post['title'] ?? '') ?>" data-char-count/>
                     </div>
-                    <?php if (!empty($post['image'])): ?>
-                        <img src="<?= e($this->getContentUrl($post['image'])) ?>" class="pointer post-image"/>
-                    <?php else: ?>
-                        <img src="/public/assets/no-image.svg" class="pointer post-image empty-img"/>
-                    <?php endif ?>
+                    <img src="<?= e(!empty($post['image']) ? $this->getContentUrl($post['image']) : '/public/assets/no-image.svg') ?>" class="pointer post-image <?php if (empty($post['image'])): ?>empty-img<?php endif ?>" alt="<?= t('post_image') ?>"/>
                     <input id="post-image-input" type="hidden" name="image" value="<?= e($post['image'] ?? '') ?>"/>
                 </div>
                 <textarea id="html" name="html"><?= $post['html'] ?? '' ?></textarea>
