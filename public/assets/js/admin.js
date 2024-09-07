@@ -100,7 +100,7 @@ class Form {
             let value = el.value;
 
             if (type == 'checkbox') {
-                if (el.hasAttribute('multiselect')) {
+                if (el.hasAttribute('data-multiselect')) {
                     key += '[]';
                     value = el.checked ? el.getAttribute('value') : undefined;
                 } else {

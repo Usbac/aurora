@@ -85,7 +85,7 @@
                             <div class="checkbox">
                                 <?php $post_tags = $post['tags'] ?? [] ?>
                                 <?php foreach ($tags as $tag): ?>
-                                    <label><input type="checkbox" multiselect name="tags" value="<?= e($tag['id']) ?>" <?php if (array_key_exists($tag['slug'], $post_tags)): ?> checked <?php endif ?>><?= e($tag['name']) ?></label>
+                                    <label><input type="checkbox" data-multiselect name="tags" value="<?= e($tag['id']) ?>" <?php if (array_key_exists($tag['slug'], $post_tags)): ?> checked <?php endif ?>><?= e($tag['name']) ?></label>
                                 <?php endforeach ?>
                             </div>
                         </div>
