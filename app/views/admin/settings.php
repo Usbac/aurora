@@ -34,11 +34,7 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="logo"><?= t('logo') ?></label>
-                        <?php if (!empty(setting('logo'))): ?>
-                            <img src="<?= e($this->getContentUrl(setting('logo'))) ?>" class="logo pointer" alt="logo"/>
-                        <?php else: ?>
-                            <img src="/public/assets/no-image.svg" class="logo pointer empty-img"/>
-                        <?php endif ?>
+                        <img src="<?= e(!empty(setting('logo')) ? $this->getContentUrl(setting('logo')) : '/public/assets/no-image.svg') ?>" class="logo pointer <?php if (empty(setting('logo'))): ?>empty-img<?php endif ?>" alt="logo"/>
                         <input id="settings-logo-input" type="hidden" name="logo" value="<?= e(setting('logo')) ?>"/>
                     </div>
                     <div class="input-group-container">
