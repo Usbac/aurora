@@ -43,11 +43,7 @@
         </div>
         <div class="current-user">
             <a href="/admin/users/edit?id=<?= e($_SESSION['user']['id']) ?>" title="<?= e($_SESSION['user']['name']) ?>">
-                <?php if (!empty($_SESSION['user']['image'])): ?>
-                    <img src="<?= e($this->getContentUrl($_SESSION['user']['image'])) ?>"/>
-                <?php else: ?>
-                    <img src="/public/assets/no-image.svg" class="empty-img"/>
-                <?php endif ?>
+                <img src="<?= e(!empty($_SESSION['user']['image']) ? $this->getContentUrl($_SESSION['user']['image']) : '/public/assets/no-image.svg') ?>" <?php if (empty($_SESSION['user']['image'])): ?>class="empty-img"<?php endif ?> alt="<?= t('user_image') ?>"/>
             </a>
             <div id="toggle-theme" class="pointer" title="<?= t('switch_theme') ?>" data-theme="<?php if (($_COOKIE['theme'] ?? '') !== 'dark'): ?>light<?php else: ?>dark<?php endif ?>">
                 <?= $this->include('icons/moon.svg') ?>

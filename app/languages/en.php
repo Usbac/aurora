@@ -186,6 +186,7 @@ return [
     'url' => 'URL',
     'user' => 'User',
     'users' => 'Users',
+    'user_image' => 'User image',
     'version' => 'Version',
     'view' => 'View',
     'view_site' => 'View site',
