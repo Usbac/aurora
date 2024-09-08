@@ -524,11 +524,11 @@ article a {
         --font-size-bg: 18px;
     }
 
-    body[nav-open] {
+    body[data-nav-open] {
         overflow: hidden;
     }
 
-    body[nav-open] .nav-background {
+    body[data-nav-open] .nav-background {
         width: 100vw;
         height: 100vh;
         z-index: calc(var(--nav-z-index) - 1);
@@ -561,7 +561,7 @@ article a {
         overflow: auto;
     }
 
-    body[nav-open] header nav {
+    body[data-nav-open] header nav {
         display: flex;
     }
 

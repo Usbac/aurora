@@ -749,7 +749,7 @@ textarea.code {
 
 /* header and containers */
 
-.admin[nav-open] {
+.admin[data-nav-open] {
     overflow: hidden;
 }
 
@@ -1420,7 +1420,7 @@ textarea.code {
         margin-left: initial;
     }
 
-    .admin[nav-open] .nav-background {
+    .admin[data-nav-open] .nav-background {
         width: 100vw;
         height: 100vh;
         z-index: calc(var(--nav-z-index) - 1);
@@ -1429,7 +1429,7 @@ textarea.code {
         opacity: 0.2;
     }
 
-    .admin:not([nav-open]) nav {
+    .admin:not([data-nav-open]) nav {
         left: calc(-1 * var(--nav-width));
     }
 

@@ -10,7 +10,7 @@
         <nav id="menu">
             <ul class="close">
                 <li>
-                    <button class="pointer" onclick="document.body.toggleAttribute('nav-open')">
+                    <button class="pointer" onclick="document.body.toggleAttribute('data-nav-open')">
                         <?= $this->include('icons/x.svg') ?>
                     </button>
                 </li>
@@ -24,7 +24,7 @@
             <?php endforeach ?>
         </nav>
         <div class="menu-options">
-            <button class="menu-button pointer" onclick="document.body.toggleAttribute('nav-open')">
+            <button class="menu-button pointer" onclick="document.body.toggleAttribute('data-nav-open')">
                 <?= $this->include('icons/menu.svg') ?>
             </button>
             <button class="pointer" onclick="search_dialog.showModal()">
@@ -42,7 +42,7 @@
         </label>
     </form>
 </dialog>
-<div class="nav-background" onclick="document.body.toggleAttribute('nav-open')"></div>
+<div class="nav-background" onclick="document.body.toggleAttribute('data-nav-open')"></div>
 <script>
     var search_dialog = document.getElementById('search-dialog');
 

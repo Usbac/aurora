@@ -55,7 +55,7 @@
         </div>
     </nav>
     <noscript class="warning"><?= t('js_disabled') ?></noscript>
-    <div class="nav-background" onclick="document.body.toggleAttribute('nav-open')"></div>
+    <div class="nav-background" onclick="document.body.toggleAttribute('data-nav-open')"></div>
     <?= $this->include('admin/partials/snackbar.php') ?>
     <?php $this->sectionStart('content') ?>
     <?php $this->sectionEnd() ?>
