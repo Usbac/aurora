@@ -112,11 +112,7 @@
         });
 
         function remove(btn) {
-            if (!confirm(LANG.delete_confirm.sprintf(<?= js($user['name'] ?? '') ?>))) {
-                return;
-            }
-
-            Form.send('/admin/users/remove', null, btn, {
+            return confirm(LANG.delete_confirm.sprintf(<?= js($user['name'] ?? '') ?>)) && Form.send('/admin/users/remove', null, btn, {
                 csrf: csrf_token,
                 id: window.id,
             }).then(res => {

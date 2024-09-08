@@ -252,11 +252,7 @@
         }
 
         function update() {
-            if (!confirm(LANG.update_confirm.sprintf(new_version))) {
-                return;
-            }
-
-            Form.send('/admin/settings/update', 'update', null, {
+            return confirm(LANG.update_confirm.sprintf(new_version)) && Form.send('/admin/settings/update', 'update', null, {
                 csrf: csrf_token,
             }).then(res => {
                 if (res.success) {

@@ -17,14 +17,10 @@
                     <?php if (\Aurora\App\Permission::can('edit_tags')): ?>
                         <div
                             class="danger"
-                            onclick="
-                                if (confirm(LANG.delete_confirm.sprintf(<?= e(js($tag['name'])) ?>))) {
-                                    Form.send('/admin/tags/remove', null, null, {
-                                        csrf: csrf_token,
-                                        id: <?= e(js($tag['id'])) ?>,
-                                    }).then(res => Listing.handleResponse(res));
-                                }
-                            "
+                            onclick="confirm(LANG.delete_confirm.sprintf(<?= e(js($tag['name'])) ?>)) && Form.send('/admin/tags/remove', null, null, {
+                                    csrf: csrf_token,
+                                    id: <?= e(js($tag['id'])) ?>,
+                                }).then(res => Listing.handleResponse(res));"
                         ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
                     <?php endif ?>
                 </div>

@@ -38,14 +38,10 @@
                         <?php if (\Aurora\App\Permission::can('edit_users')): ?>
                             <div
                                 class="danger"
-                                onclick="
-                                    if (confirm(LANG.delete_confirm.sprintf(<?= e(js($user['name'])) ?>))) {
-                                        Form.send('/admin/users/remove', null, null, {
-                                            csrf: csrf_token,
-                                            id: <?= e(js($user['id'])) ?>,
-                                        }).then(res => Listing.handleResponse(res));
-                                    }
-                                "
+                                onclick="confirm(LANG.delete_confirm.sprintf(<?= e(js($user['name'])) ?>)) && Form.send('/admin/users/remove', null, null, {
+                                        csrf: csrf_token,
+                                        id: <?= e(js($user['id'])) ?>,
+                                    }).then(res => Listing.handleResponse(res));"
                             ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
                         <?php endif ?>
                     <?php endif ?>

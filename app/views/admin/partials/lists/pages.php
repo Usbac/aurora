@@ -27,14 +27,10 @@
                     <?php if (\Aurora\App\Permission::can('edit_pages')): ?>
                         <div
                             class="danger"
-                            onclick="
-                                if (confirm(LANG.delete_confirm.sprintf(<?= e(js($page['title'])) ?>))) {
-                                    Form.send('/admin/pages/remove', null, null, {
-                                        csrf: csrf_token,
-                                        id: <?= e(js($page['id'])) ?>,
-                                    }).then(res => Listing.handleResponse(res));
-                                }
-                            "
+                            onclick="confirm(LANG.delete_confirm.sprintf(<?= e(js($page['title'])) ?>)) && Form.send('/admin/pages/remove', null, null, {
+                                    csrf: csrf_token,
+                                    id: <?= e(js($page['id'])) ?>,
+                                }).then(res => Listing.handleResponse(res));"
                         ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
                     <?php endif ?>
                 </div>

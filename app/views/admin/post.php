@@ -131,11 +131,7 @@
         });
 
         function remove(btn) {
-            if (!confirm(LANG.delete_confirm.sprintf(<?= js($post['title'] ?? '') ?>))) {
-                return;
-            }
-
-            Form.send('/admin/posts/remove', null, btn, {
+            return confirm(LANG.delete_confirm.sprintf(<?= js($post['title'] ?? '') ?>)) && Form.send('/admin/posts/remove', null, btn, {
                 csrf: csrf_token,
                 id: window.id,
             }).then(res => {

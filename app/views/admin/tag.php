@@ -72,11 +72,7 @@
         });
 
         function remove(btn) {
-            if (!confirm(LANG.delete_confirm.sprintf(<?= js($tag['name'] ?? '') ?>))) {
-                return;
-            }
-
-            Form.send('/admin/tags/remove', null, btn, {
+            return confirm(LANG.delete_confirm.sprintf(<?= js($tag['name'] ?? '') ?>)) && Form.send('/admin/tags/remove', null, btn, {
                 csrf: csrf_token,
                 id: window.id,
             }).then(res => {
