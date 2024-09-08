@@ -28,11 +28,8 @@ final class Kernel
      */
     public function __construct(array $config)
     {
-        $this->router = new Route;
-
-        foreach ($config as $key => $val) {
-            self::$config[$key] = $val;
-        }
+        $this->router = new Route();
+        self::$config = $config;
 
         if (is_callable(self::$config['bootstrap'] ?? null)) {
             self::$config['bootstrap']($this);

@@ -18,7 +18,7 @@
         <div class="section narrow post-top">
             <div class="post-tags">
                 <?php foreach ($post['tags'] as $tag_slug => $tag_title): ?>
-                    <a href="<?= e('/' . setting('blog_url') . '/tag/' . $tag_slug) ?>"><?= e($tag_title) ?></a>
+                    <a href="<?= e('/' . setting('blog_url') . "/tag/$tag_slug") ?>"><?= e($tag_title) ?></a>
                 <?php endforeach ?>
             </div>
             <h1><?= e($post['title']) ?></h1>

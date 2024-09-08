@@ -910,7 +910,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         $zip->open($file_path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($absolute_path)) as $file) {

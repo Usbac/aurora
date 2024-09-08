@@ -48,8 +48,8 @@ final class Helper
     }
 
     /**
-     * Returns the true user ip
-     * @return mixed the true user ip
+     * Returns the true user ip or the string UNKNOWN if it's unknown
+     * @return mixed the true user ip or the string UNKNOWN if it's unknown
      */
     public static function getUserIP(): mixed
     {
@@ -86,8 +86,8 @@ final class Helper
             mkdir($destination, $permission);
         }
 
-        $directory_iterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $iterator = new \RecursiveIteratorIterator($directory_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+        $dir_iterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
+        $iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $item) {
             $new_path = "$destination/" . call_user_func([ $iterator, 'getSubPathname' ]);
             $res = $item->isDir()
