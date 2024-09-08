@@ -84,3 +84,7 @@ _The admin user created by default is `john.doe@mail.com` with password `1234567
 Any contribution or support to this project will be highly appreciated. ❤️
 
 Please review the [contribution guide](CONTRIBUTING.md) before you open issues or send pull requests.
+
+## License
+
+Aurora is open-source software licensed under the [MIT license](https://github.com/Usbac/aurora/blob/master/LICENSE).
