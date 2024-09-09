@@ -83,11 +83,12 @@ final class View
     /**
      * Returns the template output with the current template data
      * @param string $template the template
+     * @param [array] $data additional template data
      * @return string the template output
      */
-    protected function include(string $template): string
+    protected function include(string $template, array $data = []): string
     {
-        return $this->get($template, $this->data, false);
+        return $this->get($template, array_merge($this->data, $data), false);
     }
 
     /**
