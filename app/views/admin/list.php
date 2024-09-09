@@ -71,7 +71,7 @@
             });
 
             window.history.replaceState('', '', '?' + params.toString());
-            Listing.handleResponse({ success: true });
+            Listing.refresh();
         });
 
         window.addEventListener('load', () => {

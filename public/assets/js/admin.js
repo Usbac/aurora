@@ -225,10 +225,6 @@ class Listing {
         this.#next_page_url = url;
     }
 
-    static setNextPage(page) {
-        this.#next_page = page;
-    }
-
     static toggleSelectMode(btn_el) {
         let listing = get('#main-listing');
         let batch_options = get('#batch-options');
@@ -333,6 +329,11 @@ class Listing {
             });
     }
 
+    static refresh() {
+        this.#next_page = 1;
+        this.loadNextPage();
+    }
+
     static handleResponse(res) {
         let open_dialog = get('.dialog.open');
 
@@ -343,8 +344,7 @@ class Listing {
         Dropdown.close();
 
         if (res.success) {
-            this.setNextPage(1);
-            this.loadNextPage();
+            this.refresh();
         }
     }
 }
