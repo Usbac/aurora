@@ -815,6 +815,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             $success = $db->connection->commit();
         } catch (\PDOException $e) {
             $db->connection->rollBack();
+            error_log($e->getMessage());
             $success = false;
         }
 
