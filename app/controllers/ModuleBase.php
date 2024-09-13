@@ -89,7 +89,7 @@ class ModuleBase
      * @param [int] $per_page the number of items per page
      * @param [string] $where the where condition for the query
      * @param [string] $order the order by condition for the query
-     * @param [bool] $return_all_til_page return all elements til the given page or not
+     * @param [bool] $return_all_til_page return all elements til the given page or just the specified one
      * @return mixed the rows in the page
      */
     public function getPage(
@@ -97,7 +97,7 @@ class ModuleBase
         ?int $per_page = null,
         ?string $where = '',
         ?string $order = '',
-        bool $return_all_til_page = false
+        bool $return_all_til_page = false,
         ): array
     {
         if (empty($order)) {
