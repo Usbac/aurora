@@ -39,7 +39,7 @@ return function (\Aurora\Core\Kernel $kernel) {
     error_reporting($settings['log_errors'] ? E_ALL : 0);
     session_set_cookie_params([
         'lifetime' => (int) $settings['session_lifetime'],
-        'path' => '/;SameSite=' . $settings['samesite_cookie'],
+        'samesite' => $settings['samesite_cookie'],
     ]);
     session_start();
 
