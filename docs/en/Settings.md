@@ -82,6 +82,24 @@ When disabled, the views counter will not be updated when a post or page is visi
 
 The `Reset views count` button will reset the views counter of all posts and pages to 0.
 
+## Advanced
+
+### Session lifetime
+
+PHP Session lifetime in seconds (e.g. 3600 = 1 hour).
+
+### Session SameSite cookie
+
+Value for the PHP session SameSite cookie. This controls whether or not a cookie is sent with cross-site requests, providing some protection against cross-site request forgery attacks (CSRF).
+
+### Log errors
+
+Log PHP errors into the defined log file or not.
+
+### Error log filename
+
+Path of the file where logs will be written. Relative to the Aurora root directory (e.g. app/aurora.log).
+
 ## Code
 
 The fields in this section can contain JS, CSS, HTML and even PHP code.
