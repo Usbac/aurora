@@ -9,7 +9,7 @@
 
 <p align="center">
 <img src="https://img.shields.io/github/actions/workflow/status/Usbac/aurora/ci.yml"/>
-<img src="https://img.shields.io/badge/stable-0.3.4-blue.svg">
+<img src="https://img.shields.io/badge/stable-0.4.0-blue.svg">
 <img src="https://img.shields.io/badge/license-MIT-orange.svg">
 </p>
 
