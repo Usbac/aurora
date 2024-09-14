@@ -896,6 +896,31 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([ 'success' => $db->delete('views') ]);
     });
 
+    $router->post('json:admin/settings/logs_clear', function() use ($lang) {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
+        }
+
+        return json_encode([ 'success' => unlink(Helper::getPath(\Aurora\App\Setting::get('log_file'))) ]);
+    });
+
+    $router->get('admin/settings/logs_download', function() {
+        $file_path = Helper::getPath(\Aurora\App\Setting::get('log_file'));
+
+        header('Content-Type: text/plain');
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: 0');
+        header('Content-Disposition: attachment; filename="Aurora ' . date('Y-m-d H:i:s') . '.log"');
+        header('Content-Length: ' . (file_exists($file_path) ? filesize($file_path) : 0));
+        header('Pragma: public');
+        flush();
+
+        if (file_exists($file_path)) {
+            readfile($file_path);
+        }
+    });
+
     $router->get('admin/settings/media_download', function() use ($lang) {
         $file_path = Helper::getPath('content.zip');
         $path = $_GET['path'] ?? '';

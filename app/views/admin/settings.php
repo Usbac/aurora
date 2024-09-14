@@ -140,6 +140,20 @@
                         <input id="log_file" name="log_file" type="text" value="<?= e(setting('log_file')) ?>"/>
                     </div>
                 </div>
+                <?php if (!empty(setting('log_file'))): ?>
+                    <div class="card v-spacing">
+                        <div id="logs" class="input-group">
+                            <label><?= t('logs') ?></label>
+                            <?php $log_file = \Aurora\Core\Helper::getPath(setting('log_file')) ?>
+                            <textarea readonly><?= e(file_exists($log_file) ? file_get_contents($log_file) : '') ?></textarea>
+                            <div class="input-group">
+                                <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
+                                <button type="button" class="light" onclick="location = '/admin/settings/logs_download'"><?= t('download') ?></button>
+                                <button type="button" class="delete" onclick="confirm(LANG.logs_clear_confirm) && Form.send('/admin/settings/logs_clear', 'logs')"><?= t('clear') ?></button>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif ?>
             </div>
             <div class="grid tab-content" data-tab="#data">
                 <div class="card v-spacing">

@@ -1416,6 +1416,16 @@ textarea.code {
     display: none;
 }
 
+#logs textarea {
+    min-height: 300px;
+}
+
+#logs .input-group {
+    flex-direction: row;
+    width: initial;
+    margin-right: auto;
+}
+
 @media screen and (max-width: 1080px) {
     .warning {
         margin-left: 0;
