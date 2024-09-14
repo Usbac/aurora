@@ -304,7 +304,7 @@
             }
 
             document.querySelectorAll('.tab-content').forEach(el => el.style.display = el.dataset.tab == location.hash
-                ? 'initial'
+                ? 'grid'
                 : 'none');
             document.querySelectorAll('.tabs > a').forEach(el => el.getAttribute('href') == location.hash
                 ? el.dataset.checked = true
