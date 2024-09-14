@@ -14,14 +14,11 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     $blog_url = \Aurora\App\Setting::get('blog_url');
     $theme_dir = 'themes/' . \Aurora\App\Setting::get('theme');
 
-    $router->middleware('*', function() use ($db) {
+    $router->middleware('*', function() use ($db, $view, $lang, $theme_dir) {
         if (\Aurora\Core\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
-            $_SESSION['user'] = $db->query('SELECT * FROM users WHERE id = ? AND status', $_SESSION['user']['id'])
-                ->fetch();
+            $_SESSION['user'] = $db->query('SELECT * FROM users WHERE id = ? AND status', $_SESSION['user']['id'])->fetch();
         }
-    });
 
-    $router->middleware('*', function() use ($view, $lang, $theme_dir) {
         if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !\Aurora\Core\Helper::isValidId($_SESSION['user']['id'] ?? false)) {
             echo $view->get("$theme_dir/information.php", [
                 'description' => $lang->get('under_maintenance'),
@@ -29,9 +26,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             ]);
             exit;
         }
-    });
 
-    $router->middleware('*', function() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !\Aurora\Core\Helper::isCsrfTokenValid($_POST['csrf'] ?? '')) {
             echo json_encode([ 'reload' => true ]);
             exit;
