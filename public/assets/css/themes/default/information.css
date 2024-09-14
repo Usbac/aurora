@@ -16,6 +16,7 @@ img {
     width: 140px;
     object-fit: contain;
     align-self: center;
+    user-select: none;
 }
 
 h1 {

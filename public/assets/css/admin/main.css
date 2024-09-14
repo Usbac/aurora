@@ -79,6 +79,10 @@ code {
     border-radius: 4px;
 }
 
+img {
+    user-select: none;
+}
+
 .warning {
     display: flex;
     justify-content: center;
@@ -379,6 +383,7 @@ select {
     background-position: right 11px center;
     background-size: 13px;
     text-overflow: ellipsis;
+    user-select: none;
 }
 
 input[readonly] {
@@ -408,6 +413,7 @@ button,
     outline: none;
     min-height: 36px;
     min-width: 44px;
+    user-select: none;
 }
 
 button,

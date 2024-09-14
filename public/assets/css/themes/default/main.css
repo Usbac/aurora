@@ -49,6 +49,10 @@ header ul {
     list-style-type: none;
 }
 
+img {
+    user-select: none;
+}
+
 .logo-img {
     display: flex;
     align-items: center;
@@ -246,6 +250,7 @@ button {
     padding: 12px 22px;
     border-radius: 8px;
     transition: all .2s;
+    user-select: none;
 }
 
 @keyframes rotation {
