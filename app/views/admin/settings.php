@@ -22,6 +22,7 @@
                         <a href="#general"><?= $this->include('icons/settings.svg') ?> <?= t('general') ?></a>
                         <a href="#meta"><?= $this->include('icons/note.svg') ?> <?= t('meta') ?></a>
                         <a href="#data"><?= $this->include('icons/database.svg') ?> <?= t('data') ?></a>
+                        <a href="#advanced"><?= $this->include('icons/terminal.svg') ?> <?= t('advanced') ?></a>
                         <a href="#info"><?= $this->include('icons/server.svg') ?> <?= t('server_info') ?></a>
                         <a href="#code"><?= $this->include('icons/code.svg') ?> <?= t('code') ?></a>
                         <a href="#update"><?= $this->include('icons/sync.svg') ?> <?= t('update') ?></a>
@@ -105,6 +106,38 @@
                     <div class="input-group">
                         <label for="meta_keywords"><?= t('meta_keywords') ?></label>
                         <input id="meta_keywords" name="meta_keywords" type="text" value="<?= e(setting('meta_keywords')) ?>"/>
+                    </div>
+                </div>
+            </div>
+            <div class="grid tab-content" data-tab="#advanced">
+                <div class="card v-spacing">
+                    <div class="input-group">
+                        <label for="session_lifetime"><?= t('session_lifetime') ?></label>
+                        <span class="description"><?= t('session_lifetime_description') ?></span>
+                        <input id="session_lifetime" name="session_lifetime" type="number" value="<?= e(setting('session_lifetime')) ?>"/>
+                    </div>
+                    <div class="input-group">
+                        <label for="samesite_cookie"><?= t('samesite_cookie') ?></label>
+                        <span class="description"><?= t('samesite_cookie_description') ?></span>
+                        <select name="samesite_cookie">
+                            <?php foreach ([ 'None', 'Lax', 'Strict' ] as $cookie): ?>
+                                <option value="<?= e($cookie) ?>" <?php if (setting('samesite_cookie') == $cookie): ?> selected <?php endif ?>><?= e($cookie) ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <div class="input-group-container">
+                        <div class="input-group">
+                            <label><?= t('log_errors') ?></label>
+                            <div class="switch">
+                                <input id="log_errors" name="log_errors" type="checkbox" <?php if (setting('log_errors')): ?> checked <?php endif ?>>
+                                <button type="button" class="slider" onclick="get('#log_errors').click()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="log_file"><?= t('log_file') ?></label>
+                        <span class="description"><?= t('relative_system_root') ?></span>
+                        <input id="log_file" name="log_file" type="text" value="<?= e(setting('log_file')) ?>"/>
                     </div>
                 </div>
             </div>
