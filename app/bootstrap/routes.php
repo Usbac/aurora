@@ -906,19 +906,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/settings/logs_download', function() {
-        $file_path = Helper::getPath(\Aurora\App\Setting::get('log_file'));
-
-        header('Content-Type: text/plain');
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: 0');
-        header('Content-Disposition: attachment; filename="Aurora ' . date('Y-m-d H:i:s') . '.log"');
-        header('Content-Length: ' . (file_exists($file_path) ? filesize($file_path) : 0));
-        header('Pragma: public');
-        flush();
-
-        if (file_exists($file_path)) {
-            readfile($file_path);
-        }
+        Helper::downloadFile(Helper::getPath(\Aurora\App\Setting::get('log_file')), 'Aurora ' . date('Y-m-d H:i:s') . '.log', 'text/plain');
     });
 
     $router->get('admin/settings/media_download', function() use ($lang) {
@@ -946,15 +934,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         }
 
         $zip->close();
-
-        header('Content-Type: application/zip');
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: 0');
-        header('Content-Disposition: attachment; filename="' . urldecode(trim($path, '/')) . ' ' . date('Y-m-d H:i:s') . '.zip"');
-        header('Content-Length: ' . filesize($file_path));
-        header('Pragma: public');
-        flush();
-        readfile($file_path);
+        Helper::downloadFile($file_path, urldecode(trim($path, '/')) . ' ' . date('Y-m-d H:i:s') . '.zip', 'application/zip');
     });
 
     $router->get('json:admin/settings/update_version', function() {

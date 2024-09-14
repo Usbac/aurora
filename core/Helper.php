@@ -177,4 +177,25 @@ final class Helper
 
         return $new;
     }
+
+    /**
+     * Downloads the file with the given path, filename, and content type
+     * @param string $file_path the file path
+     * @param string $filename the filename for the Content-Disposition header
+     * @param string $content_type the content type
+     * @return int|false the number of bytes read from the file, or false on failure
+     */
+    public static function downloadFile(string $file_path, string $filename, string $content_type): int|false
+    {
+        $file_exists = file_exists($file_path);
+        header("Content-Type: $content_type");
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Expires: 0');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header('Content-Length: ' . ($file_exists ? filesize($file_path) : 0));
+        header('Pragma: public');
+        flush();
+
+        return $file_exists ? readfile($file_path) : false;
+    }
 }
