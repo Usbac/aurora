@@ -134,7 +134,7 @@ return [
     'published' => 'Published',
     'published_posts_permission_error' => 'You are not allowed to handle published posts',
     'related_posts' => 'Related posts',
-    'relative_system_root' => 'Relative to Aurora root folder',
+    'relative_system_root' => 'Relative to the Aurora root folder',
     'remove_image' => 'Remove image',
     'rename' => 'Rename',
     'repeated_email' => 'Email already in use, try a different one',
