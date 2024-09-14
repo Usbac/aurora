@@ -5,6 +5,7 @@
         <h2><?= t('media') ?></h2>
         <div>
             <div class="media-paths">
+                <?= $this->include('icons/folder.svg') ?>
                 <?php $paths = explode('/', trim($path, '/')) ?>
                 <?php foreach ($paths as $i => $folder): ?>
                     <?php $folder_path = implode('/', array_slice($paths, 0, $i + 1)) ?>

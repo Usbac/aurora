@@ -7,6 +7,7 @@
     </div>
     <div class="header">
         <div class="media-paths">
+            <?= $this->include('icons/folder.svg') ?>
             <?php $folders = explode('/', trim($path, '/')) ?>
             <?php foreach ($folders as $i => $folder): ?>
                 <?php $folder_path = implode('/', array_slice($folders, 0, $i + 1)) ?>

@@ -1364,9 +1364,14 @@ textarea.code {
 
 .media-paths {
     display: flex;
+    align-items: center;
     overflow: auto;
     max-width: 80vw;
     gap: 6px;
+}
+
+.media-paths > svg {
+    margin-right: 4px;
 }
 
 .media-paths > a {
