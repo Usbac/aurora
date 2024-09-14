@@ -154,7 +154,7 @@
                             <input type="text" disabled/>
                             <label for="database" class="pointer"><?= t('select_file') ?></label>
                         </div>
-                        <button type="button" class="light" onclick="if (confirm(LANG.upload_db_confirm)) Form.send('/admin/settings/db_upload', 'db-upload')" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>><?= t('upload') ?> .json</button>
+                        <button type="button" class="light" onclick="confirm(LANG.upload_db_confirm) && Form.send('/admin/settings/db_upload', 'db-upload')" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>><?= t('upload') ?> .json</button>
                     </div>
                     <div class="input-group">
                         <label><?= t('views_counter') ?></label>
@@ -163,7 +163,7 @@
                             <button type="button" class="slider" onclick="get('#views-count').click()"></button>
                         </div>
                         <div id="reset-views">
-                            <button type="button" class="light" onclick="if (confirm(LANG.reset_views_confirm)) Form.send('/admin/settings/reset_views_count', 'reset-views')" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>><?= t('reset_views') ?></button>
+                            <button type="button" class="light" onclick="confirm(LANG.reset_views_confirm) && Form.send('/admin/settings/reset_views_count', 'reset-views')" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>><?= t('reset_views') ?></button>
                         </div>
                     </div>
                 </div>
