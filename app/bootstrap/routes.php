@@ -45,7 +45,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
      * ADMIN
      */
 
-     $router->middleware('admin/*', function() use ($db) {
+    $router->middleware('admin/*', function() use ($db) {
         if ((!Helper::isValidId($_SESSION['user']['id'] ?? false) || !($_SESSION['user']['status'] ?? false)) &&
             !in_array(Helper::getCurrentPath(), [ 'admin', 'admin/login', 'admin/send_password_restore', 'admin/new_password', 'admin/password_restore' ])) {
             header('Location: /admin');
