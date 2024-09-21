@@ -13,31 +13,12 @@ $app->add(new Aurora\Bin\Database\Restore());
 $app->add(new Aurora\Bin\Settings\Listing());
 $app->add(new Aurora\Bin\Settings\Set());
 
-$app->add(new Aurora\Bin\Pages\Create());
-$app->add(new Aurora\Bin\Pages\Delete());
-$app->add(new Aurora\Bin\Pages\Edit());
-$app->add(new Aurora\Bin\Pages\Listing());
-
-$app->add(new Aurora\Bin\Posts\Create());
-$app->add(new Aurora\Bin\Posts\Delete());
-$app->add(new Aurora\Bin\Posts\Edit());
-$app->add(new Aurora\Bin\Posts\Listing());
-
-$app->add(new Aurora\Bin\Tags\Create());
-$app->add(new Aurora\Bin\Tags\Delete());
-$app->add(new Aurora\Bin\Tags\Edit());
-$app->add(new Aurora\Bin\Tags\Listing());
-
-$app->add(new Aurora\Bin\Users\Create());
-$app->add(new Aurora\Bin\Users\Delete());
-$app->add(new Aurora\Bin\Users\Edit());
-$app->add(new Aurora\Bin\Users\Listing());
-
-$app->add(new Aurora\Bin\Links\Create());
-$app->add(new Aurora\Bin\Links\Delete());
-$app->add(new Aurora\Bin\Links\Edit());
-$app->add(new Aurora\Bin\Links\Listing());
-
 $app->add(new Aurora\Bin\Update());
+
+foreach ([ 'Pages', 'Posts', 'Tags', 'Users', 'Links' ] as $module) {
+    foreach ([ 'Create', 'Delete', 'Edit', 'Listing' ] as $action) {
+        $app->add(new ("Aurora\\Bin\\$module\\$action")());
+    }
+}
 
 $app->run();
