@@ -28,9 +28,9 @@ The url of pages related to the blog will follow the following patterns:
 
 The theme that will be used to render the website. Relative to the views directory.
 
-### Elements per page
+### Items per page
 
-The number of elements that will be displayed per page in the blog.
+The number of items that will be displayed per page in the blog.
 
 ### System language
 

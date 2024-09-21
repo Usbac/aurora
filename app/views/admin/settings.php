@@ -58,7 +58,7 @@
                             </select>
                         </div>
                         <div class="input-group">
-                            <label for="per_page"><?= t('elements_per_page') ?></label>
+                            <label for="per_page"><?= t('items_per_page') ?></label>
                             <input id="per_page" name="per_page" type="number" placeholder="20" min="1" value="<?= e(setting('per_page')) ?>"/>
                         </div>
                     </div>
