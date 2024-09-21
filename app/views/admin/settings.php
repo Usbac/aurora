@@ -145,7 +145,7 @@
                         <div id="logs" class="input-group">
                             <label><?= t('logs') ?></label>
                             <?php $log_file = \Aurora\Core\Helper::getPath(setting('log_file')) ?>
-                            <textarea readonly><?= e(file_exists($log_file) ? file_get_contents($log_file) : '') ?></textarea>
+                            <textarea placeholder="<?= t('no_logs') ?>" readonly><?= e(file_exists($log_file) ? file_get_contents($log_file) : '') ?></textarea>
                             <div class="input-group">
                                 <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
                                 <button type="button" class="light" onclick="location = '/admin/settings/logs_download'"><?= t('download') ?></button>

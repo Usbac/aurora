@@ -109,6 +109,7 @@ return [
     'no' => 'No',
     'no_active_user' => 'No hay un usuario activo con ese correo',
     'no_items' => 'No hay elementos',
+    'no_logs' => 'No hay registros',
     'no_permission' => 'No tienes permiso para realizar esta acción',
     'no_results' => 'No hay resultados',
     'none' => 'Nadie',
