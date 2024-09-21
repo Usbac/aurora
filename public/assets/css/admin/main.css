@@ -163,13 +163,6 @@ select {
     border: 1px var(--border-color) solid;
 }
 
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-    outline: none;
-    border: 1px #007fff solid;
-}
-
 .loading {
     display: flex;
     justify-content: center;
@@ -414,7 +407,6 @@ button,
     text-decoration: none;
     font-size: var(--font-size-bg);
     font-weight: var(--font-semibold);
-    outline: none;
     min-height: 36px;
     min-width: 44px;
     user-select: none;
