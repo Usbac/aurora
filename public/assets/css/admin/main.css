@@ -1255,13 +1255,9 @@ textarea.code {
 /* post */
 
 .post-image {
-    display: flex;
-    flex-direction: column;
-    width: calc(100% - 2px);
-    height: auto;
-    aspect-ratio: 16/9;
-    border-radius: var(--border-radius);
-    object-fit: cover;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
 }
 
 .listing-row.file > div > a {

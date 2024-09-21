@@ -67,6 +67,7 @@ return [
     'go_back' => 'Regresar',
     'host_name' => 'Nombre del host',
     'id' => 'ID',
+    'image' => 'Imagen',
     'image_alt' => 'Alt de imagen',
     'image_picker' => 'Selector de imagen',
     'impersonate' => 'Personificar',

@@ -29,13 +29,16 @@
                         <label for="title"><?= t('title') ?></label>
                         <input id="title" type="text" name="title" value="<?= e($post['title'] ?? '') ?>" data-char-count/>
                     </div>
-                    <img src="<?= e(!empty($post['image']) ? $this->getContentUrl($post['image']) : '/public/assets/no-image.svg') ?>" class="pointer post-image <?php if (empty($post['image'])): ?>empty-img<?php endif ?>" alt="<?= t('post_image') ?>"/>
-                    <input id="post-image-input" type="hidden" name="image" value="<?= e($post['image'] ?? '') ?>"/>
                 </div>
                 <textarea id="html" name="html"><?= $post['html'] ?? '' ?></textarea>
             </div>
             <div class="grid">
                 <div class="card v-spacing">
+                    <div class="input-group">
+                        <label><?= t('image') ?></label>
+                        <img src="<?= e(!empty($post['image']) ? $this->getContentUrl($post['image']) : '/public/assets/no-image.svg') ?>" class="pointer post-image <?php if (empty($post['image'])): ?>empty-img<?php endif ?>" alt="<?= t('post_image') ?>"/>
+                        <input id="post-image-input" type="hidden" name="image" value="<?= e($post['image'] ?? '') ?>"/>
+                    </div>
                     <div class="input-group">
                         <label for="slug"><?= t('slug') ?></label>
                         <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($post['slug'] ?? '') ?>" maxlength="255" data-char-count/>
