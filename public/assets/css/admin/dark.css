@@ -9,6 +9,7 @@
     --button-background-color: #006ad3;
     --danger-color: #f42f0d;
     --danger-background-color: #413a46;
+    --select-color: #0985ff;
     color: var(--main-color);
     color-scheme: dark;
 }

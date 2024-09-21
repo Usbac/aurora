@@ -14,6 +14,7 @@
     --danger-color: #f50b23;
     --danger-background-color: #ffebe9a3;
     --success-color: #29b23a;
+    --select-color: #006fde;
     --box-shadow: 0px 0px 3px 1px var(--border-color);
     --border-radius: 8px;
     --nav-width: 220px;
@@ -1074,7 +1075,7 @@ textarea.code {
     font-weight: var(--font-bold);
     font-size: var(--font-size-bg);
     min-height: 20px;
-    color: #007FFF;
+    color: var(--select-color);
     background-color: transparent !important;
 }
 
