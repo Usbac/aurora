@@ -67,11 +67,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     $router->post('json:admin/login', function() use ($user_mod, $lang) {
         $errors = $user_mod->handleLogin($_POST['email'], $_POST['password']);
-        $success = empty($errors);
 
         return json_encode([
-            'success' => $success,
-            'msg' => $success ? $lang->get('sign_in_success') : '',
+            'success' => empty($errors),
+            'msg' => null,
             'errors' => $errors,
         ]);
     });

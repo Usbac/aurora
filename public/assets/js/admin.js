@@ -136,7 +136,9 @@ class Form {
         });
 
         if (res?.success) {
-            Snackbar.show(res?.msg ? res.msg : LANG.done);
+            if (res?.msg !== null) {
+                Snackbar.show(res?.msg ? res.msg : LANG.done);
+            }
         } else if (res?.errors?.hasOwnProperty(0)) {
             Snackbar.show(res.errors[0], false);
         }

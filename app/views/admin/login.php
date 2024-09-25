@@ -37,9 +37,11 @@
     <script>
         document.getElementById('login-form').addEventListener('submit', event => {
             event.preventDefault();
-            Form.send('/admin/login', 'login-form', event.target.querySelector('[type="submit"]')).then(res => {
+            let btn = event.target.querySelector('[type="submit"]');
+            Form.send('/admin/login', 'login-form', btn).then(res => {
                 if (res.success) {
-                    setTimeout(() => location.reload(), 3000);
+                    location.reload();
+                    btn.setAttribute('disabled', 'disabled');
                 }
             });
         });

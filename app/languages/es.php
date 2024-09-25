@@ -161,7 +161,6 @@ return [
     'session_lifetime_description' => 'Tiempo de la sesión de PHP en segundos (p.ej. 3600 = 1 hora)',
     'settings' => 'Configuración',
     'sign_in' => 'Iniciar sesión',
-    'sign_in_success' => 'Has iniciado sesión. Serás redirigido en breve.',
     'site_footer' => 'Footer de la página',
     'site_footer_description' => 'Este código se añadirá al footer de todas las páginas.',
     'site_header' => 'Header de la página',
