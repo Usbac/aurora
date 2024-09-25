@@ -24,17 +24,25 @@ class Listing extends \Aurora\Bin\BaseCommand
                 [ 'Blog url', $settings['blog_url'] ],
                 [ 'Date format', $settings['date_format'] ],
                 [ 'Description', $settings['description'] ],
+                [ 'Editor code', $settings['editor_code'] ],
+                [ 'Error log filename', $settings['log_file'] ],
+                [ 'Footer code', $settings['footer_code'] ],
+                [ 'Header code', $settings['header_code'] ],
+                [ 'Items per page', $settings['per_page'] ],
                 [ 'Language', $settings['language'] ],
                 [ 'Logo', $settings['logo'] ],
+                [ 'Log errors', $settings['log_errors'] ? 'yes' : 'no' ],
                 [ 'Maintenance', $settings['maintenance'] ? 'yes' : 'no' ],
                 [ 'Meta description', $settings['meta_description'] ],
                 [ 'Meta keywords', $settings['meta_keywords'] ],
-                [ 'Items per page', $settings['per_page']],
+                [ 'Meta title', $settings['meta_title'] ],
+                [ 'Post code', $settings['post_code'] ],
+                [ 'SameSite cookie', $settings['samesite_cookie'] ],
+                [ 'Session lifetime', $settings['session_lifetime'] ],
                 [ 'Theme', $settings['theme'] ],
                 [ 'Title', $settings['title'] ],
                 [ 'Views count', $settings['views_count'] ? 'yes' : 'no' ],
-            ])
-            ->render();
+            ])->render();
 
         return Command::SUCCESS;
     }
