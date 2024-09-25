@@ -10,6 +10,7 @@ return [
     'author' => 'Author',
     'bad_password' => 'Password must be at least 8 characters long',
     'bad_password_confirm' => 'Password and its confirmation must match',
+    'bio' => 'Bio',
     'blog' => 'Blog',
     'blog_url' => 'Blog url',
     'by' => 'By',

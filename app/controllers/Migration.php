@@ -79,6 +79,7 @@ final class Migration
             'image'       => 'TEXT',
             'status'      => 'INTEGER',
             'password'    => 'TEXT',
+            'bio'         => 'TEXT',
             'role'        => 'INTEGER',
             'created_at'  => 'INTEGER',
             'last_active' => 'INTEGER',

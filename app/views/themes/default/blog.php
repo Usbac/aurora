@@ -29,7 +29,10 @@
         <?php elseif (isset($user)): ?>
             <div class="section author">
                 <img src="<?= !empty($user['image']) ? e($this->getContentUrl($user['image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
-                <h2><?= e($user['name']) ?></h2>
+                <div>
+                    <h2><?= e($user['name']) ?></h2>
+                    <span><?= e($user['bio']) ?></span>
+                </div>
             </div>
             <script>var next_page_args = 'user=' + <?= e($user['id']) ?>;</script>
         <?php else: ?>

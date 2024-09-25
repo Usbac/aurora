@@ -256,6 +256,7 @@
                 "image": "",
                 "status": 1,
                 "password": "$2y$10$ue5adhL6CJWfW8YiMW5JIehftbALWWIStJ6p9cA9BxdWICqWkymZS",
+                "bio": "",
                 "role": 4,
                 "created_at": "1694409154",
                 "last_active": "1694409154"

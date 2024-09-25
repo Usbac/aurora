@@ -299,6 +299,8 @@ button:not(.loading):hover {
 .author {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 28px;
 }
 
 .author > div {
@@ -306,12 +308,19 @@ button:not(.loading):hover {
     flex-direction: column;
 }
 
+.author > div > span {
+    max-width: 600px;
+}
+
 .author img {
     width: 120px;
     height: 120px;
     border-radius: 100%;
     object-fit: cover;
-    margin-right: 28px;
+}
+
+.author h2 {
+    margin: 0;
 }
 
 .blog-title {

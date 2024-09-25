@@ -10,6 +10,7 @@ return [
     'author' => 'Autor',
     'bad_password' => 'La contraseña debe tener un mínimo de 8 caracteres',
     'bad_password_confirm' => 'La contraseña y su confirmación deben coincidir',
+    'bio' => 'Bio',
     'blog' => 'Blog',
     'blog_url' => 'Url del blog',
     'by' => 'Por',

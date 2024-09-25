@@ -62,6 +62,10 @@
                         <input id="email" name="email" type="text" value="<?= e($user['email'] ?? '') ?>" maxlength="255"/>
                     </div>
                     <div class="input-group">
+                        <label for="bio"><?= t('bio') ?></label>
+                        <textarea id="bio" name="bio" data-char-count><?= e($user['bio'] ?? '') ?></textarea>
+                    </div>
+                    <div class="input-group">
                         <label for="role"><?= t('role') ?></label>
                         <select id="role" name="role">
                             <?php foreach ($roles as $role): ?>

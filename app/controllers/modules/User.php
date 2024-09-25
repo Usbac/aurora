@@ -34,6 +34,7 @@ final class User extends \Aurora\App\ModuleBase
             'email' => $data['email'],
             'status' => $data['status'],
             'image' => $data['image'],
+            'bio' => $data['bio'],
             'role' => $data['role'],
         ], $id);
 
@@ -59,6 +60,7 @@ final class User extends \Aurora\App\ModuleBase
             'password' => $this->getPassword($data['password']),
             'status' => $data['status'],
             'image' => $data['image'] ?? null,
+            'bio' => $data['bio'],
             'role' => $data['role'],
             'created_at' => $time,
             'last_active' => $time,
