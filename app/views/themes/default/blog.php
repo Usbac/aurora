@@ -28,7 +28,7 @@
             <script>var next_page_args = 'tag=' + <?= js($tag['id']) ?>;</script>
         <?php elseif (isset($user)): ?>
             <div class="section author">
-                <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
+                <img src="<?= !empty($user['image']) ? e($this->getContentUrl($user['image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
                 <h2><?= e($user['name']) ?></h2>
             </div>
             <script>var next_page_args = 'user=' + <?= e($user['id']) ?>;</script>
