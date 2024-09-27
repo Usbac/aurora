@@ -1013,11 +1013,11 @@ textarea.code {
     flex-direction: row;
     justify-content: flex-end;
     position: relative;
+    gap: 12px;
 }
 
 .filters > div {
-    max-width: 140px;
-    margin-right: 12px;
+    max-width: 130px;
 }
 
 .filters > button,
@@ -1457,7 +1457,6 @@ textarea.code {
 
     .filters > div {
         max-width: initial;
-        margin: 0 0 16px 0;
     }
 
     .listing-container {
