@@ -142,7 +142,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                     ],
                 ],
                 'order' => [
-                    'title' => $lang->get('order_by'),
+                    'title' => $lang->get('sort_by'),
                     'options' => [
                         'title' => $lang->get('title'),
                         'status' => $lang->get('status'),
@@ -240,7 +240,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                     ],
                 ],
                 'order' => [
-                    'title' => $lang->get('order_by'),
+                    'title' => $lang->get('sort_by'),
                     'options' => [
                         'title' => $lang->get('title'),
                         'author' => $lang->get('author'),
@@ -332,7 +332,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                     'options' => $roles,
                 ],
                 'order' => [
-                    'title' => $lang->get('order_by'),
+                    'title' => $lang->get('sort_by'),
                     'options' => [
                         'name' => $lang->get('name'),
                         'email' => $lang->get('email'),
@@ -424,7 +424,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                     ],
                 ],
                 'order' => [
-                    'title' => $lang->get('order_by'),
+                    'title' => $lang->get('sort_by'),
                     'options' => [
                         'title' => $lang->get('title'),
                         'url' => $lang->get('url'),
@@ -489,7 +489,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'extra_header' => 'admin/partials/extra_headers/tags.php',
             'filters' => [
                 'order' => [
-                    'title' => $lang->get('order_by'),
+                    'title' => $lang->get('sort_by'),
                     'options' => [
                         'name' => $lang->get('name'),
                         'slug' => $lang->get('slug'),
@@ -583,7 +583,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'extra_header' => 'admin/partials/extra_headers/media.php',
             'filters' => [
                 'order' => [
-                    'title' => $lang->get('order_by'),
+                    'title' => $lang->get('sort_by'),
                     'options' => [
                         'name' => $lang->get('name'),
                         'type' => $lang->get('type'),

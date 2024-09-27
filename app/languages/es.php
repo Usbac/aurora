@@ -168,6 +168,7 @@ return [
     'size' => 'Tamaño',
     'slug' => 'Slug',
     'someone_requested_password_restore' => 'Alguien acaba de solicitar una restauración de contraseña para tu cuenta.',
+    'sort_by' => 'Ordenar por',
     'start_creating' => 'Empezar a crear',
     'static' => 'Página estatica',
     'static_file' => 'Archivo de la página estatica',

@@ -168,6 +168,7 @@ return [
     'size' => 'Size',
     'slug' => 'Slug',
     'someone_requested_password_restore' => 'Someone recently requested a password restore for your account.',
+    'sort_by' => 'Sort by',
     'start_creating' => 'Start creating',
     'static' => 'Static page',
     'static_file' => 'Static page file',
