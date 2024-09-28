@@ -27,9 +27,10 @@ final class Media
      * @param string $path the path relative to the project root directory
      * @param [string] $search the search string
      * @param [string] $order the order (name, type, size)
+     * @param [bool] $asc the order direction. true for ascending, false for descending
      * @return array the files and folders in the given path
      */
-    public static function getFiles(string $path, string $search = '', string $order = 'name'): array
+    public static function getFiles(string $path, string $search = '', string $order = 'name', bool $asc = true): array
     {
         $path = \Aurora\Core\Helper::getPath($path);
 
@@ -57,15 +58,12 @@ final class Media
         }
 
         match ($order) {
-            'name' => usort($files, fn($a, $b) => strnatcmp($a['name'], $b['name'])),
-            'type' => usort($files, fn($a, $b) => $b['is_file'] <=> $a['is_file']),
-            'size' => usort($files, fn($a, $b) => $b['size'] <=> $a['size']),
+            'type' => usort($files, fn($a, $b) => $asc ? $a['is_file'] <=> $b['is_file'] : $b['is_file'] <=> $a['is_file']),
+            'name' => usort($files, fn($a, $b) => $asc ? strnatcmp($a['name'], $b['name']) : strnatcmp($b['name'], $a['name'])),
+            'size' => usort($files, fn($a, $b) => $asc ? $a['size'] <=> $b['size'] : $b['size'] <=> $a['size']),
         };
 
-        return [
-            ...array_filter($files, fn($file) => !$file['is_file']),
-            ...array_filter($files, fn($file) => $file['is_file']),
-        ];
+        return $files;
     }
 
     /**
