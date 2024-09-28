@@ -18,10 +18,10 @@ final class Post extends \Aurora\App\ModuleBase
     protected string $group_by = 'posts.id';
     protected array $relations = [ 'posts_to_tags' => 'post_id' ];
     protected array $orders = [
-        'title' => 'posts.title ASC, posts.id DESC',
-        'author' => 'users.name ASC, posts.title ASC',
-        'date' => 'posts.published_at DESC, posts.title ASC',
-        'views' => 'views DESC, posts.title ASC',
+        'date' => 'posts.published_at',
+        'title' => 'posts.title',
+        'author' => 'users.name',
+        'views' => 'views',
     ];
 
     /**

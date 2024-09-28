@@ -6,10 +6,10 @@ final class Link extends \Aurora\App\ModuleBase
 {
     protected string $table = 'links';
     protected array $orders = [
-        'title' => 'links.title ASC, links.id DESC',
-        'url' => 'links.url ASC, links.title ASC',
-        'order' => 'links.`order` ASC, links.title ASC',
-        'status' => 'links.status DESC, links.title ASC',
+        'title' => 'links.title',
+        'url' => 'links.url',
+        'order' => 'links.`order`',
+        'status' => 'links.status',
     ];
 
     /**

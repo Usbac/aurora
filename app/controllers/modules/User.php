@@ -11,13 +11,13 @@ final class User extends \Aurora\App\ModuleBase
     protected string $group_by = 'users.id';
     protected array $relations = [ 'password_restores' => 'user_id' ];
     protected array $orders = [
-        'name' => 'users.name ASC, users.id DESC',
-        'email' => 'users.email ASC, users.name ASC',
-        'posts' => 'COUNT(posts.id) DESC, users.name ASC',
-        'status' => 'users.status DESC, users.name ASC',
-        'role' => 'users.role DESC, users.name ASC',
-        'last_active' => 'users.last_active DESC, users.name ASC',
-        'id' => 'users.id ASC',
+        'name' => 'users.name',
+        'email' => 'users.email',
+        'posts' => 'COUNT(posts.id)',
+        'status' => 'users.status',
+        'role' => 'users.role',
+        'last_active' => 'users.last_active',
+        'id' => 'users.id',
     ];
 
     /**

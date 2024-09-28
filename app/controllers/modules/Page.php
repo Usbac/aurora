@@ -10,10 +10,10 @@ final class Page extends \Aurora\App\ModuleBase
     protected string $join = 'LEFT JOIN views ON views.type = "page" AND views.item_id = pages.id';
     protected string $group_by = 'pages.id';
     protected array $orders = [
-        'title' => 'pages.title ASC, pages.id DESC',
-        'status' => 'pages.status DESC, pages.title ASC',
-        'edited' => 'pages.edited_at DESC, pages.title ASC',
-        'views' => 'views DESC, pages.title ASC',
+        'title' => 'pages.title',
+        'status' => 'pages.status',
+        'edited' => 'pages.edited_at',
+        'views' => 'views',
     ];
 
     /**

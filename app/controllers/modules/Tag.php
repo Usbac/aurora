@@ -10,8 +10,8 @@ final class Tag extends \Aurora\App\ModuleBase
     protected string $group_by = 'tags.id';
     protected array $relations = [ 'posts_to_tags' => 'tag_id' ];
     protected array $orders = [
-        'name' => 'tags.name DESC, tags.id DESC',
-        'posts' => 'COUNT(post_id) DESC, tags.name ASC',
+        'name' => 'tags.name',
+        'posts' => 'COUNT(post_id)',
     ];
 
     /**
