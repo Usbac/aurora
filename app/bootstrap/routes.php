@@ -194,18 +194,6 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([ 'success' => true ]);
     });
 
-    $router->get('json:admin/pages/page', function() use ($view, $page_mod) {
-        $where = $page_mod->getCondition($_GET);
-
-        return json_encode([
-            'next_page' => $page_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
-            'count' => $page_mod->count($where),
-            'html' => $view->get('admin/partials/lists/pages.php', [
-                'pages' => $page_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
-            ]),
-        ]);
-    });
-
     /* POSTS */
 
     $router->get('admin/posts', function() use ($view, $lang, $user_mod) {
