@@ -27,7 +27,7 @@
         <form id="filters-form" class="filters" target="<?= e($current_path) ?>">
             <?php foreach ($filters as $key => $filter): ?>
                 <div class="input-group">
-                    <label><?= e($filter['title']) ?></label>
+                    <label><?= empty($filter['title']) ? '&nbsp;' : e($filter['title']) ?></label>
                     <select name="<?= e($key) ?>" onchange="this.form.dispatchEvent(new CustomEvent('submit'))">
                         <?php foreach ($filter['options'] as $opt_value => $opt_title): ?>
                             <option value="<?= e($opt_value) ?>" <?php if (strval($_GET[$key] ?? '') === strval($opt_value)): ?> selected <?php endif ?>>
