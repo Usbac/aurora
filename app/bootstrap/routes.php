@@ -280,18 +280,6 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([ 'success' => true ]);
     });
 
-    $router->get('json:admin/posts/page', function() use ($view, $post_mod) {
-        $where = $post_mod->getCondition($_GET);
-
-        return json_encode([
-            'next_page' => $post_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
-            'count' => $post_mod->count($where),
-            'html' => $view->get('admin/partials/lists/posts.php', [
-                'posts' => $post_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
-            ]),
-        ]);
-    });
-
     $router->any('json:admin/posts/upload_image', function() {
         $path = Kernel::config('content') . '/' . date('Y/m/');
         \Aurora\App\Media::uploadFile($_FILES['file'], $path);
@@ -373,18 +361,6 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([ 'success' => true ]);
     });
 
-    $router->get('json:admin/users/page', function() use ($view, $user_mod) {
-        $where = $user_mod->getCondition($_GET);
-
-        return json_encode([
-            'next_page' => $user_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
-            'count' => $user_mod->count($where),
-            'html' => $view->get('admin/partials/lists/users.php', [
-                'users' => $user_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
-            ]),
-        ]);
-    });
-
     $router->get('admin/users/impersonate', function() use ($user_mod) {
         $user = $user_mod->get([
             'id' => $_GET['id'] ?? 0,
@@ -462,18 +438,6 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([ 'success' => true ]);
     });
 
-    $router->get('json:admin/links/page', function() use ($view, $link_mod) {
-        $where = $link_mod->getCondition($_GET);
-
-        return json_encode([
-            'next_page' => $link_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
-            'count' => $link_mod->count($where),
-            'html' => $view->get('admin/partials/lists/links.php', [
-                'links' => $link_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
-            ]),
-        ]);
-    });
-
     /* TAGS */
 
     $router->get('admin/tags', function() use ($view, $lang) {
@@ -524,18 +488,6 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         }
 
         return json_encode([ 'success' => true ]);
-    });
-
-    $router->get('json:admin/tags/page', function() use ($view, $tag_mod) {
-        $where = $tag_mod->getCondition($_GET);
-
-        return json_encode([
-            'next_page' => $tag_mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
-            'count' => $tag_mod->count($where),
-            'html' => $view->get('admin/partials/lists/tags.php', [
-                'tags' => $tag_mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
-            ]),
-        ]);
     });
 
     /* MEDIA */
@@ -591,20 +543,6 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                     ]
                 ],
             ],
-        ]);
-    });
-
-    $router->get('json:admin/media/page', function() use ($view) {
-        $files = \Aurora\App\Media::getFiles($_GET['path'] ?? Kernel::config('content'),
-            $_GET['search'] ?? '',
-            $_GET['order'] ?? 'name');
-
-        return json_encode([
-            'next_page' => false,
-            'count' => count($files),
-            'html' => $view->get('admin/partials/lists/media.php', [
-                'files' => $files ? $files : [],
-            ]),
         ]);
     });
 
@@ -816,22 +754,52 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->post('json:admin/{mod}/save', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
-        $id = $_GET['id'] ?? '';
-        $mod = match ($_GET['mod']) {
-            'pages' => $page_mod,
-            'posts' => $post_mod,
-            'users' => $user_mod,
-            'tags' => $tag_mod,
-            'links' => $link_mod,
-            default => null,
-        };
-
-        if (!$mod) {
-            http_response_code(404);
-            return;
+    $router->get('json:admin/{mod}/page', function() use ($view, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+        $mod_str = $_GET['mod'] ?? '';
+        switch ($mod_str) {
+            case 'pages': $mod = $page_mod; break;
+            case 'posts': $mod = $post_mod; break;
+            case 'users': $mod = $user_mod; break;
+            case 'tags': $mod = $tag_mod; break;
+            case 'links': $mod = $link_mod; break;
+            case 'media':
+                $files = \Aurora\App\Media::getFiles($_GET['path'] ?? Kernel::config('content'), $_GET['search'] ?? '', $_GET['order'] ?? 'name');
+                return json_encode([
+                    'next_page' => false,
+                    'count' => count($files),
+                    'html' => $view->get('admin/partials/lists/media.php', [
+                        'files' => $files ? $files : [],
+                    ]),
+                ]);
+            default:
+                http_response_code(404);
+                return;
         }
 
+        $where = $mod->getCondition($_GET);
+
+        return json_encode([
+            'next_page' => $mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
+            'count' => $mod->count($where),
+            'html' => $view->get("admin/partials/lists/$mod_str.php", [
+                $mod_str => $mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
+            ]),
+        ]);
+    });
+
+    $router->post('json:admin/{mod}/save', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+        switch ($_GET['mod']) {
+            case 'pages': $mod = $page_mod; break;
+            case 'posts': $mod = $post_mod; break;
+            case 'users': $mod = $user_mod; break;
+            case 'tags': $mod = $tag_mod; break;
+            case 'links': $mod = $link_mod; break;
+            default:
+                http_response_code(404);
+                return;
+        }
+
+        $id = $_GET['id'] ?? '';
         $errors = $mod->checkFields($_POST, $id);
         if (!empty($errors)) {
             return json_encode([
