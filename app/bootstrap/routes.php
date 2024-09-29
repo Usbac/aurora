@@ -1121,12 +1121,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             ]);
         }
 
-        $page['header_links'] = $link_mod->getHeaderLinks();
-
         $template = !empty($page['static']) && !empty($page['static_file'])
             ? $page['static_file']
             : 'page.php';
 
-        return $view->get("$theme_dir/$template", $page);
+        return $view->get("$theme_dir/$template", [
+            'header_links' => $link_mod->getHeaderLinks(),
+            ...$page,
+        ]);
     });
 };
