@@ -47,6 +47,15 @@ class ModuleBase
     }
 
     /**
+     * Returns the default ORDER BY statement
+     * @return mixed the default ORDER BY statement
+     */
+    public function getDefaultOrder(): mixed
+    {
+        return array_key_first($this->orders);
+    }
+
+    /**
      * Returns the row based on the given search
      * @param array $search the search fields to find the row
      * Must follow the format field => value
@@ -89,6 +98,7 @@ class ModuleBase
      * @param [int] $per_page the number of items per page
      * @param [string] $where the where condition for the query
      * @param [string] $order the order by condition for the query
+     * @param [bool] $asc the order direction. true for ascending, false for descending
      * @param [bool] $return_all_til_page return all elements til the given page or just the specified one
      * @return mixed the rows in the page
      */
@@ -97,6 +107,7 @@ class ModuleBase
         ?int $per_page = null,
         ?string $where = '',
         ?string $order = '',
+        bool $asc = true,
         bool $return_all_til_page = false,
         ): array
     {
@@ -104,7 +115,7 @@ class ModuleBase
             $order = array_key_first($this->orders);
         }
 
-        $base_query = $this->getBaseQuery($where) . ' ORDER BY ' . ($this->orders[$order] ?? '1');
+        $base_query = $this->getBaseQuery($where) . ' ORDER BY ' . ($this->orders[$order] ?? '1') . ($asc ? ' ASC' : ' DESC');
 
         if (!isset($page)) {
             $res = $this->db->query($base_query);

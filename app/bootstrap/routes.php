@@ -107,7 +107,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     $router->get('admin/dashboard', function() use ($db, $view, $link_mod, $post_mod) {
         return $view->get('admin/dashboard.php', [
             'links' => $link_mod->getPage(null, null, '', 'order'),
-            'posts' => $post_mod->getPage(1, 6, $post_mod->getCondition([ 'status' => 1 ]), 'published_at DESC'),
+            'posts' => $post_mod->getPage(1, 6, $post_mod->getCondition([ 'status' => 1 ]), 'published_at', false),
             'total_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 1 ])),
             'total_scheduled_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 'scheduled' ])),
             'total_draft_posts' => $db->count('posts', '', 'status != 1'),
@@ -149,7 +149,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'slug' => $lang->get('slug'),
                         'edited' => $lang->get('edited'),
                         'views' => $lang->get('number_views'),
-                    ]
+                    ],
+                ],
+                'sort' => [
+                    'options' => [
+                        'asc' => $lang->get('ascending'),
+                        'desc' => $lang->get('descending'),
+                    ],
                 ],
             ],
         ]);
@@ -236,6 +242,12 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'views' => $lang->get('number_views'),
                     ],
                 ],
+                'sort' => [
+                    'options' => [
+                        'asc' => $lang->get('ascending'),
+                        'desc' => $lang->get('descending'),
+                    ],
+                ],
             ],
         ]);
     });
@@ -249,7 +261,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         return $view->get('admin/post.php', [
             'users' => $user_mod->getPage(),
-            'tags' => $tag_mod->getPage(null, null, '', 'name ASC'),
+            'tags' => $tag_mod->getPage(null, null, '', 'name'),
             'post' => $post,
         ]);
     });
@@ -316,6 +328,12 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'role' => $lang->get('role'),
                         'last_active' => $lang->get('last_active'),
                         'posts' => $lang->get('number_posts'),
+                    ],
+                ],
+                'sort' => [
+                    'options' => [
+                        'asc' => $lang->get('ascending'),
+                        'desc' => $lang->get('descending'),
                     ],
                 ],
             ],
@@ -394,7 +412,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'url' => $lang->get('url'),
                         'status' => $lang->get('status'),
                         'order' => $lang->get('order'),
-                    ]
+                    ],
+                ],
+                'sort' => [
+                    'options' => [
+                        'asc' => $lang->get('ascending'),
+                        'desc' => $lang->get('descending'),
+                    ],
                 ],
             ],
         ]);
@@ -446,7 +470,13 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'name' => $lang->get('name'),
                         'slug' => $lang->get('slug'),
                         'posts' => $lang->get('number_posts'),
-                    ]
+                    ],
+                ],
+                'sort' => [
+                    'options' => [
+                        'asc' => $lang->get('ascending'),
+                        'desc' => $lang->get('descending'),
+                    ],
                 ],
             ],
         ]);
@@ -525,10 +555,16 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 'order' => [
                     'title' => $lang->get('sort_by'),
                     'options' => [
-                        'name' => $lang->get('name'),
                         'type' => $lang->get('type'),
+                        'name' => $lang->get('name'),
                         'size' => $lang->get('size'),
                     ]
+                ],
+                'sort' => [
+                    'options' => [
+                        'asc' => $lang->get('ascending'),
+                        'desc' => $lang->get('descending'),
+                    ],
                 ],
             ],
         ]);
@@ -744,6 +780,8 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     $router->get('json:admin/{mod}/page', function() use ($view, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $mod_str = $_GET['mod'] ?? '';
+        $sort = ($_GET['sort'] ?? 'asc') == 'asc';
+
         switch ($mod_str) {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;
@@ -751,13 +789,11 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             case 'tags': $mod = $tag_mod; break;
             case 'links': $mod = $link_mod; break;
             case 'media':
-                $files = \Aurora\App\Media::getFiles($_GET['path'] ?? Kernel::config('content'), $_GET['search'] ?? '', $_GET['order'] ?? 'name');
+                $files = \Aurora\App\Media::getFiles($_GET['path'] ?? Kernel::config('content'), $_GET['search'] ?? '', $_GET['order'] ?? 'type', $sort);
                 return json_encode([
                     'next_page' => false,
                     'count' => count($files),
-                    'html' => $view->get('admin/partials/lists/media.php', [
-                        'files' => $files ? $files : [],
-                    ]),
+                    'html' => $view->get('admin/partials/lists/media.php', [ 'files' => $files ]),
                 ]);
             default:
                 http_response_code(404);
@@ -770,7 +806,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'next_page' => $mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $mod->count($where),
             'html' => $view->get("admin/partials/lists/$mod_str.php", [
-                $mod_str => $mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? ''),
+                $mod_str => $mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? $mod->getDefaultOrder(), $sort),
             ]),
         ]);
     });
@@ -956,7 +992,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return $view->get("$theme_dir/blog.php", [
             'header_links' => $link_mod->getHeaderLinks(),
             'title' => $lang->get('blog'),
-            'posts' => $post_mod->getPage($current_page, $per_page, $where, '', true),
+            'posts' => $post_mod->getPage($current_page, $per_page, $where, 'date', false, true),
             'next_page' => $post_mod->isNextPageAvailable($current_page, $per_page, $where),
             'current_page' => $current_page,
         ]);
@@ -981,7 +1017,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'header_links' => $link_mod->getHeaderLinks(),
             'title' => $user['name'],
             'user' => $user,
-            'posts' => $post_mod->getPage($current_page, $per_page, $where, '', true),
+            'posts' => $post_mod->getPage($current_page, $per_page, $where, 'date', false, true),
             'next_page' => $post_mod->isNextPageAvailable($current_page, $per_page, $where),
             'current_page' => $current_page,
         ]);
@@ -1006,7 +1042,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'header_links' => $link_mod->getHeaderLinks(),
             'title' => $tag['name'],
             'tag' => $tag,
-            'posts' => $post_mod->getPage($current_page, $per_page, $where, '', true),
+            'posts' => $post_mod->getPage($current_page, $per_page, $where, 'date', false, true),
             'next_page' => $post_mod->isNextPageAvailable($current_page, $per_page, $where),
             'current_page' => $current_page,
         ]);
