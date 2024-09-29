@@ -213,11 +213,7 @@ class Listing {
 
     static init() {
         window.addEventListener('keydown', e => {
-            if (document.activeElement.tagName == 'INPUT') {
-                return;
-            }
-
-            if ((e.key == 'Escape' && this.#select_mode) || e.key == 's') {
+            if (document.activeElement.tagName != 'INPUT' && (e.key == 's' || (e.key == 'Escape' && this.#select_mode))) {
                 this.toggleSelectMode(get('.batch-options-container > button'));
             }
         });
