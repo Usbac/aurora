@@ -63,10 +63,13 @@
 
         filters_form.addEventListener('submit', e => {
             e.preventDefault();
-            let params = new URLSearchParams(new FormData(filters_form));
-            Array.from(params).forEach(([ key, value ]) => {
+            let params = new URLSearchParams(location.search);
+
+            Array.from(new FormData(filters_form)).forEach(([ key, value ]) => {
                 if (value === '') {
                     params.delete(key);
+                } else {
+                    params.set(key, value);
                 }
             });
 
