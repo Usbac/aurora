@@ -1018,6 +1018,7 @@ textarea.code {
 
 .filters > div {
     max-width: 120px;
+    justify-content: flex-end;
 }
 
 .filters > button,
