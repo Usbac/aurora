@@ -187,6 +187,7 @@ final class Media
 
     /**
      * Uploads the given file to the given path
+     * @throws \InvalidArgumentException
      * @param array $file the file
      * @param string $path the path relative to the project root directory
      * @return bool true if the file was uploaded successfully, false otherwise
