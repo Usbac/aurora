@@ -325,10 +325,7 @@ class Listing {
                     total_items.innerHTML = res.count + ' ' + LANG[res.count == 1 ? 'item' : 'items'];
                 }
             })
-            .finally(() => {
-                btn_load_more.resetState();
-                get('#main-listing > svg')?.remove();
-            });
+            .finally(() => btn_load_more.resetState());
     }
 
     static refresh() {
