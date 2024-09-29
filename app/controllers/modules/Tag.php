@@ -4,6 +4,9 @@ namespace Aurora\App\Modules;
 
 final class Tag extends \Aurora\App\ModuleBase
 {
+    public const DEFAULT_ORDER = 'name';
+    public const DEFAULT_SORT = 'asc';
+
     protected string $select = 'tags.*, COUNT(post_id) AS posts';
     protected string $table = 'tags';
     protected string $join = 'LEFT JOIN posts_to_tags p2t ON p2t.tag_id = tags.id AND p2t.post_id IN (SELECT posts.id FROM posts)';

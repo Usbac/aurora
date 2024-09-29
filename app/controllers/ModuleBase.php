@@ -47,15 +47,6 @@ class ModuleBase
     }
 
     /**
-     * Returns the default ORDER BY statement
-     * @return mixed the default ORDER BY statement
-     */
-    public function getDefaultOrder(): mixed
-    {
-        return array_key_first($this->orders);
-    }
-
-    /**
      * Returns the row based on the given search
      * @param array $search the search fields to find the row
      * Must follow the format field => value

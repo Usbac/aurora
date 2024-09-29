@@ -4,6 +4,9 @@ namespace Aurora\App\Modules;
 
 final class Page extends \Aurora\App\ModuleBase
 {
+    public const DEFAULT_ORDER = 'title';
+    public const DEFAULT_SORT = 'asc';
+
     protected string $select = 'pages.*,
         COUNT(DISTINCT views.ip) AS views';
     protected string $table = 'pages';

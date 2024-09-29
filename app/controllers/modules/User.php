@@ -4,6 +4,9 @@ namespace Aurora\App\Modules;
 
 final class User extends \Aurora\App\ModuleBase
 {
+    public const DEFAULT_ORDER = 'name';
+    public const DEFAULT_SORT = 'asc';
+
     protected string $select = 'users.*, COUNT(posts.id) AS posts, roles.slug AS role_slug';
     protected string $table = 'users';
     protected string $join = 'LEFT JOIN posts ON posts.user_id = users.id

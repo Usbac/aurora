@@ -4,6 +4,9 @@ namespace Aurora\App\Modules;
 
 final class Post extends \Aurora\App\ModuleBase
 {
+    public const DEFAULT_ORDER = 'date';
+    public const DEFAULT_SORT = 'desc';
+
     protected string $select = 'posts.*,
         COUNT(DISTINCT views.ip) AS views,
         users.id AS user_id,

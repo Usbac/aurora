@@ -4,6 +4,9 @@ namespace Aurora\App\Modules;
 
 final class Link extends \Aurora\App\ModuleBase
 {
+    public const DEFAULT_ORDER = 'title';
+    public const DEFAULT_SORT = 'asc';
+
     protected string $table = 'links';
     protected array $orders = [
         'title' => 'links.title',

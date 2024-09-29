@@ -120,7 +120,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     /* PAGES */
 
-    $router->get('admin/pages', function() use ($view, $lang) {
+    $router->get('admin/pages', function() use ($view, $lang, $page_mod) {
         return $view->get('admin/list.php', [
             'title' => $lang->get('pages'),
             'show_add_button' => \Aurora\App\Permission::can('edit_pages'),
@@ -157,6 +157,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'desc' => $lang->get('descending'),
                     ],
                 ],
+            ],
+            'defaults' => [
+                'order' => $page_mod::DEFAULT_ORDER,
+                'sort' => $page_mod::DEFAULT_SORT,
             ],
         ]);
     });
@@ -202,7 +206,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     /* POSTS */
 
-    $router->get('admin/posts', function() use ($view, $lang, $user_mod) {
+    $router->get('admin/posts', function() use ($view, $lang, $post_mod, $user_mod) {
         $authors = [ '' => $lang->get('all') ];
         foreach ($user_mod->getPage() as $user) {
             $authors[$user['id']] = $user['name'];
@@ -249,6 +253,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                     ],
                 ],
             ],
+            'defaults' => [
+                'order' => $post_mod::DEFAULT_ORDER,
+                'sort' => $post_mod::DEFAULT_SORT,
+            ],
         ]);
     });
 
@@ -289,7 +297,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     /* USERS */
 
-    $router->get('admin/users', function() use ($db, $view, $lang) {
+    $router->get('admin/users', function() use ($db, $view, $lang, $user_mod) {
         $roles = [ '' => $lang->get('all') ];
         foreach ($db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll() as $role) {
             $roles[$role['level']] = $lang->get($role['slug']);
@@ -336,6 +344,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'desc' => $lang->get('descending'),
                     ],
                 ],
+            ],
+            'defaults' => [
+                'order' => $user_mod::DEFAULT_ORDER,
+                'sort' => $user_mod::DEFAULT_SORT,
             ],
         ]);
     });
@@ -384,7 +396,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     /* LINKS */
 
-    $router->get('admin/links', function() use ($view, $lang) {
+    $router->get('admin/links', function() use ($view, $lang, $link_mod) {
         return $view->get('admin/list.php', [
             'title' => $lang->get('links'),
             'show_add_button' => \Aurora\App\Permission::can('edit_links'),
@@ -421,6 +433,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                     ],
                 ],
             ],
+            'defaults' => [
+                'order' => $link_mod::DEFAULT_ORDER,
+                'sort' => $link_mod::DEFAULT_SORT,
+            ],
         ]);
     });
 
@@ -452,7 +468,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     /* TAGS */
 
-    $router->get('admin/tags', function() use ($view, $lang) {
+    $router->get('admin/tags', function() use ($view, $lang, $tag_mod) {
         return $view->get('admin/list.php', [
             'title' => $lang->get('tags'),
             'show_add_button' => \Aurora\App\Permission::can('edit_tags'),
@@ -478,6 +494,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'desc' => $lang->get('descending'),
                     ],
                 ],
+            ],
+            'defaults' => [
+                'order' => $tag_mod::DEFAULT_ORDER,
+                'sort' => $tag_mod::DEFAULT_SORT,
             ],
         ]);
     });
@@ -555,8 +575,8 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 'order' => [
                     'title' => $lang->get('sort_by'),
                     'options' => [
-                        'type' => $lang->get('type'),
                         'name' => $lang->get('name'),
+                        'type' => $lang->get('type'),
                         'size' => $lang->get('size'),
                     ]
                 ],
@@ -566,6 +586,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                         'desc' => $lang->get('descending'),
                     ],
                 ],
+            ],
+            'defaults' => [
+                'order' => 'type',
+                'sort' => 'asc',
             ],
         ]);
     });
@@ -780,8 +804,6 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     $router->get('json:admin/{mod}/page', function() use ($view, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $mod_str = $_GET['mod'] ?? '';
-        $sort = ($_GET['sort'] ?? 'asc') == 'asc';
-
         switch ($mod_str) {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;
@@ -789,7 +811,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             case 'tags': $mod = $tag_mod; break;
             case 'links': $mod = $link_mod; break;
             case 'media':
-                $files = \Aurora\App\Media::getFiles($_GET['path'] ?? Kernel::config('content'), $_GET['search'] ?? '', $_GET['order'] ?? 'type', $sort);
+                $files = \Aurora\App\Media::getFiles($_GET['path'] ?? Kernel::config('content'), $_GET['search'] ?? '', $_GET['order'] ?? 'type', ($_GET['sort'] ?? 'asc') == 'asc');
                 return json_encode([
                     'next_page' => false,
                     'count' => count($files),
@@ -806,7 +828,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'next_page' => $mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $mod->count($where),
             'html' => $view->get("admin/partials/lists/$mod_str.php", [
-                $mod_str => $mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? $mod->getDefaultOrder(), $sort),
+                $mod_str => $mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? $mod::DEFAULT_ORDER, ($_GET['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
             ]),
         ]);
     });
