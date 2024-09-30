@@ -614,14 +614,10 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             }
         }
 
-        try {
-            foreach ($files as $file) {
-                if (!\Aurora\App\Media::uploadFile($file, $path)) {
-                    $success = false;
-                }
+        foreach ($files as $file) {
+            if (!\Aurora\App\Media::uploadFile($file, $path)) {
+                $success = false;
             }
-        } catch (Exception $e) {
-            $success = false;
         }
 
         return json_encode([

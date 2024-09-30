@@ -60,7 +60,7 @@ return [
     'error_remove_some_items' => 'No se pudieron eliminar todos los elementos.',
     'error_rename_item' => 'Error al renombrar el elemento. El nombre es inválido, el archivo no cumple con las reglas del servidor o no tiene permisos de escritura en esa ruta.',
     'error_sending_email' => 'Error al enviar el correo. Verifica la configuración del servidor o contacta con un administrador',
-    'error_upload_file' => 'Error al subir el archivo. El nombre es inválido, el tamaño excede las <a href="/admin/settings#info">reglas del servidor</a> o no tiene permisos de escritura en esa ruta.',
+    'error_upload_file' => 'Error al subir archivo(s). El nombre es inválido, el tamaño excede las <a href="/admin/settings#info">reglas del servidor</a> o no tiene permisos de escritura en esa ruta.',
     'file_size_upload_limit' => 'Tamaño máximo de subida de archivos',
     'file_size_upload_limit_description' => 'El valor es el valor mínimo entre las opciones de <code>post_max_size</code> y <code>upload_max_filesize</code> de tu configuración de PHP.',
     'folder' => 'Carpeta',
