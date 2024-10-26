@@ -11,6 +11,7 @@ final class Post extends \Aurora\App\ModuleBase
         COUNT(DISTINCT views.ip) AS views,
         users.id AS user_id,
         users.name AS user_name,
+        users.email as user_email,
         users.slug AS user_slug,
         users.image AS user_image,
         GROUP_CONCAT(tag_id, ",") AS tags_id';
