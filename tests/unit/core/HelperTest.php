@@ -4,9 +4,9 @@ final class HelperTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetPath(): void
     {
-        $this->assertEquals(dirname(__DIR__, 2) . '/app', \Aurora\Core\Helper::getPath('app'));
-        $this->assertEquals(dirname(__DIR__, 2) . '/app/views', \Aurora\Core\Helper::getPath('app/views'));
-        $this->assertEquals(dirname(__DIR__, 2) . '/file.txt', \Aurora\Core\Helper::getPath('/file.txt'));
+        $this->assertEquals(dirname(__DIR__, 3) . '/app', \Aurora\Core\Helper::getPath('app'));
+        $this->assertEquals(dirname(__DIR__, 3) . '/app/views', \Aurora\Core\Helper::getPath('app/views'));
+        $this->assertEquals(dirname(__DIR__, 3) . '/file.txt', \Aurora\Core\Helper::getPath('/file.txt'));
     }
 
     public function testCurrentPath(): void
@@ -56,7 +56,7 @@ final class HelperTest extends \PHPUnit\Framework\TestCase
 
     public function testCopy(): void
     {
-        $test_dir = dirname(__DIR__);
+        $test_dir = dirname(__DIR__, 2);
         $this->assertTrue(\Aurora\Core\Helper::copy("$test_dir/fixtures/files", "$test_dir/fixtures/files2"));
         $this->assertFileEquals("$test_dir/fixtures/files/a.txt", "$test_dir/fixtures/files2/a.txt");
         $this->assertFileExists("$test_dir/fixtures/files2/b");
@@ -65,7 +65,7 @@ final class HelperTest extends \PHPUnit\Framework\TestCase
 
     public static function tearDownAfterClass(): void
     {
-        $dir = dirname(__DIR__) . '/fixtures/files2';
+        $dir = dirname(__DIR__, 2) . '/fixtures/files2';
 
         foreach (new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS),

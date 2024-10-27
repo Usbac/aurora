@@ -4,12 +4,14 @@ final class DBTest extends \PHPUnit\Framework\TestCase
 {
     private static \Aurora\Core\DB $db;
 
+    private static $db_file;
+
     public function testQuery(): void
     {
-        $db_file = dirname(__DIR__) . '/fixtures/db.sqlite';
-        file_put_contents($db_file, '');
+        self::$db_file = dirname(__DIR__, 2) . '/fixtures/db.sqlite';
+        file_put_contents(self::$db_file, '');
 
-        self::$db = new \Aurora\Core\DB("sqlite:$db_file");
+        self::$db = new \Aurora\Core\DB('sqlite:' . self::$db_file);
 
         $this->assertInstanceOf(\PDOStatement::class, self::$db->query('CREATE TABLE users (
             `id` INTEGER PRIMARY KEY,
@@ -115,6 +117,6 @@ final class DBTest extends \PHPUnit\Framework\TestCase
 
     public static function tearDownAfterClass(): void
     {
-        unlink(dirname(__DIR__) . '/fixtures/db.sqlite');
+        unlink(self::$db_file);
     }
 }
