@@ -5,6 +5,7 @@
 <?php $this->sectionEnd() ?>
 
 <?php $this->sectionStart('content') ?>
+    <?php $allow_edit_settings = \Aurora\App\Permission::can('edit_settings'); ?>
     <form id="settings-form" class="content">
         <div>
             <div class="page-title">
@@ -12,7 +13,7 @@
                 <h2><?= t('settings') ?></h2>
             </div>
             <div class="buttons">
-                <button type="submit" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>><?= t('save') ?></button>
+                <button type="submit" <?php if (!$allow_edit_settings): ?> disabled <?php endif ?>><?= t('save') ?></button>
             </div>
         </div>
         <div class="grid grid-two-columns wide">
@@ -155,7 +156,7 @@
                             <div class="input-group">
                                 <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
                                 <button type="button" class="light" onclick="location = '/admin/settings/logs_download'"><?= t('download') ?></button>
-                                <button type="button" class="delete" onclick="confirm(LANG.logs_clear_confirm) && Form.send('/admin/settings/logs_clear', 'logs')"><?= t('clear') ?></button>
+                                <button type="button" class="delete" onclick="confirm(LANG.logs_clear_confirm) && Form.send('/admin/settings/logs_clear', 'logs')" <?php if (!$allow_edit_settings): ?> disabled <?php endif ?>><?= t('clear') ?></button>
                             </div>
                         </div>
                     </div>
@@ -165,7 +166,7 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label><?= t('download_db') ?></label>
-                        <button type="button" class="light" onclick="location = '/admin/settings/db'" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>>.json</button>
+                        <button type="button" class="light" onclick="location = '/admin/settings/db'" <?php if (!$allow_edit_settings): ?> disabled <?php endif ?>>.json</button>
                     </div>
                     <div id="db-upload" class="input-group">
                         <label for="database"><?= t('upload_db') ?></label>
@@ -174,7 +175,7 @@
                             <input type="text" disabled/>
                             <label for="database" class="pointer"><?= t('select_file') ?></label>
                         </div>
-                        <button type="button" class="light" onclick="confirm(LANG.upload_db_confirm) && Form.send('/admin/settings/db_upload', 'db-upload')" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>><?= t('upload') ?> .json</button>
+                        <button type="button" class="light" onclick="confirm(LANG.upload_db_confirm) && Form.send('/admin/settings/db_upload', 'db-upload', null, { csrf: csrf_token })" <?php if (!$allow_edit_settings): ?> disabled <?php endif ?>><?= t('upload') ?> .json</button>
                     </div>
                     <div class="input-group">
                         <label><?= t('views_counter') ?></label>
@@ -183,7 +184,7 @@
                             <button type="button" class="slider" onclick="get('#views-count').click()"></button>
                         </div>
                         <div id="reset-views">
-                            <button type="button" class="light" onclick="confirm(LANG.reset_views_confirm) && Form.send('/admin/settings/reset_views_count', 'reset-views')" <?php if (!\Aurora\App\Permission::can('edit_settings')): ?> disabled <?php endif ?>><?= t('reset_views') ?></button>
+                            <button type="button" class="light" onclick="confirm(LANG.reset_views_confirm) && Form.send('/admin/settings/reset_views_count', 'reset-views')" <?php if (!$allow_edit_settings): ?> disabled <?php endif ?>><?= t('reset_views') ?></button>
                         </div>
                     </div>
                 </div>
