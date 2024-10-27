@@ -887,7 +887,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         try {
             $json = json_decode(file_get_contents($_FILES['db']['tmp_name'] ?? ''), true);
             $success = (new \Aurora\App\Migration($db))->import($json['tables'] ?? false);
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             $success = false;
         }
 
