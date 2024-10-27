@@ -893,16 +893,24 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
+        $errors = [];
+
         try {
             $json = json_decode(file_get_contents($_FILES['db']['tmp_name'] ?? ''), true);
-            $success = (new \Aurora\App\Migration($db))->import($json['tables'] ?? false);
+            $version = is_scalar($json['meta']['version'] ?? null) ? explode('.', (string) $json['meta']['version']) : null;
+
+            if (!isset($version) || explode('.', \Aurora\Core\Kernel::VERSION)[0] != $version[0]) {
+                $errors[] = $lang->get('invalid_db_version');
+            } elseif (!(new \Aurora\App\Migration($db))->import($json['tables'] ?? false)) {
+                $errors[] = $lang->get('invalid_db_file');
+            }
         } catch (\Throwable) {
-            $success = false;
+            $errors[] = $lang->get('invalid_db_file');
         }
 
         return json_encode([
-            'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('invalid_db_file') ],
+            'success' => empty($errors),
+            'errors' => $errors,
         ]);
     });
 

@@ -78,6 +78,7 @@ return [
     'inactive' => 'Inactive',
     'information' => 'Information',
     'invalid_db_file' => 'Invalid file. Make sure the file is a valid json and contains the right data.',
+    'invalid_db_version' => 'Invalid file. The major version set in the file does not match the current major version of Aurora or is missing.',
     'invalid_slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
     'invalid_value' => 'Invalid value',
     'item' => 'Item',

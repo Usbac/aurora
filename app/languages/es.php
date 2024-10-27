@@ -78,6 +78,7 @@ return [
     'inactive' => 'Inactivo',
     'information' => 'Información',
     'invalid_db_file' => 'Archivo inválido. Asegurese de que el archivo es un json válido y que contiene la información correcta.',
+    'invalid_db_version' => 'Archivo inválido. La versión mayor no coincide con la versión actual de Aurora o no está establecida.',
     'invalid_slug' => 'Valor inválido. El slug solo puede contener caracteres alfanuméricos, guiones bajos y guiones',
     'invalid_value' => 'Valor inválido',
     'item' => 'Elemento',
