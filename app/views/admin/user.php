@@ -8,7 +8,7 @@
 
 <?php $this->sectionStart('content') ?>
     <form id="user-form" class="content">
-        <?php $can_edit_user = \Aurora\App\Permission::can('edit_users'); ?>
+        <?php $can_edit_user = \Aurora\App\Permission::edit_user($user); ?>
         <div>
             <div class="page-title">
                 <?= $this->include('admin/partials/menu_btn.php') ?>

@@ -372,7 +372,16 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
         }
 
-        if (!$user_mod->remove(array_filter(explode(',', $_POST['id']), fn($id) => $id != $_SESSION['user']['id']))) {
+        $ids = array_map(fn($id) => (int) $id, explode(',', $_POST['id']));
+        $valid_ids = [];
+
+        foreach ($user_mod->getPage(null, null, 'users.id IN (' . implode(',', $ids) . ')') as $user) {
+            if (\Aurora\App\Permission::edit_user($user) && $user['id'] != $_SESSION['user']['id']) {
+                $valid_ids[] = $user['id'];
+            }
+        }
+
+        if (!$user_mod->remove($valid_ids)) {
             http_response_code(500);
             return json_encode([ 'errors' => [ $lang->get('unexpected_error') ] ]);
         }

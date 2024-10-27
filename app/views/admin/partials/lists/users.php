@@ -35,7 +35,7 @@
                         <?php if (\Aurora\App\Permission::impersonate($user)): ?>
                             <div onclick="if (confirm(LANG.impersonate_confirm)) location.href = '/admin/users/impersonate?id=' + <?= e(js($user['id'])) ?>"><?= $this->include('icons/users.svg') ?> <?= t('impersonate') ?></div>
                         <?php endif ?>
-                        <?php if (\Aurora\App\Permission::can('edit_users')): ?>
+                        <?php if (\Aurora\App\Permission::edit_user($user)): ?>
                             <div
                                 class="danger"
                                 onclick="confirm(LANG.delete_confirm.sprintf(<?= e(js($user['name'])) ?>)) && Form.send('/admin/users/remove', null, null, {
