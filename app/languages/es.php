@@ -13,7 +13,7 @@ return [
     'bad_password_confirm' => 'La contraseña y su confirmación deben coincidir',
     'bio' => 'Bio',
     'blog' => 'Blog',
-    'blog_url' => 'Url del blog',
+    'blog_url' => 'URL del blog',
     'by' => 'Por',
     'cancel' => 'Cancelar',
     'canonical_url' => 'URL Canonica',

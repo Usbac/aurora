@@ -13,7 +13,7 @@ return [
     'bad_password_confirm' => 'Password and its confirmation must match',
     'bio' => 'Bio',
     'blog' => 'Blog',
-    'blog_url' => 'Blog url',
+    'blog_url' => 'Blog URL',
     'by' => 'By',
     'cancel' => 'Cancel',
     'canonical_url' => 'Canonical URL',
