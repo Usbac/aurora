@@ -70,13 +70,13 @@ _The admin user created by default is `john.doe@mail.com` with password `1234567
 ## Captures
 
 <div align="center">
-  <img src="https://github.com/Usbac/aurora/assets/38147742/b48cb613-8ddc-47be-bd5b-19f7ed06fb01" width="800"/>
-
-  <img src="https://github.com/Usbac/aurora/assets/38147742/7e293216-8da6-46f7-a4db-0de988826a1f" width="800"/>
+  <img src="https://github.com/user-attachments/assets/a43f4f4e-48fb-48fe-97af-6b13af1d1ce4" width="800"/>
   
-  <img src="https://github.com/Usbac/aurora/assets/38147742/90849968-f2f6-49a1-8a69-a0dcb665a33b" width="800"/>
+  <img src="https://github.com/user-attachments/assets/d3ca710f-ccac-4fae-8a84-0607442c9250" width="800"/>
   
-  <img src="https://github.com/Usbac/aurora/assets/38147742/fd769057-2a3e-485f-98a7-6f16c660f503" width="800"/>
+  <img src="https://github.com/user-attachments/assets/d39ee11f-9686-4fdd-a6ef-bd241170f585" width="800"/>
+  
+  <img src="https://github.com/user-attachments/assets/c89c8ebb-aac5-4931-84f4-490dd027b108" width="800"/>
 </div>
 
 ## Contributing
