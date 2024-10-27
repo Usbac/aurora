@@ -227,6 +227,10 @@
             {
                 "key": "log_file",
                 "value": "aurora.log"
+            },
+            {
+                "key": "rss",
+                "value": "rss"
             }
         ],
         "tags": [

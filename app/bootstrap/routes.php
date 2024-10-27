@@ -13,6 +13,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     $blog_url = \Aurora\App\Setting::get('blog_url');
     $theme_dir = 'themes/' . \Aurora\App\Setting::get('theme');
+    $rss = \Aurora\App\Setting::get('rss');
 
     $router->middleware('*', function() use ($db, $view, $lang, $theme_dir) {
         if (Helper::isValidId($_SESSION['user']['id'] ?? false)) {
@@ -1096,6 +1097,14 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 : $post_mod->getPage(1, 3, "$post_cond AND p2t.tag_id IN (" . $post['tags_id'] . ') AND posts.id != ' . $post['id']),
         ]);
     });
+
+    if (!empty($rss)) {
+        $router->get("xml:$rss", function() use ($post_mod, $view, $theme_dir) {
+            return $view->get("$theme_dir/rss.php", [
+                'posts' => $post_mod->getPage(null, null, $post_mod->getCondition([ 'status' => 1 ]), 'date', false),
+            ]);
+        });
+    }
 
     $router->get([ '/', '{slug}' ], function() use ($db, $view, $link_mod, $page_mod, $theme_dir) {
         $page = $page_mod->get([

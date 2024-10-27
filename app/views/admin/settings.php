@@ -43,9 +43,15 @@
                             <label for="title"><?= t('title') ?></label>
                             <input id="title" name="title" type="text" value="<?= e(setting('title')) ?>" data-char-count/>
                         </div>
+                    </div>
+                    <div class="input-group-container">
                         <div class="input-group">
                             <label for="blog-url"><?= t('blog_url') ?></label>
                             <input id="blog-url" name="blog_url" type="text" placeholder="/blog" value="<?= e(setting('blog_url')) ?>"/>
+                        </div>
+                        <div class="input-group">
+                            <label for="rss"><?= t('rss_url', false) ?></label>
+                            <input id="rss" name="rss" type="text" placeholder="/rss" value="<?= e(setting('rss')) ?>"/>
                         </div>
                     </div>
                     <div class="input-group-container">

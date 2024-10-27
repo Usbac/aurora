@@ -150,6 +150,7 @@ return [
     'restore_your_password' => 'Restore your password',
     'role' => 'Role',
     'root_folder' => 'Root folder',
+    'rss_url' => 'RSS feed URL',
     'samesite_cookie' => 'Session SameSite cookie',
     'samesite_cookie_description' => 'PHP session SameSite cookie',
     'save' => 'Save',
