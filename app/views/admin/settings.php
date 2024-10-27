@@ -250,9 +250,9 @@
                 <div class="card v-spacing">
                     <div id="update" class="input-group">
                         <label id="update-title" for="update-button"></label>
+                        <span class="description"><?= t('update_description', false) ?></span>
                         <button type="button" id="update-button" class="light" onclick="update()" <?php if (!\Aurora\App\Permission::can('update')): ?> disabled <?php endif ?>><?= t('update_now') ?></button>
                         <input id="update-zip" type="hidden" name="zip"/>
-                        <span class="description"><?= t('update_description', false) ?></span>
                     </div>
                 </div>
             </div>
