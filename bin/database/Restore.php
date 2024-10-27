@@ -25,7 +25,7 @@ class Restore extends \Aurora\Bin\BaseCommand
         try {
             $json = json_decode(file_get_contents($file), true);
             $success = (new \Aurora\App\Migration($this->config['db']))->import($json['tables'] ?? false);
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             $success = false;
         }
 
