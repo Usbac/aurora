@@ -29,7 +29,6 @@
                         <a href="#update"><?= $this->include('icons/sync.svg') ?> <?= t('update') ?></a>
                     </div>
                     <p class="version"><?= t('version') ?>: <?= e(\Aurora\Core\Kernel::VERSION) ?></p>
-                    <input type="hidden" name="version" value="<?= e(\Aurora\Core\Kernel::VERSION) ?>"/>
                 </div>
             </div>
             <div class="grid tab-content" data-tab="#general">
