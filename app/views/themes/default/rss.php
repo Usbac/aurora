@@ -1,6 +1,6 @@
 <rss version="2.0">
     <channel>
-        <title><?= e(setting('title')) ?></title> 
+        <title><?= e(setting('title')) ?></title>
         <link><?= e($this->url()) ?></link>
         <description><?= e(setting('description')) ?></description>
         <language><?= e(\Aurora\Core\Container::get('language')->getCode()) ?></language>
@@ -9,7 +9,7 @@
                 <url><?= e($this->getContentUrl(setting('logo'))) ?></url>
                 <title><?= e(setting('title')) ?></title>
                 <link><?= e($this->url()) ?></link>
-            </image> 
+            </image>
         <?php endif ?>
         <?php foreach ($posts as $post): ?>
             <item>
