@@ -635,7 +635,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         try {
             $success = \Aurora\App\Media::addFolder($_GET['path'] ?? Kernel::config('content'), $_POST['name'] ?? '');
-        } catch (Exception $e) {
+        } catch (Exception) {
             $success = false;
         }
 
@@ -660,7 +660,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             }
 
             $success = $done == count($paths);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $success = false;
         }
 
@@ -687,7 +687,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         try {
             $success = \Aurora\App\Media::rename($_POST['path'] ?? '', $_POST['name']);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $success = false;
         }
 
@@ -712,7 +712,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             }
 
             $success = $done == count($paths);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $success = false;
         }
 
@@ -739,7 +739,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         try {
             $success = \Aurora\App\Media::duplicate($_POST['path'] ?? '', $_POST['name']);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $success = false;
         }
 
