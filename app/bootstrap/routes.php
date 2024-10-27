@@ -902,7 +902,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         return json_encode([
             'success' => $success,
-            'errors' => $success ? '' : $lang->get('invalid_db_file'),
+            'errors' => [ $success ? '' : $lang->get('invalid_db_file') ],
         ]);
     });
 
