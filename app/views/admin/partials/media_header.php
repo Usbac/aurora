@@ -165,7 +165,7 @@
     }
 
     function createFolder() {
-        Form.send('/admin/media/createFolder' + window.location.search, 'folder-dialog', null, {
+        Form.send('/admin/media/create_folder' + window.location.search, 'folder-dialog', null, {
             csrf: csrf_token,
         }).then(res => Listing.handleResponse(res));
     }

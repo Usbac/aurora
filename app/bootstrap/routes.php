@@ -627,7 +627,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         ]);
     });
 
-    $router->post('json:admin/media/createFolder', function() use ($lang) {
+    $router->post('json:admin/media/create_folder', function() use ($lang) {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
             return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
