@@ -24,6 +24,10 @@ The url of pages related to the blog will follow the following patterns:
 
 - `[blog_url]/author/[user_slug]` - Author page.
 
+### RSS feed URL
+
+The url of the RSS feed relative to the website. When empty the RSS will be disabled.
+
 ### Theme
 
 The theme that will be used to render the website. Relative to the views directory.
