@@ -1,4 +1,5 @@
 const LOADING_ICON = '<svg class="loading-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" fill="none" stroke-width="10" r="36" stroke-dasharray="171 56"></circle></svg>';
+
 function get(query) {
     return document.querySelectorAll(query)[0];
 }
