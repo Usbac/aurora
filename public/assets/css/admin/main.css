@@ -190,11 +190,11 @@ span.loading {
 }
 
 .grid-two-columns {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 }
 
 .grid-two-columns.wide {
-    grid-template-columns: 2fr 6fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 6fr);
 }
 
 .tabs {
@@ -548,6 +548,8 @@ button.load-more {
 .checkbox label {
     display: flex;
     align-items: center;
+    white-space: break-spaces;
+    word-break: break-word;
 }
 
 .checkbox label:hover {
@@ -1475,7 +1477,7 @@ textarea.code {
     }
 
     .grid.grid-two-columns {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 

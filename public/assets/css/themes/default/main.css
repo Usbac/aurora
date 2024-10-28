@@ -488,7 +488,7 @@ article a {
 .post-related > div {
     display: grid;
     grid-gap: 30px;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-top: 40px;
 }
 
@@ -644,7 +644,7 @@ article a {
     }
 
     .post-related > div {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .related-card {
