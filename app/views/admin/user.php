@@ -1,8 +1,9 @@
 <?php $this->extend('admin/base.php') ?>
 
+<?php $current_user = !empty($user) && $user['id'] == $_SESSION['user']['id'] ?>
+<?php $title = t($current_user ? 'your_user' : 'user'); ?>
+
 <?php $this->sectionStart('title') ?>
-    <?php $current_user = !empty($user) && $user['id'] == $_SESSION['user']['id'] ?>
-    <?php $title = t($current_user ? 'your_user' : 'user'); ?>
     <?= $title ?>
 <?php $this->sectionEnd() ?>
 
