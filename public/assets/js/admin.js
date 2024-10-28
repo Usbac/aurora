@@ -247,23 +247,20 @@ class Listing {
         if (event) {
             event.preventDefault();
             event.stopPropagation();
+        }
 
-            if (event.shiftKey && this.#prev_selected_row) {
-                [ this.#prev_selected_row, ...this.#getElementsBetween(this.#prev_selected_row, row) ].forEach(el => {
-                    if ('selected' in row.dataset) {
-                        delete el.dataset.selected;
-                    } else {
-                        el.dataset.selected = true;
-                    }
-                });
+        let selecting = !('selected' in row.dataset);
+        let selected_rows = event?.shiftKey && this.#prev_selected_row
+            ? [ row, this.#prev_selected_row, ...this.#getElementsBetween(this.#prev_selected_row, row) ]
+            : [ row ];
+
+        selected_rows.map(el => {
+            if (selecting) {
+                el.dataset.selected = true;
+            } else {
+                delete el.dataset.selected;
             }
-        }
-
-        if ('selected' in row.dataset) {
-            delete row.dataset.selected;
-        } else {
-            row.dataset.selected = true;
-        }
+        });
 
         this.#prev_selected_row = row;
         let rows_selected_count = this.getSelectedRows().length;
