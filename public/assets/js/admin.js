@@ -14,10 +14,6 @@ String.prototype.toSlug = function() {
     return this.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 };
 
-Element.prototype.appendAfter = function(el) {
-    this.parentNode.insertBefore(el, this.nextSibling);
-};
-
 Element.prototype.setLoading = function() {
     this.dataset.originalHtml = this.innerHTML;
     this.innerHTML = LOADING_ICON;
@@ -30,34 +26,6 @@ Element.prototype.resetState = function() {
         this.innerHTML = this.dataset.originalHtml;
         delete this.dataset.originalHtml;
     }
-};
-
-Element.prototype.getElementsBetween = function(el) {
-    if (el === this) {
-        return [];
-    }
-
-    const elements = [ ...this.parentElement.children ];
-    const result = [];
-    let start = null;
-    let end = null;
-
-    if (elements.indexOf(this) > elements.indexOf(el)) {
-        start = el;
-        end = this;
-    } else {
-        start = this;
-        end = el;
-    }
-
-    let next = start.nextElementSibling;
-
-    while (next && next !== end) {
-        result.push(next);
-        next = next.nextElementSibling;
-    }
-
-    return result;
 };
 
 class Snackbar {
@@ -90,6 +58,10 @@ class Snackbar {
 }
 
 class Form {
+    static #appendAfter = function(element_a, element_b) {
+        element_b.parentNode.insertBefore(element_a, element_b.nextSibling);
+    };
+
     static #getData(form_id, initial_data = {}) {
         let form_data = new FormData;
 
@@ -133,7 +105,7 @@ class Form {
             let err = document.createElement('span');
             err.classList.add('field-error');
             err.innerHTML = res.errors[key];
-            input.appendAfter(err);
+            this.#appendAfter(err, input);
         });
 
         if (res?.success) {
@@ -199,7 +171,7 @@ class Form {
             let count_el = document.createElement('span');
             count_el.classList.add('char-counter');
 
-            input.appendAfter(count_el);
+            this.#appendAfter(count_el, input);
             input.addEventListener('input', e => count_el.innerHTML = e.target.value.length + ' ' + LANG.characters);
             input.dispatchEvent(new Event('input'));
         });
@@ -211,6 +183,27 @@ class Listing {
     static #next_page_url = '';
     static #next_page = 1;
     static #prev_selected_row = null;
+
+    static #getElementsBetween = function(element_a, element_b) {
+        if (element_a === element_b) {
+            return [];
+        }
+
+        const elements = [ ...element_a.parentElement.children ];
+        const result = [];
+        const is_a_first = elements.indexOf(element_b) > elements.indexOf(element_a);
+        const start = is_a_first ? element_a : element_b;
+        const end = is_a_first ? element_b : element_a;
+        let next = start.nextElementSibling;
+
+        while (next && next !== end) {
+            result.push(next);
+            next = next.nextElementSibling;
+        }
+
+        return result;
+    };
+
 
     static init() {
         window.addEventListener('keydown', e => {
@@ -256,7 +249,7 @@ class Listing {
             event.stopPropagation();
 
             if (event.shiftKey && this.#prev_selected_row) {
-                [ this.#prev_selected_row, ...row.getElementsBetween(this.#prev_selected_row) ].forEach(el => {
+                [ this.#prev_selected_row, ...this.#getElementsBetween(this.#prev_selected_row, row) ].forEach(el => {
                     if ('selected' in row.dataset) {
                         delete el.dataset.selected;
                     } else {
