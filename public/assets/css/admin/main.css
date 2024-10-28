@@ -489,7 +489,7 @@ button.load-more {
 .input-group .description {
     color: var(--second-color);
     font-size: var(--font-size-sm);
-    line-height: 1em;
+    line-height: 1.2em;
     margin-top: -4px;
 }
 
