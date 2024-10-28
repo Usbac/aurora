@@ -143,8 +143,6 @@ button:hover:not(:disabled):not(.loading),
 
 button.loading,
 .button.loading {
-    background-color: #e0e0e0 !important;
-    color: black;
     cursor: wait;
 }
 
@@ -153,6 +151,10 @@ button.loading,
     animation: rotation 1s infinite linear;
     width: var(--size);
     height: var(--size);
+    stroke: var(--background-color);
+}
+
+.light .loading-icon {
     stroke: var(--main-color);
 }
 
