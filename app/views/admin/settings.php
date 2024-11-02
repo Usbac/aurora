@@ -38,11 +38,9 @@
                         <img src="<?= e(!empty(setting('logo')) ? $this->getContentUrl(setting('logo')) : '/public/assets/no-image.svg') ?>" class="logo pointer <?php if (empty(setting('logo'))): ?>empty-img<?php endif ?>" alt="logo"/>
                         <input id="settings-logo-input" type="hidden" name="logo" value="<?= e(setting('logo')) ?>"/>
                     </div>
-                    <div class="input-group-container">
-                        <div class="input-group">
-                            <label for="title"><?= t('title') ?></label>
-                            <input id="title" name="title" type="text" value="<?= e(setting('title')) ?>" data-char-count/>
-                        </div>
+                    <div class="input-group">
+                        <label for="title"><?= t('title') ?></label>
+                        <input id="title" name="title" type="text" value="<?= e(setting('title')) ?>" data-char-count/>
                     </div>
                     <div class="input-group-container">
                         <div class="input-group">
@@ -84,13 +82,11 @@
                             <input id="date_format" name="date_format" type="text" placeholder="MMM d, Y" value="<?= e(setting('date_format')) ?>"/>
                         </div>
                     </div>
-                    <div class="input-group-container">
-                        <div class="input-group">
-                            <label><?= t('maintenance_mode') ?></label>
-                            <div class="switch">
-                                <input id="maintenance" name="maintenance" type="checkbox" <?php if (setting('maintenance')): ?> checked <?php endif ?>>
-                                <button type="button" class="slider" onclick="get('#maintenance').click()"></button>
-                            </div>
+                    <div class="input-group">
+                        <label><?= t('maintenance_mode') ?></label>
+                        <div class="switch">
+                            <input id="maintenance" name="maintenance" type="checkbox" <?php if (setting('maintenance')): ?> checked <?php endif ?>>
+                            <button type="button" class="slider" onclick="get('#maintenance').click()"></button>
                         </div>
                     </div>
                 </div>
@@ -131,13 +127,11 @@
                             <?php endforeach ?>
                         </select>
                     </div>
-                    <div class="input-group-container">
-                        <div class="input-group">
-                            <label><?= t('log_errors') ?></label>
-                            <div class="switch">
-                                <input id="log_errors" name="log_errors" type="checkbox" <?php if (setting('log_errors')): ?> checked <?php endif ?>>
-                                <button type="button" class="slider" onclick="get('#log_errors').click()"></button>
-                            </div>
+                    <div class="input-group">
+                        <label><?= t('log_errors') ?></label>
+                        <div class="switch">
+                            <input id="log_errors" name="log_errors" type="checkbox" <?php if (setting('log_errors')): ?> checked <?php endif ?>>
+                            <button type="button" class="slider" onclick="get('#log_errors').click()"></button>
                         </div>
                     </div>
                     <div class="input-group">
