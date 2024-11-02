@@ -36,6 +36,8 @@ return function (\Aurora\Core\Kernel $kernel) {
     ini_set('session.cookie_httponly', 1);
     header('X-Content-Type-Options: nosniff');
     ini_set('error_log', \Aurora\Core\Helper::getPath($settings['log_file']));
+    ini_set('display_errors', $settings['display_errors'] ? 1 : 0);
+    ini_set('display_startup_errors', $settings['display_errors'] ? 1 : 0);
     error_reporting($settings['log_errors'] ? E_ALL : 0);
     session_set_cookie_params([
         'lifetime' => (int) $settings['session_lifetime'],

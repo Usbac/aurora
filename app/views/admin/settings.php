@@ -128,6 +128,13 @@
                         </select>
                     </div>
                     <div class="input-group">
+                        <label><?= t('display_errors') ?></label>
+                        <div class="switch">
+                            <input id="display_errors" name="display_errors" type="checkbox" <?php if (setting('display_errors')): ?> checked <?php endif ?>>
+                            <button type="button" class="slider" onclick="get('#display_errors').click()"></button>
+                        </div>
+                    </div>
+                    <div class="input-group">
                         <label><?= t('log_errors') ?></label>
                         <div class="switch">
                             <input id="log_errors" name="log_errors" type="checkbox" <?php if (setting('log_errors')): ?> checked <?php endif ?>>
