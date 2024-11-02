@@ -96,6 +96,10 @@ PHP Session lifetime in seconds (e.g. 3600 = 1 hour).
 
 Value for the PHP session SameSite cookie. This controls whether or not a cookie is sent with cross-site requests, providing some protection against cross-site request forgery attacks (CSRF).
 
+### Display errors
+
+Display PHP errors on the website. It's recommended to enable this option ONLY in non-production environments. For it to work properly, the Log errors option must also be enabled.
+
 ### Log errors
 
 Log PHP errors into the defined log file or not.
