@@ -38,6 +38,7 @@ return [
     'delete_confirm_selected' => '¿Está seguro de eliminar los elemento(s) seleccionado(s)?',
     'descending' => 'Descendente',
     'description' => 'Descripción',
+    'display_errors' => 'Mostrar errores',
     'done' => 'Listo',
     'download' => 'Descargar',
     'download_db' => 'Descargar base de datos',

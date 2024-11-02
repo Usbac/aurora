@@ -38,6 +38,7 @@ return [
     'delete_confirm_selected' => 'Are you sure about deleting the selected element(s)?',
     'descending' => 'Descending',
     'description' => 'Description',
+    'display_errors' => 'Display errors',
     'done' => 'Done',
     'download' => 'Download',
     'download_db' => 'Download database',
