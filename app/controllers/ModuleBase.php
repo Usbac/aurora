@@ -2,7 +2,7 @@
 
 namespace Aurora\App;
 
-class ModuleBase
+abstract class ModuleBase implements ModuleInterface
 {
     /**
      * SELECT statement
