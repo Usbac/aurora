@@ -28,7 +28,8 @@
         "psr-4": {
             "Aurora\\App\\": "app/controllers",
             "Aurora\\Bin\\": "bin",
-            "Aurora\\Core\\": "core"
+            "Aurora\\Core\\": "core",
+            "Aurora\\Tests\\": "tests"
         }
     },
     "require-dev": {
