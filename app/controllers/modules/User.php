@@ -188,7 +188,7 @@ final class User extends \Aurora\App\ModuleBase
             $errors['slug'] = $this->language->get('invalid_slug');
         }
 
-        if (!empty($this->get([ 'email' => $data['email'], '!id' => $id ]))) {
+        if (!empty($data['email']) && !empty($this->get([ 'email' => $data['email'], '!id' => $id ]))) {
             $errors['email'] = $this->language->get('repeated_email');
         }
 
