@@ -4,6 +4,17 @@ namespace Aurora\Tests;
 
 class Base extends \PHPUnit\Framework\TestCase
 {
+    protected ?\Aurora\Core\DB $db = null;
+
+    protected ?\Aurora\Core\Language $language = null;
+
+    public function __construct()
+    {
+        $this->db = $this->getDB();
+        $this->language = $this->getLanguage();
+        parent::__construct();
+    }
+
     public function getDB(): \Aurora\Core\DB
     {
         $db_file = \Aurora\Core\Helper::getPath('tests/fixtures/db.sqlite');
