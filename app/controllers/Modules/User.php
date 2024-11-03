@@ -27,9 +27,9 @@ final class User extends \Aurora\App\ModuleBase
      * Updates an existing user
      * @param int $id the user id
      * @param array $data the new data
-     * @return string|bool the id of the user on success, false otherwise
+     * @return bool true on success, false otherwise
      */
-    public function save(int $id, array $data): int|false
+    public function save(int $id, array $data): bool
     {
         $res = $this->db->update($this->table, [
             'name' => $data['name'],
@@ -45,7 +45,7 @@ final class User extends \Aurora\App\ModuleBase
             $this->db->update($this->table, [ 'password' => $this->getPassword($data['password']) ], $id);
         }
 
-        return $res ? $id : false;
+        return $res;
     }
 
     /**
@@ -168,9 +168,10 @@ final class User extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the user fields that contain an error
      * @param array $data the user fields
+     * @param [mixed] $id the user id
      * @return array the array with the user fields that contain an error
      */
-    public function checkFields(array $data, $id): array
+    public function checkFields(array $data, $id = null): array
     {
         $errors = [];
 

@@ -38,7 +38,7 @@ final class Link extends \Aurora\App\ModuleBase
      * Updates an existing link
      * @param int $id the link id
      * @param array $data the new data
-     * @return string|bool the id of the link on success, false otherwise
+     * @return bool true on success, false otherwise
      */
     public function save(int $id, array $data): bool
     {
@@ -48,9 +48,10 @@ final class Link extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the link fields that contain an error
      * @param array $data the link fields
+     * @param [mixed] $id the link id
      * @return array the array with the link fields that contain an error
      */
-    public function checkFields(array $data): array
+    public function checkFields(array $data, $id = null): array
     {
         $errors = [];
 

@@ -33,7 +33,7 @@ final class Page extends \Aurora\App\ModuleBase
      * Updates an existing page
      * @param int $id the page id
      * @param array $data the new data
-     * @return string|bool the id of the page on success, false otherwise
+     * @return bool true on success, false otherwise
      */
     public function save(int $id, array $data): bool
     {
@@ -43,10 +43,10 @@ final class Page extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the page fields that contain an error
      * @param array $data the page fields
-     * @param mixed $id the page id
+     * @param [mixed] $id the page id
      * @return array the array with the page fields that contain an error
      */
-    public function checkFields(array $data, $id): array
+    public function checkFields(array $data, $id = null): array
     {
         $errors = [];
 

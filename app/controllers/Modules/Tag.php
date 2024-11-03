@@ -31,7 +31,7 @@ final class Tag extends \Aurora\App\ModuleBase
      * Updates an existing tag
      * @param int $id the tag id
      * @param array $data the new data
-     * @return string|bool the id of the tag on success, false otherwise
+     * @return bool true on success, false otherwise
      */
     public function save(int $id, array $data): bool
     {
@@ -41,9 +41,10 @@ final class Tag extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the tag fields that contain an error
      * @param array $data the tag fields
+     * @param [mixed] $id the tag id
      * @return array the array with the tag fields that contain an error
      */
-    public function checkFields(array $data, $id): array
+    public function checkFields(array $data, $id = null): array
     {
         $errors = [];
 

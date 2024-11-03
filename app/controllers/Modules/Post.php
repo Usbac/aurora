@@ -53,7 +53,7 @@ final class Post extends \Aurora\App\ModuleBase
      * Updates an existing post
      * @param int $id the post id
      * @param array $data the new data
-     * @return string|bool the id of the post on success, false otherwise
+     * @return bool true on success, false otherwise
      */
     public function save(int $id, array $data): bool
     {
@@ -74,9 +74,10 @@ final class Post extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the post fields that contain an error
      * @param array $data the post fields
+     * @param [mixed] $id the post id
      * @return array the array with the post fields that contain an error
      */
-    public function checkFields(array $data, $id): array
+    public function checkFields(array $data, $id = null): array
     {
         $errors = [];
 
