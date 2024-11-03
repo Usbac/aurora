@@ -1,6 +1,8 @@
 <?php
 
-final class LinkTest extends \Aurora\Tests\Base
+namespace Aurora\Tests\Unit\Controllers\Modules;
+
+final class LinkTest extends \Aurora\Tests\Unit\Controllers\Modules\Base
 {
     protected ?\Aurora\App\Modules\Link $mod;
 

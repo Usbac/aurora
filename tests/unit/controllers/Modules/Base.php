@@ -1,8 +1,8 @@
 <?php
 
-namespace Aurora\Tests;
+namespace Aurora\Tests\Unit\Controllers\Modules;
 
-class Base extends \PHPUnit\Framework\TestCase
+abstract class Base extends \PHPUnit\Framework\TestCase
 {
     protected ?\Aurora\Core\DB $db = null;
 

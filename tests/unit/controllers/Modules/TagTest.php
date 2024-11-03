@@ -1,6 +1,8 @@
 <?php
 
-final class TagTest extends \Aurora\Tests\Base
+namespace Aurora\Tests\Unit\Controllers\Modules;
+
+final class TagTest extends \Aurora\Tests\Unit\Controllers\Modules\Base
 {
     protected ?\Aurora\App\Modules\Tag $mod;
 
