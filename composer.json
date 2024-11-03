@@ -29,7 +29,7 @@
             "Aurora\\App\\": "app/controllers",
             "Aurora\\Bin\\": "bin",
             "Aurora\\Core\\": "core",
-            "Aurora\\Tests\\": "tests"
+            "Aurora\\Tests\\Modules\\": "tests/unit/controllers/modules"
         }
     },
     "require-dev": {
