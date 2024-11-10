@@ -12,7 +12,7 @@ class BaseCommand extends Command
     public function __construct()
     {
         $this->config = require(__DIR__ . '/../app/bootstrap/config.php');
-        $this->settings = $this->config['db']->query('SELECT * FROM settings')->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $this->settings = $this->config['db']->query('SELECT `key`, value FROM settings')->fetchAll(\PDO::FETCH_KEY_PAIR);
         date_default_timezone_set($this->settings['timezone']);
         parent::__construct();
     }
