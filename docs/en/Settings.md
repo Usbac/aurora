@@ -44,6 +44,10 @@ The language that will be used to render the website (including the admin panel)
 
 The format that will be used to render dates in the website. It must be a valid [ICU Date](https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax) format.
 
+### Timezone
+
+Server's timezone.
+
 ### Maintenance mode
 
 If enabled, the website will be in maintenance mode. This means that only users logged in the admin panel will be able to access the website, other users will see a maintenance page when accessing the website.
