@@ -41,6 +41,7 @@ class Listing extends \Aurora\Bin\BaseCommand
                 [ 'SameSite cookie', $settings['samesite_cookie'] ],
                 [ 'Session lifetime', $settings['session_lifetime'] ],
                 [ 'Theme', $settings['theme'] ],
+                [ 'Timezone', $settings['timezone'] ],
                 [ 'Title', $settings['title'] ],
                 [ 'Views count', $settings['views_count'] ? 'yes' : 'no' ],
             ])->render();

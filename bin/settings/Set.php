@@ -42,6 +42,7 @@ class Set extends \Aurora\Bin\BaseCommand
             'SameSite cookie' => 'samesite_cookie',
             'Session lifetime' => 'session_lifetime',
             'Theme' => 'theme',
+            'Timezone' => 'timezone',
             'Title' => 'title',
             'Views count' => 'views_count',
         ];
