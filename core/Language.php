@@ -2,7 +2,7 @@
 
 namespace Aurora\Core;
 
-final class Language
+class Language
 {
     /**
      * Current language code

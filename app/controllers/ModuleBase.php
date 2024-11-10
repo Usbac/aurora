@@ -40,7 +40,7 @@ abstract class ModuleBase implements ModuleInterface
      */
     protected array $orders = [];
 
-    public function __construct(protected $db = null, protected $language = null)
+    public function __construct(protected ?\Aurora\Core\DB $db = null, protected ?\Aurora\Core\Language $language = null)
     {
         $this->db = $db;
         $this->language = $language;
