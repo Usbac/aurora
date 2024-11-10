@@ -185,6 +185,7 @@ return [
     'tag' => 'Tag',
     'tags' => 'Tags',
     'theme' => 'Theme',
+    'time' => 'Time',
     'timezone' => 'Timezone',
     'title' => 'Title',
     'try_again' => 'Try again',

@@ -222,6 +222,10 @@
                         <span><?= e(rtrim(\Aurora\Core\Helper::getPath(), '/')) ?></span>
                     </div>
                     <div class="input-group">
+                        <label><?= t('time') ?></label>
+                        <span><?= e(date('Y-m-d H:i:s')) ?></span>
+                    </div>
+                    <div class="input-group">
                         <label><?= t('memory_limit') ?></label>
                         <span><?= e(\Aurora\Core\Helper::getByteSize(\Aurora\Core\Helper::getPhpSize(ini_get('memory_limit')))) ?></span>
                     </div>
