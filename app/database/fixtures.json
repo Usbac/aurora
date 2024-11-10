@@ -235,6 +235,10 @@
             {
                 "key": "rss",
                 "value": "rss"
+            },
+            {
+                "key": "timezone",
+                "value": "UTC"
             }
         ],
         "tags": [
