@@ -781,6 +781,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'roles' => $db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll(),
             'themes' => array_filter(scandir($themes_dir), fn($file) => is_dir("$themes_dir/$file") && $file != '.' && $file != '..'),
             'languages' => $lang->getAll(),
+            'timezones' => \DateTimeZone::listIdentifiers(),
             'db_dsn' => $db->dsn,
         ]);
     });

@@ -82,11 +82,21 @@
                             <input id="date_format" name="date_format" type="text" placeholder="MMM d, Y" value="<?= e(setting('date_format')) ?>"/>
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label><?= t('maintenance_mode') ?></label>
-                        <div class="switch">
-                            <input id="maintenance" name="maintenance" type="checkbox" <?php if (setting('maintenance')): ?> checked <?php endif ?>>
-                            <button type="button" class="slider" onclick="get('#maintenance').click()"></button>
+                    <div class="input-group-container">
+                        <div class="input-group">
+                            <label><?= t('timezone') ?></label>
+                            <select name="timezone">
+                                <?php foreach ($timezones as $tz): ?>
+                                    <option value="<?= e($tz) ?>" <?php if (setting('timezone') == $tz): ?> selected <?php endif ?>><?= e(str_replace('_', ' ', $tz)) ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label><?= t('maintenance_mode') ?></label>
+                            <div class="switch">
+                                <input id="maintenance" name="maintenance" type="checkbox" <?php if (setting('maintenance')): ?> checked <?php endif ?>>
+                                <button type="button" class="slider" onclick="get('#maintenance').click()"></button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -39,6 +39,7 @@ return function (\Aurora\Core\Kernel $kernel) {
     ini_set('display_errors', $settings['display_errors'] ? 1 : 0);
     ini_set('display_startup_errors', $settings['display_errors'] ? 1 : 0);
     error_reporting($settings['log_errors'] ? E_ALL : 0);
+    date_default_timezone_set($settings['timezone']);
     session_set_cookie_params([
         'lifetime' => (int) $settings['session_lifetime'],
         'samesite' => $settings['samesite_cookie'],
