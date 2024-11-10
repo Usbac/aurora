@@ -7,7 +7,6 @@ use Symfony\Component\Console\Command\Command;
 class BaseCommand extends Command
 {
     protected array $config = [];
-
     protected array $settings = [];
 
     public function __construct()
