@@ -154,7 +154,7 @@
             },
             {
                 "key": "date_format",
-                "value": "MMM dd, Y"
+                "value": "MMM dd, Y HH:mm"
             },
             {
                 "key": "logo",
