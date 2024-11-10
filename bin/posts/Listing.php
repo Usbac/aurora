@@ -27,7 +27,7 @@ class Listing extends \Aurora\Bin\BaseCommand
                 $post['slug'],
                 $post['description'],
                 $post['user_name'],
-                date('Y-m-d', $post['published_at']),
+                date('Y-m-d H:i', $post['published_at']),
                 $post['status'] ? 'Yes' : 'No',
                 $post['image_alt'],
                 $post['meta_title'],

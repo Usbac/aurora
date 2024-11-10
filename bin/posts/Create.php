@@ -43,7 +43,7 @@ class Create extends \Aurora\Bin\BaseCommand
             }),
             'description' => $io->ask('Description'),
             'user_id' => array_search($io->choice('Author', $users), $users),
-            'published_at' => $io->ask('Publish date (YYYY-MM-DD)', date('Y-m-d')),
+            'published_at' => $io->ask('Publish date (YYYY-MM-DD hh:mm)', date('Y-m-d H:i')),
             'status' => $io->confirm('Published'),
             'image' => $io->ask('Image (relative to content directory)'),
             'image_alt' => $io->ask('Image alt'),

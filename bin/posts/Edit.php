@@ -59,7 +59,7 @@ class Edit extends \Aurora\Bin\BaseCommand
             }),
             'description' => $io->ask('Description', $post['description']),
             'user_id' => array_search($io->choice('Author', $users, $post['user_id']), $users),
-            'published_at' => $io->ask('Publish date (YYYY-MM-DD)', date('Y-m-d', $post['published_at'])),
+            'published_at' => $io->ask('Publish date (YYYY-MM-DD hh:mm)', date('Y-m-d H:i', $post['published_at'])),
             'status' => $io->confirm('Published', $post['status']),
             'image' => $io->ask('Image (relative to content directory)', $post['image']),
             'image_alt' => $io->ask('Image alt', $post['image_alt']),
