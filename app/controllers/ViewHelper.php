@@ -53,8 +53,8 @@ final class ViewHelper
             $formatter = new \IntlDateFormatter(\Aurora\Core\Container::get('language')->getCode(), 0, 0);
         }
 
-        $formatter->setTimeZone(\Aurora\App\Setting::get('timezone') ?? '');
-        $formatter->setPattern(\Aurora\App\Setting::get('date_format') ?? '');
+        $formatter->setTimeZone(\Aurora\App\Setting::get('timezone'));
+        $formatter->setPattern(\Aurora\App\Setting::get('date_format'));
         return $formatter->format($tstamp);
     }
 
