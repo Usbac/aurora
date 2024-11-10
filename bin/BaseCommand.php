@@ -8,16 +8,19 @@ class BaseCommand extends Command
 {
     protected array $config = [];
 
+    protected array $settings = [];
+
     public function __construct()
     {
         $this->config = require(__DIR__ . '/../app/bootstrap/config.php');
+        $this->settings = $this->config['db']->query('SELECT * FROM settings')->fetchAll(\PDO::FETCH_KEY_PAIR);
+        date_default_timezone_set($this->settings['timezone']);
         parent::__construct();
     }
 
     protected function getThemeFiles()
     {
-        $theme = $this->config['db']->query('SELECT value FROM settings WHERE `key` = "theme"')->fetch()['value'];
-        $absolute_theme_dir = \Aurora\Core\Helper::getPath($this->config['views'] . "/themes/$theme");
+        $absolute_theme_dir = \Aurora\Core\Helper::getPath($this->config['views'] . '/themes/' . $this->settings['theme']);
         $view_files = [ '' ];
 
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($absolute_theme_dir)) as $file) {
