@@ -50,7 +50,7 @@ class Set extends \Aurora\Bin\BaseCommand
         $field = $names[$input->getArgument('name')] ?? null;
 
         if (!isset($field)) {
-            $io->error('Invalid setting name given, must be one of: ' . implode(', ', array_keys($names)));
+            $io->error("Invalid setting name given, must be one of these: \n" . implode("\n", array_keys($names)));
             return Command::INVALID;
         }
 
