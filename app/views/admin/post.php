@@ -60,7 +60,7 @@
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label for="published_at"><?= t('publish_date') ?></label>
-                        <input id="published_at" name="published_at" type="date" value="<?= e(date('Y-m-d', $post['published_at'] ?? time())) ?>"/>
+                        <input id="published_at" name="published_at" type="datetime-local" value="<?= e(date('Y-m-d H:i', $post['published_at'] ?? time())) ?>"/>
                     </div>
                     <div class="input-group">
                         <label for="user_id"><?= t('author') ?></label>
