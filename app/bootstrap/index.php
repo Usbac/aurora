@@ -63,6 +63,6 @@ return function (\Aurora\Core\Kernel $kernel) {
 
     (require('routes.php'))($kernel->router,
         $db,
-        new \Aurora\Core\View(\Aurora\Core\Helper::getPath($kernel->config('views')), new \Aurora\App\ViewHelper()),
+        new \Aurora\Core\View(\Aurora\Core\Helper::getPath($kernel->config('views')), new \Aurora\App\ViewHelper($kernel->config('date_format'))),
         $lang);
 };

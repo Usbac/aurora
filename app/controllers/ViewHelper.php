@@ -6,6 +6,13 @@ final class ViewHelper
 {
     private const WORDS_PER_MINUTE = 210;
 
+    private ?string $default_date_format = null;
+
+    public function __construct(string $default_date_format = null)
+    {
+        $this->default_date_format = $default_date_format;
+    }
+
     /**
      * Returns the url or path to obtain a file without unnecessary cache
      * @param string $filename the file url or path
@@ -43,9 +50,10 @@ final class ViewHelper
     /**
      * Returns the given timestamp formatted
      * @param mixed $tstamp the timestamp
+     * @param [string|null] $date_format the date format
      * @return string the given timestamp formatted
      */
-    public function dateFormat(mixed $tstamp): string
+    public function dateFormat(mixed $tstamp, ?string $date_format = null): string
     {
         static $formatter = null;
 
@@ -54,7 +62,7 @@ final class ViewHelper
         }
 
         $formatter->setTimeZone(\Aurora\App\Setting::get('timezone'));
-        $formatter->setPattern(\Aurora\App\Setting::get('date_format'));
+        $formatter->setPattern($date_format ?? $this->default_date_format);
         return $formatter->format($tstamp);
     }
 
