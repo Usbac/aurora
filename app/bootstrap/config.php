@@ -15,6 +15,7 @@ if (!$db_exists) {
 
 return [
     'bootstrap' => require(__DIR__ . '/index.php'),
+    'date_format' => 'dd MMM Y HH:mm',
     'db'        => $db,
     'content'   => 'public/content',
     'mail'      => fn($to, $subject, $message) => mail($to, $subject, $message),
