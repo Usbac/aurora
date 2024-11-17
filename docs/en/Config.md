@@ -19,6 +19,16 @@ function (\Aurora\Core\Kernel $kernel) {
 }
 ```
 
+### `date_format`
+
+Default date format to use for dates. Used by default on all admin pages.
+
+#### Example
+
+```php
+'dd MMM Y HH:mm'
+```
+
 ### `db`
 
 Database connection.
