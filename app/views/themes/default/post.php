@@ -38,7 +38,7 @@
                         <a href="<?= e($user_url) ?>"><?= e($post['user_name']) ?></a>
                     </div>
                 <?php endif ?>
-                <span><?= e($this->dateFormat($post['published_at'])) ?></span>
+                <span><?= e($this->dateFormat($post['published_at'], setting('date_format'))) ?></span>
                 <span><?= e($this->getReadTime($post['html'])) ?> <?= t('minutes_read') ?></span>
             </div>
         </div>
@@ -69,7 +69,7 @@
                                 <a href="<?= e($related_post_url) ?>"><?= e($related['title']) ?></a>
                             </h3>
                             <div class="meta">
-                                <span><?= e($this->dateFormat($related['published_at'])) ?></span>
+                                <span><?= e($this->dateFormat($related['published_at'], setting('date_format'))) ?></span>
                                 <span><?= e($this->getReadTime($related['html'])) ?> <?= t('minutes_read') ?></span>
                             </div>
                             <div><?= e($related['description']) ?></div>

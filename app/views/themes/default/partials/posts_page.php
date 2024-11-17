@@ -29,7 +29,7 @@
                         <a href="<?= e($user_url) ?>"><?= e($post['user_name']) ?></a>
                     </div>
                 <?php endif ?>
-                <span><?= e($this->dateFormat($post['published_at'])) ?></span>
+                <span><?= e($this->dateFormat($post['published_at'], setting('date_format'))) ?></span>
                 <span><?= e($this->getReadTime($post['html'])) ?> <?= t('minutes_read') ?></span>
             </div>
             <div class="description"><?= e($post['description']) ?></div>
