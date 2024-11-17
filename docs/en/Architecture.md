@@ -4,11 +4,11 @@ The Aurora codebase is structured in several directories.
 
 - `bin` Contains the CLI code.
 
+- `core` - Contains the core code of Aurora. Like the router, database abstraction layer, language manager, etc.
+
 - `docs` - Contains the Aurora documentation.
 
 - `public` - Contains the public files and resources, such as images, stylesheets and javascript files.
-
-- `core` - Contains the core code of Aurora. Like the router, database abstraction layer, language manager, etc.
 
 - `tests` - Contains all the code related to the automated tests.
 
