@@ -886,8 +886,7 @@ textarea.code {
     gap: 6px;
 }
 
-.page-title h2 + span,
-.media-paths > * {
+.page-title h2 + span {
     line-height: 1.8em;
 }
 
@@ -1372,16 +1371,25 @@ textarea.code {
     align-items: center;
     overflow: auto;
     max-width: 80vw;
-    gap: 6px;
-}
-
-.media-paths > svg {
-    margin-right: 4px;
+    gap: 4px;
 }
 
 .media-paths > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 26px;
+    min-height: 18px;
     color: var(--main-color);
     text-decoration: none;
+    background: var(--fourth-color);
+    padding: 4px 8px;
+    border: 1px var(--border-color) solid;
+    border-radius: 6px;
+}
+
+.media-paths > a svg {
+    fill: var(--main-color);
 }
 
 .media-paths > a:last-of-type {
@@ -1389,7 +1397,7 @@ textarea.code {
 }
 
 .media-paths > span {
-    opacity: 0.3;
+    opacity: 0.6;
 }
 
 .media-paths > span:last-of-type {

@@ -5,12 +5,11 @@
         <h2><?= $this->t('media') ?></h2>
         <div>
             <div class="media-paths">
-                <?= $this->include('icons/folder.svg') ?>
                 <?php $paths = explode('/', trim($path, '/')) ?>
                 <?php foreach ($paths as $i => $folder): ?>
                     <?php $folder_path = implode('/', array_slice($paths, 0, $i + 1)) ?>
                     <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
-                        <a href="/admin/media?path=<?= e($folder_path) ?>" class="pointer"><?= e($folder) ?></a>
+                        <a href="/admin/media?path=<?= e($folder_path) ?>" class="pointer"><?= $i == 1 ? $this->include('icons/home.svg') : e($folder) ?></a>
                         <span>/</span>
                     <?php endif ?>
                 <?php endforeach ?>
