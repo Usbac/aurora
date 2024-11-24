@@ -66,7 +66,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return $view->get('admin/login.html');
     });
 
-    $router->post('json:admin/login', function() use ($user_mod, $lang) {
+    $router->post('json:admin/login', function() use ($user_mod) {
         $errors = $user_mod->handleLogin($_POST['email'], $_POST['password']);
 
         return json_encode([
