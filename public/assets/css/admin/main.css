@@ -51,6 +51,10 @@ body, h1, h2, h3 {
     margin: 0;
 }
 
+body:has(.dialog.open) {
+    overflow: hidden;
+}
+
 b, h1, h2, h3 {
     font-weight: var(--font-bold);
 }

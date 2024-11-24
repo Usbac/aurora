@@ -397,12 +397,10 @@ class Dropdown {
 class Dialog {
     static show(container) {
         container.classList.add('open');
-        document.body.style.overflow = 'hidden';
     }
 
     static close(container) {
         container.classList.remove('open');
-        document.body.style.overflow = 'auto';
     }
 }
 
