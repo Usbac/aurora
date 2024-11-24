@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(\Aurora\Core\Container::get('language')->getCode()) ?>">
+<html lang="<?= e($this->getLanguageCode()) ?>">
 <head>
     <title>
         <?php $this->sectionStart('title') ?><?php $this->sectionEnd() ?> - <?= e(setting('title')) ?>
@@ -14,47 +14,47 @@
         </header>
         <div class="admin-options">
             <a href="/admin/dashboard">
-                <?= $this->include('icons/home.svg') ?> <?= t('dashboard') ?>
+                <?= $this->include('icons/home.svg') ?> <?= $this->t('dashboard') ?>
             </a>
             <a href="<?= e($this->url()) ?>" target="_blank">
-                <?= $this->include('icons/window.svg') ?> <?= t('view_site') ?>
+                <?= $this->include('icons/window.svg') ?> <?= $this->t('view_site') ?>
             </a>
             <a href="/admin/pages" data-separator>
-                <?= $this->include('icons/book.svg') ?> <?= t('pages') ?>
+                <?= $this->include('icons/book.svg') ?> <?= $this->t('pages') ?>
             </a>
             <a href="/admin/posts">
-                <?= $this->include('icons/pencil.svg') ?> <?= t('posts') ?>
+                <?= $this->include('icons/pencil.svg') ?> <?= $this->t('posts') ?>
             </a>
             <a href="/admin/tags">
-                <?= $this->include('icons/tag.svg') ?> <?= t('tags') ?>
+                <?= $this->include('icons/tag.svg') ?> <?= $this->t('tags') ?>
             </a>
             <a href="/admin/media">
-                <?= $this->include('icons/image.svg') ?> <?= t('media') ?>
+                <?= $this->include('icons/image.svg') ?> <?= $this->t('media') ?>
             </a>
             <a href="/admin/users">
-                <?= $this->include('icons/user.svg') ?> <?= t('users') ?>
+                <?= $this->include('icons/user.svg') ?> <?= $this->t('users') ?>
             </a>
             <a href="/admin/links">
-                <?= $this->include('icons/link.svg') ?> <?= t('links') ?>
+                <?= $this->include('icons/link.svg') ?> <?= $this->t('links') ?>
             </a>
             <a href="/admin/settings">
-                <?= $this->include('icons/settings.svg') ?> <?= t('settings') ?>
+                <?= $this->include('icons/settings.svg') ?> <?= $this->t('settings') ?>
             </a>
         </div>
         <div class="current-user">
             <a href="/admin/users/edit?id=<?= e($_SESSION['user']['id']) ?>" title="<?= e($_SESSION['user']['name']) ?>">
-                <img src="<?= e(!empty($_SESSION['user']['image']) ? $this->getContentUrl($_SESSION['user']['image']) : '/public/assets/no-image.svg') ?>" <?php if (empty($_SESSION['user']['image'])): ?>class="empty-img"<?php endif ?> alt="<?= t('user_image') ?>"/>
+                <img src="<?= e(!empty($_SESSION['user']['image']) ? $this->getContentUrl($_SESSION['user']['image']) : '/public/assets/no-image.svg') ?>" <?php if (empty($_SESSION['user']['image'])): ?>class="empty-img"<?php endif ?> alt="<?= $this->t('user_image') ?>"/>
             </a>
-            <div id="toggle-theme" class="pointer" title="<?= t('switch_theme') ?>" data-theme="<?php if (($_COOKIE['theme'] ?? '') !== 'dark'): ?>light<?php else: ?>dark<?php endif ?>">
+            <div id="toggle-theme" class="pointer" title="<?= $this->t('switch_theme') ?>" data-theme="<?php if (($_COOKIE['theme'] ?? '') !== 'dark'): ?>light<?php else: ?>dark<?php endif ?>">
                 <?= $this->include('icons/moon.svg') ?>
                 <?= $this->include('icons/sun.svg') ?>
             </div>
-            <a href="/admin/logout" class="pointer" title="<?= t('logout') ?>">
+            <a href="/admin/logout" class="pointer" title="<?= $this->t('logout') ?>">
                 <?= $this->include('icons/logout.svg') ?>
             </a>
         </div>
     </nav>
-    <noscript class="warning"><?= t('js_disabled') ?></noscript>
+    <noscript class="warning"><?= $this->t('js_disabled') ?></noscript>
     <div class="nav-background" onclick="document.body.toggleAttribute('data-nav-open')"></div>
     <?= $this->include('admin/partials/snackbar.html') ?>
     <?php $this->sectionStart('content') ?>

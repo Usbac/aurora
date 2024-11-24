@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <?php if (!empty($show_add_button)): ?>
-                    <a href="<?= e("$current_path/edit") ?>" class="button" title="<?= t('new') ?>"><b>+</b>&nbsp;<?= t('new') ?></a>
+                    <a href="<?= e("$current_path/edit") ?>" class="button" title="<?= $this->t('new') ?>"><b>+</b>&nbsp;<?= $this->t('new') ?></a>
                 <?php endif ?>
             <?php endif ?>
         </div>
@@ -39,7 +39,7 @@
                     </select>
                 </div>
             <?php endforeach ?>
-            <input type="text" name="search" placeholder="<?= t('search') ?>" value="<?= e($_GET['search'] ?? '') ?>"/>
+            <input type="text" name="search" placeholder="<?= $this->t('search') ?>" value="<?= e($_GET['search'] ?? '') ?>"/>
             <button type="submit"><?= $this->include('icons/glass.svg') ?></button>
         </form>
         <?php if (!empty($extra_header)): ?>
@@ -55,7 +55,7 @@
             </div>
             <div id="main-listing" class="listing"></div>
         </div>
-        <button class="load-more hidden" onclick="Listing.loadNextPage()"><?= t('load_more') ?></button>
+        <button class="load-more hidden" onclick="Listing.loadNextPage()"><?= $this->t('load_more') ?></button>
     </div>
 <?php $this->sectionEnd() ?>
 

@@ -3,7 +3,7 @@
         <title><?= e(setting('title')) ?></title>
         <link><?= e($this->url()) ?></link>
         <description><?= e(setting('description')) ?></description>
-        <language><?= e(\Aurora\Core\Container::get('language')->getCode()) ?></language>
+        <language><?= e($this->getLanguageCode()) ?></language>
         <?php if (setting('logo')): ?>
             <image>
                 <url><?= e($this->getContentUrl(setting('logo'))) ?></url>

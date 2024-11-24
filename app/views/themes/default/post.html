@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(\Aurora\Core\Container::get('language')->getCode()) ?>">
+<html lang="<?= e($this->getLanguageCode()) ?>">
 <head>
     <title><?= e($post['title'] . ' - ' . setting('title')) ?></title>
     <?= $this->include('themes/default/partials/head.html') ?>
@@ -33,13 +33,13 @@
                     <div>
                         <?php $user_url = '/' . setting('blog_url') . '/author/' . $post['user_slug'] ?>
                         <a href="<?= e($user_url) ?>" class="pointer">
-                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
+                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= $this->t('author') ?>"/>
                         </a>
                         <a href="<?= e($user_url) ?>"><?= e($post['user_name']) ?></a>
                     </div>
                 <?php endif ?>
                 <span><?= e($this->dateFormat($post['published_at'], setting('date_format'))) ?></span>
-                <span><?= e($this->getReadTime($post['html'])) ?> <?= t('minutes_read') ?></span>
+                <span><?= e($this->getReadTime($post['html'])) ?> <?= $this->t('minutes_read') ?></span>
             </div>
         </div>
         <div class="section narrow post-html">
@@ -52,7 +52,7 @@
         <?php endif ?>
         <?php if (!empty($related_posts)): ?>
             <div class="section post-related">
-                <h2><?= t('related_posts') ?></h2>
+                <h2><?= $this->t('related_posts') ?></h2>
                 <div>
                     <?php foreach ($related_posts as $related): ?>
                         <?php $related_post_url = '/' . setting('blog_url') . '/' . $related['slug'] ?>
@@ -61,16 +61,16 @@
                                 <img src="<?= e($this->getContentUrl($related['image'])) ?>" alt="<?= e($related['image_alt'] ?? '') ?>" class="pointer"/>
                             </a>
                             <?php if (!$related['status']): ?>
-                                <span class="label red"><?= t('draft') ?></span>
+                                <span class="label red"><?= $this->t('draft') ?></span>
                             <?php elseif ($related['published_at'] > time()): ?>
-                                <span class="label"><?= t('scheduled') ?></span>
+                                <span class="label"><?= $this->t('scheduled') ?></span>
                             <?php endif ?>
                             <h3>
                                 <a href="<?= e($related_post_url) ?>"><?= e($related['title']) ?></a>
                             </h3>
                             <div class="meta">
                                 <span><?= e($this->dateFormat($related['published_at'], setting('date_format'))) ?></span>
-                                <span><?= e($this->getReadTime($related['html'])) ?> <?= t('minutes_read') ?></span>
+                                <span><?= e($this->getReadTime($related['html'])) ?> <?= $this->t('minutes_read') ?></span>
                             </div>
                             <div><?= e($related['description']) ?></div>
                         </div>

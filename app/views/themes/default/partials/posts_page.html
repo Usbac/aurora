@@ -5,9 +5,9 @@
         </a>
         <div>
             <?php if (!$post['status']): ?>
-                <span class="label red"><?= t('draft') ?></span>
+                <span class="label red"><?= $this->t('draft') ?></span>
             <?php elseif ($post['published_at'] > time()): ?>
-                <span class="label"><?= t('scheduled') ?></span>
+                <span class="label"><?= $this->t('scheduled') ?></span>
             <?php endif ?>
             <?php if (!empty($post['tags'])): ?>
                 <div class="post-tags">
@@ -24,13 +24,13 @@
                     <div>
                         <?php $user_url = '/' . setting('blog_url') . '/author/' . $post['user_slug'] ?>
                         <a href="<?= e($user_url) ?>" class="pointer">
-                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
+                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= $this->t('author') ?>"/>
                         </a>
                         <a href="<?= e($user_url) ?>"><?= e($post['user_name']) ?></a>
                     </div>
                 <?php endif ?>
                 <span><?= e($this->dateFormat($post['published_at'], setting('date_format'))) ?></span>
-                <span><?= e($this->getReadTime($post['html'])) ?> <?= t('minutes_read') ?></span>
+                <span><?= e($this->getReadTime($post['html'])) ?> <?= $this->t('minutes_read') ?></span>
             </div>
             <div class="description"><?= e($post['description']) ?></div>
         </div>

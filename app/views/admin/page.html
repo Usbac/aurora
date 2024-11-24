@@ -1,7 +1,7 @@
 <?php $this->extend('admin/base.html') ?>
 
 <?php $this->sectionStart('title') ?>
-    <?= t('page') ?>
+    <?= $this->t('page') ?>
 <?php $this->sectionEnd() ?>
 
 <?php $this->sectionStart('content') ?>
@@ -10,7 +10,7 @@
         <div>
             <div class="page-title">
                 <?= $this->include('admin/partials/menu_btn.html') ?>
-                <h2><?= t('page') ?></h2>
+                <h2><?= $this->t('page') ?></h2>
             </div>
             <div class="buttons">
                 <?php if (\Aurora\Core\Helper::isValidId($page['id'] ?? false)): ?>
@@ -19,14 +19,14 @@
                     </button>
                     <button type="button" onclick="window.open(<?= e(js($this->url($page['slug']))) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?></button>
                 <?php endif ?>
-                <button type="submit" <?php if (!$can_edit_page): ?> disabled <?php endif ?>><?= t('save') ?></button>
+                <button type="submit" <?php if (!$can_edit_page): ?> disabled <?php endif ?>><?= $this->t('save') ?></button>
             </div>
         </div>
         <div class="grid grid-two-columns">
             <div class="grid">
                 <div class="card v-spacing">
                     <div class="input-group">
-                        <label for="title"><?= t('title') ?></label>
+                        <label for="title"><?= $this->t('title') ?></label>
                         <input id="title" type="text" name="title" value="<?= e($page['title'] ?? '') ?>" data-char-count/>
                     </div>
                 </div>
@@ -37,38 +37,38 @@
             <div class="grid">
                 <div class="card v-spacing">
                     <div class="input-group">
-                        <label for="slug"><?= t('slug') ?></label>
+                        <label for="slug"><?= $this->t('slug') ?></label>
                         <input id="slug" name="slug" type="text" placeholder="lorem-ipsum" value="<?= e($page['slug'] ?? '') ?>" maxlength="255" data-char-count/>
                         <a id="page-link" target="_blank"></a>
                     </div>
                     <?php if (\Aurora\Core\Helper::isValidId($page['id'] ?? false)): ?>
                         <div class="extra-data">
-                            <span><?= t('id') ?>: <?= e($page['id']) ?></span>
+                            <span><?= $this->t('id') ?>: <?= e($page['id']) ?></span>
                             <?php if (setting('views_count')): ?>
-                                <span><?= t('number_views') ?>: <?= e($page['views']) ?></span>
+                                <span><?= $this->t('number_views') ?>: <?= e($page['views']) ?></span>
                             <?php endif ?>
                         </div>
                     <?php endif ?>
                 </div>
                 <div class="card v-spacing">
                     <div class="input-group">
-                        <label for="status"><?= t('published') ?></label>
+                        <label for="status"><?= $this->t('published') ?></label>
                         <div class="switch">
                             <input id="status" name="status" type="checkbox" <?php if ($page['status'] ?? false): ?> checked <?php endif ?>>
                             <button type="button" class="slider" onclick="get('#status').click()"></button>
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="static"><?= t('static') ?></label>
+                        <label for="static"><?= $this->t('static') ?></label>
                         <div class="switch">
                             <input id="static" name="static" type="checkbox" <?php if ($page['static'] ?? false): ?> checked <?php endif ?> oninput="toggleEditor(!this.checked)">
                             <button type="button" class="slider" onclick="get('#static').click()"></button>
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="static-file"><?= t('static_file') ?></label>
+                        <label for="static-file"><?= $this->t('static_file') ?></label>
                         <select id="static-file" name="static_file">
-                            <option value=""><?= t('none') ?></option>
+                            <option value=""><?= $this->t('none') ?></option>
                             <?php foreach ($view_files as $file): ?>
                                 <option value="<?= e($file) ?>" <?php if (($page['static_file'] ?? '') == $file): ?> selected <?php endif ?>><?= e($file) ?></option>
                             <?php endforeach ?>
@@ -77,15 +77,15 @@
                 </div>
                 <div class="card v-spacing">
                     <div class="input-group">
-                        <label for="meta-title"><?= t('meta_title') ?></label>
+                        <label for="meta-title"><?= $this->t('meta_title') ?></label>
                         <input id="meta-title" name="meta_title" type="text" placeholder="lorem ipsum" value="<?= e($page['meta_title'] ?? '') ?>" data-char-count/>
                     </div>
                     <div class="input-group">
-                        <label for="meta-description"><?= t('meta_description') ?></label>
+                        <label for="meta-description"><?= $this->t('meta_description') ?></label>
                         <textarea id="meta-description" name="meta_description" data-char-count><?= e($page['meta_description'] ?? '') ?></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="canonical-url"><?= t('canonical_url') ?></label>
+                        <label for="canonical-url"><?= $this->t('canonical_url') ?></label>
                         <input id="canonical-url" name="canonical_url" type="text" placeholder="<?= e($this->url('/about')) ?>" value="<?= e($page['canonical_url'] ?? '') ?>"/>
                     </div>
                 </div>

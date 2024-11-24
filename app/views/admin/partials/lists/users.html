@@ -8,17 +8,17 @@
                 <h3>
                     <?= e($user['name']) ?>
                     <?php if ($user['id'] == $_SESSION['user']['id']): ?>
-                        <span class="you-tag">(<?= t('you') ?>)</span>
+                        <span class="you-tag">(<?= $this->t('you') ?>)</span>
                     <?php endif ?>
                     <?php if ($user['status'] != 1): ?>
-                        <span class="title-label red"><?= t('inactive') ?></span>
+                        <span class="title-label red"><?= $this->t('inactive') ?></span>
                     <?php endif ?>
                 </h3>
                 <p class="subtitle"><?= e($user['email']) ?></p>
             </div>
         </div>
         <div class="w20">
-            <?= t($user['role_slug']) ?>
+            <?= $this->t($user['role_slug']) ?>
         </div>
         <div class="w20">
             <?= e($this->dateFormat($user['last_active'])) ?>
@@ -30,10 +30,10 @@
             <div class="three-dots" onclick="return false" dropdown>
                 <?= $this->include('icons/dots.svg') ?>
                 <div class="dropdown-menu">
-                    <div onclick="window.open(<?= e(js('/' . setting('blog_url') . '/author/' . $user['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= t('view') ?></div>
+                    <div onclick="window.open(<?= e(js('/' . setting('blog_url') . '/author/' . $user['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= $this->t('view') ?></div>
                     <?php if ($user['id'] != $_SESSION['user']['id']): ?>
                         <?php if (\Aurora\App\Permission::impersonate($user)): ?>
-                            <div onclick="if (confirm(LANG.impersonate_confirm)) location.href = '/admin/users/impersonate?id=' + <?= e(js($user['id'])) ?>"><?= $this->include('icons/users.svg') ?> <?= t('impersonate') ?></div>
+                            <div onclick="if (confirm(LANG.impersonate_confirm)) location.href = '/admin/users/impersonate?id=' + <?= e(js($user['id'])) ?>"><?= $this->include('icons/users.svg') ?> <?= $this->t('impersonate') ?></div>
                         <?php endif ?>
                         <?php if (\Aurora\App\Permission::edit_user($user)): ?>
                             <div
@@ -42,7 +42,7 @@
                                         csrf: csrf_token,
                                         id: <?= e(js($user['id'])) ?>,
                                     }).then(res => Listing.handleResponse(res));"
-                            ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
+                            ><?= $this->include('icons/trash.svg') ?> <?= $this->t('delete') ?></div>
                         <?php endif ?>
                     <?php endif ?>
                 </div>

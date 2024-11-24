@@ -8,9 +8,9 @@
         </div>
         <div class="w20">
             <?php if ($link['status'] == 1): ?>
-                <span class="title-label green"><?= t('active') ?></span>
+                <span class="title-label green"><?= $this->t('active') ?></span>
             <?php else: ?>
-                <span class="title-label red"><?= t('inactive') ?></span>
+                <span class="title-label red"><?= $this->t('inactive') ?></span>
             <?php endif ?>
         </div>
         <div class="w10 numeric">
@@ -20,7 +20,7 @@
             <div class="three-dots" onclick="return false" dropdown>
                 <?= $this->include('icons/dots.svg') ?>
                 <div class="dropdown-menu">
-                    <div onclick="window.open(<?= e(js($link['url'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= t('view') ?></div>
+                    <div onclick="window.open(<?= e(js($link['url'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= $this->t('view') ?></div>
                     <?php if (\Aurora\App\Permission::can('edit_links')): ?>
                         <div
                             class="danger"
@@ -28,7 +28,7 @@
                                     csrf: csrf_token,
                                     id: <?= e(js($link['id'])) ?>,
                                 }).then(res => Listing.handleResponse(res));"
-                        ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
+                        ><?= $this->include('icons/trash.svg') ?> <?= $this->t('delete') ?></div>
                     <?php endif ?>
                 </div>
             </div>

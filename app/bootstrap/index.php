@@ -7,14 +7,6 @@ if (!function_exists('e')) {
     }
 }
 
-if (!function_exists('t')) {
-    function t(?string $key = null, bool $escape = true)
-    {
-        $text = \Aurora\Core\Container::get('language')->get($key);
-        return $key && $escape ? e($text) : $text;
-    }
-}
-
 if (!function_exists('js')) {
     function js(mixed $val): string|bool
     {
@@ -54,15 +46,13 @@ return function (\Aurora\Core\Kernel $kernel) {
     $lang = new \Aurora\Core\Language($languages);
     $lang->setCode($settings['language']);
 
-    \Aurora\Core\Container::set('language', $lang);
+    $view = new \Aurora\Core\View(\Aurora\Core\Helper::getPath($kernel->config('views')), new \Aurora\App\ViewHelper($kernel->config('date_format'), $lang));
+
     \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $_SESSION['user']['role'] ?? 0);
     \Aurora\App\Permission::addMethod('impersonate', fn($user) => ($user['status'] ?? false) && $user['role'] <= ($_SESSION['user']['role'] ?? 0) && \Aurora\App\Permission::can('impersonate'));
     \Aurora\App\Permission::addMethod('edit_user', fn($user) => ($user['role'] ?? 0) <= ($_SESSION['user']['role'] ?? 0) && \Aurora\App\Permission::can('edit_users'));
     \Aurora\App\Setting::set($settings);
     \Aurora\App\Media::setDirectory($kernel->config('content'));
 
-    (require('routes.php'))($kernel->router,
-        $db,
-        new \Aurora\Core\View(\Aurora\Core\Helper::getPath($kernel->config('views')), new \Aurora\App\ViewHelper($kernel->config('date_format'))),
-        $lang);
+    (require('routes.php'))($kernel->router, $db, $view, $lang);
 };

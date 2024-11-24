@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?= e(\Aurora\Core\Container::get('language')->getCode()) ?>">
+<html lang="<?= e($this->getLanguageCode()) ?>">
 <head>
     <title><?= e("$title - " . setting('title')) ?></title>
     <?= $this->include('themes/default/partials/head.html') ?>
@@ -17,18 +17,18 @@
     <main>
         <?php if (!empty($_GET['search'])): ?>
             <div class="section blog-title">
-                <h2><?= t('searching') ?>: <?= e($_GET['search']) ?></h2>
+                <h2><?= $this->t('searching') ?>: <?= e($_GET['search']) ?></h2>
             </div>
         <?php endif ?>
         <?php if (isset($tag)): ?>
             <div class="section blog-title">
-                <h2><?= t('tag') ?>: <?= e($tag['name']) ?></h2>
+                <h2><?= $this->t('tag') ?>: <?= e($tag['name']) ?></h2>
                 <span><?= e($tag['description']) ?></span>
             </div>
             <script>var next_page_args = 'tag=' + <?= js($tag['id']) ?>;</script>
         <?php elseif (isset($user)): ?>
             <div class="section author">
-                <img src="<?= !empty($user['image']) ? e($this->getContentUrl($user['image'])) : '/public/assets/user.svg' ?>" alt="<?= t('author') ?>"/>
+                <img src="<?= !empty($user['image']) ? e($this->getContentUrl($user['image'])) : '/public/assets/user.svg' ?>" alt="<?= $this->t('author') ?>"/>
                 <div>
                     <h2><?= e($user['name']) ?></h2>
                     <span><?= e($user['bio']) ?></span>
@@ -41,11 +41,11 @@
         <div id="posts" class="section posts">
             <?= $this->include('themes/default/partials/posts_page.html') ?>
             <?php if (empty($posts)): ?>
-                <h3 class="empty"><?= t('no_results') ?></h3>
+                <h3 class="empty"><?= $this->t('no_results') ?></h3>
             <?php endif ?>
         </div>
         <?php if ($next_page): ?>
-            <button id="load-posts" class="load-more" onclick="loadNextPage(this, next_page_args)"><?= t('load_more') ?></button>
+            <button id="load-posts" class="load-more" onclick="loadNextPage(this, next_page_args)"><?= $this->t('load_more') ?></button>
         <?php endif ?>
     </main>
     <?= $this->include('themes/default/partials/footer.html') ?>

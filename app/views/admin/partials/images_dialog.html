@@ -1,6 +1,6 @@
 <div class="top">
     <div class="title">
-        <h2><?= t('image_picker') ?></h2>
+        <h2><?= $this->t('image_picker') ?></h2>
         <span onclick="ImageDialog.close()">
             <?= $this->include('icons/x.svg') ?>
         </span>
@@ -18,7 +18,7 @@
             <?php endforeach ?>
         </div>
         <div id="image-dialog-file-form">
-            <button type="button" class="light" onclick="ImageDialog.close(); ImageDialog.clearImage();"><?= t('remove_image') ?></button>
+            <button type="button" class="light" onclick="ImageDialog.close(); ImageDialog.clearImage();"><?= $this->t('remove_image') ?></button>
             <button type="button" id="image-dialog-file-button" onclick="get('#image-input-file').click()" <?php if (!\Aurora\App\Permission::can('edit_media')): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
             <input type="hidden" name="csrf" value="<?= e($this->csrfToken()) ?>"/>
             <input
@@ -35,8 +35,8 @@
 <div id="image-dialog-listing" class="listing">
     <div class="listing-row header">
         <div class="w100"></div>
-        <div class="w20" title="<?= t('information') ?>"><?= t('information') ?></div>
-        <div class="w20" title="<?= t('last_modification') ?>"><?= t('last_modification') ?></div>
+        <div class="w20" title="<?= $this->t('information') ?>"><?= $this->t('information') ?></div>
+        <div class="w20" title="<?= $this->t('last_modification') ?>"><?= $this->t('last_modification') ?></div>
     </div>
     <?php foreach ($files as $i => $file): ?>
         <?php $file_path = '/' . \Aurora\Core\Kernel::config('content') . '/' . trim($file['path'], '/') ?>
@@ -72,6 +72,6 @@
         </div>
     <?php endforeach ?>
     <?php if (empty($files)): ?>
-        <span class="empty"><?= t('no_items') ?></span>
+        <span class="empty"><?= $this->t('no_items') ?></span>
     <?php endif ?>
 </div>

@@ -13,7 +13,7 @@
             <div class="three-dots" onclick="return false" dropdown>
                 <?= $this->include('icons/dots.svg') ?>
                 <div class="dropdown-menu">
-                    <div onclick="window.open(<?= e(js('/' . setting('blog_url') . '/tag/' . $tag['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= t('view') ?></div>
+                    <div onclick="window.open(<?= e(js('/' . setting('blog_url') . '/tag/' . $tag['slug'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= $this->t('view') ?></div>
                     <?php if (\Aurora\App\Permission::can('edit_tags')): ?>
                         <div
                             class="danger"
@@ -21,7 +21,7 @@
                                     csrf: csrf_token,
                                     id: <?= e(js($tag['id'])) ?>,
                                 }).then(res => Listing.handleResponse(res));"
-                        ><?= $this->include('icons/trash.svg') ?> <?= t('delete') ?></div>
+                        ><?= $this->include('icons/trash.svg') ?> <?= $this->t('delete') ?></div>
                     <?php endif ?>
                 </div>
             </div>

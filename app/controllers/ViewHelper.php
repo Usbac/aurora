@@ -8,9 +8,12 @@ final class ViewHelper
 
     private ?string $default_date_format = null;
 
-    public function __construct(string $default_date_format = null)
+    private ?\Aurora\Core\Language $language = null;
+
+    public function __construct(string $default_date_format = null, \Aurora\Core\Language $language = null)
     {
         $this->default_date_format = $default_date_format;
+        $this->language = $language;
     }
 
     /**
@@ -58,12 +61,32 @@ final class ViewHelper
         static $formatter = null;
 
         if ($formatter === null) {
-            $formatter = new \IntlDateFormatter(\Aurora\Core\Container::get('language')->getCode(), 0, 0);
+            $formatter = new \IntlDateFormatter($this->getLanguageCode(), 0, 0);
         }
 
         $formatter->setTimeZone(\Aurora\App\Setting::get('timezone'));
         $formatter->setPattern($date_format ?? $this->default_date_format);
         return $formatter->format($tstamp);
+    }
+
+    /**
+     * Returns the language key or all of them if no key is specified
+     * @param [string] $key the key to obtain
+     * @param [bool] $escape escape the language key or not
+     * @return mixed the language key/keys
+     */
+    public function t(?string $key = null, bool $escape = true)
+    {
+        $text = $this->language->get($key);
+        return $key && $escape ? e($text) : $text;
+    }
+
+    /**
+     * @see \Aurora\Core\Language::getCode
+     */
+    public function getLanguageCode(): string
+    {
+        return $this->language->getCode();
     }
 
     /**

@@ -2,7 +2,7 @@
 <div class="page-title">
     <?= $this->include('admin/partials/menu_btn.html') ?>
     <div>
-        <h2><?= t('media') ?></h2>
+        <h2><?= $this->t('media') ?></h2>
         <div>
             <div class="media-paths">
                 <?= $this->include('icons/folder.svg') ?>
@@ -23,10 +23,10 @@
     </div>
 </div>
 <div class="media-options">
-    <button onclick="downloadAll()" title="<?= t('download_zip') ?>"><?= $this->include('icons/zip.svg') ?></button>
-    <button <?php if (!$can_edit_media): ?> disabled <?php endif ?> onclick="openCreateFolderDialog()" title="<?= t('create_folder') ?>"><?= $this->include('icons/folder.svg') ?></button>
+    <button onclick="downloadAll()" title="<?= $this->t('download_zip') ?>"><?= $this->include('icons/zip.svg') ?></button>
+    <button <?php if (!$can_edit_media): ?> disabled <?php endif ?> onclick="openCreateFolderDialog()" title="<?= $this->t('create_folder') ?>"><?= $this->include('icons/folder.svg') ?></button>
     <div id="file-form">
-        <button onclick="get('#input-file').click()" title="<?= t('upload_file') ?>" <?php if (!$can_edit_media): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
+        <button onclick="get('#input-file').click()" title="<?= $this->t('upload_file') ?>" <?php if (!$can_edit_media): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
         <input id="input-file" type="file" class="hidden" name="file" oninput="uploadFile()"/>
     </div>
 </div>
@@ -35,19 +35,19 @@
     <div>
         <div class="top">
             <div class="title">
-                <h2><?= t('rename') ?></h2>
+                <h2><?= $this->t('rename') ?></h2>
                 <span onclick="Dialog.close(get('#edit-dialog'))">
                     <?= $this->include('icons/x.svg') ?>
                 </span>
             </div>
         </div>
         <div class="content input-group">
-            <label for="file-name-input"><?= t('name') ?></label>
+            <label for="file-name-input"><?= $this->t('name') ?></label>
             <input id="file-name-input" type="text" name="name"/>
         </div>
         <div class="bottom">
-            <button class="light" onclick="Dialog.close(get('#edit-dialog'))"><?= t('cancel') ?></button>
-            <button onclick="editFile()"><?= t('save') ?></button>
+            <button class="light" onclick="Dialog.close(get('#edit-dialog'))"><?= $this->t('cancel') ?></button>
+            <button onclick="editFile()"><?= $this->t('save') ?></button>
         </div>
     </div>
 </div>
@@ -55,19 +55,19 @@
     <div>
         <div class="top">
             <div class="title">
-                <h2><?= t('create_folder') ?></h2>
+                <h2><?= $this->t('create_folder') ?></h2>
                 <span onclick="Dialog.close(get('#folder-dialog'))">
                     <?= $this->include('icons/x.svg') ?>
                 </span>
             </div>
         </div>
         <div class="content input-group">
-            <label for="folder-input"><?= t('name') ?></label>
+            <label for="folder-input"><?= $this->t('name') ?></label>
             <input id="folder-input" type="text" name="name"/>
         </div>
         <div class="bottom">
-            <button class="light" onclick="Dialog.close(get('#folder-dialog'))"><?= t('cancel') ?></button>
-            <button onclick="createFolder()"><?= t('create') ?></button>
+            <button class="light" onclick="Dialog.close(get('#folder-dialog'))"><?= $this->t('cancel') ?></button>
+            <button onclick="createFolder()"><?= $this->t('create') ?></button>
         </div>
     </div>
 </div>
@@ -75,14 +75,14 @@
     <div>
         <div class="top">
             <div class="title">
-                <h2><?= t('move') ?></h2>
+                <h2><?= $this->t('move') ?></h2>
                 <span onclick="Dialog.close(get('#move-dialog'))">
                     <?= $this->include('icons/x.svg') ?>
                 </span>
             </div>
         </div>
         <div class="content input-group">
-            <label for="move-input"><?= t('folder') ?></label>
+            <label for="move-input"><?= $this->t('folder') ?></label>
             <select id="move-input" name="name">
                 <?php foreach ($folders as $full_path => $relative_path): ?>
                     <option value="<?= e($full_path) ?>"><?= e($relative_path) ?></option>
@@ -90,8 +90,8 @@
             </select>
         </div>
         <div class="bottom">
-            <button class="light" onclick="Dialog.close(get('#move-dialog'))"><?= t('cancel') ?></button>
-            <button onclick="moveFile()"><?= t('move') ?></button>
+            <button class="light" onclick="Dialog.close(get('#move-dialog'))"><?= $this->t('cancel') ?></button>
+            <button onclick="moveFile()"><?= $this->t('move') ?></button>
         </div>
     </div>
 </div>
@@ -99,19 +99,19 @@
     <div>
         <div class="top">
             <div class="title">
-                <h2><?= t('duplicate') ?></h2>
+                <h2><?= $this->t('duplicate') ?></h2>
                 <span onclick="Dialog.close(get('#duplicate-dialog'))">
                     <?= $this->include('icons/x.svg') ?>
                 </span>
             </div>
         </div>
         <div class="content input-group">
-            <label for="duplicate-input"><?= t('name') ?></label>
+            <label for="duplicate-input"><?= $this->t('name') ?></label>
             <input id="duplicate-input" type="text" name="name"/>
         </div>
         <div class="bottom">
-            <button class="light" onclick="Dialog.close(get('#duplicate-dialog'))"><?= t('cancel') ?></button>
-            <button onclick="duplicateFile()"><?= t('save') ?></button>
+            <button class="light" onclick="Dialog.close(get('#duplicate-dialog'))"><?= $this->t('cancel') ?></button>
+            <button onclick="duplicateFile()"><?= $this->t('save') ?></button>
         </div>
     </div>
 </div>
