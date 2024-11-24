@@ -43,8 +43,7 @@ return function (\Aurora\Core\Kernel $kernel) {
         $languages[pathinfo($file, PATHINFO_FILENAME)] = require_once($file);
     }
 
-    $lang = new \Aurora\Core\Language($languages);
-    $lang->setCode($settings['language']);
+    $lang = new \Aurora\Core\Language($languages, $settings['language']);
 
     $view = new \Aurora\Core\View(\Aurora\Core\Helper::getPath($kernel->config('views')), new \Aurora\App\ViewHelper($kernel->config('date_format'), $lang));
 

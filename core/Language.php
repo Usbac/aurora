@@ -4,23 +4,9 @@ namespace Aurora\Core;
 
 class Language
 {
-    /**
-     * Current language code
-     * @var string
-     */
-    private string $code = '';
-
-    public function __construct(private array $languages = [])
+    public function __construct(private array $languages = [], private string $code = '')
     {
         $this->languages = $languages;
-    }
-
-    /**
-     * Sets the language to use
-     * @param string $code the language code
-     */
-    public function setCode(string $code): void
-    {
         $this->code = $code;
     }
 
@@ -42,6 +28,15 @@ class Language
         }
 
         throw new \InvalidArgumentException("Language with code '$key' does not exist");
+    }
+
+    /**
+     * Sets the language to use
+     * @param string $code the language code
+     */
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
     }
 
     /**
