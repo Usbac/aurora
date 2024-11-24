@@ -4,7 +4,7 @@
     <title>
         <?php $this->sectionStart('title') ?><?php $this->sectionEnd() ?> - <?= e(setting('title')) ?>
     </title>
-    <?= $this->include('admin/partials/head.php') ?>
+    <?= $this->include('admin/partials/head.html') ?>
 </head>
 <body class="admin">
     <nav>
@@ -56,7 +56,7 @@
     </nav>
     <noscript class="warning"><?= t('js_disabled') ?></noscript>
     <div class="nav-background" onclick="document.body.toggleAttribute('data-nav-open')"></div>
-    <?= $this->include('admin/partials/snackbar.php') ?>
+    <?= $this->include('admin/partials/snackbar.html') ?>
     <?php $this->sectionStart('content') ?>
     <?php $this->sectionEnd() ?>
     <script>

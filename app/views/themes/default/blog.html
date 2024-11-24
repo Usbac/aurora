@@ -2,7 +2,7 @@
 <html lang="<?= e(\Aurora\Core\Container::get('language')->getCode()) ?>">
 <head>
     <title><?= e("$title - " . setting('title')) ?></title>
-    <?= $this->include('themes/default/partials/head.php') ?>
+    <?= $this->include('themes/default/partials/head.html') ?>
     <?php if (isset($tag)): ?>
         <meta property="og:title" content="<?= e($tag[empty($tag['meta_title']) ? 'name' : 'meta_title']) ?>"/>
         <meta property="og:description" content="<?= e($tag[empty($tag['meta_description']) ? 'description' : 'meta_description']) ?>"/>
@@ -13,7 +13,7 @@
     <link rel="canonical" href="<?= e($this->url($_SERVER['REQUEST_URI'])) ?>"/>
 </head>
 <body>
-    <?= $this->include('themes/default/partials/header.php') ?>
+    <?= $this->include('themes/default/partials/header.html') ?>
     <main>
         <?php if (!empty($_GET['search'])): ?>
             <div class="section blog-title">
@@ -39,7 +39,7 @@
             <script>var next_page_args = '';</script>
         <?php endif ?>
         <div id="posts" class="section posts">
-            <?= $this->include('themes/default/partials/posts_page.php') ?>
+            <?= $this->include('themes/default/partials/posts_page.html') ?>
             <?php if (empty($posts)): ?>
                 <h3 class="empty"><?= t('no_results') ?></h3>
             <?php endif ?>
@@ -48,7 +48,7 @@
             <button id="load-posts" class="load-more" onclick="loadNextPage(this, next_page_args)"><?= t('load_more') ?></button>
         <?php endif ?>
     </main>
-    <?= $this->include('themes/default/partials/footer.php') ?>
+    <?= $this->include('themes/default/partials/footer.html') ?>
     <script>
         var next_page = <?= js($current_page + 1) ?>;
 

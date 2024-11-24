@@ -21,7 +21,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         }
 
         if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !Helper::isValidId($_SESSION['user']['id'] ?? false)) {
-            echo $view->get("$theme_dir/information.php", [
+            echo $view->get("$theme_dir/information.html", [
                 'description' => $lang->get('under_maintenance'),
                 'subdescription' => $lang->get('come_back_soon'),
             ]);
@@ -35,7 +35,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->code(404, function() use ($view, $lang, $theme_dir) {
-        return $view->get("$theme_dir/information.php", [
+        return $view->get("$theme_dir/information.html", [
             'title' => '404',
             'description' => $lang->get('not_found'),
             'subdescription' => $lang->get('not_found_desc'),
@@ -63,7 +63,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             header('Location: /admin/dashboard');
         }
 
-        return $view->get('admin/login.php');
+        return $view->get('admin/login.html');
     });
 
     $router->post('json:admin/login', function() use ($user_mod, $lang) {
@@ -80,7 +80,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         $hash = bin2hex(random_bytes(18));
         $errors = $user_mod->requestPasswordRestore($_POST['email'],
             $hash,
-            $view->get('admin/emails/password_restore.php', [ 'hash' => $hash ]));
+            $view->get('admin/emails/password_restore.html', [ 'hash' => $hash ]));
 
         return json_encode([
             'success' => empty($errors),
@@ -89,7 +89,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/new_password', function() use ($view) {
-        return $view->get('admin/password_restore.php', [ 'hash' => $_GET['hash'] ]);
+        return $view->get('admin/password_restore.html', [ 'hash' => $_GET['hash'] ]);
     });
 
     $router->post('json:admin/password_restore', function() use ($user_mod) {
@@ -106,7 +106,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     });
 
     $router->get('admin/dashboard', function() use ($db, $view, $link_mod, $post_mod) {
-        return $view->get('admin/dashboard.php', [
+        return $view->get('admin/dashboard.html', [
             'links' => $link_mod->getPage(null, null, '', 'order'),
             'posts' => $post_mod->getPage(1, 6, $post_mod->getCondition([ 'status' => 1 ]), 'published_at', false),
             'total_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 1 ])),
@@ -122,7 +122,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     /* PAGES */
 
     $router->get('admin/pages', function() use ($view, $lang, $page_mod) {
-        return $view->get('admin/list.php', [
+        return $view->get('admin/list.html', [
             'title' => $lang->get('pages'),
             'show_add_button' => \Aurora\App\Permission::can('edit_pages'),
             'columns' => [
@@ -132,7 +132,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => \Aurora\App\Setting::get('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
-            'extra_header' => 'admin/partials/extra_headers/pages.php',
+            'extra_header' => 'admin/partials/extra_headers/pages.html',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -184,7 +184,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         natcasesort($view_files);
 
-        return $view->get('admin/page.php', [
+        return $view->get('admin/page.html', [
             'header_links' => $link_mod->getHeaderLinks(),
             'page' => $page,
             'view_files' => $view_files,
@@ -213,7 +213,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             $authors[$user['id']] = $user['name'];
         }
 
-        return $view->get('admin/list.php', [
+        return $view->get('admin/list.html', [
             'title' => $lang->get('posts'),
             'show_add_button' => \Aurora\App\Permission::can('edit_posts'),
             'columns' => [
@@ -223,7 +223,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_views'), 'class' => 'w10 numeric', 'condition' => \Aurora\App\Setting::get('views_count') ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
-            'extra_header' => 'admin/partials/extra_headers/posts.php',
+            'extra_header' => 'admin/partials/extra_headers/posts.html',
             'filters' => [
                 'user' => [
                     'title' => $lang->get('author'),
@@ -268,7 +268,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return;
         }
 
-        return $view->get('admin/post.php', [
+        return $view->get('admin/post.html', [
             'users' => $user_mod->getPage(),
             'tags' => $tag_mod->getPage(null, null, '', 'name'),
             'post' => $post,
@@ -304,7 +304,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             $roles[$role['level']] = $lang->get($role['slug']);
         }
 
-        return $view->get('admin/list.php', [
+        return $view->get('admin/list.html', [
             'title' => $lang->get('users'),
             'show_add_button' => \Aurora\App\Permission::can('edit_users'),
             'columns' => [
@@ -314,7 +314,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
-            'extra_header' => 'admin/partials/extra_headers/users.php',
+            'extra_header' => 'admin/partials/extra_headers/users.html',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -360,7 +360,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return;
         }
 
-        return $view->get('admin/user.php', [
+        return $view->get('admin/user.html', [
             'user' => $user,
             'roles' => $db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll(),
         ]);
@@ -407,7 +407,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     /* LINKS */
 
     $router->get('admin/links', function() use ($view, $lang, $link_mod) {
-        return $view->get('admin/list.php', [
+        return $view->get('admin/list.html', [
             'title' => $lang->get('links'),
             'show_add_button' => \Aurora\App\Permission::can('edit_links'),
             'columns' => [
@@ -417,7 +417,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('order'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
-            'extra_header' => 'admin/partials/extra_headers/links.php',
+            'extra_header' => 'admin/partials/extra_headers/links.html',
             'filters' => [
                 'status' => [
                     'title' => $lang->get('status'),
@@ -457,7 +457,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return;
         }
 
-        return $view->get('admin/link.php', [
+        return $view->get('admin/link.html', [
             'link' => $link,
         ]);
     });
@@ -479,7 +479,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     /* TAGS */
 
     $router->get('admin/tags', function() use ($view, $lang, $tag_mod) {
-        return $view->get('admin/list.php', [
+        return $view->get('admin/list.html', [
             'title' => $lang->get('tags'),
             'show_add_button' => \Aurora\App\Permission::can('edit_tags'),
             'columns' => [
@@ -488,7 +488,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('number_posts'), 'class' => 'w10 numeric' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
-            'extra_header' => 'admin/partials/extra_headers/tags.php',
+            'extra_header' => 'admin/partials/extra_headers/tags.html',
             'filters' => [
                 'order' => [
                     'title' => $lang->get('sort_by'),
@@ -519,7 +519,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return;
         }
 
-        return $view->get('admin/tag.php', [
+        return $view->get('admin/tag.html', [
             'tag' => $tag,
         ]);
     });
@@ -568,9 +568,9 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         natcasesort($folders);
 
-        return $view->get('admin/list.php', [
+        return $view->get('admin/list.html', [
             'title' => $lang->get('media'),
-            'custom_header' => $view->get('admin/partials/media_header.php', [
+            'custom_header' => $view->get('admin/partials/media_header.html', [
                 'path' => $path,
                 'folders' => $folders,
             ]),
@@ -580,7 +580,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 [ 'title' => $lang->get('last_modification'), 'class' => 'w20' ],
                 [ 'title' => '', 'class' => 'w10 row-actions' ],
             ],
-            'extra_header' => 'admin/partials/extra_headers/media.php',
+            'extra_header' => 'admin/partials/extra_headers/media.html',
             'filters' => [
                 'order' => [
                     'title' => $lang->get('sort_by'),
@@ -766,7 +766,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             return;
         }
 
-        return $view->get('admin/partials/images_dialog.php', [
+        return $view->get('admin/partials/images_dialog.html', [
             'path' => $path,
             'files' => array_filter($files, fn($file) => !$file['is_file'] || $file['is_image']),
         ]);
@@ -777,7 +777,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     $router->get('admin/settings', function() use ($view, $db, $lang) {
         $themes_dir = Helper::getPath(Kernel::config('views') . '/themes');
 
-        return $view->get('admin/settings.php', [
+        return $view->get('admin/settings.html', [
             'roles' => $db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll(),
             'themes' => array_filter(scandir($themes_dir), fn($file) => is_dir("$themes_dir/$file") && $file != '.' && $file != '..'),
             'languages' => $lang->getAll(),
@@ -822,7 +822,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 return json_encode([
                     'next_page' => false,
                     'count' => count($files),
-                    'html' => $view->get('admin/partials/lists/media.php', [ 'files' => $files ]),
+                    'html' => $view->get('admin/partials/lists/media.html', [ 'files' => $files ]),
                 ]);
             default:
                 http_response_code(404);
@@ -834,7 +834,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([
             'next_page' => $mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
             'count' => $mod->count($where),
-            'html' => $view->get("admin/partials/lists/$mod_str.php", [
+            'html' => $view->get("admin/partials/lists/$mod_str.html", [
                 $mod_str => $mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? $mod::DEFAULT_ORDER, ($_GET['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
             ]),
         ]);
@@ -1010,7 +1010,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         return json_encode([
             'next_page' => $post_mod->isNextPageAvailable($current_page, $per_page, $where),
-            'html' => $view->get("$theme_dir/partials/posts_page.php", [
+            'html' => $view->get("$theme_dir/partials/posts_page.html", [
                 'posts' => $post_mod->getPage($current_page, $per_page, $where),
             ]),
         ]);
@@ -1026,7 +1026,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             $where .= " AND (posts.title LIKE '%$search%' OR posts.description LIKE '%$search%')";
         }
 
-        return $view->get("$theme_dir/blog.php", [
+        return $view->get("$theme_dir/blog.html", [
             'header_links' => $link_mod->getHeaderLinks(),
             'title' => $lang->get('blog'),
             'posts' => $post_mod->getPage($current_page, $per_page, $where, 'date', false, true),
@@ -1050,7 +1050,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'users.id = ' . ((int) $user['id']),
         ]);
 
-        return $view->get("$theme_dir/blog.php", [
+        return $view->get("$theme_dir/blog.html", [
             'header_links' => $link_mod->getHeaderLinks(),
             'title' => $user['name'],
             'user' => $user,
@@ -1075,7 +1075,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             'posts.id IN (SELECT post_id FROM posts_to_tags WHERE tag_id = ' . ((int) $tag['id']) . ')',
         ]);
 
-        return $view->get("$theme_dir/blog.php", [
+        return $view->get("$theme_dir/blog.html", [
             'header_links' => $link_mod->getHeaderLinks(),
             'title' => $tag['name'],
             'tag' => $tag,
@@ -1107,7 +1107,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
             ]);
         }
 
-        return $view->get("$theme_dir/post.php", [
+        return $view->get("$theme_dir/post.html", [
             'header_links' => $link_mod->getHeaderLinks(),
             'post' => $post,
             'related_posts' => empty($post['tags_id'])
@@ -1118,7 +1118,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
     if (!empty($rss)) {
         $router->get("xml:$rss", function() use ($post_mod, $view, $theme_dir) {
-            return $view->get("$theme_dir/rss.php", [
+            return $view->get("$theme_dir/rss.html", [
                 'posts' => $post_mod->getPage(null, null, $post_mod->getCondition([ 'status' => 1 ]), 'date', false),
             ]);
         });
@@ -1146,7 +1146,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
 
         $template = !empty($page['static']) && !empty($page['static_file'])
             ? $page['static_file']
-            : 'page.php';
+            : 'page.html';
 
         return $view->get("$theme_dir/$template", [
             'header_links' => $link_mod->getHeaderLinks(),

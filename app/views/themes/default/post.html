@@ -2,7 +2,7 @@
 <html lang="<?= e(\Aurora\Core\Container::get('language')->getCode()) ?>">
 <head>
     <title><?= e($post['title'] . ' - ' . setting('title')) ?></title>
-    <?= $this->include('themes/default/partials/head.php') ?>
+    <?= $this->include('themes/default/partials/head.html') ?>
     <meta property="og:type" content="article">
     <meta property="og:title" content="<?= e($post[empty($post['meta_title']) ? 'title' : 'meta_title']) ?>"/>
     <meta property="og:description" content="<?= e($post[empty($post['meta_description']) ? 'description' : 'meta_description']) ?>"/>
@@ -13,7 +13,7 @@
     <link rel="canonical" href="<?= e(empty($post['canonical_url']) ? $this->url($_SERVER['REQUEST_URI']) : $post['canonical_url']) ?>"/>
 </head>
 <body>
-    <?= $this->include('themes/default/partials/header.php') ?>
+    <?= $this->include('themes/default/partials/header.html') ?>
     <main class="post">
         <div class="section narrow post-top">
             <div class="post-tags">
@@ -79,6 +79,6 @@
             </div>
         <?php endif ?>
     </main>
-    <?= $this->include('themes/default/partials/footer.php') ?>
+    <?= $this->include('themes/default/partials/footer.html') ?>
 </body>
 </html>

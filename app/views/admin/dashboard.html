@@ -1,4 +1,4 @@
-<?php $this->extend('admin/base.php') ?>
+<?php $this->extend('admin/base.html') ?>
 
 <?php $this->sectionStart('title') ?>
     <?= t('dashboard') ?>
@@ -8,7 +8,7 @@
     <div class="content">
         <div>
             <div class="page-title">
-                <?= $this->include('admin/partials/menu_btn.php') ?>
+                <?= $this->include('admin/partials/menu_btn.html') ?>
                 <h2><?= t('dashboard') ?></h2>
             </div>
         </div>
