@@ -98,7 +98,7 @@ final class Post extends \Aurora\App\ModuleBase
             $errors[0] = $this->language->get('no_permission');
         }
 
-        if ($data['status'] && !\Aurora\App\Permission::can('publish_posts')) {
+        if (!empty($data['status']) && !\Aurora\App\Permission::can('publish_posts')) {
             $errors[0] = $this->language->get('published_posts_permission_error');
         }
 
