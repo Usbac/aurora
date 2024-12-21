@@ -81,7 +81,6 @@ final class PostTest extends \Aurora\Tests\Modules\Base
      */
     public function testSave(): void
     {
-        $time = time();
         $this->assertEquals(2, $this->mod->save(2, [
             'title' => 'Top 5 beaches',
             'slug' => 'top-beaches',
