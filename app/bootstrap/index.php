@@ -53,5 +53,5 @@ return function (\Aurora\Core\Kernel $kernel) {
     \Aurora\App\Setting::set($settings);
     \Aurora\App\Media::setDirectory($kernel->config('content'));
 
-    (require('routes.php'))($kernel->router, $db, $view, $lang);
+    (require('routes.php'))($kernel, $db, $view, $lang);
 };

@@ -1,10 +1,8 @@
 <?php
 
-use Aurora\Core\{DB, Helper, Kernel, Language, Route, View};
+use Aurora\Core\{DB, Helper, Kernel, Language, View};
 
-const ITEMS_PER_PAGE = 20;
-
-return function (Route $router, DB $db, View $view, Language $lang) {
+return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang) {
     $user_mod = new \Aurora\App\Modules\User($db, $lang);
     $tag_mod = new \Aurora\App\Modules\Tag($db, $lang);
     $link_mod = new \Aurora\App\Modules\Link($db, $lang);
@@ -14,6 +12,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
     $blog_url = \Aurora\App\Setting::get('blog_url');
     $theme_dir = 'themes/' . \Aurora\App\Setting::get('theme');
     $rss = \Aurora\App\Setting::get('rss');
+    $router = $kernel->router;
 
     $router->middleware('*', function() use ($db, $view, $lang, $theme_dir) {
         if (Helper::isValidId($_SESSION['user']['id'] ?? false)) {
@@ -809,7 +808,7 @@ return function (Route $router, DB $db, View $view, Language $lang) {
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->get('json:admin/{mod}/page', function() use ($view, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->get('json:admin/{mod}/page', function() use ($kernel, $view, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $mod_str = $_GET['mod'] ?? '';
         switch ($mod_str) {
             case 'pages': $mod = $page_mod; break;
@@ -829,13 +828,14 @@ return function (Route $router, DB $db, View $view, Language $lang) {
                 return;
         }
 
+        $per_page = $kernel->config('per_page');
         $where = $mod->getCondition($_GET);
 
         return json_encode([
-            'next_page' => $mod->isNextPageAvailable($_GET['page'], ITEMS_PER_PAGE, $where),
+            'next_page' => $mod->isNextPageAvailable($_GET['page'], $per_page, $where),
             'count' => $mod->count($where),
             'html' => $view->get("admin/partials/lists/$mod_str.html", [
-                $mod_str => $mod->getPage($_GET['page'], ITEMS_PER_PAGE, $where, $_GET['order'] ?? $mod::DEFAULT_ORDER, ($_GET['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
+                $mod_str => $mod->getPage($_GET['page'], $per_page, $where, $_GET['order'] ?? $mod::DEFAULT_ORDER, ($_GET['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
             ]),
         ]);
     });

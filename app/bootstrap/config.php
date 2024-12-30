@@ -18,6 +18,7 @@ return [
     'date_format' => 'dd MMM Y HH:mm',
     'db'        => $db,
     'content'   => 'public/content',
+    'per_page'  => 1,
     'mail'      => fn($to, $subject, $message) => mail($to, $subject, $message),
     'views'     => 'app/views',
 ];
