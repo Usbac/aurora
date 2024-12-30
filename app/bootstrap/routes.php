@@ -175,7 +175,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $absolute_theme_dir = Helper::getPath(Kernel::config('views') . "/$theme_dir");
         $view_files = [];
 
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($absolute_theme_dir)) as $file) {
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($absolute_theme_dir)) as $file) {
             if ($file->isFile()) {
                 $view_files[] = mb_substr($file->getPathname(), mb_strlen($absolute_theme_dir) + 1);
             }
@@ -950,7 +950,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $zip = new ZipArchive();
         $zip->open($file_path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($absolute_path)) as $file) {
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($absolute_path)) as $file) {
             $real_path = $file->getRealPath();
             $relative_path = mb_substr($real_path, mb_strlen($absolute_path) + 1);
 
