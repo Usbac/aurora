@@ -452,10 +452,8 @@ button.delete svg {
     fill: white;
 }
 
-button.load-more {
+#load-more {
     margin: 0 auto;
-    background: var(--third-color);
-    color: var(--main-color);
 }
 
 .input-group-container {

@@ -281,7 +281,7 @@ class Listing {
 
         let listing = get('#main-listing');
         let total_items = get('#total-items');
-        let btn_load_more = get('button.load-more');
+        let btn_load_more = get('#load-more');
         btn_load_more.setLoading();
 
         if (this.#next_page == 1) {
