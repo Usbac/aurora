@@ -28,9 +28,10 @@ final class Media
      * @param [string] $search the search string
      * @param [string] $order the order (name, type, size)
      * @param [bool] $asc the order direction. true for ascending, false for descending
+     * @param [bool] $folders_at_top true to keep the folders at the start, false otherwise
      * @return array the files and folders in the given path
      */
-    public static function getFiles(string $path, string $search = '', string $order = 'name', bool $asc = true): array
+    public static function getFiles(string $path, string $search = '', string $order = 'name', bool $asc = true, bool $folders_at_top = false): array
     {
         $path = \Aurora\Core\Helper::getPath($path);
 
@@ -68,6 +69,10 @@ final class Media
                 'size' => $a['size'] <=> $b['size'],
             };
         });
+
+        if ($folders_at_top) {
+            usort($files, fn($a, $b) => $a['is_file'] <=> $b['is_file']);
+        }
 
         return $files;
     }
