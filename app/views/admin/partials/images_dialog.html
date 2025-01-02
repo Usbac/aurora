@@ -66,12 +66,11 @@
 </div>
 <div class="media-paths-container">
     <div class="media-paths">
-        <?= $this->include('icons/folder.svg') ?>
         <?php $folders = explode('/', trim($path, '/')) ?>
         <?php foreach ($folders as $i => $folder): ?>
             <?php $folder_path = implode('/', array_slice($folders, 0, $i + 1)) ?>
             <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
-                <a href="#" class="pointer" onclick="ImageDialog.setImagePage(<?= e(js($folder_path)) ?>)"><?= e($folder) ?></a>
+                <a href="#" class="pointer" onclick="ImageDialog.setImagePage(<?= e(js($folder_path)) ?>)"><?= $i == 1 ? $this->include('icons/home.svg') : e($folder) ?></a>
                 <span>/</span>
             <?php endif ?>
         <?php endforeach ?>
