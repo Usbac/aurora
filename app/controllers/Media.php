@@ -57,11 +57,17 @@ final class Media
             $files = array_filter($files, fn($file) => mb_stripos($file['name'], $search) !== false);
         }
 
-        match ($order) {
-            'type' => usort($files, fn($a, $b) => $asc ? $a['is_file'] <=> $b['is_file'] : $b['is_file'] <=> $a['is_file']),
-            'name' => usort($files, fn($a, $b) => $asc ? strnatcmp($a['name'], $b['name']) : strnatcmp($b['name'], $a['name'])),
-            'size' => usort($files, fn($a, $b) => $asc ? $a['size'] <=> $b['size'] : $b['size'] <=> $a['size']),
-        };
+        usort($files, function($a, $b) use ($order, $asc) {
+            if (!$asc) {
+                [ $a, $b ] = [ $b, $a ];
+            }
+
+            return match ($order) {
+                'type' => $a['is_file'] <=> $b['is_file'],
+                'name' => strnatcmp($a['name'], $b['name']),
+                'size' => $a['size'] <=> $b['size'],
+            };
+        });
 
         return $files;
     }
