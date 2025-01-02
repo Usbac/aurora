@@ -759,7 +759,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('admin/image_dialog', function() use ($view) {
         $path = $_GET['path'] ?? Kernel::config('content');
-        $files = \Aurora\App\Media::getFiles($path, '', 'name');
+        $files = \Aurora\App\Media::getFiles($path, '', 'name', true, true);
         if ($files === false) {
             http_response_code(404);
             return;
