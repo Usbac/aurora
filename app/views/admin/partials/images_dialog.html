@@ -6,17 +6,6 @@
         </span>
     </div>
     <div class="header">
-        <div class="media-paths">
-            <?= $this->include('icons/folder.svg') ?>
-            <?php $folders = explode('/', trim($path, '/')) ?>
-            <?php foreach ($folders as $i => $folder): ?>
-                <?php $folder_path = implode('/', array_slice($folders, 0, $i + 1)) ?>
-                <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
-                    <a href="#" class="pointer" onclick="ImageDialog.setImagePage(<?= e(js($folder_path)) ?>)"><?= e($folder) ?></a>
-                    <span>/</span>
-                <?php endif ?>
-            <?php endforeach ?>
-        </div>
         <div id="image-dialog-file-form">
             <button type="button" class="light" onclick="ImageDialog.close(); ImageDialog.clearImage();"><?= $this->t('remove_image') ?></button>
             <button type="button" id="image-dialog-file-button" onclick="get('#image-input-file').click()" <?php if (!\Aurora\App\Permission::can('edit_media')): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
@@ -74,4 +63,17 @@
     <?php if (empty($files)): ?>
         <span class="empty"><?= $this->t('no_items') ?></span>
     <?php endif ?>
+</div>
+<div class="media-paths-container">
+    <div class="media-paths">
+        <?= $this->include('icons/folder.svg') ?>
+        <?php $folders = explode('/', trim($path, '/')) ?>
+        <?php foreach ($folders as $i => $folder): ?>
+            <?php $folder_path = implode('/', array_slice($folders, 0, $i + 1)) ?>
+            <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
+                <a href="#" class="pointer" onclick="ImageDialog.setImagePage(<?= e(js($folder_path)) ?>)"><?= e($folder) ?></a>
+                <span>/</span>
+            <?php endif ?>
+        <?php endforeach ?>
+    </div>
 </div>

@@ -88,6 +88,10 @@ img {
     user-select: none;
 }
 
+svg {
+    flex-shrink: 0;
+}
+
 .warning {
     display: flex;
     justify-content: center;
@@ -341,23 +345,24 @@ dialog::backdrop {
     align-items: center;
 }
 
-.image-dialog .media-paths {
-    max-width: 100%;
-    flex-wrap: wrap;
-    position: relative;
-    top: initial;
-}
-
-.image-dialog .media-paths > a {
-    display: block;
+.media-paths-container {
+    --margin: 15px;
+    display: flex;
+    position: sticky;
+    left: var(--margin);
+    bottom: var(--margin);
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
+    width: calc(100% - (var(--margin) * 2));
 }
 
-.image-dialog .media-paths > span,
-.image-dialog .media-paths > a {
-    font-size: var(--font-size-bg);
+.image-dialog .media-paths {
+    position: relative;
+    max-width: fit-content;
+    bottom: 0;
+}
+
+.image-dialog .listing {
+    min-height: 100%;
 }
 
 .image-dialog .listing-row:not(.header):hover {
@@ -882,6 +887,7 @@ textarea.code {
     align-items: center;
     justify-content: space-between;
     align-items: flex-start;
+    position: relative;
     width: 100%;
 }
 
@@ -1061,6 +1067,10 @@ textarea.code {
     padding-left: 6px;
     min-width: initial;
     min-height: initial;
+}
+
+.listing-container {
+    margin-bottom: 40px;
 }
 
 .listing {
@@ -1379,23 +1389,37 @@ textarea.code {
 .media-paths {
     display: flex;
     align-items: center;
-    overflow: auto;
-    max-width: 80vw;
+    position: fixed;
+    bottom: 14px;
+    background: var(--fourth-color);
+    border: 1px var(--border-color) solid;
+    border-radius: 6px;
+    box-sizing: border-box;
+    max-width: calc(100vw - var(--nav-width) - (var(--content-spacing) * 2));
+    z-index: calc(var(--nav-z-index) - 2);
+    scrollbar-width: none;
+    padding: 4px 8px;
     gap: 4px;
+    overflow: auto;
 }
 
 .media-paths > a {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 26px;
     min-height: 18px;
     color: var(--main-color);
     text-decoration: none;
-    background: var(--fourth-color);
     padding: 4px 8px;
-    border: 1px var(--border-color) solid;
     border-radius: 6px;
+}
+
+.media-paths > * {
+    font-size: var(--font-size-bg);
+}
+
+.media-paths > a:hover {
+    background-color: var(--third-color);
 }
 
 .media-paths > a svg {
@@ -1500,6 +1524,10 @@ textarea.code {
 
     .grid.grid-two-columns {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .media-paths {
+        max-width: calc(100vw - (var(--content-spacing) * 2));
     }
 }
 

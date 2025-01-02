@@ -3,22 +3,8 @@
     <?= $this->include('admin/partials/menu_btn.html') ?>
     <div>
         <h2><?= $this->t('media') ?></h2>
-        <div>
-            <div class="media-paths">
-                <?php $paths = explode('/', trim($path, '/')) ?>
-                <?php foreach ($paths as $i => $folder): ?>
-                    <?php $folder_path = implode('/', array_slice($paths, 0, $i + 1)) ?>
-                    <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
-                        <a href="/admin/media?path=<?= e($folder_path) ?>" class="pointer"><?= $i == 1 ? $this->include('icons/home.svg') : e($folder) ?></a>
-                        <span>/</span>
-                    <?php endif ?>
-                <?php endforeach ?>
-            </div>
-            <div>
-                <span id="total-items">&nbsp;</span>
-                <span id="selected-items"></span>
-            </div>
-        </div>
+        <span id="total-items">&nbsp;</span>
+        <span id="selected-items"></span>
     </div>
 </div>
 <div class="media-options">
@@ -28,6 +14,17 @@
         <button onclick="get('#input-file').click()" title="<?= $this->t('upload_file') ?>" <?php if (!$can_edit_media): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
         <input id="input-file" type="file" class="hidden" name="file" oninput="uploadFile()"/>
     </div>
+</div>
+
+<div class="media-paths">
+    <?php $paths = explode('/', trim($path, '/')) ?>
+    <?php foreach ($paths as $i => $folder): ?>
+        <?php $folder_path = implode('/', array_slice($paths, 0, $i + 1)) ?>
+        <?php if (\Aurora\App\Media::isValidPath(\Aurora\Core\Helper::getPath($folder_path))): ?>
+            <a href="/admin/media?path=<?= e($folder_path) ?>" class="pointer"><?= $i == 1 ? $this->include('icons/home.svg') : e($folder) ?></a>
+            <span>/</span>
+        <?php endif ?>
+    <?php endforeach ?>
 </div>
 
 <div id="edit-dialog" class="dialog">
