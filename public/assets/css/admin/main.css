@@ -328,6 +328,9 @@ dialog::backdrop {
 }
 
 .image-dialog .top .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
     padding-top: 0;
 }
 
@@ -339,8 +342,17 @@ dialog::backdrop {
 }
 
 .image-dialog .media-paths {
+    max-width: 100%;
+    flex-wrap: wrap;
     position: relative;
     top: initial;
+}
+
+.image-dialog .media-paths > a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
 }
 
 .image-dialog .media-paths > span,
