@@ -22,7 +22,7 @@ class BaseCommand extends Command
         $absolute_theme_dir = \Aurora\Core\Helper::getPath($this->config['views'] . '/themes/' . $this->settings['theme']);
         $view_files = [ '' ];
 
-        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($absolute_theme_dir)) as $file) {
+        foreach (\Aurora\Core\Helper::getFileIterator($absolute_theme_dir) as $file) {
             if ($file->isFile()) {
                 $view_files[] = mb_substr($file->getPathname(), mb_strlen($absolute_theme_dir) + 1);
             }

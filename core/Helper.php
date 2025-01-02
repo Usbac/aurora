@@ -86,8 +86,7 @@ final class Helper
             mkdir($destination, $permission);
         }
 
-        $dir_iterator = new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+        $iterator = self::getFileIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS, \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $item) {
             $new_path = "$destination/" . call_user_func([ $iterator, 'getSubPathname' ]);
             $res = $item->isDir()
@@ -100,6 +99,21 @@ final class Helper
         }
 
         return true;
+    }
+
+    /**
+     * Returns a recursive file iterator
+     * @param string $path the path
+     * @param [int] $flags the flags
+     * @param [int] $mode the mode
+     * @return \RecursiveIteratorIterator a recursive file iterator
+     */
+    public static function getFileIterator(string $path,
+        int $flags = \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_FILEINFO,
+        int $mode = \RecursiveIteratorIterator::LEAVES_ONLY,
+    ): \RecursiveIteratorIterator
+    {
+        return new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, $flags), $mode);
     }
 
     /**
