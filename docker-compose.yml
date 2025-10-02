@@ -1,0 +1,9 @@
+services:
+  app:
+    build: ./docker
+    container_name: Aurora
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+    restart: unless-stopped
