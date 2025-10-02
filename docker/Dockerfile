@@ -6,8 +6,10 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     sqlite3 \
     libsqlite3-dev \
+    libicu-dev \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install pdo pdo_mysql pdo_sqlite zip \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite zip intl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
