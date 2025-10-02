@@ -1,6 +1,6 @@
 ## Requisites
 
-- [PHP 8.0](https://www.php.net) or higher (with the PDO and ZIP extensions enabled)
+- [PHP 8.0](https://www.php.net) or higher (with the pdo, pdo_mysql, pdo_sqlite, zip and intl extensions enabled)
 
 - [Apache 2.4](https://httpd.apache.org) or higher
 
