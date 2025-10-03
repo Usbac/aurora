@@ -28,8 +28,8 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !Helper::isCsrfTokenValid($_POST['csrf'] ?? '')) {
-            echo json_encode([ 'reload' => true ]);
-            exit;
+            //echo json_encode([ 'reload' => true ]);
+            //exit;
         }
     });
 
@@ -1151,6 +1151,90 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return $view->get("$theme_dir/$template", [
             'header_links' => $link_mod->getHeaderLinks(),
             ...$page,
+        ]);
+    });
+
+    /**
+     * API V2
+     */
+
+    $router->middleware('api/v2/*', function() use ($db, $user_mod) {
+        if (Helper::getCurrentPath() == 'api/v2/auth') {
+            return;
+        }
+
+        $token = preg_match('/Bearer\s(\S+)/', getallheaders()['Authorization'] ?? '', $matches)
+            ? $matches[1]
+            : false;
+
+        $user = $user_mod->get([
+            'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
+            'status' => 1,
+        ]);
+
+        if (empty($user)) {
+            http_response_code(401);
+            exit;
+        }
+    });
+
+    $router->any('json:api/v2/auth', function() use ($db, $user_mod) {
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $user = $user_mod->get([
+            'email' => $email,
+            'status' => 1,
+        ]);
+
+        if (!$user || !password_verify($password, $user['password'])) {
+            return json_encode([
+                'success' => false,
+                'error' => 'invalid_credentials',
+            ]);
+        }
+
+        $data = [ 'token' => bin2hex(random_bytes(64)) ];
+
+        try {
+            $data['success'] = (bool) $db->insert('tokens', [
+                'user_id' => $user['id'],
+                'token' => $data['token'],
+                'created_at' => time(),
+            ]);
+        } catch (\Exception) {
+            $data = [
+                'succcess' => false,
+                'error' => 'server_error',
+            ];
+        }
+
+        if (!$data['success']) {
+            unset($data['token']);
+        }
+
+        return json_encode($data);
+    });
+
+    $router->any('json:api/v2/posts', function() use ($post_mod) {
+        $current_page = max(1, (int) ($_POST['page'] ?? 1));
+        $per_page = \Aurora\App\Setting::get('per_page');
+        $where = [ $post_mod->getCondition([ 'status' => 1 ]) ];
+
+        if (!empty($_POST['user'])) {
+            $where[] = 'posts.user_id = ' . ((int) $_POST['user']);
+        }
+
+        if (!empty($_POST['tag'])) {
+            $where[] = 'posts.id IN (SELECT post_id FROM posts_to_tags WHERE tag_id = ' . ((int) $_POST['tag']) . ')';
+        }
+
+        $where = implode(' AND ', $where);
+
+        return json_encode([
+            'data' => $post_mod->getPage($current_page, $per_page, $where),
+            'meta' => [
+                'next_page' => $post_mod->isNextPageAvailable($current_page, $per_page, $where),
+            ],
         ]);
     });
 };
