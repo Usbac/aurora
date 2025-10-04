@@ -99,36 +99,24 @@ final class User extends \Aurora\App\ModuleBase
 
     /**
      * Sends an email to restore the password of an user
-     * @param string $email the user's email
+     * @param array $user the user's data
      * @param string $hash the hash to restore the password
      * @param string $message the email's content
-     * @return array the array with the errors, if empty it means the email has been sent.
+     * @return bool true on success, false otherwise
      */
-    public function requestPasswordRestore(string $email, string $hash, string $message): array
+    public function requestPasswordRestore(array $user, string $hash, string $message): bool
     {
-        $user = $this->get([
-            'email' => $email,
-            'status' => 1,
+        $success = (bool) $this->db->replace('password_restores', [
+            'user_id' => $user['id'],
+            'hash' => $hash,
+            'created_at' => time(),
         ]);
-        $errors = [];
 
-        if (!$user) {
-            $errors['email'] = $this->language->get('no_active_user');
+        if (!\Aurora\Core\Kernel::config('mail')($user['email'], $this->language->get('restore_your_password'), $message)) {
+            return false;
         }
 
-        if (empty($errors)) {
-            $this->db->replace('password_restores', [
-                'user_id' => $user['id'],
-                'hash' => $hash,
-                'created_at' => time(),
-            ]);
-
-            if (!\Aurora\Core\Kernel::config('mail')($email, $this->language->get('restore_your_password'), $message)) {
-                $errors['email'] = $this->language->get('error_sending_email');
-            }
-        }
-
-        return $errors;
+        return $success;
     }
 
     /**

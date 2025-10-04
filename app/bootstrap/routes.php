@@ -1167,7 +1167,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
      */
 
     $router->middleware('api/v2/*', function() use ($db, $user_mod) {
-        if (Helper::getCurrentPath() == 'api/v2/auth') {
+        if (in_array(Helper::getCurrentPath(), [ 'api/v2/auth', 'api/v2/send_password_restore' ])) {
             return;
         }
 
@@ -1229,6 +1229,20 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('json:api/v2/settings', function() {
         return json_encode(\Aurora\App\Setting::get());
+    });
+
+    $router->post('json:api/v2/send_password_restore', function() use ($view, $user_mod) {
+        $hash = bin2hex(random_bytes(18));
+        $user = $user_mod->get([
+            'email' => $_POST['email'] ?? '',
+            'status' => 1,
+        ]);
+
+        return json_encode([
+            'success' => !$user || $user_mod->requestPasswordRestore($user,
+                $hash,
+                $view->get('admin/emails/password_restore.html', [ 'hash' => $hash ])),
+        ]);
     });
 
     $router->any('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
