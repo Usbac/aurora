@@ -46,7 +46,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
      */
     
     $router->get([ 'console', 'console/*' ], function() use ($view) {
-        return $view->get('admin/index.html');
+        return $view->get('admin.html');
     });
 
     /**
