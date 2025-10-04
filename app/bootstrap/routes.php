@@ -42,6 +42,14 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     /**
+     * ADMIN 2
+     */
+    
+    $router->get([ 'console', 'console/*' ], function() use ($view) {
+        return $view->get('admin/index.html');
+    });
+
+    /**
      * ADMIN
      */
 
@@ -1215,25 +1223,34 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($data);
     });
 
-    $router->any('json:api/v2/posts', function() use ($post_mod) {
-        $current_page = max(1, (int) ($_POST['page'] ?? 1));
-        $per_page = \Aurora\App\Setting::get('per_page');
-        $where = [ $post_mod->getCondition([ 'status' => 1 ]) ];
-
-        if (!empty($_POST['user'])) {
-            $where[] = 'posts.user_id = ' . ((int) $_POST['user']);
+    $router->any('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+        $mod_str = $_GET['mod'] ?? '';
+        switch ($mod_str) {
+            case 'pages': $mod = $page_mod; break;
+            case 'posts': $mod = $post_mod; break;
+            case 'users': $mod = $user_mod; break;
+            case 'tags': $mod = $tag_mod; break;
+            case 'links': $mod = $link_mod; break;
+            case 'media':
+                return json_encode([
+                    'data' => \Aurora\App\Media::getFiles($_POST['path'] ?? Kernel::config('content'), $_POST['search'] ?? '', $_POST['order'] ?? 'type', ($_POST['sort'] ?? 'asc') == 'asc'),
+                    'meta' => [
+                        'next_page' => false,
+                    ],
+                ]);
+            default:
+                http_response_code(404);
+                return;
         }
 
-        if (!empty($_POST['tag'])) {
-            $where[] = 'posts.id IN (SELECT post_id FROM posts_to_tags WHERE tag_id = ' . ((int) $_POST['tag']) . ')';
-        }
-
-        $where = implode(' AND ', $where);
+        $page = $_GET['page'] ?? 1;
+        $per_page = $kernel->config('per_page');
+        $where = $mod->getCondition($_POST);
 
         return json_encode([
-            'data' => $post_mod->getPage($current_page, $per_page, $where),
+            'data' => $mod->getPage($page, $per_page, $where, $_POST['order'] ?? $mod::DEFAULT_ORDER, ($_POST['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
             'meta' => [
-                'next_page' => $post_mod->isNextPageAvailable($current_page, $per_page, $where),
+                'next_page' => $mod->isNextPageAvailable($page, $per_page, $where),
             ],
         ]);
     });
