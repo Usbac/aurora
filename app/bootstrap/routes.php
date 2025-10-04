@@ -1256,7 +1256,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->any('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $mod_str = $_GET['mod'] ?? '';
         switch ($mod_str) {
             case 'pages': $mod = $page_mod; break;
@@ -1265,8 +1265,14 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             case 'tags': $mod = $tag_mod; break;
             case 'links': $mod = $link_mod; break;
             case 'media':
+                $files = \Aurora\App\Media::getFiles(Kernel::config('content') . '/' . ltrim($_GET['path'] ?? '', '/'), $_GET['search'] ?? '', $_GET['order'] ?? 'type', ($_GET['sort'] ?? 'asc') == 'asc');
+
+                if ($_GET['images'] ?? false) {
+                    $files = array_filter($files, fn($file) => !$file['is_file'] || $file['is_image']);
+                }
+
                 return json_encode([
-                    'data' => \Aurora\App\Media::getFiles($_POST['path'] ?? Kernel::config('content'), $_POST['search'] ?? '', $_POST['order'] ?? 'type', ($_POST['sort'] ?? 'asc') == 'asc'),
+                    'data' => $files,
                     'meta' => [
                         'next_page' => false,
                     ],
@@ -1278,10 +1284,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
         $page = $_GET['page'] ?? 1;
         $per_page = $kernel->config('per_page');
-        $where = $mod->getCondition($_POST);
+        $where = $mod->getCondition($_GET);
 
         return json_encode([
-            'data' => $mod->getPage($page, $per_page, $where, $_POST['order'] ?? $mod::DEFAULT_ORDER, ($_POST['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
+            'data' => $mod->getPage($page, $per_page, $where, $_GET['order'] ?? $mod::DEFAULT_ORDER, ($_GET['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
             'meta' => [
                 'next_page' => $mod->isNextPageAvailable($page, $per_page, $where),
             ],
