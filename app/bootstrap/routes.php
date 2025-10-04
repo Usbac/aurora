@@ -1227,8 +1227,19 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($GLOBALS['user']);
     });
 
-    $router->get('json:api/v2/settings', function() {
-        return json_encode(\Aurora\App\Setting::get());
+    $router->get('json:api/v2/settings', function() use ($db, $lang) {
+        $themes_dir = Helper::getPath(Kernel::config('views') . '/themes');
+
+        return json_encode([
+            ...\Aurora\App\Setting::get(),
+            'meta' => [
+                'roles' => $db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll(),
+                'themes' => array_filter(scandir($themes_dir), fn($file) => is_dir("$themes_dir/$file") && $file != '.' && $file != '..'),
+                'languages' => $lang->getAll(),
+                'timezones' => \DateTimeZone::listIdentifiers(),
+                'db_dsn' => $db->dsn,
+            ],
+        ]);
     });
 
     $router->post('json:api/v2/send_password_restore', function() use ($view, $user_mod) {
