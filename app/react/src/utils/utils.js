@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 
@@ -23,7 +23,7 @@ export const makeRequest = async ({ method = 'GET', url, data = null }) => {
 
 export const useRequest = ({ method = 'GET', url, data = null, options = {} }) => {
     return useQuery({
-        queryKey: [ method, url, data, localStorage.getItem('auth_token') ],
+        queryKey: [ url, method, data, localStorage.getItem('auth_token') ],
         queryFn: () => makeRequest({ method, url, data }),
         staleTime: 5 * 60 * 1000, // 5 minutes
         refetchOnWindowFocus: true,
@@ -53,3 +53,21 @@ export const LoadingPage = () => <div className="content">
         <div className="spinner"/>
     </div>
 </div>;
+
+export const Input = (props) => {
+    const char_count = props.value?.length || 0;
+
+    return <>
+        <input {...props}/>
+        {props.charCount && <span class="char-counter">{char_count} character{char_count !== 1 ? 's' : ''}</span>}
+    </>;
+};
+
+export const Switch = (props) => {
+    const ref = useRef(null);
+
+    return <div class="switch">
+        <input ref={ref} type="checkbox" {...props}/>
+        <button type="button" class="slider" onClick={() => ref.current.click()}></button>
+    </div>;
+};
