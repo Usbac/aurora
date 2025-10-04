@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AdminPages from './components/AdminPages';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
 
 const App = () => {
     const query_client = new QueryClient();
@@ -15,6 +16,7 @@ const App = () => {
                 <Route path="/console" element={<Login/>}/>
                 <Route path="/console" element={<AdminPages/>}>
                     <Route path="dashboard" element={<Dashboard/>}/>
+                    <Route path="settings" element={<Settings/>}/>
                 </Route>
                 <Route path="*" element={<div>404 Not Found</div>}/>
             </Routes>
