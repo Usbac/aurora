@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from '../utils/icons';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useElement } from '../utils/utils';
 
 export default function AdminPages() {
+    const dark_theme_element = document.getElementById('css-dark');
     const user = useElement('/api/v2/me');
     const settings = useElement('/api/v2/settings');
-    const dark_theme_element = document.getElementById('css-dark');
     const [ theme, setTheme ] = useState(dark_theme_element?.hasAttribute('disabled') ? 'light' : 'dark');
+    const navigate = useNavigate();
 
     const toggleTheme = () => {
         const is_light_enabled = dark_theme_element.toggleAttribute('disabled');
@@ -15,8 +16,13 @@ export default function AdminPages() {
         document.cookie = 'theme=' + (is_light_enabled ? 'light' : 'dark') + ';path=/';
     };
 
+    const logout = () => {
+        localStorage.removeItem('auth_token');
+        navigate('/console', { replace: true });
+    };
+
     if (user === null) {
-        return <Navigate to="/console/login" replace/>;
+        return <Navigate to="/console" replace/>;
     }
 
     return <div className="admin">
@@ -61,9 +67,9 @@ export default function AdminPages() {
                 <div id="toggle-theme" class="pointer" title="Switch theme" onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}
                 </div>
-                <a href="/console/logout" class="pointer" title="Logout">
+                <div href="/console/logout" class="pointer" title="Logout" onClick={logout}>
                     <IconLogout/>
-                </a>
+                </div>
             </div>
         </nav>
         <Outlet context={{ user: user, settings: settings }}/>
