@@ -877,11 +877,6 @@ textarea.code {
     margin: 0 auto 0 10px;
 }
 
-#toggle-theme[data-theme="dark"] svg:first-of-type,
-#toggle-theme:not([data-theme="dark"]) svg:last-of-type {
-    display: none;
-}
-
 .admin > .content > *:first-child {
     display: flex;
     align-items: center;
