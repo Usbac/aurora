@@ -1261,6 +1261,35 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
+    $router->post('json:api/v2/media/upload', function() {
+        if (!\Aurora\App\Permission::can('edit_media')) {
+            http_response_code(403);
+            exit;
+        }
+
+        $success = true;
+        $path = Kernel::config('content') . '/' . ltrim($_GET['path'] ?? '', '/');
+        $files = [];
+
+        if (isset($_FILES['file']['name']) && !is_array($_FILES['file']['name'])) {
+            $files[] = $_FILES['file'];
+        } else {
+            foreach (array_keys($_FILES['file']['name'] ?? []) as $i) {
+                foreach (array_keys($_FILES['file']) as $prop) {
+                    $files[$i][$prop] = $_FILES['file'][$prop][$i];
+                }
+            }
+        }
+
+        foreach ($files as $file) {
+            if (!\Aurora\App\Media::uploadFile($file, $path)) {
+                $success = false;
+            }
+        }
+
+        return json_encode([ 'success' => $success ]);
+    });
+
     $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $mod_str = $_GET['mod'] ?? '';
         switch ($mod_str) {
