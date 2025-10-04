@@ -1224,7 +1224,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->get('json:api/v2/me', function() {
-        return json_encode($GLOBALS['user']);
+        $user = $GLOBALS['user'];
+        foreach (\Aurora\App\Permission::getPermissions() as $action) {
+            $user['actions'][$action] = \Aurora\App\Permission::can($action);
+        }
+
+        return json_encode($user);
     });
 
     $router->get('json:api/v2/settings', function() use ($db, $lang) {
