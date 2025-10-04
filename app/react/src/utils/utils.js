@@ -1,6 +1,8 @@
-import React, { useRef } from 'react';
-import axios from 'axios';
+import React, { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useQuery } from '@tanstack/react-query';
+import { IconFolderFill, IconHome, IconUploadFile, IconX } from './icons';
+import axios from 'axios';
 
 export const makeRequest = async ({ method = 'GET', url, data = null }) => {
     const form_data = new FormData();
@@ -70,4 +72,132 @@ export const Switch = (props) => {
         <input ref={ref} type="checkbox" {...props}/>
         <button type="button" class="slider" onClick={() => ref.current.click()}></button>
     </div>;
+};
+
+export const formatDate = (timestamp, timezone, locale) => {
+    return new Intl.DateTimeFormat(locale, {
+        timeZone: timezone,
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    }).format(new Date(timestamp * 1000));
+};
+
+export const formatSize = (bytes) => {
+    if (bytes === 0) {
+        return '0B';
+    }
+
+    const factor = Math.floor((bytes.toString().length - 1) / 3);
+    const size = bytes / Math.pow(1024, factor);
+
+    return `${size.toFixed(2)}${[ 'B', 'kB', 'MB', 'GB', 'TB' ][factor] ?? ''}`;
+};
+
+export const getContentUrl = (path = '') => {
+    const content_path = document.querySelector('meta[name="content_path"]')?.content || '/';
+    return '/' + content_path + '/' + path.replace(/^\/+|\/+$/g, '');
+};
+
+export const ImageDialog = ({ onSave, onClose }) => {
+    const user = useElement('/api/v2/me');
+    const settings = useElement('/api/v2/settings');
+    const [ path, setPath ] = useState('');
+    const { data: files_req, isLoading: is_loading, refetch: refetch_files } = useRequest({
+        method: 'GET',
+        url: `/api/v2/media?images=1&path=${path}`,
+    });
+    const folders = path.split('/');
+    const input_ref = useRef(null);
+
+    const uploadFile = async (e) => {
+        makeRequest({
+            method: 'POST',
+            url: `/api/v2/media/upload?path=${path}`,
+            data: {
+                file: e.target.files[0],
+            },
+        }).finally(() => {
+            refetch_files();
+            input_ref.current.value = '';
+        });
+    };
+
+    const ListingContent = () => {
+        const files = files_req ? files_req.data?.data : [];
+
+        if (is_loading) {
+            return <svg class="loading-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" fill="none" strokeWidth="10" r="36" strokeDasharray="171 56"></circle></svg>;
+        }
+
+        return <>
+            <div class="listing-row header">
+                <div class="w100"></div>
+                <div class="w20" title="Information">Information</div>
+                <div class="w20" title="Last modification">Last modification</div>
+            </div>
+            {files.map(file => {
+                const file_path = getContentUrl(file.path);
+                return <div
+                    class="listing-row file"
+                    onClick={() => {
+                        if (file.is_file) {
+                            onSave(file.path);
+                            onClose();
+                        } else {
+                            setPath(file.path);
+                        }
+                    }}
+                >
+                    <div class="w100 align-center">
+                        {file.is_file
+                            ? <a href={file_path} target="_blank" class="pointer" onClick={e => e.stopPropagation()}>
+                                <img src={file_path}/>
+                            </a>
+                            : <div className="pointer custom-media folder">
+                                <IconFolderFill/>
+                            </div>}
+                        <span class="file-name">{file.name}</span>
+                    </div>
+                    <div class="w20 file-info">
+                        {file.is_file && <p>{formatSize(file.size)}</p>}
+                        <p>{file.mime}</p>
+                    </div>
+                    <div class="w20">{formatDate(file.time, settings.timezone, settings.language)}</div>
+                </div>;
+            })}
+            {files.length == 0 && <span class="empty">No items</span>}
+        </>;
+    };
+
+    return createPortal(<div id="image-dialog" class="dialog image-dialog open">
+        <div>
+            <div class="top">
+                <div class="title">
+                    <h2>Image picker</h2>
+                    <span onClick={() => onClose()}><IconX/></span>
+                </div>
+                <div class="header">
+                    <div id="image-dialog-file-form">
+                        <button type="button" class="light" onClick={() => { onSave(null); onClose(); }}>Remove image</button>
+                        <button type="button" id="image-dialog-file-button" onClick={() => input_ref.current.click()} disabled={!user?.actions?.edit_media}><IconUploadFile/></button>
+                        <input ref={input_ref} type="file" class="hidden" accept="image/*" onInput={uploadFile}/>
+                    </div>
+                </div>
+            </div>
+            <div id="image-dialog-listing" class="listing">
+                <ListingContent/>
+            </div>
+            <div class="media-paths-container">
+                <div class="media-paths">
+                    {folders.map((folder, i) => <>
+                        <div class="pointer" onClick={() => setPath(folders.slice(0, i + 1).join('/'))}>{i == 0 ? <IconHome/> : folder}</div>
+                        <span>/</span>
+                    </>)}
+                </div>
+            </div>
+        </div>
+    </div>, document.querySelector('body'));
 };
