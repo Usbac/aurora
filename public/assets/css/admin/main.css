@@ -159,7 +159,7 @@ button.loading,
     animation: rotation 1s infinite linear;
     width: var(--size);
     height: var(--size);
-    stroke: var(--background-color);
+    stroke: var(--main-color);
 }
 
 .light .loading-icon {
