@@ -12,10 +12,9 @@ const App = () => {
     return <BrowserRouter>
         <QueryClientProvider className="app" client={query_client}>
             <Routes>
-                <Route path="/console/login" element={<Login/>}/>
+                <Route path="/console" element={<Login/>}/>
                 <Route path="/console" element={<AdminPages/>}>
                     <Route path="dashboard" element={<Dashboard/>}/>
-                    <Route path="" element={<Dashboard/>}/>
                 </Route>
                 <Route path="*" element={<div>404 Not Found</div>}/>
             </Routes>

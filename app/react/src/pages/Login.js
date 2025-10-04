@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { makeRequest } from '../utils/utils';
+import { makeRequest, useElement } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+    const user = useElement('/api/v2/me');
     const logo = document.querySelector('meta[name="logo"]')?.content;
     const [ loading, setLoading ] = useState(false);
     const [ email, setEmail ] = useState('');
@@ -44,6 +45,15 @@ export default function Login() {
             setEmail('');
         }).finally(() => setLoading(false));
     };
+
+    if (user === undefined) {
+        return <></>;
+    }
+
+    if (user) {
+        navigate('/console/dashboard');
+        return null;
+    }
 
     return <div className="login-page">
         <form id="login-form" className="card v-spacing" onSubmit={reset_password ? resetPassword : submitLogin}>
