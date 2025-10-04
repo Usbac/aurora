@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from '../utils/icons';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useElement } from '../utils/utils';
 
 export default function AdminPages() {
@@ -28,46 +28,46 @@ export default function AdminPages() {
     return <div className="admin">
         <nav>
             <header>
-                <img src="/public/assets/logo.svg" alt=""/>
+                <img src="/public/assets/logo.svg"/>
                 <h1>Aurora</h1>
             </header>
             <div class="admin-options">
-                <a href="/console/dashboard">
+                <Link to="/console/dashboard">
                     <IconHome/> Dashboard
-                </a>
+                </Link>
                 <a href="/" target="_blank">
                     <IconWindow/> View Site
                 </a>
-                <a href="/console/pages" data-separator>
+                <Link to="/console/pages" data-separator>
                     <IconBook/> Pages
-                </a>
-                <a href="/console/posts">
+                </Link>
+                <Link to="/console/posts">
                     <IconPencil/> Posts
-                </a>
-                <a href="/console/tags">
+                </Link>
+                <Link to="/console/tags">
                     <IconTag/> Tags
-                </a>
-                <a href="/console/media">
+                </Link>
+                <Link to="/console/media">
                     <IconImage/> Media
-                </a>
-                <a href="/console/users">
+                </Link>
+                <Link to="/console/users">
                     <IconUser/> Users
-                </a>
-                <a href="/console/links">
+                </Link>
+                <Link to="/console/links">
                     <IconLink/> Links
-                </a>
-                <a href="/console/settings">
+                </Link>
+                <Link to="/console/settings">
                     <IconSettings/> Settings
-                </a>
+                </Link>
             </div>
             <div class="current-user">
-                <a href={`/console/users/edit?id=${user?.id}`} title={user?.name}>
+                <Link to={`/console/users/edit?id=${user?.id}`} title={user?.name}>
                     <img src={user?.image ? user.image : '/public/assets/no-image.svg'} className="empty-img"/>
-                </a>
+                </Link>
                 <div id="toggle-theme" class="pointer" title="Switch theme" onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}
                 </div>
-                <div href="/console/logout" class="pointer" title="Logout" onClick={logout}>
+                <div class="pointer" title="Logout" onClick={logout}>
                     <IconLogout/>
                 </div>
             </div>
