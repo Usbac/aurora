@@ -1175,12 +1175,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             ? $matches[1]
             : false;
 
-        $user = $user_mod->get([
+        $GLOBALS['user'] = $user_mod->get([
             'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
             'status' => 1,
         ]);
 
-        if (empty($user)) {
+        if (empty($GLOBALS['user'])) {
             http_response_code(401);
             exit;
         }
@@ -1221,6 +1221,14 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode($data);
+    });
+
+    $router->get('json:api/v2/me', function() {
+        return json_encode($GLOBALS['user']);
+    });
+
+    $router->get('json:api/v2/settings', function() {
+        return json_encode(\Aurora\App\Setting::get());
     });
 
     $router->any('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
