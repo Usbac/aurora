@@ -19,7 +19,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             $_SESSION['user'] = $db->query('SELECT * FROM users WHERE id = ? AND status', $_SESSION['user']['id'])->fetch();
         }
 
-        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !Helper::isValidId($_SESSION['user']['id'] ?? false)) {
+        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($_SESSION['user']['id'] ?? false)) {
             echo $view->get("$theme_dir/information.html", [
                 'description' => $lang->get('under_maintenance'),
                 'subdescription' => $lang->get('come_back_soon'),

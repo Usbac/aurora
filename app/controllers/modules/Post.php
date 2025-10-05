@@ -115,11 +115,16 @@ final class Post extends \Aurora\App\ModuleBase
         $where = [];
 
         if (isset($filters['status']) && $filters['status'] !== '') {
-            $where[] = match (strval($filters['status'])) {
+            $val = match (strval($filters['status'])) {
                 '1' => 'posts.status AND posts.published_at <= ' . time(),
                 '0' => 'posts.status = 0',
                 'scheduled' => 'posts.status AND posts.published_at > ' . time(),
+                default => '',
             };
+
+            if ($val) {
+                $where[] = $val;
+            }
         }
 
         if (isset($filters['user']) && $filters['user'] !== '') {
