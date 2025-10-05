@@ -1290,6 +1290,29 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
+    $router->post('json:api/v2/settings', function() use ($db) {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            exit;
+        }
+
+        try {
+            $db->connection->beginTransaction();
+
+            foreach ($_POST as $key => $val) {
+                $db->replace('settings', [ 'key' => $key, 'value' => $val ]);
+            }
+
+            $success = $db->connection->commit();
+        } catch (\PDOException $e) {
+            $db->connection->rollBack();
+            error_log($e->getMessage());
+            $success = false;
+        }
+
+        return json_encode([ 'success' => $success ]);
+    });
+
     $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $mod_str = $_GET['mod'] ?? '';
         switch ($mod_str) {
