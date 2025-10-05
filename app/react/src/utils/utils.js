@@ -73,6 +73,15 @@ export const Input = (props) => {
     </>;
 };
 
+export const Textarea = (props) => {
+    const char_count = props.value?.length || 0;
+
+    return <>
+        <textarea {...props}></textarea>
+        {props.charCount && <span class="char-counter">{char_count} character{char_count !== 1 ? 's' : ''}</span>}
+    </>
+};
+
 export const Switch = (props) => {
     const ref = useRef(null);
 
