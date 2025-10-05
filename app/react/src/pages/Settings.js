@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getContentUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch } from '../utils/utils';
+import { getContentUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea } from '../utils/utils';
 import { IconCode, IconDatabase, IconNote, IconServer, IconSettings, IconSync, IconTerminal } from '../utils/icons';
 import { useLocation, useOutletContext } from 'react-router-dom';
 
@@ -62,8 +62,31 @@ const General = ({ data, setData }) => {
                 </div>
                 <div class="input-group">
                     <label>Maintenance mode</label>
-                    <Switch checked={data.maintenance} onChange={e => setData({ ...data, maintenance: e.target.checked })}/>
+                    <Switch checked={data.maintenance == 1} onChange={e => setData({ ...data, maintenance: e.target.checked })}/>
                 </div>
+            </div>
+        </div>
+    </div>;
+};
+
+const Meta = ({ data, setData }) => {
+    return <div class="grid">
+        <div class="card v-spacing">
+            <div class="input-group">
+                <label for="meta_title">Meta title</label>
+                <Input id="meta_title" type="text" value={data.meta_title} onChange={e => setData({ ...data, meta_title: e.target.value })} charCount/>
+            </div>
+            <div class="input-group">
+                <label for="description">Description</label>
+                <Textarea value={data.description} onChange={e => setData({ ...data, description: e.target.value })} charCount/>
+            </div>
+            <div class="input-group">
+                <label for="meta_description">Meta description</label>
+                <Textarea value={data.meta_description} onChange={e => setData({ ...data, meta_description: e.target.value })} charCount/>
+            </div>
+            <div class="input-group">
+                <label for="meta_keywords">Meta keywords</label>
+                <Input type="text" value={data.meta_keywords} onChange={e => setData({ ...data, meta_keywords: e.target.value })}/>
             </div>
         </div>
     </div>;
@@ -75,6 +98,7 @@ export default function Settings() {
     const [ hash, setHash ] = useState(location.hash);
     const { user, settings } = useOutletContext();
     const [ data, setData ] = useState(undefined);
+    const [ loading, setLoading ] = useState(false);
 
     useEffect(() => {
         const onHashChange = () => setHash(window.location.hash);
@@ -88,7 +112,13 @@ export default function Settings() {
 
     const save = e => {
         e.preventDefault();
-        console.log(data);
+        setLoading(true);
+        makeRequest({
+            method: 'POST',
+            url: '/api/v2/settings',
+            data: data,
+        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'))
+        .finally(() => setLoading(false));
     };
 
     if (!data) {
@@ -102,7 +132,7 @@ export default function Settings() {
                 <h2>Settings</h2>
             </div>
             <div class="buttons">
-                <button type="submit" disabled={!user?.actions?.edit_settings}>Save</button>
+                <button type="submit" disabled={!user?.actions?.edit_settings || loading}>Save</button>
             </div>
         </div>
         <div class="grid grid-two-columns wide">
@@ -122,6 +152,7 @@ export default function Settings() {
             </div>
             {settings && <>
                 {hash == '#general' && <General data={data} setData={setData}/>}
+                {hash == '#meta' && <Meta data={data} setData={setData}/>}
             </>}
         </div>
         <div id="image-dialog" class="dialog image-dialog">
