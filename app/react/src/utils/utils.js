@@ -8,7 +8,15 @@ export const makeRequest = async ({ method = 'GET', url, data = null }) => {
     const form_data = new FormData();
 
     if (data) {
-        Object.keys(data).forEach(key => form_data.append(key, data[key]));
+        Object.keys(data).forEach(key => {
+            let val = data[key];
+
+            if (typeof val === 'boolean') {
+                val = val ? '1' : '0';
+            }
+
+            form_data.append(key, val);
+        });
     }
 
     return axios({
