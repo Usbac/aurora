@@ -19,7 +19,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             $_SESSION['user'] = $db->query('SELECT * FROM users WHERE id = ? AND status', $_SESSION['user']['id'])->fetch();
         }
 
-        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($_SESSION['user']['id'] ?? false)) {
+        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !str_starts_with(Helper::getCurrentPath(), 'console') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($_SESSION['user']['id'] ?? false)) {
             echo $view->get("$theme_dir/information.html", [
                 'description' => $lang->get('under_maintenance'),
                 'subdescription' => $lang->get('come_back_soon'),
@@ -1180,6 +1180,8 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             'status' => 1,
         ]);
 
+        \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $GLOBALS['user']['role'] ?? 0);
+
         if (empty($GLOBALS['user'])) {
             http_response_code(401);
             exit;
@@ -1288,6 +1290,30 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode([ 'success' => $success ]);
+    });
+
+    $router->get('json:api/v2/db', function() use ($db) {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            return;
+        }
+
+        return json_encode([
+            'meta' => [
+                'created' => date('Y-m-d H:i:s'),
+                'version' => Kernel::VERSION,
+            ],
+            'tables' => (new \Aurora\App\Migration($db))->export(),
+        ]);
+    });
+
+    $router->get('json:api/v2/reset_views_count', function() use ($db) {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            return;
+        }
+
+        return json_encode([ 'success' => $db->delete('views') ]);
     });
 
     $router->post('json:api/v2/settings', function() use ($db) {
