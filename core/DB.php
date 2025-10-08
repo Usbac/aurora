@@ -90,7 +90,7 @@ class DB
     public function delete(string $table, $id = null, string $column = 'id'): bool
     {
         return !isset($id)
-            ? $this->connection->exec("DELETE FROM $table")
+            ? $this->connection->exec("DELETE FROM $table") !== false
             : $this->connection->prepare("DELETE FROM $table WHERE `$column` = ?")->execute([ $id ]);
     }
 
