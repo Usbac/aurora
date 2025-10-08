@@ -92,6 +92,63 @@ const Meta = ({ data, setData }) => {
     </div>;
 };
 
+const Data = ({ data, setData, user }) => {
+    const downloadDB = () => {
+        makeRequest({
+            method: 'GET',
+            url: '/api/v2/db',
+            options: { responseType: 'blob' },
+        }).then(res => {
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(new Blob([ res.data ]));
+            link.setAttribute('download', 'data.json');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        });
+    };
+
+    const uploadDb = () => {
+        if (confirm('Are you sure about updating the current database?')) {
+
+        }
+    };
+
+    const resetViewsCount = () => {
+        if (confirm('Are you sure about resetting the views count of all items?')) {
+            makeRequest({
+                method: 'GET',
+                url: '/api/v2/reset_views_count',
+            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+        }
+    };
+
+    return <div class="grid">
+        <div class="card v-spacing">
+            <div class="input-group">
+                <label>Download database</label>
+                <button type="button" class="light" onClick={downloadDB} disabled={!user?.actions?.edit_settings}>.json</button>
+            </div>
+            <div id="db-upload" class="input-group">
+                <label for="database">Upload database</label>
+                <div class="input-file">
+                    <input id="database" type="file" name="db" class="hidden"/>
+                    <input type="text" disabled/>
+                    <label for="database" class="pointer">Select file</label>
+                </div>
+                <button type="button" class="light" onClick={uploadDb} disabled={!user?.actions?.edit_settings}>Upload .json</button>
+            </div>
+            <div class="input-group">
+                <label>Views counter</label>
+                <Switch checked={data.views_count == 1} onChange={e => setData({ ...data, views_count: e.target.checked })}/>
+                <div id="reset-views">
+                    <button type="button" class="light" onClick={resetViewsCount} disabled={!user?.actions?.edit_settings}>Reset views count</button>
+                </div>
+            </div>
+        </div>
+    </div>;
+};
+
 export default function Settings() {
     const version = document.querySelector('meta[name="version"]')?.content;
     const location = useLocation();
@@ -153,6 +210,7 @@ export default function Settings() {
             {settings && <>
                 {hash == '#general' && <General data={data} setData={setData}/>}
                 {hash == '#meta' && <Meta data={data} setData={setData}/>}
+                {hash == '#data' && <Data data={data} setData={setData} user={user}/>}
             </>}
         </div>
         <div id="image-dialog" class="dialog image-dialog">
