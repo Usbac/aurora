@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { IconFolderFill, IconHome, IconUploadFile, IconX } from './icons';
 import axios from 'axios';
 
-export const makeRequest = async ({ method = 'GET', url, data = null }) => {
+export const makeRequest = async ({ method = 'GET', url, data = null, options = {} }) => {
     const form_data = new FormData();
 
     if (data) {
@@ -26,6 +26,7 @@ export const makeRequest = async ({ method = 'GET', url, data = null }) => {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
+        ...options,
     }).catch(err => {
         console.error(err);
     });
