@@ -1263,7 +1263,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->post('json:api/v2/media/upload', function() {
+    $router->post('json:api/v2/media', function() {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
             exit;

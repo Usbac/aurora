@@ -133,7 +133,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
     const uploadFile = async (e) => {
         makeRequest({
             method: 'POST',
-            url: `/api/v2/media/upload?path=${path}`,
+            url: `/api/v2/media?path=${path}`,
             data: {
                 file: e.target.files[0],
             },
