@@ -219,3 +219,12 @@ export const ImageDialog = ({ onSave, onClose }) => {
         </div>
     </div>, document.querySelector('body'));
 };
+
+export const downloadFile = (data, filename) => {
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(new Blob([ data ]));
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+};
