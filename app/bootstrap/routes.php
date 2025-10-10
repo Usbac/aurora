@@ -1295,7 +1295,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     $router->get('json:api/v2/db', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
-            return;
+            exit;
         }
 
         return json_encode([
@@ -1310,7 +1310,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     $router->get('json:api/v2/reset_views_count', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
-            return;
+            exit;
         }
 
         return json_encode([ 'success' => $db->delete('views') ]);
