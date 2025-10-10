@@ -1389,6 +1389,23 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
+    $router->get('json:api/v2/server', function() use ($db) {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            exit;
+        }
+
+        return json_encode([
+            'os' => php_uname('s') . ' ' . php_uname('r'),
+            'php_version' => phpversion(),
+            'db_dsn' => $db->dsn,
+            'root_folder' => rtrim(\Aurora\Core\Helper::getPath(), '/'),
+            'date' => date('Y-m-d H:i:s'),
+            'memory_limit' => \Aurora\Core\Helper::getPhpSize(ini_get('memory_limit')),
+            'file_size_limit' => \Aurora\App\Media::getMaxUploadFileSize(),
+        ]);
+    });
+
     $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $mod_str = $_GET['mod'] ?? '';
         switch ($mod_str) {

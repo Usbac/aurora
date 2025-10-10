@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { downloadFile, getContentUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea } from '../utils/utils';
+import { downloadFile, formatSize, getContentUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea } from '../utils/utils';
 import { IconCode, IconDatabase, IconNote, IconServer, IconSettings, IconSync, IconTerminal } from '../utils/icons';
 import { useLocation, useOutletContext } from 'react-router-dom';
 
@@ -222,6 +222,86 @@ const Advanced = ({ data, setData, user }) => {
     </div>;
 };
 
+const Info = () => {
+    const [ server, setServer ] = useState(undefined);
+
+    useEffect(() => {
+        makeRequest({
+            method: 'GET',
+            url: '/api/v2/server',
+        }).then(res => setServer(res?.data));
+    }, []);
+
+    if (!server) {
+        return null;
+    }
+
+    return <div class="grid">
+        <div class="card v-spacing">
+            <div class="input-group">
+                <label>Operating system</label>
+                <span>{server.os}</span>
+            </div>
+            <div class="input-group">
+                <label>PHP version</label>
+                <span>{server.php_version}</span>
+            </div>
+            <div class="input-group">
+                <label>Database</label>
+                <span>{server.db_dsn}</span>
+            </div>
+            <div class="input-group">
+                <label>Host name</label>
+                <span>{server.host_name}</span>
+            </div>
+            <div class="input-group">
+                <label>Root folder</label>
+                <span>{server.root_folder}</span>
+            </div>
+            <div class="input-group">
+                <label>Time</label>
+                <span>{server.date}</span>
+            </div>
+            <div class="input-group">
+                <label>Memory limit</label>
+                <span>{formatSize(server.memory_limit)}</span>
+            </div>
+            <div class="input-group">
+                <label>File size upload limit</label>
+                <span class="description">The value is the lowest possible value between the <code>post_max_size</code> and the <code>upload_max_filesize</code> options of your PHP configuration.</span>
+                <span>{formatSize(server.file_size_limit)}</span>
+            </div>
+        </div>
+    </div>;
+};
+
+const Code = ({ data, setData }) => {
+    return <div class="grid">
+        <div class="card v-spacing">
+            <div class="input-group">
+                <label for="site-header">Site header</label>
+                <span class="description">Code here will be injected into the header of all pages.</span>
+                <textarea id="site-header" name="header_code" class="code" value={data.header_code} onChange={e => setData({ ...data, header_code: e.target.value })}></textarea>
+            </div>
+            <div class="input-group">
+                <label for="site-footer">Site footer</label>
+                <span class="description">Code here will be injected into the footer of all pages.</span>
+                <textarea id="site-footer" name="footer_code" class="code" value={data.footer_code} onChange={e => setData({ ...data, footer_code: e.target.value })}></textarea>
+            </div>
+            <div class="input-group">
+                <label for="post-code">Post code</label>
+                <span class="description">Code here will be injected at the bottom of all post pages. Useful for things like adding a comment system.</span>
+                <textarea id="post-code" name="post_code" class="code" value={data.post_code} onChange={e => setData({ ...data, post_code: e.target.value })}></textarea>
+            </div>
+            <div class="input-group">
+                <label for="editor-code">Editor code</label>
+                <span class="description">Code here will be injected into the editor of all pages.</span>
+                <textarea id="editor-code" name="editor_code" class="code" value={data.editor_code} onChange={e => setData({ ...data, editor_code: e.target.value })}></textarea>
+            </div>
+        </div>
+    </div>;
+};
+
 export default function Settings() {
     const version = document.querySelector('meta[name="version"]')?.content;
     const location = useLocation();
@@ -285,6 +365,8 @@ export default function Settings() {
                 {hash == '#meta' && <Meta data={data} setData={setData}/>}
                 {hash == '#data' && <Data data={data} setData={setData} user={user}/>}
                 {hash == '#advanced' && <Advanced data={data} setData={setData} user={user}/>}
+                {hash == '#info' && <Info/>}
+                {hash == '#code' && <Code data={data} setData={setData}/>}
             </>}
         </div>
         <div id="image-dialog" class="dialog image-dialog">
