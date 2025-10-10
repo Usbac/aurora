@@ -47,6 +47,7 @@ return function (\Aurora\Core\Kernel $kernel) {
 
     $view = new \Aurora\Core\View(\Aurora\Core\Helper::getPath($kernel->config('views')), new \Aurora\App\ViewHelper($kernel->config('date_format'), $lang));
 
+    \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $_SESSION['user']['role']?? 0);
     \Aurora\App\Permission::addMethod('impersonate', fn($user) => ($user['status'] ?? false) && $user['role'] <= ($_SESSION['user']['role'] ?? 0) && \Aurora\App\Permission::can('impersonate'));
     \Aurora\App\Permission::addMethod('edit_user', fn($user) => ($user['role'] ?? 0) <= ($_SESSION['user']['role'] ?? 0) && \Aurora\App\Permission::can('edit_users'));
     \Aurora\App\Setting::set($settings);
