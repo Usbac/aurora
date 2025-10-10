@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getContentUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea } from '../utils/utils';
+import React, { useEffect, useRef, useState } from 'react';
+import { downloadFile, getContentUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea } from '../utils/utils';
 import { IconCode, IconDatabase, IconNote, IconServer, IconSettings, IconSync, IconTerminal } from '../utils/icons';
 import { useLocation, useOutletContext } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ const General = ({ data, setData }) => {
             <div class="input-group-container">
                 <div class="input-group">
                     <label>Theme</label>
-                    <select name="theme">
+                    <select onChange={e => setData({ ...data, theme: e.target.value })}>
                         {Object.keys(data.meta.themes).map(theme => <option value={theme} selected={data.theme == data.meta.themes[theme]}>{data.meta.themes[theme]}</option>)}
                     </select>
                 </div>
@@ -43,7 +43,7 @@ const General = ({ data, setData }) => {
                 <div class="input-group">
                     <label>System language</label>
                     <span class="description">System language</span>
-                    <select name="language">
+                    <select onChange={e => setData({ ...data, language: e.target.value })}>
                         {data.meta.languages.map(lang => <option value={lang} selected={data.language == lang}>{lang}</option>)}
                     </select>
                 </div>
@@ -56,7 +56,7 @@ const General = ({ data, setData }) => {
             <div class="input-group-container">
                 <div class="input-group">
                     <label>Timezone</label>
-                    <select name="timezone">
+                    <select onChange={e => setData({ ...data, timezone: e.target.value })}>
                         {data.meta.timezones.map(tz => <option value={tz} selected={data.timezone == tz}>{tz.replace('_', ' ')}</option>)}
                     </select>
                 </div>
@@ -93,24 +93,26 @@ const Meta = ({ data, setData }) => {
 };
 
 const Data = ({ data, setData, user }) => {
-    const downloadDB = () => {
+    const file_ref = useRef(null);
+    const [ database_file, setDatabaseFile ] = useState(null);
+
+    const downloadDatabase = () => {
         makeRequest({
             method: 'GET',
             url: '/api/v2/db',
             options: { responseType: 'blob' },
-        }).then(res => {
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(new Blob([ res.data ]));
-            link.setAttribute('download', 'data.json');
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-        });
+        }).then(res => downloadFile(res.data, 'data.json'));
     };
 
-    const uploadDb = () => {
+    const uploadDatabase = async () => {
         if (confirm('Are you sure about updating the current database?')) {
-
+            makeRequest({
+                method: 'POST',
+                url: '/api/v2/db',
+                data: { file: database_file },
+            }).finally(() => {
+                file_ref.current.value = '';
+            });
         }
     };
 
@@ -127,16 +129,16 @@ const Data = ({ data, setData, user }) => {
         <div class="card v-spacing">
             <div class="input-group">
                 <label>Download database</label>
-                <button type="button" class="light" onClick={downloadDB} disabled={!user?.actions?.edit_settings}>.json</button>
+                <button type="button" class="light" onClick={downloadDatabase} disabled={!user?.actions?.edit_settings}>.json</button>
             </div>
             <div id="db-upload" class="input-group">
                 <label for="database">Upload database</label>
                 <div class="input-file">
-                    <input id="database" type="file" name="db" class="hidden"/>
-                    <input type="text" disabled/>
-                    <label for="database" class="pointer">Select file</label>
+                    <input ref={file_ref} id="database" type="file" name="db" class="hidden" onChange={e => setDatabaseFile(e.target.files[0])}/>
+                    <input type="text" disabled value={database_file?.name}/>
+                    <label htmlFor="database" class="pointer">Select file</label>
                 </div>
-                <button type="button" class="light" onClick={uploadDb} disabled={!user?.actions?.edit_settings}>Upload .json</button>
+                <button type="button" class="light" onClick={uploadDatabase} disabled={!user?.actions?.edit_settings}>Upload .json</button>
             </div>
             <div class="input-group">
                 <label>Views counter</label>
@@ -146,6 +148,77 @@ const Data = ({ data, setData, user }) => {
                 </div>
             </div>
         </div>
+    </div>;
+};
+
+const Advanced = ({ data, setData, user }) => {
+    const [ logs, setLogs ] = useState(undefined);
+
+    useEffect(() => {
+        loadLogs();
+    }, []);
+
+    const loadLogs = () => {
+        makeRequest({
+            method: 'GET',
+            url: '/api/v2/logs',
+        }).then(res => {
+            setLogs(res?.data || '');
+        });
+    };
+
+    const downloadLogs = () => {
+        downloadFile(logs, `Aurora ${new Date().toISOString().slice(0, 19).replace('T', ' ')}.log`);
+    };
+
+    const deleteLogs = () => {
+        makeRequest({
+            method: 'DELETE',
+            url: '/api/v2/logs',
+        }).then(res => {
+            alert(res?.data?.success ? 'Done' : 'Error');
+            setLogs(undefined);
+        }).finally(() => loadLogs());
+    };
+
+    return <div class="grid">
+        <div class="card v-spacing">
+            <div class="input-group">
+                <label for="session_lifetime">Session lifetime</label>
+                <span class="description">PHP Session lifetime in seconds (e.g. 3600 = 1 hour)</span>
+                <input id="session_lifetime" type="number" value={data.session_lifetime} onChange={e => setData({ ...data, session_lifetime: e.target.value })}/>
+            </div>
+            <div class="input-group">
+                <label for="samesite_cookie">Session SameSite cookie</label>
+                <span class="description">PHP session SameSite cookie</span>
+                <select onChange={e => setData({ ...data, samesite_cookie: e.target.value })}>
+                    {[ 'None', 'Lax', 'Strict' ].map(cookie => <option value={cookie} selected={data.samesite_cookie == cookie}>{cookie}</option>)}
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Display errors</label>
+                <Switch checked={data.display_errors == 1} onChange={e => setData({ ...data, display_errors: e.target.checked })}/>
+            </div>
+            <div class="input-group">
+                <label>Log errors</label>
+                <Switch checked={data.log_errors == 1} onChange={e => setData({ ...data, log_errors: e.target.checked })}/>
+            </div>
+            <div class="input-group">
+                <label for="log_file">Log file</label>
+                <span class="description">Relative to the Aurora root folder</span>
+                <input id="log_file" name="log_file" type="text" value={data.log_file} onChange={e => setData({ ...data, log_file: e.target.value })}/>
+            </div>
+        </div>
+        {data.log_file && <div class="card v-spacing">
+            <div id="logs" class="input-group">
+                <label>Logs</label>
+                <textarea placeholder={logs === undefined ? 'Loading...' : 'No logs'} readonly value={logs}></textarea>
+                <div class="input-group">
+                    <button type="button" class="light" onClick={downloadLogs}>Download</button>
+                    <button type="button" class="delete" onClick={deleteLogs} disabled={!user?.actions?.edit_settings}>Clear</button>
+                </div>
+            </div>
+        </div>}
     </div>;
 };
 
@@ -211,6 +284,7 @@ export default function Settings() {
                 {hash == '#general' && <General data={data} setData={setData}/>}
                 {hash == '#meta' && <Meta data={data} setData={setData}/>}
                 {hash == '#data' && <Data data={data} setData={setData} user={user}/>}
+                {hash == '#advanced' && <Advanced data={data} setData={setData} user={user}/>}
             </>}
         </div>
         <div id="image-dialog" class="dialog image-dialog">

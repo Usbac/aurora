@@ -1307,6 +1307,56 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
+    $router->post('json:api/v2/db', function() use ($db, $lang) {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            exit;
+        }
+
+        $error = false;
+
+        try {
+            $json = json_decode(file_get_contents($_FILES['file']['tmp_name'] ?? ''), true);
+            $version = is_scalar($json['meta']['version'] ?? null) ? explode('.', (string) $json['meta']['version']) : null;
+
+            if (!isset($version) || explode('.', \Aurora\Core\Kernel::VERSION)[0] != $version[0]) {
+                $error = 'invalid_db_version';
+            } elseif (!(new \Aurora\App\Migration($db))->import($json['tables'] ?? false)) {
+                $error = 'invalid_db_file';
+            }
+        } catch (\Throwable) {
+            $error = 'invalid_db_file';
+        }
+
+        $data = [
+            'success' => $error === false,
+        ];
+
+        if ($error !== false) {
+            $data['error'] = $error;
+        }
+
+        return json_encode($data);
+    });
+
+    $router->get('api/v2/logs', function() {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            exit;
+        }
+
+        return file_get_contents(\Aurora\Core\Helper::getPath(\Aurora\App\Setting::get('log_file')));
+    });
+
+    $router->delete('json:api/v2/logs', function() use ($lang) {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            exit;
+        }
+
+        return json_encode([ 'success' => unlink(Helper::getPath(\Aurora\App\Setting::get('log_file'))) ]);
+    });
+
     $router->get('json:api/v2/reset_views_count', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
@@ -1348,7 +1398,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             case 'tags': $mod = $tag_mod; break;
             case 'links': $mod = $link_mod; break;
             case 'media':
-                $files = \Aurora\App\Media::getFiles(Kernel::config('content') . '/' . ltrim($_GET['path'] ?? '', '/'), $_GET['search'] ?? '', $_GET['order'] ?? 'type', ($_GET['sort'] ?? 'asc') == 'asc');
+                $files = \Aurora\App\Media::getFiles(Kernel::config('content') . '/' . ltrim($_GET['path'] ?? '', '/'),
+                    $_GET['search'] ?? '',
+                    $_GET['order'] ?? 'type',
+                    ($_GET['sort'] ?? 'asc') == 'asc');
 
                 if ($_GET['images'] ?? false) {
                     $files = array_filter($files, fn($file) => !$file['is_file'] || $file['is_image']);
