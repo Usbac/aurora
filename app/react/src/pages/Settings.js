@@ -309,6 +309,15 @@ export default function Settings() {
     const { user, settings } = useOutletContext();
     const [ data, setData ] = useState(undefined);
     const [ loading, setLoading ] = useState(false);
+    const SECTIONS = [
+        { id: 'general', name: 'General', icon: IconSettings, section: General },
+        { id: 'meta', name: 'Meta', icon: IconNote, section: Meta },
+        { id: 'data', name: 'Data', icon: IconDatabase, section: Data },
+        { id: 'advanced', name: 'Advanced', icon: IconTerminal, section: Advanced },
+        { id: 'info', name: 'Server Info', icon: IconServer, section: Info },
+        { id: 'code', name: 'Code', icon: IconCode, section: Code },
+        { id: 'update', name: 'Update', icon: IconSync, section: <></> },
+    ];
 
     useEffect(() => {
         const onHashChange = () => setHash(window.location.hash);
@@ -349,25 +358,12 @@ export default function Settings() {
             <div class="grid">
                 <div>
                     <div class="tabs">
-                        <a href="#general" data-checked={hash == '#general'}><IconSettings/> General</a>
-                        <a href="#meta" data-checked={hash == '#meta'}><IconNote/> Meta</a>
-                        <a href="#data" data-checked={hash == '#data'}><IconDatabase/> Data</a>
-                        <a href="#advanced" data-checked={hash == '#advanced'}><IconTerminal/> Advanced</a>
-                        <a href="#info" data-checked={hash == '#info'}><IconServer/> Server Info</a>
-                        <a href="#code" data-checked={hash == '#code'}><IconCode/> Code</a>
-                        <a href="#update" data-checked={hash == '#update'}><IconSync/> Update</a>
+                        {SECTIONS.map(section => <a href={'#' + section.id} data-checked={hash == ('#' + section.id)}><section.icon/> {section.name}</a>)}
                     </div>
                     <p class="version">Version: {version}</p>
                 </div>
             </div>
-            {settings && <>
-                {hash == '#general' && <General data={data} setData={setData}/>}
-                {hash == '#meta' && <Meta data={data} setData={setData}/>}
-                {hash == '#data' && <Data data={data} setData={setData} user={user}/>}
-                {hash == '#advanced' && <Advanced data={data} setData={setData} user={user}/>}
-                {hash == '#info' && <Info/>}
-                {hash == '#code' && <Code data={data} setData={setData}/>}
-            </>}
+            {settings && SECTIONS.map(section => (hash == ('#' + section.id) && <section.section data={data} setData={setData} user={user}/>))}
         </div>
         <div id="image-dialog" class="dialog image-dialog">
             <div></div>
