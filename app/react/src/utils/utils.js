@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { useQuery } from '@tanstack/react-query';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IconFolderFill, IconHome, IconUploadFile, IconX } from './icons';
+import { createPortal } from 'react-dom';
 import axios from 'axios';
 
 export const makeRequest = async ({ method = 'GET', url, data = null, options = {} }) => {
@@ -19,31 +18,57 @@ export const makeRequest = async ({ method = 'GET', url, data = null, options = 
         });
     }
 
-    return axios({
-        method: method,
-        url: url,
-        data: form_data,
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-        },
-        ...options,
-    }).catch(err => {
+    try {
+        const res = await axios({
+            method,
+            url,
+            data: form_data,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+            },
+            ...options,
+        });
+
+        return res;
+    } catch (err) {
         console.error(err);
-    });
+        throw err;
+    }
 };
 
-export const useRequest = ({ method = 'GET', url, data = null, options = {} }) => {
-    return useQuery({
-        queryKey: [ url, method, data, localStorage.getItem('auth_token') ],
-        queryFn: () => makeRequest({ method, url, data }),
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        refetchOnWindowFocus: true,
-        ...options
-    });
+export const useRequest = (params, dependencies = []) => {
+    const [ data, setData ] = useState(null);
+    const [ is_loading, setIsLoading ] = useState(true);
+    const [ is_error, setIsError ] = useState(false);
+
+    const fetch = useCallback(async () => {
+        setIsLoading(true);
+        setIsError(false);
+
+        try {
+            const res = await makeRequest(params);
+            setData(res);
+        } catch (err) {
+            setIsError(true);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [ JSON.stringify(params) ]);
+
+    useEffect(() => {
+        fetch();
+    }, dependencies);
+
+    return {
+        data: data,
+        is_loading: is_loading,
+        is_error: is_error,
+        refetch: fetch,
+    };
 };
 
 export const useElement = (url) => {
-    const { data: data, isLoading: is_loading, isError: is_error } = useRequest({
+    const { data, is_loading, is_error } = useRequest({
         url: url,
         staleTime: 0,
     });
@@ -123,7 +148,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
     const user = useElement('/api/v2/me');
     const settings = useElement('/api/v2/settings');
     const [ path, setPath ] = useState('');
-    const { data: files_req, isLoading: is_loading, refetch: refetch_files } = useRequest({
+    const { data: files_req, is_loading, refetch: refetch_files } = useRequest({
         method: 'GET',
         url: `/api/v2/media?images=1&path=${path}`,
     });
