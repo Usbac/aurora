@@ -9,7 +9,7 @@ export default function Links() {
             url="/api/v2/links"
             title="Links"
             addLink="/links/new"
-            onClick={link => navigate(`/console/links/edit?id=${link.id}`)}
+            rowOnClick={link => navigate(`/console/links/edit?id=${link.id}`)}
             filters={{
                 status: {
                     title: 'Status',
@@ -39,22 +39,22 @@ export default function Links() {
                 {
                     title: '',
                     class: 'w100',
-                    content: link => <></>,
+                    content: link => <h3>{link.title}</h3>,
                 },
                 {
                     title: 'URL',
                     class: 'w20',
-                    content: link => <></>,
+                    content: link => link.url,
                 },
                 {
                     title: 'Status',
                     class: 'w20',
-                    content: link => <></>,
+                    content: link => <span class={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{link.status == 1 ? 'Active' : 'Inactive'}</span>,
                 },
                 {
                     title: 'Order',
                     class: 'w10 numeric',
-                    content: link => <></>,
+                    content: link => link.order,
                 },
                 {
                     title: '',
