@@ -50,7 +50,8 @@ export const Table = ({
     const params = useMemo(() => new URLSearchParams(window.location.search), []);
     const [ page, setPage ] = useState(params.get('page') ? parseInt(params.get('page')) : 1);
     const [ search, setSearch ] = useState(params.get('search') || '');
-    const [ filters, setFilters ] = useState(initialFilters); // TODO initialize from params
+    const [ input_search, setInputSearch ] = useState(params.get('search') || '');
+    const [ filters, setFilters ] = useState(initialFilters);
     const [ query_string, setQueryString ] = useState(getQueryString(filters, search, page));
     const [ rows, setRows ] = useState([]);
     const { data: page_req, is_loading, is_error, fetch } = useRequest({
@@ -61,7 +62,7 @@ export const Table = ({
 
     useEffect(() => {
         setQueryString(getQueryString(filters, search, page));
-    }, [ filters ]);
+    }, [ filters, search, page ]);
 
     useEffect(() => {
         fetch();
@@ -87,6 +88,7 @@ export const Table = ({
                 });
 
                 setFilters({ ...filters, [id]: aux });
+                setPage(1);
             }}>
                 {Object.keys(filter.options).map(opt_key => <option
                     value={filter.options[opt_key].key}
@@ -106,7 +108,9 @@ export const Table = ({
         <form class="filters" onSubmit={e => {
             e.preventDefault();
             setPage(1);
-            let aux = getQueryString(filters, search, 1);
+            setSearch(input_search);
+            
+            const aux = getQueryString(filters, input_search, 1);
             if (aux !== query_string) {
                 setQueryString(aux);
             } else {
@@ -114,7 +118,7 @@ export const Table = ({
             }
         }}>
             {Object.keys(filters).map(key => <Filter key={key} id={key}/>)}
-            <input type="text" name="search" placeholder="Search" value={search} onChange={e => setSearch(e.target.value)}/>
+            <input type="text" name="search" placeholder="Search" value={input_search} onChange={e => setInputSearch(e.target.value)}/>
             <button type="submit"><IconGlass/></button>
         </form>
         {ExtraHeader && <ExtraHeader/>}
