@@ -132,13 +132,6 @@ export const Table = ({
                 ))}
             </div>
         </div>
-        <button
-            id="load-more"
-            class="light"
-            onClick={() => setPage(prevPage => prevPage + 1)}
-            style={{ display: page_req && page_req.data && page_req.data.length > 0 ? 'block' : 'none' }}
-        >
-            Load more
-        </button>
+        {page_req?.data?.meta?.next_page && <button id="load-more" class="light" onClick={() => setPage(page + 1)}>Load more</button>}
     </>;
 };
