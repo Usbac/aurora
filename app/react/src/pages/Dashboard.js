@@ -5,11 +5,11 @@ import { useOutletContext } from 'react-router-dom';
 
 export default function Dashboard() {
     const { settings } = useOutletContext();
-    const { data: links_req, isLoading: is_loading_links } = useRequest({
+    const { data: links_req, is_loading: is_loading_links } = useRequest({
         method: 'GET',
         url: '/api/v2/links',
     });
-    const { data: posts_req, isLoading: is_loading_posts } = useRequest({
+    const { data: posts_req, is_loading: is_loading_posts } = useRequest({
         method: 'GET',
         url: '/api/v2/posts?limit=6&status=1&order=published_at&sort=desc',
     });
