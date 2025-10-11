@@ -316,7 +316,7 @@ export default function Settings() {
         { id: 'advanced', name: 'Advanced', icon: IconTerminal, section: Advanced },
         { id: 'info', name: 'Server Info', icon: IconServer, section: Info },
         { id: 'code', name: 'Code', icon: IconCode, section: Code },
-        { id: 'update', name: 'Update', icon: IconSync, section: <></> },
+        //{ id: 'update', name: 'Update', icon: IconSync, section: <></> },
     ];
 
     useEffect(() => {
