@@ -36,7 +36,7 @@ export const makeRequest = async ({ method = 'GET', url, data = null, options = 
     }
 };
 
-export const useRequest = (params, dependencies = []) => {
+export const useRequest = (params) => {
     const [ data, setData ] = useState(null);
     const [ is_loading, setIsLoading ] = useState(true);
     const [ is_error, setIsError ] = useState(false);
@@ -55,15 +55,11 @@ export const useRequest = (params, dependencies = []) => {
         }
     }, [ JSON.stringify(params) ]);
 
-    useEffect(() => {
-        fetch();
-    }, dependencies);
-
     return {
         data: data,
         is_loading: is_loading,
         is_error: is_error,
-        refetch: fetch,
+        fetch: fetch,
     };
 };
 
