@@ -69,8 +69,8 @@ export const useRequest = (params, dependencies = []) => {
 
 export const useElement = (url) => {
     const { data, is_loading, is_error } = useRequest({
+        method: 'GET',
         url: url,
-        staleTime: 0,
     });
 
     if (is_loading) {
