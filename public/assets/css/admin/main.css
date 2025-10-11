@@ -1144,6 +1144,7 @@ textarea.code {
     text-decoration: none;
     color: var(--main-color);
     gap: 16px;
+    cursor: pointer;
 }
 
 .listing-row div {
