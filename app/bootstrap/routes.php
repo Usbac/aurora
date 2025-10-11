@@ -1427,6 +1427,9 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 return json_encode([
                     'data' => $files,
                     'meta' => [
+                        'current_page' => 1,
+                        'per_page' => false,
+                        'prev_page' => false,
                         'next_page' => false,
                     ],
                 ]);
@@ -1435,13 +1438,16 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 return;
         }
 
-        $page = $_GET['page'] ?? 1;
+        $page = (int) max($_GET['page'] ?? 1, 1);
         $per_page = $kernel->config('per_page');
         $where = $mod->getCondition($_GET);
 
         return json_encode([
             'data' => $mod->getPage($page, $per_page, $where, $_GET['order'] ?? $mod::DEFAULT_ORDER, ($_GET['sort'] ?? ($mod::DEFAULT_SORT ?? 'asc')) == 'asc'),
             'meta' => [
+                'current_page' => $page,
+                'per_page' => $per_page,
+                'prev_page' => $page > 1,
                 'next_page' => $mod->isNextPageAvailable($page, $per_page, $where),
             ],
         ]);
