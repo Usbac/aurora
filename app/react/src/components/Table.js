@@ -45,12 +45,14 @@ export const Table = ({
     addLink = false,
     filters: initialFilters = [],
     columns = [],
+    rowOnClick = null,
 }) => {
     const params = useMemo(() => new URLSearchParams(window.location.search), []);
     const [ page, setPage ] = useState(params.get('page') ? parseInt(params.get('page')) : 1);
     const [ search, setSearch ] = useState(params.get('search') || '');
     const [ filters, setFilters ] = useState(initialFilters); // TODO initialize from params
     const [ query_string, setQueryString ] = useState(getQueryString(filters, search, page));
+    const [ rows, setRows ] = useState([]);
     const { data: page_req, is_loading, is_error, fetch } = useRequest({
         method: 'GET',
         url: url + (query_string ? `?${query_string}` : ''),
@@ -64,6 +66,13 @@ export const Table = ({
     useEffect(() => {
         fetch();
     }, [ query_string ]);
+
+    useEffect(() => {
+        const page_rows = page_req?.data?.data || null;
+        if (page_rows) {
+            setRows(page == 1 ? page_rows : [ ...rows, ...page_rows ]);
+        }
+    }, [ page_req ]);
 
     const Filter = ({ id }) => {
         const filter = filters[id];
@@ -112,12 +121,24 @@ export const Table = ({
         <div class="listing-container">
             <div class="listing">
                 <div class="listing-row header">
-                    {columns.filter(c => c.condition === undefined || c.condition).map(c => <div class={c.class} title={c.title}>{c.title}</div>)}
+                    {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class} title={c.title}>{c.title}</div>)}
                 </div>
             </div>
             <div class="listing">
+                {rows.map((row, index) => (
+                    <div key={row.id || index} class="listing-row" onClick={e => rowOnClick ? rowOnClick(row, e) : null}>
+                        {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class}>{c.content(row, index)}</div>)}
+                    </div>
+                ))}
             </div>
         </div>
-        <button id="load-more" class="light hidden">Load more</button>
+        <button
+            id="load-more"
+            class="light"
+            onClick={() => setPage(prevPage => prevPage + 1)}
+            style={{ display: page_req && page_req.data && page_req.data.length > 0 ? 'block' : 'none' }}
+        >
+            Load more
+        </button>
     </>;
 };
