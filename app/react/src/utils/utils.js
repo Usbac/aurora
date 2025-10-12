@@ -18,14 +18,20 @@ export const makeRequest = async ({ method = 'GET', url, data = null, options = 
         });
     }
 
+    let headers = {
+        Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+    };
+
+    if ([ 'DELETE', 'PUT' ].includes(method)) {
+        headers['Content-Type'] = 'application/json';
+    }
+
     try {
         const res = await axios({
             method,
             url,
+            headers: headers,
             data: form_data,
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-            },
             ...options,
         });
 
