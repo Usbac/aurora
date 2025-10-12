@@ -64,10 +64,14 @@ export const useRequest = (params) => {
 };
 
 export const useElement = (url) => {
-    const { data, is_loading, is_error } = useRequest({
+    const { data, is_loading, is_error, fetch } = useRequest({
         method: 'GET',
         url: url,
     });
+
+    useEffect(() => {
+        fetch();
+    }, []);
 
     if (is_loading) {
         return undefined;
