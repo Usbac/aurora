@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from '../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { makeRequest } from '../utils/utils';
 
 export default function Links() {
     const { user } = useOutletContext();
@@ -47,7 +48,15 @@ export default function Links() {
                     title: 'Delete',
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_links),
-                    onClick: () => alert('Delete clicked'),
+                    onClick: (links) => {
+                        if (confirm('Are you sure you want to delete the selected links? This action cannot be undone.')) {
+                            makeRequest({
+                                method: 'DELETE',
+                                url: '/api/v2/links',
+                                data: { id: links.map(l => l.id) },
+                            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                        }
+                    },
                 },
             ]}
             columns={[
