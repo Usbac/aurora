@@ -1092,7 +1092,6 @@ textarea.code {
 .batch-options-container > div {
     display: flex;
     gap: 10px;
-    visibility: hidden;
 }
 
 .batch-options-container button {
