@@ -1431,6 +1431,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                         'per_page' => false,
                         'prev_page' => false,
                         'next_page' => false,
+                        'total_items' => count($files),
                     ],
                 ]);
             default:
@@ -1449,6 +1450,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 'per_page' => $per_page,
                 'prev_page' => $page > 1,
                 'next_page' => $mod->isNextPageAvailable($page, $per_page, $where),
+                'total_items' => $mod->count($where),
             ],
         ]);
     });
