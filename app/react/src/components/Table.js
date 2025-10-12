@@ -2,14 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { MenuButton, useRequest } from '../utils/utils';
 import { IconGlass } from '../utils/icons';
 
-const DefaultHeader = ({ title, addLink = null }) => {
+const DefaultHeader = ({ title, totalItems, selectedItems = 0, addLink = null }) => {
     return <>
         <div class="page-title">
             <MenuButton/>
             <div>
                 <h2>{title}</h2>
-                <span id="total-items">&nbsp;</span>
-                <span id="selected-items"></span>
+                <span id="total-items">{totalItems} item{totalItems != 1 ? 's' : ''}</span>
+                {selectedItems > 0 && <span id="selected-items">{selectedItems} selected</span>}
             </div>
         </div>
         {addLink && <a href={addLink} class="button" title="New"><b>+</b>&nbsp;New</a>}
@@ -57,7 +57,6 @@ export const Table = ({
     const { data: page_req, is_loading, is_error, fetch } = useRequest({
         method: 'GET',
         url: url + (query_string ? `?${query_string}` : ''),
-        data: {},
     });
 
     useEffect(() => {
@@ -103,7 +102,7 @@ export const Table = ({
 
     return <>
         <div>
-            {CustomHeader ? <CustomHeader/> : <DefaultHeader title={title} addLink={addLink}/>}
+            {CustomHeader ? <CustomHeader/> : <DefaultHeader title={title} totalItems={page_req?.data?.meta?.total_items} addLink={addLink}/>}
         </div>
         <form class="filters" onSubmit={e => {
             e.preventDefault();
