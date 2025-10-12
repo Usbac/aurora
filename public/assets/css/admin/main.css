@@ -909,7 +909,6 @@ textarea.code {
 }
 
 #selected-items {
-    visibility: hidden;
     margin-left: 6px;
     font-variant-numeric: tabular-nums;
 }

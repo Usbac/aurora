@@ -85,6 +85,20 @@ export const Table = ({
         setSelectedRows([]);
     }, [ select_mode ]);
 
+    const submit = e => {
+        e.preventDefault();
+        setPage(1);
+        setSearch(input_search);
+        
+        const aux = getQueryString(filters, input_search, 1);
+        if (aux !== query_string) {
+            setQueryString(aux);
+        } else {
+            setSelectedRows([]);
+            fetch();
+        }
+    };
+
     const toggleRow = i => {
         let aux = [ ...selected_rows ];
 
@@ -120,26 +134,25 @@ export const Table = ({
         </div>;
     };
 
-    if (is_loading) return <p>Cargando...</p>;
-    if (is_error) return <p>Error al cargar los datos.</p>;
+    const Rows = () => {
+        if (is_loading) return <p>Cargando...</p>;
+        if (is_error) return <p>Error al cargar los datos.</p>;
+
+        return rows.map((row, i) => <div
+            key={i}
+            class="listing-row"
+            onClick={e => select_mode ? toggleRow(i) : (rowOnClick ? rowOnClick(row, e) : null)}
+            data-selected={selected_rows.includes(i)}
+        >
+            {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class}>{c.content(row, i)}</div>)}
+        </div>);
+    };
 
     return <>
         <div>
-            {CustomHeader ? <CustomHeader/> : <DefaultHeader title={title} totalItems={page_req?.data?.meta?.total_items} addLink={addLink}/>}
+            {CustomHeader ? <CustomHeader/> : <DefaultHeader title={title} totalItems={page_req?.data?.meta?.total_items} selectedItems={selected_rows.length} addLink={addLink}/>}
         </div>
-        <form class="filters" onSubmit={e => {
-            e.preventDefault();
-            setPage(1);
-            setSearch(input_search);
-            
-            const aux = getQueryString(filters, input_search, 1);
-            if (aux !== query_string) {
-                setQueryString(aux);
-            } else {
-                setSelectedRows([]);
-                fetch();
-            }
-        }}>
+        <form class="filters" onSubmit={submit}>
             {Object.keys(filters).map(key => <Filter key={key} id={key}/>)}
             <input type="text" name="search" placeholder="Search" value={input_search} onChange={e => setInputSearch(e.target.value)}/>
             <button type="submit"><IconGlass/></button>
@@ -162,14 +175,7 @@ export const Table = ({
                 </div>
             </div>
             <div class="listing">
-                {rows.map((row, i) => <div
-                    key={i}
-                    class="listing-row"
-                    onClick={e => select_mode ? toggleRow(i) : (rowOnClick ? rowOnClick(row, e) : null)}
-                    data-selected={selected_rows.includes(i)}
-                >
-                    {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class}>{c.content(row, i)}</div>)}
-                </div>)}
+                <Rows/>
             </div>
         </div>
         {page_req?.data?.meta?.next_page && <button id="load-more" class="light" onClick={() => setPage(page + 1)}>Load more</button>}
