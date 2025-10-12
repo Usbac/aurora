@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { MenuButton, useRequest } from '../utils/utils';
 import { IconGlass } from '../utils/icons';
 
-const DefaultHeader = ({ title, totalItems, selectedItems = 0, addLink = null }) => {
-    return <>
+const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
+    return <div>
         <div class="page-title">
             <MenuButton/>
             <div>
@@ -12,8 +12,8 @@ const DefaultHeader = ({ title, totalItems, selectedItems = 0, addLink = null })
                 {selectedItems > 0 && <span id="selected-items">{selectedItems} selected</span>}
             </div>
         </div>
-        {addLink && <a href={addLink} class="button" title="New"><b>+</b>&nbsp;New</a>}
-    </>;
+        {options.map((opt, i) => <button key={i} className="button" onClick={opt.onClick}>{opt.content}</button>)}
+    </div>;
 };
 
 const getQueryString = (filters, search, page) => {
@@ -40,8 +40,7 @@ const getQueryString = (filters, search, page) => {
 export const Table = ({
     url,
     title = '',
-    CustomHeader = null,
-    addLink = false,
+    topOptions = [],
     filters: initialFilters = [],
     columns = [],
     rowOnClick = null,
@@ -149,9 +148,12 @@ export const Table = ({
     };
 
     return <>
-        <div>
-            {CustomHeader ? <CustomHeader/> : <DefaultHeader title={title} totalItems={page_req?.data?.meta?.total_items} selectedItems={selected_rows.length} addLink={addLink}/>}
-        </div>
+        <Header
+            title={title}
+            totalItems={page_req?.data?.meta?.total_items}
+            selectedItems={selected_rows.length}
+            options={topOptions}
+        />
         <form class="filters" onSubmit={submit}>
             {Object.keys(filters).map(key => <Filter key={key} id={key}/>)}
             <input type="text" name="search" placeholder="Search" value={input_search} onChange={e => setInputSearch(e.target.value)}/>
