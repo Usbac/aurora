@@ -123,6 +123,73 @@ export const Switch = (props) => {
     </div>;
 };
 
+export const DropdownMenu = ({ content, className, options = [] }) => {
+    const [ open, setOpen ] = useState(false);
+    const dropdown_ref = useRef(null);
+    const button_ref = useRef(null);
+
+    useEffect(() => {
+        let updateActiveDropdown = () => {
+            const MARGIN = 4;
+
+            if (!dropdown_ref.current || !button_ref.current) {
+                return;
+            }
+
+            let btn_rect = button_ref.current.getBoundingClientRect();
+            dropdown_ref.current.style.top = (btn_rect.top + btn_rect.height + MARGIN) + 'px';
+            dropdown_ref.current.style.left = btn_rect.left + 'px';
+            let dropdown_rect = dropdown_ref.current.getBoundingClientRect();
+
+            if ((dropdown_rect.x + dropdown_rect.width) >= (window.innerWidth - MARGIN)) {
+                dropdown_ref.current.style.left = ((btn_rect.x - dropdown_rect.width) + btn_rect.width) + 'px';
+            }
+
+            if (dropdown_rect.y + dropdown_rect.height >= (window.innerHeight - MARGIN)) {
+                dropdown_ref.current.style.top = (btn_rect.y - dropdown_rect.height - MARGIN) + 'px';
+            }
+        };
+
+        let handleClick = e => {
+            if (!button_ref.current?.contains(e?.target)) {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener('scroll', updateActiveDropdown);
+        window.addEventListener('resize', updateActiveDropdown);
+        document.addEventListener('click', handleClick, true);
+        updateActiveDropdown();
+
+        return () => {
+            window.removeEventListener('scroll', updateActiveDropdown);
+            window.removeEventListener('resize', updateActiveDropdown);
+            document.removeEventListener('click', handleClick, true);
+        };
+    }, [ open ]);
+
+    return <div
+        ref={button_ref}
+        class={className}
+        onClick={e => {
+            e.stopPropagation();
+            if (!dropdown_ref?.current?.contains(e.target)) {
+                setOpen(!open);
+            }
+        }}
+        dropdown
+    >
+        {content}
+        <div ref={dropdown_ref} class="dropdown-menu" style={{ display: open ? 'flex' : 'none' }}>
+            {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => <div
+                key={i}
+                class={opt.class}
+                onClick={opt.onClick}
+            >{opt.content}</div>)}
+        </div>
+    </div>;
+};
+
 export const formatDate = (timestamp, timezone, locale) => {
     return new Intl.DateTimeFormat(locale, {
         timeZone: timezone,
