@@ -173,7 +173,7 @@ export const Table = ({
         <div class="listing-container">
             <div class="listing">
                 <div class="listing-row header">
-                    {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class} title={c.title}>{c.title}</div>)}
+                    {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class} title={c.title ?? undefined}>{c.title ?? ''}</div>)}
                 </div>
             </div>
             <div class="listing">

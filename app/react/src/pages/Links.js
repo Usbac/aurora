@@ -62,7 +62,6 @@ export default function Links() {
             ]}
             columns={[
                 {
-                    title: '',
                     class: 'w100',
                     content: link => <h3>{link.title}</h3>,
                 },
@@ -82,7 +81,6 @@ export default function Links() {
                     content: link => link.order,
                 },
                 {
-                    title: '',
                     class: 'w10 row-actions',
                     content: link => <DropdownMenu
                         content={<IconThreeDots/>}
