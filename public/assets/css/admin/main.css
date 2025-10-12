@@ -1149,7 +1149,7 @@ textarea.code {
     overflow: hidden;
 }
 
-.listing-row div:first-of-type {
+.listing-row > div:first-of-type {
     gap: 10px;
 }
 
@@ -1246,6 +1246,7 @@ textarea.code {
 
 .dropdown-menu > * {
     display: flex;
+    align-items: center;
     gap: 10px;
     padding: 8px;
     border-radius: var(--border-radius);
