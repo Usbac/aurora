@@ -41,19 +41,22 @@ export const Table = ({
     url,
     title = '',
     CustomHeader = null,
-    ExtraHeader = null,
     addLink = false,
     filters: initialFilters = [],
     columns = [],
     rowOnClick = null,
+    options: initialOptions = [],
 }) => {
     const params = useMemo(() => new URLSearchParams(window.location.search), []);
     const [ page, setPage ] = useState(params.get('page') ? parseInt(params.get('page')) : 1);
+    const [ select_mode, setSelectMode ] = useState(false);
+    const [ selected_rows, setSelectedRows ] = useState([]);
     const [ search, setSearch ] = useState(params.get('search') || '');
     const [ input_search, setInputSearch ] = useState(params.get('search') || '');
     const [ filters, setFilters ] = useState(initialFilters);
     const [ query_string, setQueryString ] = useState(getQueryString(filters, search, page));
     const [ rows, setRows ] = useState([]);
+    const options = initialOptions.filter(opt => opt.condition === undefined || opt.condition);
     const { data: page_req, is_loading, is_error, fetch } = useRequest({
         method: 'GET',
         url: url + (query_string ? `?${query_string}` : ''),
@@ -64,6 +67,7 @@ export const Table = ({
     }, [ filters, search, page ]);
 
     useEffect(() => {
+        setSelectedRows([]);
         fetch();
     }, [ query_string ]);
 
@@ -73,6 +77,22 @@ export const Table = ({
             setRows(page == 1 ? page_rows : [ ...rows, ...page_rows ]);
         }
     }, [ page_req ]);
+
+    useEffect(() => {
+        setSelectedRows([]);
+    }, [ select_mode ]);
+
+    const toggleRow = i => {
+        let aux = [ ...selected_rows ];
+
+        if (selected_rows.includes(i)) {
+            aux.splice(aux.indexOf(i), 1);
+        } else {
+            aux.push(i);
+        }
+
+        setSelectedRows(aux);
+    };
 
     const Filter = ({ id }) => {
         const filter = filters[id];
@@ -113,6 +133,7 @@ export const Table = ({
             if (aux !== query_string) {
                 setQueryString(aux);
             } else {
+                setSelectedRows([]);
                 fetch();
             }
         }}>
@@ -120,7 +141,17 @@ export const Table = ({
             <input type="text" name="search" placeholder="Search" value={input_search} onChange={e => setInputSearch(e.target.value)}/>
             <button type="submit"><IconGlass/></button>
         </form>
-        {ExtraHeader && <ExtraHeader/>}
+        {options.length > 0 && <div class="batch-options-container">
+            {select_mode && <div>
+                {options.map((opt, i) => <button
+                    key={i}
+                    className={opt.class}
+                    onClick={() => opt.onClick(rows.filter((_, row_i) => selected_rows.includes(row_i)))}
+                    disabled={selected_rows.length == 0}
+                >{opt.title}</button>)}
+            </div>}
+            <button onClick={() => setSelectMode(!select_mode)}>{select_mode ? 'Done' : 'Select'}</button>
+        </div>}
         <div class="listing-container">
             <div class="listing">
                 <div class="listing-row header">
@@ -128,11 +159,14 @@ export const Table = ({
                 </div>
             </div>
             <div class="listing">
-                {rows.map((row, index) => (
-                    <div key={row.id || index} class="listing-row" onClick={e => rowOnClick ? rowOnClick(row, e) : null}>
-                        {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class}>{c.content(row, index)}</div>)}
-                    </div>
-                ))}
+                {rows.map((row, i) => <div
+                    key={i}
+                    class="listing-row"
+                    onClick={e => select_mode ? toggleRow(i) : (rowOnClick ? rowOnClick(row, e) : null)}
+                    data-selected={selected_rows.includes(i)}
+                >
+                    {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class}>{c.content(row, i)}</div>)}
+                </div>)}
             </div>
         </div>
         {page_req?.data?.meta?.next_page && <button id="load-more" class="light" onClick={() => setPage(page + 1)}>Load more</button>}
