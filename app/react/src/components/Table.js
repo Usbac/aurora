@@ -67,7 +67,6 @@ export const Table = ({
     }, [ filters, search, page ]);
 
     useEffect(() => {
-        setSelectedRows([]);
         fetch();
     }, [ query_string ]);
 
@@ -75,6 +74,10 @@ export const Table = ({
         const page_rows = page_req?.data?.data || null;
         if (page_rows) {
             setRows(page == 1 ? page_rows : [ ...rows, ...page_rows ]);
+        }
+
+        if (page == 1) {
+            setSelectedRows([]);
         }
     }, [ page_req ]);
 
