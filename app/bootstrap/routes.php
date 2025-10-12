@@ -1348,7 +1348,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return file_get_contents(\Aurora\Core\Helper::getPath(\Aurora\App\Setting::get('log_file')));
     });
 
-    $router->delete('json:api/v2/logs', function() use ($lang) {
+    $router->delete('json:api/v2/logs', function() {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -1406,9 +1406,60 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->delete('json:api/v2/{mod}', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $ids = array_map(fn($id) => (int) $id, is_array($_POST['id']) ? $_POST['id'] : explode(',', $_POST['id']));
         $mod_str = $_GET['mod'] ?? '';
-        switch ($mod_str) {
+
+        if (!\Aurora\App\Permission::can("edit_$mod_str")) {
+            http_response_code(403);
+            exit;
+        }
+
+        $success = match ($mod_str) {
+            'pages' => $page_mod->remove($ids),
+            'posts' => $post_mod->remove($ids),
+            'tags' => $tag_mod->remove($ids),
+            'links' => $link_mod->remove($ids),
+            'users' => (function() use ($user_mod, $ids) {
+                $valid_ids = [];
+
+                foreach ($user_mod->getPage(null, null, 'users.id IN (' . implode(',', $ids) . ')') as $user) {
+                    if (\Aurora\App\Permission::edit_user($user) && $user['id'] != $GLOBALS['user']['id']) {
+                        $valid_ids[] = $user['id'];
+                    }
+                }
+
+                $ids = $valid_ids;
+                return $user_mod->remove($ids);
+            })(),
+            'media' => (function() {
+                $paths = json_decode($_POST['paths'] ?? '') ?? [];
+                $done = 0;
+
+                try {
+                    foreach ($paths as $path) {
+                        $done += \Aurora\App\Media::remove($path);
+                    }
+
+                    $success = $done == count($paths);
+                } catch (Exception) {
+                    $success = false;
+                }
+
+                return $success;
+            })(),
+            default => (function() {
+                http_response_code(404);
+                exit;
+            })(),
+        };
+
+        return json_encode([ 'success' => $success ]);
+    });
+
+    $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+        switch ($_GET['mod'] ?? '') {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;
             case 'users': $mod = $user_mod; break;
