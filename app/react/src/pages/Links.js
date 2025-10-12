@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from '../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { makeRequest } from '../utils/utils';
+import { DropdownMenu, makeRequest } from '../utils/utils';
+import { IconEye, IconThreeDots, IconTrash } from '../utils/icons';
 
 export default function Links() {
     const { user } = useOutletContext();
@@ -83,21 +84,24 @@ export default function Links() {
                 {
                     title: '',
                     class: 'w10 row-actions',
-                    content: link => <></> /*<div class="three-dots" onclick="return false" dropdown>
-                        <?= $this->include('icons/dots.svg') ?>
-                        <div class="dropdown-menu">
-                            <div onclick="window.open(<?= e(js($link['url'])) ?>, '_blank').focus()"><?= $this->include('icons/eye.svg') ?> <?= $this->t('view') ?></div>
-                            <?php if (\Aurora\App\Permission::can('edit_links')): ?>
-                                <div
-                                    class="danger"
-                                    onclick="confirm(LANG.delete_confirm.sprintf(<?= e(js($link['title'])) ?>)) && Form.send('/admin/links/remove', null, null, {
-                                            csrf: csrf_token,
-                                            id: <?= e(js($link['id'])) ?>,
-                                        }).then(res => Listing.handleResponse(res));"
-                                ><?= $this->include('icons/trash.svg') ?> <?= $this->t('delete') ?></div>
-                            <?php endif ?>
-                        </div>
-                    </div>*/,
+                    content: link => <DropdownMenu
+                        content={<IconThreeDots/>}
+                        className="three-dots"
+                        options={[
+                            {
+                                onClick: () => window.open(link.url, '_blank').focus(),
+                                content: <><IconEye/> View</>
+                            },
+                            {
+                                class: 'danger',
+                                condition: Boolean(user?.actions?.edit_links),
+                                onClick: () => {
+                    
+                                },
+                                content: <><IconTrash/> Delete</>
+                            },
+                        ]}
+                    />,
                 },
             ]}
         />
