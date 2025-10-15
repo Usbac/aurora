@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from '../utils/icons';
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { useElement } from '../utils/utils';
+import { LoadingPage, useElement } from '../utils/utils';
 
 export default function AdminPages() {
     const dark_theme_element = document.getElementById('css-dark');
@@ -72,6 +72,6 @@ export default function AdminPages() {
                 </div>
             </div>
         </nav>
-        <Outlet context={{ user: user, settings: settings }}/>
+        {settings ? <Outlet context={{ user: user, settings: settings }}/> : <LoadingPage/>}
     </div>;
 };

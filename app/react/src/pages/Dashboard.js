@@ -23,7 +23,7 @@ export default function Dashboard() {
     const total_users = 0;
     const total_inactive_users = 0;
 
-    if (is_loading_links || is_loading_posts || !settings) {
+    if (is_loading_links || is_loading_posts) {
         return <LoadingPage/>;
     }
 
