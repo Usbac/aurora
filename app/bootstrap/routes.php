@@ -1406,6 +1406,35 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
+    $router->post('json:api/v2/{mod}', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+        switch ($_GET['mod']) {
+            case 'pages': $mod = $page_mod; break;
+            case 'posts': $mod = $post_mod; break;
+            case 'users': $mod = $user_mod; break;
+            case 'tags': $mod = $tag_mod; break;
+            case 'links': $mod = $link_mod; break;
+            default:
+                http_response_code(404);
+                return;
+        }
+
+        $id = $_GET['id'] ?? '';
+        $errors = $mod->checkFields($_POST, $id);
+        if (!empty($errors)) {
+            return json_encode([
+                'success' => false,
+                'errors' => $errors,
+            ]);
+        }
+
+        return json_encode([
+            'success' => Helper::isValidId($id)
+                ? $mod->save($id, $_POST)
+                : ($id = $mod->add($_POST)) !== false,
+            'id' => $id,
+        ]);
+    });
+
     $router->delete('json:api/v2/{mod}', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $ids = array_map(fn($id) => (int) $id, is_array($_POST['id']) ? $_POST['id'] : explode(',', $_POST['id']));
