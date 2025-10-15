@@ -217,6 +217,10 @@ final class User extends \Aurora\App\ModuleBase
     {
         $where = [];
 
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'users.id = ' . ((int) $filters['id']);
+        }
+
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = 'users.status = ' . ((int) $filters['status']);
         }

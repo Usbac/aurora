@@ -79,6 +79,10 @@ final class Page extends \Aurora\App\ModuleBase
     {
         $where = [];
 
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'pages.id = ' . ((int) $filters['id']);
+        }
+
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = 'pages.status = ' . ((int) $filters['status']);
         }

@@ -78,6 +78,10 @@ final class Tag extends \Aurora\App\ModuleBase
     {
         $where = [];
 
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'tags.id = ' . ((int) $filters['id']);
+        }
+
         if (!empty($filters['search'])) {
             $search = $this->db->escape($filters['search']);
             $where[] = "(tags.name LIKE '%$search%' OR tags.slug LIKE '%$search%')";

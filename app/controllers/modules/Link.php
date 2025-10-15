@@ -76,6 +76,10 @@ final class Link extends \Aurora\App\ModuleBase
     {
         $where = [];
 
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'links.id = ' . ((int) $filters['id']);
+        }
+
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = 'links.status = ' . ((int) $filters['status']);
         }

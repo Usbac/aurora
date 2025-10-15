@@ -114,6 +114,10 @@ final class Post extends \Aurora\App\ModuleBase
     {
         $where = [];
 
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'posts.id = ' . ((int) $filters['id']);
+        }
+
         if (isset($filters['status']) && $filters['status'] !== '') {
             $val = match (strval($filters['status'])) {
                 '1' => 'posts.status AND posts.published_at <= ' . time(),
