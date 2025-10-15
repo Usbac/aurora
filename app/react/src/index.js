@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
 import Links from './pages/Links';
+import Link from './pages/Link';
 
 const App = () => {
     const query_client = new QueryClient();
@@ -19,6 +20,7 @@ const App = () => {
                     <Route path="dashboard" element={<Dashboard/>}/>
                     <Route path="links" element={<Links/>}/>
                     <Route path="settings" element={<Settings/>}/>
+                    <Route path="links/edit" element={<Link/>}/>
                 </Route>
                 <Route path="*" element={<div>404 Not Found</div>}/>
             </Routes>

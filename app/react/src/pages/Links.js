@@ -15,7 +15,7 @@ export default function Links() {
             topOptions={[
                 {
                     content: <><b>+</b>&nbsp;New</>,
-                    onClick: () => navigate('/console/links/new'),
+                    onClick: () => navigate('/console/links/edit'),
                 },
             ]}
             rowOnClick={link => navigate(`/console/links/edit?id=${link.id}`)}
