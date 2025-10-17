@@ -119,7 +119,7 @@ export const Table = ({
                 let aux = { ...filter };
 
                 Object.keys(aux.options).map(opt_key => {
-                    aux.options[opt_key].selected = aux.options[opt_key].key === e.target.value;
+                    aux.options[opt_key].selected = String(aux.options[opt_key].key) === String(e.target.value);
                 });
 
                 setFilters({ ...filters, [id]: aux });
