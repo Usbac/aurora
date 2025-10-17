@@ -9,6 +9,7 @@ import Settings from './pages/Settings';
 import Links from './pages/tables/Links';
 import Link from './pages/Link';
 import Tags from './pages/tables/Tags';
+import Pages from './pages/tables/Pages';
 
 const App = () => {
     const query_client = new QueryClient();
@@ -19,6 +20,7 @@ const App = () => {
                 <Route path="/console" element={<Login/>}/>
                 <Route path="/console" element={<AdminPages/>}>
                     <Route path="dashboard" element={<Dashboard/>}/>
+                    <Route path="pages" element={<Pages/>}/>
                     <Route path="links" element={<Links/>}/>
                     <Route path="tags" element={<Tags/>}/>
                     <Route path="settings" element={<Settings/>}/>
