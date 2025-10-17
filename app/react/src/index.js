@@ -10,6 +10,7 @@ import Links from './pages/tables/Links';
 import Link from './pages/Link';
 import Tags from './pages/tables/Tags';
 import Pages from './pages/tables/Pages';
+import Posts from './pages/tables/Posts';
 
 const App = () => {
     const query_client = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => {
                 <Route path="/console" element={<AdminPages/>}>
                     <Route path="dashboard" element={<Dashboard/>}/>
                     <Route path="pages" element={<Pages/>}/>
+                    <Route path="posts" element={<Posts/>}/>
                     <Route path="links" element={<Links/>}/>
                     <Route path="tags" element={<Tags/>}/>
                     <Route path="settings" element={<Settings/>}/>
