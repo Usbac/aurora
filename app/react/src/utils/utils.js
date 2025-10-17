@@ -170,14 +170,13 @@ export const DropdownMenu = ({ content, className, options = [] }) => {
 
     return <div
         ref={button_ref}
-        class={className}
+        class={`dropdown ${className}`}
         onClick={e => {
             e.stopPropagation();
             if (!dropdown_ref?.current?.contains(e.target)) {
                 setOpen(!open);
             }
         }}
-        dropdown
     >
         {content}
         <div ref={dropdown_ref} class="dropdown-menu" style={{ display: open ? 'flex' : 'none' }}>
