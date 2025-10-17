@@ -1406,6 +1406,18 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
+    $router->get('json:api/v2/stats', function() use ($db, $post_mod) {
+        return json_encode([
+            'total_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 1 ])),
+            'total_scheduled_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 'scheduled' ])),
+            'total_draft_posts' => $db->count('posts', '', 'status != 1'),
+            'total_pages' => $db->count('pages', '', 'status = 1'),
+            'total_draft_pages' => $db->count('pages', '', 'status != 1'),
+            'total_users' => $db->count('users', '', 'status = 1'),
+            'total_inactive_users' => $db->count('users', '', 'status != 1'),
+        ]);
+    });
+
     $router->post('json:api/v2/{mod}', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         switch ($_GET['mod']) {
             case 'pages': $mod = $page_mod; break;

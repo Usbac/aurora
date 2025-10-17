@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { LoadingPage, MenuButton, useRequest } from '../utils/utils';
 import { IconBook, IconPencil, IconTag, IconUser } from '../utils/icons';
 import { useOutletContext } from 'react-router-dom';
 
 export default function Dashboard() {
     const { settings } = useOutletContext();
-    const { data: links_req, is_loading: is_loading_links } = useRequest({
+    const { data: links_req, is_loading: is_loading_links, fetch: fetch_links } = useRequest({
         method: 'GET',
         url: '/api/v2/links',
     });
-    const { data: posts_req, is_loading: is_loading_posts } = useRequest({
+    const { data: posts_req, is_loading: is_loading_posts, fetch: fetch_posts } = useRequest({
         method: 'GET',
         url: '/api/v2/posts?limit=6&status=1&order=published_at&sort=desc',
     });
+    const { data: stats_req, is_loading: is_loading_stats, fetch: fetch_stats } = useRequest({
+        method: 'GET',
+        url: '/api/v2/stats',
+    });
     const links = links_req ? links_req.data?.data : null;
     const posts = posts_req ? posts_req.data?.data : null;
-    const total_posts = 0;
-    const total_scheduled_posts = 0;
-    const total_draft_posts = 0;
-    const total_pages = 0;
-    const total_draft_pages = 0;
-    const total_users = 0;
-    const total_inactive_users = 0;
+    const stats = stats_req ? stats_req.data : null;
 
-    if (is_loading_links || is_loading_posts) {
+    useEffect(() => {
+        fetch_links();
+        fetch_posts();
+        fetch_stats();
+    }, []);
+
+    if (is_loading_links || is_loading_posts || is_loading_stats) {
         return <LoadingPage/>;
     }
 
@@ -74,25 +78,15 @@ export default function Dashboard() {
                         <div>
                             <div class="input-group">
                                 <b>Posts</b>
-                                <span>
-                                    {total_posts} Published,
-                                    {total_scheduled_posts} Scheduled,
-                                    {total_draft_posts} Draft
-                                </span>
+                                <span>{stats.total_posts} Published, {stats.total_scheduled_posts} Scheduled, {stats.total_draft_posts} Draft</span>
                             </div>
                             <div class="input-group">
                                 <b>Pages</b>
-                                <span>
-                                    {total_pages} Published,
-                                    {total_draft_pages} Draft
-                                </span>
+                                <span>{stats.total_pages} Published, {stats.total_draft_pages} Draft</span>
                             </div>
                             <div class="input-group">
                                 <b>Users</b>
-                                <span>
-                                    {total_users} Active,
-                                    {total_inactive_users} Inactive
-                                </span>
+                                <span>{stats.total_users} Active, {stats.total_inactive_users} Inactive</span>
                             </div>
                         </div>
                     </div>
