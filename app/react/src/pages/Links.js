@@ -94,7 +94,13 @@ export default function Links() {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_links),
                                 onClick: () => {
-                    
+                                    if (confirm('Are you sure you want to delete the link? This action cannot be undone.')) {
+                                        makeRequest({
+                                            method: 'DELETE',
+                                            url: '/api/v2/links',
+                                            data: { id: link.id },
+                                        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                                    }
                                 },
                                 content: <><IconTrash/> Delete</>
                             },
