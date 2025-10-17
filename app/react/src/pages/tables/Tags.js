@@ -15,6 +15,7 @@ export default function Tags() {
             topOptions={[
                 {
                     content: <><b>+</b>&nbsp;New</>,
+                    condition: Boolean(user?.actions?.edit_tags),
                     onClick: () => navigate('/console/tags/edit'),
                 },
             ]}

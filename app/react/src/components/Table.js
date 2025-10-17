@@ -12,7 +12,7 @@ const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
                 {selectedItems > 0 && <span id="selected-items">{selectedItems} selected</span>}
             </div>
         </div>
-        {options.map((opt, i) => <button key={i} className="button" onClick={opt.onClick}>{opt.content}</button>)}
+        {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => <button key={i} className="button" onClick={opt.onClick}>{opt.content}</button>)}
     </div>;
 };
 

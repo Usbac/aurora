@@ -15,6 +15,7 @@ export default function Links() {
             topOptions={[
                 {
                     content: <><b>+</b>&nbsp;New</>,
+                    condition: Boolean(user?.actions?.edit_links),
                     onClick: () => navigate('/console/links/edit'),
                 },
             ]}

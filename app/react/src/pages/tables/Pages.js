@@ -15,6 +15,7 @@ export default function Pages() {
             topOptions={[
                 {
                     content: <><b>+</b>&nbsp;New</>,
+                    condition: Boolean(user?.actions?.edit_pages),
                     onClick: () => navigate('/console/pages/edit'),
                 },
             ]}
