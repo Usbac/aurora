@@ -1,8 +1,8 @@
 import React from 'react';
-import { Table } from '../components/Table';
+import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, makeRequest } from '../utils/utils';
-import { IconEye, IconThreeDots, IconTrash } from '../utils/icons';
+import { DropdownMenu, makeRequest } from '../../utils/utils';
+import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 
 export default function Tags() {
     const { user } = useOutletContext();

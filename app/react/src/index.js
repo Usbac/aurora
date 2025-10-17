@@ -6,9 +6,9 @@ import AdminPages from './components/AdminPages';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
-import Links from './pages/Links';
+import Links from './pages/tables/Links';
 import Link from './pages/Link';
-import Tags from './pages/Tags';
+import Tags from './pages/tables/Tags';
 
 const App = () => {
     const query_client = new QueryClient();
