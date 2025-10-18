@@ -44,7 +44,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     /**
      * ADMIN 2
      */
-    
+
     $router->get([ 'console', 'console/*' ], function() use ($view) {
         return $view->get('admin.html');
     });
@@ -1497,6 +1497,30 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         };
 
         return json_encode([ 'success' => $success ]);
+    });
+
+    $router->get('json:api/v2/roles', function() use ($db) {
+        $roles = [];
+        $permissions_data = $db->query('SELECT role_level, permission FROM roles_permissions ORDER BY role_level ASC, permission ASC')->fetchAll();
+        foreach ($db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll() as $role) {
+            $role_permissions = [];
+
+            foreach ($permissions_data as $permission) {
+                if ($role['level'] >= $permission['role_level']) {
+                    $role_permissions[] = $permission['permission'];
+                }
+            }
+
+            sort($role_permissions);
+
+            $roles[] = [
+                'level' => (int) $role['level'],
+                'slug' => $role['slug'],
+                'permissions' => $role_permissions
+            ];
+        }
+
+        return json_encode($roles);
     });
 
     $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
