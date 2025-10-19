@@ -52,15 +52,7 @@ export const Table = ({
     const [ selected_rows, setSelectedRows ] = useState([]);
     const [ search, setSearch ] = useState(params.get('search') || '');
     const [ input_search, setInputSearch ] = useState(params.get('search') || '');
-    const [ filters, setFilters ] = useState(() => {
-        let aux = { ...initialFilters };
-
-        Object.keys(aux).map(key => {
-            aux[key].options.map((opt, i) => opt.selected = i === 0);
-        });
-
-        return aux;
-    });
+    const [ filters, setFilters ] = useState({});
     const [ query_string, setQueryString ] = useState(getQueryString(filters, search, page));
     const [ rows, setRows ] = useState([]);
     const options = initialOptions.filter(opt => opt.condition === undefined || opt.condition);
@@ -68,6 +60,16 @@ export const Table = ({
         method: 'GET',
         url: url + (query_string ? `?${query_string}` : ''),
     });
+
+    useEffect(() => {
+        let aux = { ...initialFilters };
+
+        Object.keys(aux).map(key => {
+            aux[key].options.map((opt, i) => opt.selected = i === 0);
+        });
+
+        setFilters(aux);
+    }, [ initialFilters ]);
 
     useEffect(() => {
         setQueryString(getQueryString(filters, search, page));
@@ -96,7 +98,7 @@ export const Table = ({
         e.preventDefault();
         setPage(1);
         setSearch(input_search);
-        
+
         const aux = getQueryString(filters, input_search, 1);
         if (aux !== query_string) {
             setQueryString(aux);
