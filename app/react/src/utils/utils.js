@@ -79,12 +79,8 @@ export const useElement = (url) => {
         fetch();
     }, []);
 
-    if (is_loading) {
-        return undefined;
-    }
-
     return [
-        data?.data && !is_error ? data.data : null,
+        is_loading ? undefined : (data?.data && !is_error ? data.data : null),
         fetch,
     ];
 };
