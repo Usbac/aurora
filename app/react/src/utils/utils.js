@@ -325,3 +325,13 @@ export const downloadFile = (data, filename) => {
     link.click();
     link.remove();
 };
+
+export const getRoleTitle = (role_slug) => {
+    switch (role_slug) {
+        case 'contributor': return 'Contributor';
+        case 'editor': return 'Editor';
+        case 'admin': return 'Administrator';
+        case 'owner': return 'Owner';
+        default: return '';
+    }
+}
