@@ -41,7 +41,7 @@ export const Table = ({
     url,
     title = '',
     topOptions = [],
-    filters: initialFilters = [],
+    filters: initialFilters = {},
     columns = [],
     rowOnClick = null,
     options: initialOptions = [],
@@ -52,7 +52,15 @@ export const Table = ({
     const [ selected_rows, setSelectedRows ] = useState([]);
     const [ search, setSearch ] = useState(params.get('search') || '');
     const [ input_search, setInputSearch ] = useState(params.get('search') || '');
-    const [ filters, setFilters ] = useState(initialFilters);
+    const [ filters, setFilters ] = useState(() => {
+        let aux = { ...initialFilters };
+
+        Object.keys(aux).map(key => {
+            aux[key].options.map((opt, i) => opt.selected = i === 0);
+        });
+
+        return aux;
+    });
     const [ query_string, setQueryString ] = useState(getQueryString(filters, search, page));
     const [ rows, setRows ] = useState([]);
     const options = initialOptions.filter(opt => opt.condition === undefined || opt.condition);
