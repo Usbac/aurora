@@ -72,6 +72,6 @@ export default function AdminPages() {
                 </div>
             </div>
         </nav>
-        {settings ? <Outlet context={{ user: user, fetch_user: fetch_user, settings: settings, fetch_settings: fetch_settings }}/> : <LoadingPage/>}
+        {user && settings ? <Outlet context={{ user: user, fetch_user: fetch_user, settings: settings, fetch_settings: fetch_settings }}/> : <LoadingPage/>}
     </div>;
 };
