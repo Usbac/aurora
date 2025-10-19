@@ -83,7 +83,10 @@ export const useElement = (url) => {
         return undefined;
     }
 
-    return data?.data && !is_error ? data.data : null;
+    return [
+        data?.data && !is_error ? data.data : null,
+        fetch,
+    ];
 };
 
 export const MenuButton = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list pointer" viewBox="0 0 16 16" onClick={() => document.body.toggleAttribute('data-nav-open')}>
@@ -217,8 +220,8 @@ export const getContentUrl = (path = '') => {
 };
 
 export const ImageDialog = ({ onSave, onClose }) => {
-    const user = useElement('/api/v2/me');
-    const settings = useElement('/api/v2/settings');
+    const [ user ] = useElement('/api/v2/me');
+    const [ settings ] = useElement('/api/v2/settings');
     const [ path, setPath ] = useState('');
     const { data: files_req, is_loading, refetch: refetch_files } = useRequest({
         method: 'GET',

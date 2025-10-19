@@ -5,8 +5,8 @@ import { LoadingPage, useElement } from '../utils/utils';
 
 export default function AdminPages() {
     const dark_theme_element = document.getElementById('css-dark');
-    const user = useElement('/api/v2/me');
-    const settings = useElement('/api/v2/settings');
+    const [ user, fetch_user ] = useElement('/api/v2/me');
+    const [ settings, fetch_settings ] = useElement('/api/v2/settings');
     const [ theme, setTheme ] = useState(dark_theme_element?.hasAttribute('disabled') ? 'light' : 'dark');
     const navigate = useNavigate();
 
@@ -72,6 +72,6 @@ export default function AdminPages() {
                 </div>
             </div>
         </nav>
-        {settings ? <Outlet context={{ user: user, settings: settings }}/> : <LoadingPage/>}
+        {settings ? <Outlet context={{ user: user, fetch_user: fetch_user, settings: settings, fetch_settings: fetch_settings }}/> : <LoadingPage/>}
     </div>;
 };
