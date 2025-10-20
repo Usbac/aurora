@@ -62,7 +62,7 @@ export default function AdminPages() {
             </div>
             <div class="current-user">
                 <Link to={`/console/users/edit?id=${user?.id}`} title={user?.name}>
-                    <img src={user?.image ? user.image : '/public/assets/no-image.svg'} className="empty-img"/>
+                    <img src={user?.image ? getContentUrl(user.image) : '/public/assets/no-image.svg'} className={!user?.image ? 'empty-img' : ''}/>
                 </Link>
                 <div id="toggle-theme" class="pointer" title="Switch theme" onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}
