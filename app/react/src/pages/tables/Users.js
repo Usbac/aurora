@@ -5,7 +5,7 @@ import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, LoadingPage, mak
 import { IconEye, IconThreeDots, IconTrash, IconUsers } from '../../utils/icons';
 
 export default function Users() {
-    const { user, settings } = useOutletContext();
+    const { user, settings, fetch_user } = useOutletContext();
     const navigate = useNavigate();
     const { data: roles_req, is_loading: is_loading_roles, fetch: fetch_roles } = useRequest({
         method: 'GET',
@@ -138,7 +138,17 @@ export default function Users() {
                                 condition: item.id != user?.id && user.role > item.role,
                                 onClick: () => {
                                     if (confirm('Are you sure you want to impersonate this user?')) {
-                                        window.location.href = `/admin/users/impersonate?id=${item.id}`;
+                                        makeRequest({
+                                            method: 'GET',
+                                            url: '/api/v2/users/impersonate?id=' + item.id,
+                                        }).then(res => {
+                                            if (!res?.data?.success) {
+                                                alert('Error');
+                                            } else {
+                                                localStorage.setItem('auth_token', res.data.token);
+                                                fetch_user();
+                                            }
+                                        });
                                     }
                                 },
                                 content: <><IconUsers/> Impersonate</>
