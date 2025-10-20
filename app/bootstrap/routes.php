@@ -1162,6 +1162,29 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
+    $login = function($user_id) use ($db) {
+        $data = [ 'token' => bin2hex(random_bytes(64)) ];
+
+        try {
+            $data['success'] = (bool) $db->insert('tokens', [
+                'user_id' => $user_id,
+                'token' => $data['token'],
+                'created_at' => time(),
+            ]);
+        } catch (\Exception) {
+            $data = [
+                'success' => false,
+                'error' => 'server_error',
+            ];
+        }
+
+        if (!$data['success']) {
+            unset($data['token']);
+        }
+
+        return $data;
+    };
+
     /**
      * API V2
      */
@@ -1188,7 +1211,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
     });
 
-    $router->any('json:api/v2/auth', function() use ($db, $user_mod) {
+    $router->any('json:api/v2/auth', function() use ($db, $user_mod, $login) {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         $user = $user_mod->get([
@@ -1203,26 +1226,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             ]);
         }
 
-        $data = [ 'token' => bin2hex(random_bytes(64)) ];
-
-        try {
-            $data['success'] = (bool) $db->insert('tokens', [
-                'user_id' => $user['id'],
-                'token' => $data['token'],
-                'created_at' => time(),
-            ]);
-        } catch (\Exception) {
-            $data = [
-                'succcess' => false,
-                'error' => 'server_error',
-            ];
-        }
-
-        if (!$data['success']) {
-            unset($data['token']);
-        }
-
-        return json_encode($data);
+        return json_encode($login($user['id']));
     });
 
     $router->get('json:api/v2/me', function() {
@@ -1261,6 +1265,20 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 $hash,
                 $view->get('admin/emails/password_restore.html', [ 'hash' => $hash ])),
         ]);
+    });
+
+    $router->get('json:api/v2/users/impersonate', function() use ($user_mod, $login) {
+        $user = $user_mod->get([
+            'id' => $_GET['id'] ?? 0,
+            'status' => 1,
+        ]);
+
+        if (!\Aurora\App\Permission::can('impersonate') || empty($user) || $user['role'] > $GLOBALS['user']['role']) {
+            http_response_code(403);
+            exit;
+        }
+
+        return json_encode($login($user['id']));
     });
 
     $router->post('json:api/v2/media', function() {
