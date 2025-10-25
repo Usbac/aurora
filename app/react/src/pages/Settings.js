@@ -62,7 +62,7 @@ const General = ({ data, setData }) => {
                 </div>
                 <div class="input-group">
                     <label>Maintenance mode</label>
-                    <Switch checked={data.maintenance == 1} onChange={e => setData({ ...data, maintenance: e.target.checked })}/>
+                    <Switch checked={data.maintenance == 1} onChange={e => setData({ ...data, maintenance: e.target.checked ? 1 : 0 })}/>
                 </div>
             </div>
         </div>
@@ -142,7 +142,7 @@ const Data = ({ data, setData, user }) => {
             </div>
             <div class="input-group">
                 <label>Views counter</label>
-                <Switch checked={data.views_count == 1} onChange={e => setData({ ...data, views_count: e.target.checked })}/>
+                <Switch checked={data.views_count == 1} onChange={e => setData({ ...data, views_count: e.target.checked ? 1 : 0 })}/>
                 <div id="reset-views">
                     <button type="button" class="light" onClick={resetViewsCount} disabled={!user?.actions?.edit_settings}>Reset views count</button>
                 </div>
@@ -197,11 +197,11 @@ const Advanced = ({ data, setData, user }) => {
             </div>
             <div class="input-group">
                 <label>Display errors</label>
-                <Switch checked={data.display_errors == 1} onChange={e => setData({ ...data, display_errors: e.target.checked })}/>
+                <Switch checked={data.display_errors == 1} onChange={e => setData({ ...data, display_errors: e.target.checked ? 1 : 0 })}/>
             </div>
             <div class="input-group">
                 <label>Log errors</label>
-                <Switch checked={data.log_errors == 1} onChange={e => setData({ ...data, log_errors: e.target.checked })}/>
+                <Switch checked={data.log_errors == 1} onChange={e => setData({ ...data, log_errors: e.target.checked ? 1 : 0 })}/>
             </div>
             <div class="input-group">
                 <label for="log_file">Log file</label>
