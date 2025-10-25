@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IconFolderFill, IconHome, IconUploadFile, IconX } from './icons';
 import { createPortal } from 'react-dom';
+import { Editor as TinyMCE } from '@tinymce/tinymce-react';
 import axios from 'axios';
 
 export const makeRequest = async ({ method = 'GET', url, data = null, options = {} }) => {
@@ -333,4 +334,25 @@ export const getRoleTitle = (role_slug) => {
         case 'owner': return 'Owner';
         default: return '';
     }
-}
+};
+
+export const Editor = ({ value, setValue, theme }) => {
+    return <TinyMCE
+        licenseKey="gpl"
+        tinymceScriptSrc="/public/assets/js/tinymce/tinymce.min.js"
+        value={value}
+        init={{
+            menubar: false,
+            plugins: [ 'image', 'wordcount', 'autoresize', 'code', 'link', 'lists' ],
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image code',
+            images_upload_url: '/admin/posts/upload_image',
+            skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
+            content_css: theme === 'dark' ? 'dark' : 'default',
+            setup: editor => {
+                editor.on('Change Keyup', () => {
+                    setValue(editor.getContent());
+                });
+            },
+        }}
+    />;
+};
