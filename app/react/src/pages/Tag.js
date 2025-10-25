@@ -66,16 +66,16 @@ export default function Tag() {
         <div>
             <div class="page-title">
                 <MenuButton/>
-                <h2>Link</h2>
+                <h2>Tag</h2>
             </div>
             <div class="buttons">
                 {id && <>
-                    <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_links}>
+                    <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_tags}>
                         <IconTrash/>
                     </button>
                     <button type="button" onClick={() => window.open(`/${settings.blog_url}/tag/${data.slug}`, '_blank').focus()}><IconEye/></button>
                 </>}
-                <button type="submit" disabled={!user?.actions?.edit_links}>Save</button>
+                <button type="submit" disabled={!user?.actions?.edit_tags}>Save</button>
             </div>
         </div>
        <div class="grid small-form">
