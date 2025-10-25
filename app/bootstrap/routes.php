@@ -1436,6 +1436,20 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
+    $router->get('json:api/v2/view_files', function() use ($theme_dir) {
+        $absolute_theme_dir = Helper::getPath(Kernel::config('views') . "/$theme_dir");
+        $view_files = [];
+
+        foreach (Helper::getFileIterator($absolute_theme_dir) as $file) {
+            if ($file->isFile()) {
+                $view_files[] = mb_substr($file->getPathname(), mb_strlen($absolute_theme_dir) + 1);
+            }
+        }
+
+        natcasesort($view_files);
+        return json_encode(array_values($view_files));
+    });
+
     $router->post('json:api/v2/{mod}', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         switch ($_GET['mod']) {
             case 'pages': $mod = $page_mod; break;
