@@ -211,6 +211,14 @@ export const formatSize = (bytes) => {
     return `${size.toFixed(2)}${[ 'B', 'kB', 'MB', 'GB', 'TB' ][factor] ?? ''}`;
 };
 
+export const getUrl = (path = '') => {
+    const { protocol, hostname, port } = window.location;
+    const base = `${protocol}//${hostname}${port ? ':' + port : ''}`;
+    path = path.replace(/^\/+/, '');
+
+    return path ? `${base}/${path}` : base;
+};
+
 export const getContentUrl = (path = '') => {
     const content_path = document.querySelector('meta[name="content_path"]')?.content || '/';
     return '/' + content_path + '/' + path.replace(/^\/+|\/+$/g, '');
