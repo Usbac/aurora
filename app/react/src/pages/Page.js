@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Editor, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
+import { Editor, getUrl, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -84,7 +84,7 @@ export default function Page() {
                     <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_pages}>
                         <IconTrash/>
                     </button>
-                    <button type="button" onClick={() => window.open(`/${data.slug}`, '_blank').focus()}><IconEye/></button>
+                    <button type="button" onClick={() => window.open(getUrl(data.slug), '_blank').focus()}><IconEye/></button>
                 </>}
                 <button type="submit" disabled={!user?.actions?.edit_pages}>Save</button>
             </div>
@@ -106,7 +106,7 @@ export default function Page() {
                     <div class="input-group">
                         <label htmlFor="slug">Slug</label>
                         <Input id="slug" type="text" placeholder="lorem-ipsum" value={data.slug} onChange={e => setData({...data, slug: e.target.value})} maxLength="255" charCount={true}/>
-                        <a href={data.slug} target="_blank"></a>
+                        <a href={getUrl(data.slug)} target="_blank">{getUrl(data.slug)}</a>
                     </div>
                     {id && <div class="extra-data">
                         <span>ID: {id}</span>
@@ -141,7 +141,7 @@ export default function Page() {
                     </div>
                     <div class="input-group">
                         <label htmlFor="canonical-url">Canonical URL</label>
-                        <Input id="canonical-url" type="text" placeholder="/about" value={data.canonical_url} onChange={e => setData({...data, canonical_url: e.target.value})}/>
+                        <Input id="canonical-url" type="text" placeholder={getUrl('/about')} value={data.canonical_url} onChange={e => setData({...data, canonical_url: e.target.value})}/>
                     </div>
                 </div>
             </div>
