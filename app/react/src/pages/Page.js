@@ -23,11 +23,7 @@ export default function Page() {
             makeRequest({
                 method: 'GET',
                 url: `/api/v2/pages?id=${id}`,
-            }).then(res => {
-                const pageData = res?.data?.data[0] ?? null;
-                console.log('Page data from API:', pageData);
-                setData(pageData);
-            });
+            }).then(res => setData(res?.data?.data[0] ?? null));
         } else {
             setData({});
         }
