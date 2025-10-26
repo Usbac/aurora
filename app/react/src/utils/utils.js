@@ -228,12 +228,16 @@ export const ImageDialog = ({ onSave, onClose }) => {
     const [ user ] = useElement('/api/v2/me');
     const [ settings ] = useElement('/api/v2/settings');
     const [ path, setPath ] = useState('');
-    const { data: files_req, is_loading, refetch: refetch_files } = useRequest({
+    const { data: files_req, is_loading, fetch: fetch_files } = useRequest({
         method: 'GET',
         url: `/api/v2/media?images=1&path=${path}`,
     });
     const folders = path.split('/');
     const input_ref = useRef(null);
+
+    useEffect(() => {
+        fetch_files();
+    }, [ path ]);
 
     const uploadFile = async (e) => {
         makeRequest({
@@ -243,7 +247,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
                 file: e.target.files[0],
             },
         }).finally(() => {
-            refetch_files();
+            fetch_files();
             input_ref.current.value = '';
         });
     };
@@ -251,7 +255,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
     const ListingContent = () => {
         const files = files_req ? files_req.data?.data : [];
 
-        if (is_loading) {
+        if (is_loading || !user || !settings) {
             return <svg class="loading-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" fill="none" strokeWidth="10" r="36" strokeDasharray="171 56"></circle></svg>;
         }
 
