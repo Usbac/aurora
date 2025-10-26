@@ -365,8 +365,5 @@ export default function Settings() {
             </div>
             {settings && SECTIONS.map(section => (hash == ('#' + section.id) && <section.section data={data} setData={setData} user={user}/>))}
         </div>
-        <div id="image-dialog" class="dialog image-dialog">
-            <div></div>
-        </div>
     </form>);
 }
