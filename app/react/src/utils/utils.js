@@ -4,35 +4,16 @@ import { createPortal } from 'react-dom';
 import { Editor as TinyMCE } from '@tinymce/tinymce-react';
 import axios from 'axios';
 
-export const makeRequest = async ({ method = 'GET', url, data = null, options = {} }) => {
-    const form_data = new FormData();
-
-    if (data) {
-        Object.keys(data).forEach(key => {
-            let val = data[key];
-
-            if (typeof val === 'boolean') {
-                val = val ? '1' : '0';
-            }
-
-            form_data.append(key, val);
-        });
-    }
-
-    let headers = {
-        Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-    };
-
-    if ([ 'DELETE', 'PUT' ].includes(method)) {
-        headers['Content-Type'] = 'application/json';
-    }
-
+export const makeRequest = async ({ method = 'GET', url, data = {}, options = {} }) => {
     try {
         const res = await axios({
             method,
             url,
-            headers: headers,
-            data: form_data,
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+                'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
+            },
+            data: data instanceof FormData ? data : JSON.stringify(data),
             ...options,
         });
 
