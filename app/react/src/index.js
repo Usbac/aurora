@@ -14,6 +14,7 @@ import Posts from './pages/tables/Posts';
 import Users from './pages/tables/Users';
 import Tag from './pages/Tag';
 import Page from './pages/Page';
+import Post from './pages/Post';
 
 const App = () => {
     const query_client = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => {
                     <Route path="tags" element={<Tags/>}/>
                     <Route path="settings" element={<Settings/>}/>
                     <Route path="pages/edit" element={<Page/>}/>
+                    <Route path="posts/edit" element={<Post/>}/>
                     <Route path="links/edit" element={<Link/>}/>
                     <Route path="tags/edit" element={<Tag/>}/>
                 </Route>
