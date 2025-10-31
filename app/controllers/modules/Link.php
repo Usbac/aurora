@@ -100,10 +100,10 @@ final class Link extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'title' => $data['title'],
-            'url' => $data['url'],
-            'order' => $data['order'],
-            'status' => $data['status'],
+            'title' => $data['title'] ?? '',
+            'url' => $data['url'] ?? '',
+            'order' => $data['order'] ?? 0,
+            'status' => $data['status'] ?? false,
         ];
     }
 }

@@ -98,11 +98,11 @@ final class Tag extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'name' => $data['name'],
-            'slug' => $data['slug'],
-            'description' => $data['description'],
-            'meta_title' => $data['meta_title'],
-            'meta_description' => $data['meta_description'],
+            'name' => $data['name'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'description' => $data['description'] ?? '',
+            'meta_title' => $data['meta_title'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
         ];
     }
 }

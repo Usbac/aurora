@@ -200,18 +200,18 @@ final class Post extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'title' => $data['title'],
-            'slug' => $data['slug'],
-            'description' => $data['description'],
-            'html' => $data['html'],
-            'user_id' => $data['user_id'],
+            'title' => $data['title'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'description' => $data['description'] ?? '',
+            'html' => $data['html'] ?? '',
+            'user_id' => $data['user_id'] ?? 0,
             'image' => $data['image'] ?? null,
-            'image_alt' => $data['image_alt'],
-            'status' => $data['status'],
-            'meta_title' => $data['meta_title'],
-            'meta_description' => $data['meta_description'],
-            'canonical_url' => $data['canonical_url'],
-            'published_at' => (int) strtotime($data['published_at']),
+            'image_alt' => $data['image_alt'] ?? '',
+            'status' => $data['status'] ?? false,
+            'meta_title' => $data['meta_title'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
+            'canonical_url' => $data['canonical_url'] ?? '',
+            'published_at' => (int) strtotime($data['published_at'] ?? ''),
         ];
     }
 }

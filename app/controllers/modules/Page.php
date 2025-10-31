@@ -103,15 +103,15 @@ final class Page extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'title' => $data['title'],
-            'slug' => $data['slug'],
-            'html' => $data['html'],
-            'status' => $data['status'],
-            'static' => $data['static'],
-            'static_file' => $data['static_file'],
-            'meta_title' => $data['meta_title'],
-            'meta_description' => $data['meta_description'],
-            'canonical_url' => $data['canonical_url'],
+            'title' => $data['title'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'html' => $data['html'] ?? '',
+            'status' => $data['status'] ?? false,
+            'static' => $data['static'] ?? false,
+            'static_file' => $data['static_file'] ?? '',
+            'meta_title' => $data['meta_title'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
+            'canonical_url' => $data['canonical_url'] ?? '',
             'edited_at' => time(),
         ];
     }
