@@ -1405,7 +1405,7 @@ textarea.code {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 18px;
+    min-height: 20px;
     color: var(--main-color);
     text-decoration: none;
     padding: 4px 8px;
