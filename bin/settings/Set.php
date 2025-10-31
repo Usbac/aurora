@@ -25,7 +25,6 @@ class Set extends \Aurora\Bin\BaseCommand
             'Blog url' => 'blog_url',
             'Date format' => 'date_format',
             'Description' => 'description',
-            'Editor code' => 'editor_code',
             'Error log filename' => 'log_file',
             'Footer code' => 'footer_code',
             'Header code' => 'header_code',

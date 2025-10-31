@@ -48,8 +48,6 @@ return [
     'duplicate' => 'Duplicate',
     'edited' => 'Edited',
     'editor' => 'Editor',
-    'editor_code' => 'HTML editor',
-    'editor_code_description' => 'This code defines the HTML editor used in the admin. The selector for the fields is <code>textarea#html</code>, the endpoint to upload images is <code>/admin/posts/upload_image</code>.',
     'email' => 'Email',
     'error' => 'Error',
     'error_create_folder' => 'Error creating folder. The name is invalid, the file does not comply with the server rules or the path is not writable.',

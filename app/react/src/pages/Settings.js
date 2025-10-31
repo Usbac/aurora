@@ -295,11 +295,6 @@ const Code = ({ data, setData }) => {
                 <span class="description">Code here will be injected at the bottom of all post pages. Useful for things like adding a comment system.</span>
                 <textarea id="post-code" name="post_code" class="code" value={data.post_code} onChange={e => setData({ ...data, post_code: e.target.value })}></textarea>
             </div>
-            <div class="input-group">
-                <label for="editor-code">Editor code</label>
-                <span class="description">Code here will be injected into the editor of all pages.</span>
-                <textarea id="editor-code" name="editor_code" class="code" value={data.editor_code} onChange={e => setData({ ...data, editor_code: e.target.value })}></textarea>
-            </div>
         </div>
     </div>;
 };

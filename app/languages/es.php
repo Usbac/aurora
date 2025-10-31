@@ -48,8 +48,6 @@ return [
     'duplicate' => 'Duplicar',
     'edited' => 'Editado',
     'editor' => 'Editor',
-    'editor_code' => 'Editor HTML',
-    'editor_code_description' => 'Este código define el editor HTML usado en el panel de administración. El selector para los campos es <code>textarea#html</code>, el endpoint para subir imágenes es <code>/admin/posts/upload_image</code>.',
     'email' => 'Correo',
     'error' => 'Error',
     'error_create_folder' => 'Error al crear la carpeta. El nombre es inválido, el archivo no cumple con las reglas del servidor o no tiene permisos de escritura en esa ruta.',

@@ -24,7 +24,6 @@ class Listing extends \Aurora\Bin\BaseCommand
                 [ 'Blog url', $settings['blog_url'] ],
                 [ 'Date format', $settings['date_format'] ],
                 [ 'Description', $settings['description'] ],
-                [ 'Editor code', $settings['editor_code'] ],
                 [ 'Error log filename', $settings['log_file'] ],
                 [ 'Footer code', $settings['footer_code'] ],
                 [ 'Header code', $settings['header_code'] ],
