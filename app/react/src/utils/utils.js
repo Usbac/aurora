@@ -221,12 +221,12 @@ export const ImageDialog = ({ onSave, onClose }) => {
     }, [ path ]);
 
     const uploadFile = async (e) => {
+        const form_data = new FormData();
+        form_data.append('file', e.target.files[0]);
         makeRequest({
             method: 'POST',
             url: `/api/v2/media?path=${path}`,
-            data: {
-                file: e.target.files[0],
-            },
+            data: form_data,
         }).finally(() => {
             fetch_files();
             input_ref.current.value = '';

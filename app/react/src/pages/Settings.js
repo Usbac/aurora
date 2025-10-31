@@ -106,10 +106,12 @@ const Data = ({ data, setData, user }) => {
 
     const uploadDatabase = async () => {
         if (confirm('Are you sure about updating the current database?')) {
+            let form_data = new FormData();
+            form_data.append('file', database_file);
             makeRequest({
                 method: 'POST',
                 url: '/api/v2/db',
-                data: { file: database_file },
+                data: form_data,
             }).finally(() => {
                 file_ref.current.value = '';
             });
