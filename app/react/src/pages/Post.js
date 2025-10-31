@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DateTimeInput, Editor, getContentUrl, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
+import { DateTimeInput, Editor, getContentUrl, getSlug, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -122,7 +122,7 @@ export default function Post() {
                     </div>
                     <div class="input-group">
                         <label htmlFor="slug">Slug</label>
-                        <Input id="slug" type="text" placeholder="lorem-ipsum" value={data.slug} onChange={e => setData({ ...data, slug: e.target.value })} maxlength="255" charCount={true}/>
+                        <Input id="slug" type="text" placeholder="lorem-ipsum" value={data.slug} onChange={e => setData({ ...data, slug: getSlug(e.target.value) })} maxlength="255" charCount={true}/>
                         <a href={`/${settings.blog_url}/${data.slug}`} target="_blank">{getUrl(`/${settings.blog_url}/${data.slug}`)}</a>
                     </div>
                     <div class="input-group">

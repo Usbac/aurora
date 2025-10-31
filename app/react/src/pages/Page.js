@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Editor, getUrl, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
+import { Editor, getSlug, getUrl, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -90,7 +90,7 @@ export default function Page() {
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label htmlFor="title">Title</label>
-                        <Input id="title" type="text" value={data.title} onChange={e => setData({...data, title: e.target.value})} charCount={true}/>
+                        <Input id="title" type="text" value={data.title} onChange={e => setData({ ...data, title: e.target.value })} charCount={true}/>
                     </div>
                 </div>
                 <div id="page-editor" style={{ display: data.static ? 'none' : 'flex' }}>
@@ -101,7 +101,7 @@ export default function Page() {
                 <div class="card v-spacing">
                     <div class="input-group">
                         <label htmlFor="slug">Slug</label>
-                        <Input id="slug" type="text" placeholder="lorem-ipsum" value={data.slug} onChange={e => setData({...data, slug: e.target.value})} maxLength="255" charCount={true}/>
+                        <Input id="slug" type="text" placeholder="lorem-ipsum" value={data.slug} onChange={e => setData({ ...data, slug: getSlug(e.target.value) })} maxLength="255" charCount={true}/>
                         <a href={getUrl(data.slug)} target="_blank">{getUrl(data.slug)}</a>
                     </div>
                     {id && <div class="extra-data">

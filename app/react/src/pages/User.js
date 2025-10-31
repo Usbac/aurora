@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest, formatDate, getRoleTitle } from '../utils/utils';
+import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest, formatDate, getRoleTitle, getSlug } from '../utils/utils';
 import { IconEye, IconTrash, IconUsers } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -124,7 +124,7 @@ export default function User() {
 					</div>
 					<div class="input-group">
 						<label htmlFor="slug">Slug</label>
-						<Input id="slug" type="text" value={data.slug} onChange={e => setData({ ...data, slug: e.target.value })} charCount={true}/>
+						<Input id="slug" type="text" value={data.slug} onChange={e => setData({ ...data, slug: getSlug(e.target.value) })} charCount={true}/>
 						<a href={getUrl(`/${settings.blog_url}/author/${data.slug}`)} target="_blank">{getUrl(`/${settings.blog_url}/author/${data.slug}`)}</a>
 					</div>
 					<div class="input-group">

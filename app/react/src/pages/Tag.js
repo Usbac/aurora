@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Input, LoadingPage, makeRequest, MenuButton, Textarea } from '../utils/utils';
+import { getSlug, Input, LoadingPage, makeRequest, MenuButton, Textarea } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -86,7 +86,7 @@ export default function Tag() {
                         id="name"
                         type="text"
                         value={data.name}
-                        onChange={e => setData({...data, name: e.target.value})}
+                        onChange={e => setData({ ...data, name: e.target.value })}
                         charCount={true}
                     />
                 </div>
@@ -96,7 +96,7 @@ export default function Tag() {
                         id="slug"
                         type="text"
                         value={data.slug}
-                        onChange={e => setData({...data, slug: e.target.value})}
+                        onChange={e => setData({ ...data, slug: getSlug(e.target.value) })}
                         charCount={true}
                     />
                 </div>
@@ -105,7 +105,7 @@ export default function Tag() {
                     <Textarea
                         id="description"
                         value={data.description}
-                        onChange={e => setData({...data, description: e.target.value})}
+                        onChange={e => setData({ ...data, description: e.target.value })}
                         charCount={true}
                     />
                 </div>
