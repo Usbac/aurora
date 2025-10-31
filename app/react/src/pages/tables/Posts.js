@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, getContentUrl, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 
 export default function Posts() {
@@ -95,7 +95,7 @@ export default function Posts() {
                     class: 'w100 align-center',
                     content: post => <>
                         <img
-                            src={post.image || '/assets/no-image.svg'}
+                            src={post.image ? getContentUrl(post.image) : ''}
                             alt={post.image_alt || ''}
                             className="row-thumb"
                             style={{ visibility: post.image ? 'visible' : 'hidden' }}
