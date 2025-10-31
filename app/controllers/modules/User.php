@@ -190,7 +190,7 @@ final class User extends \Aurora\App\ModuleBase
         }
 
         if (!empty($data['password'])) {
-            $password_error = $this->checkPassword($data['password'], $data['password_confirm']);
+            $password_error = $this->checkPassword($data['password'], $data['password_confirm'] ?? '');
             if (!empty($password_error)) {
                 $errors['password'] = $password_error;
             }
