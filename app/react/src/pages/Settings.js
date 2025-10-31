@@ -331,6 +331,12 @@ export default function Settings() {
         setData(settings);
     }, [ settings ]);
 
+    useEffect(() => {
+        if (SECTIONS.find(sec => '#' + sec.id == hash) === undefined) {
+            setHash('#' + SECTIONS[0].id);
+        }
+    }, [ hash ]);
+
     const save = e => {
         e.preventDefault();
         setLoading(true);
