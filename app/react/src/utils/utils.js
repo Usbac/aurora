@@ -370,7 +370,7 @@ export const Editor = ({ value, setValue, theme }) => {
             menubar: false,
             plugins: [ 'image', 'wordcount', 'autoresize', 'code', 'link', 'lists' ],
             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image code',
-            images_upload_url: '/admin/posts/upload_image',
+            images_upload_url: '/api/v2/media/upload_image',
             skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
             content_css: theme === 'dark' ? 'dark' : 'default',
             setup: editor => {

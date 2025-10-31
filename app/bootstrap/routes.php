@@ -1281,6 +1281,13 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($login($user['id']));
     });
 
+    $router->any('json:api/v2/media/upload_image', function() {
+        $path = Kernel::config('content') . '/' . date('Y/m/');
+        \Aurora\App\Media::uploadFile($_FILES['file'], $path);
+
+        return json_encode([ 'location' => "/$path/" . $_FILES['file']['name'] ]);
+    });
+
     $router->post('json:api/v2/media', function() {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
