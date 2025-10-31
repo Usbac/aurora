@@ -57,14 +57,14 @@ final class User extends \Aurora\App\ModuleBase
     {
         $time = time();
         return $this->db->insert($this->table, [
-            'name' => $data['name'],
-            'slug' => $data['slug'],
-            'email' => $data['email'],
+            'name' => $data['name'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'email' => $data['email'] ?? '',
             'password' => $this->getPassword($data['password']),
-            'status' => $data['status'],
+            'status' => $data['status'] ?? false,
             'image' => $data['image'] ?? null,
-            'bio' => $data['bio'],
-            'role' => $data['role'],
+            'bio' => $data['bio'] ?? '',
+            'role' => $data['role'] ?? 0,
             'created_at' => $time,
             'last_active' => $time,
         ]);
@@ -235,6 +235,17 @@ final class User extends \Aurora\App\ModuleBase
         }
 
         return implode(' AND ', $where);
+    }
+
+    /**
+     * Returns the user with additional data mapped into it
+     * @param mixed $data the user data
+     * @return mixed the user with additional data
+     */
+    protected function getRowData($data): mixed
+    {
+        unset($data['password']);
+        return $data;
     }
 
     /**
