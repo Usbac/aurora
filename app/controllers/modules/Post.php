@@ -211,7 +211,7 @@ final class Post extends \Aurora\App\ModuleBase
             'meta_title' => $data['meta_title'] ?? '',
             'meta_description' => $data['meta_description'] ?? '',
             'canonical_url' => $data['canonical_url'] ?? '',
-            'published_at' => (int) strtotime($data['published_at'] ?? ''),
+            'published_at' => (int) ($data['published_at'] ?? 0),
         ];
     }
 }
