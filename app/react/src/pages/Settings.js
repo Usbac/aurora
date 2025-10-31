@@ -334,10 +334,12 @@ export default function Settings() {
     const save = e => {
         e.preventDefault();
         setLoading(true);
+        let new_data = { ...data };
+        delete new_data.meta;
         makeRequest({
             method: 'POST',
             url: '/api/v2/settings',
-            data: data,
+            data: new_data,
         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'))
         .finally(() => setLoading(false));
     };
