@@ -42,7 +42,7 @@ final class Kernel
      */
     public function init(string $url): void
     {
-        $this->router->handleRoute($url);
+        $this->router->handleRoute($url, \Aurora\Core\Helper::getRequestData());
         $this->router->handleRouteCode(http_response_code());
     }
 

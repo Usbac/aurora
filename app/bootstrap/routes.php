@@ -1211,9 +1211,9 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
     });
 
-    $router->any('json:api/v2/auth', function() use ($db, $user_mod, $login) {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
+    $router->any('json:api/v2/auth', function($body) use ($user_mod, $login) {
+        $email = $body['email'] ?? '';
+        $password = $body['password'] ?? '';
         $user = $user_mod->get([
             'email' => $email,
             'status' => 1,
@@ -1253,10 +1253,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->post('json:api/v2/send_password_restore', function() use ($view, $user_mod) {
+    $router->post('json:api/v2/send_password_restore', function($body) use ($view, $user_mod) {
         $hash = bin2hex(random_bytes(18));
         $user = $user_mod->get([
-            'email' => $_POST['email'] ?? '',
+            'email' => $body['email'] ?? '',
             'status' => 1,
         ]);
 
@@ -1384,7 +1384,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $db->delete('views') ]);
     });
 
-    $router->post('json:api/v2/settings', function() use ($db) {
+    $router->post('json:api/v2/settings', function($body) use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -1393,7 +1393,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         try {
             $db->connection->beginTransaction();
 
-            foreach ($_POST as $key => $val) {
+            foreach ($body as $key => $val) {
                 $db->replace('settings', [ 'key' => $key, 'value' => $val ]);
             }
 
@@ -1450,7 +1450,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode(array_values($view_files));
     });
 
-    $router->post('json:api/v2/{mod}', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->post('json:api/v2/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         switch ($_GET['mod']) {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;
@@ -1463,7 +1463,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         $id = $_GET['id'] ?? '';
-        $errors = $mod->checkFields($_POST, $id);
+        $errors = $mod->checkFields($body, $id);
         if (!empty($errors)) {
             return json_encode([
                 'success' => false,
@@ -1473,15 +1473,14 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
         return json_encode([
             'success' => Helper::isValidId($id)
-                ? $mod->save($id, $_POST)
-                : ($id = $mod->add($_POST)) !== false,
+                ? $mod->save($id, $body)
+                : ($id = $mod->add($body)) !== false,
             'id' => $id,
         ]);
     });
 
-    $router->delete('json:api/v2/{mod}', function() use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        $ids = array_map(fn($id) => (int) $id, is_array($_POST['id']) ? $_POST['id'] : explode(',', $_POST['id']));
+    $router->delete('json:api/v2/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+        $ids = array_map(fn($id) => (int) $id, is_array($body['id']) ? $body['id'] : explode(',', $body['id']));
         $mod_str = $_GET['mod'] ?? '';
 
         if (!\Aurora\App\Permission::can("edit_$mod_str")) {
@@ -1507,7 +1506,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 return $user_mod->remove($ids);
             })(),
             'media' => (function() {
-                $paths = json_decode($_POST['paths'] ?? '') ?? [];
+                $paths = json_decode($body['paths'] ?? '') ?? [];
                 $done = 0;
 
                 try {

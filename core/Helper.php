@@ -189,4 +189,31 @@ final class Helper
 
         return $file_exists ? readfile($file_path) : false;
     }
+
+    public static function getRequestData(): array
+        {
+            if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && !empty($_POST)) {
+                return $_POST;
+            }
+
+            $raw_input = file_get_contents('php://input');
+
+            if (empty($raw_input)) {
+                return [];
+            }
+
+            $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
+
+            if (stripos($content_type, 'application/json') !== false) {
+                $decoded = json_decode($raw_input, true);
+                return is_array($decoded) ? $decoded : [];
+            }
+
+            if (stripos($content_type, 'application/x-www-form-urlencoded') !== false) {
+                parse_str($raw_input, $data);
+                return $data;
+            }
+
+            return [ '_raw' => $raw_input ];
+        }
 }

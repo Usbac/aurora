@@ -115,8 +115,9 @@ final class Route
     /**
      * Handles a url
      * @param string $url the url to handle
+     * @param array $request_body the request body data
      */
-    public function handleRoute(string $url): void
+    public function handleRoute(string $url, array $request_body = []): void
     {
         $current = array_filter(explode('/', $url));
         $len = count($current) - 1;
@@ -126,7 +127,7 @@ final class Route
 
             if ($this->matchesRoute($current, $len, $route)) {
                 $this->mapParameters($current, $route);
-                $middleware['action']();
+                $middleware['action']($request_body);
             }
         }
 
@@ -142,7 +143,7 @@ final class Route
                 $this->mapParameters($current, $route);
                 header('Content-Type: ' . $val['content_type']);
                 http_response_code($val['status'] ?? 200);
-                echo $val['action']();
+                echo $val['action']($request_body);
                 return;
             }
         }
