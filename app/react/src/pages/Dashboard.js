@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { LoadingPage, MenuButton, useRequest } from '../utils/utils';
+import { getContentUrl, LoadingPage, MenuButton, useRequest } from '../utils/utils';
 import { IconBook, IconPencil, IconTag, IconUser } from '../utils/icons';
 import { useOutletContext } from 'react-router-dom';
 
@@ -52,7 +52,7 @@ export default function Dashboard() {
                         <div class="dashboard-card-rows">
                             {posts && posts.length > 0 && <>
                                 {posts.map(post => <a href={`/${settings.blog_url}/${post.slug}`} target="_blank">
-                                    <img src={post.image} alt={post.title} style={{ visibility: post.image ? 'initial' : 'hidden' }}/>
+                                    <img src={post.image ? getContentUrl(post.image) : ''} alt={post.title} style={{ visibility: post.image ? 'initial' : 'hidden' }}/>
                                     <div>
                                         <b>{post.title}</b>
                                         <span class="subtitle">{post.user_id ? `by ${post.user_name}` : <>&nbsp;</>}</span>
