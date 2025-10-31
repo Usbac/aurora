@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Editor, getContentUrl, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
+import { DateTimeInput, Editor, getContentUrl, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 
@@ -136,8 +136,8 @@ export default function Post() {
                 </div>
                 <div class="card v-spacing">
                     <div class="input-group">
-                        <label htmlFor="published_at">Publish date</label>
-                        <Input id="published_at" type="datetime-local" value={data.published_at} onChange={e => setData({ ...data, published_at: e.target.value })}/>
+                        <label htmlFor="published-at">Publish date</label>
+                        <DateTimeInput id="published-at" value={data.published_at} onChange={value => setData({ ...data, published_at: value })}/>
                     </div>
                     <div class="input-group">
                         <label htmlFor="user-id">Author</label>
@@ -147,8 +147,8 @@ export default function Post() {
                         </select>
                     </div>
                     <div class="input-group">
-                        <label htmlFor="published_at">Published</label>
-                        <Switch checked={data.status == 1} onChange={e => setData({ ...data, status: e.target.checked ? 1 : 0 })}/>
+                        <label htmlFor="published">Published</label>
+                        <Switch id="published" checked={data.status == 1} onChange={e => setData({ ...data, status: e.target.checked ? 1 : 0 })}/>
                     </div>
                     {tags.length > 0 && <div className="input-group">
                         <label>Tags</label>

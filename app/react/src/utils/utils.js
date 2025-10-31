@@ -95,6 +95,38 @@ export const Textarea = (props) => {
     </>
 };
 
+export const DateTimeInput = ({ value, onChange, ...props }) => {
+    let formatted_value = '';
+
+    try {
+        if (value != null && !isNaN(value)) {
+            const date = new Date(value * 1000);
+            if (!isNaN(date.getTime())) {
+                formatted_value = date.toISOString().slice(0, 16);
+            }
+        }
+    } catch {
+        formatted_value = '';
+    }
+    
+    return <Input
+        type="datetime-local"
+        value={formatted_value}
+        onChange={e => {
+            if (!e.target.value) {
+                onChange(null); 
+                return;
+            }
+
+            const new_date = new Date(e.target.value);
+            if (!isNaN(new_date.getTime())) {
+                onChange(Math.floor(new_date.getTime() / 1000));
+            }
+        }}
+        {...props}
+    />;
+};
+
 export const Switch = (props) => {
     const ref = useRef(null);
 
