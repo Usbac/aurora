@@ -36,12 +36,12 @@ export default function Login() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/send_password_restore',
-            data: {
-                email: email,
-            },
+            url: '/api/v2/password-reset/request',
+            data: { email: email },
         }).then(res => {
-            alert(res?.data?.success ? 'If the email is registered, you will receive an email with instructions to reset your password' : 'An error occurred, please try again later');
+            alert(res?.data?.success
+                ? 'If the email is registered, you will receive an email with instructions to reset your password'
+                : 'An error occurred, please try again later');
             setEmail('');
         }).finally(() => setLoading(false));
     };
