@@ -361,6 +361,8 @@ export const getRoleTitle = (role_slug) => {
     }
 };
 
+export const getSlug = (str) => str.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+
 export const Editor = ({ value, setValue, theme }) => {
     return <TinyMCE
         licenseKey="gpl"
