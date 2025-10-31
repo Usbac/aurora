@@ -36,7 +36,7 @@ export default function AdminPages() {
                     <IconHome/> Dashboard
                 </Link>
                 <a href="/" target="_blank">
-                    <IconWindow/> View Site
+                    <IconWindow/> View site
                 </a>
                 <Link to="/console/pages" data-separator>
                     <IconBook/> Pages
