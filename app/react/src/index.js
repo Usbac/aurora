@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 import Links from './pages/tables/Links';
 import Link from './pages/Link';
 import Tags from './pages/tables/Tags';
+import Media from './pages/tables/Media';
 import Pages from './pages/tables/Pages';
 import Posts from './pages/tables/Posts';
 import Users from './pages/tables/Users';
@@ -31,7 +32,7 @@ const App = () => {
                     <Route path="pages" element={<Pages/>}/>
                     <Route path="posts" element={<Posts/>}/>
                     <Route path="users" element={<Users/>}/>
-                    {/* <Route path="media" element={<Media/>}/> */}
+                    <Route path="media" element={<Media/>}/>
                     <Route path="links" element={<Links/>}/>
                     <Route path="tags" element={<Tags/>}/>
                     <Route path="settings" element={<Settings/>}/>
