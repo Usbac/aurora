@@ -14,6 +14,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     $rss = \Aurora\App\Setting::get('rss');
     $router = $kernel->router;
 
+    $router->get([ 'console', 'console/*' ], function() use ($view) {
+        return $view->get('admin.html');
+    });
+
     /* MEDIA */
 
     $router->get('admin/media', function() use ($view, $lang) {
@@ -462,12 +466,8 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('*', function() use ($db, $view, $lang, $theme_dir) {
-        if (Helper::isValidId($_SESSION['user']['id'] ?? false)) {
-            $_SESSION['user'] = $db->query('SELECT * FROM users WHERE id = ? AND status', $_SESSION['user']['id'])->fetch();
-        }
-
-        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'console') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($_SESSION['user']['id'] ?? false)) {
+    $router->middleware('*', function() use ($view, $lang, $theme_dir) {
+        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'console') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($GLOBALS['user']['id'] ?? false)) {
             echo $view->get("$theme_dir/information.html", [
                 'description' => $lang->get('under_maintenance'),
                 'subdescription' => $lang->get('come_back_soon'),
@@ -476,36 +476,61 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
     });
 
-    $router->get([ 'console', 'console/*' ], function() use ($view) {
-        return $view->get('admin.html');
-    });
-
-    $router->post('json:admin/send_password_restore', function() use ($view, $user_mod) {
+    $router->post('json:api/v2/password-reset/request', function($body) use ($db, $lang, $user_mod, $view) {
         $hash = bin2hex(random_bytes(18));
-        $errors = $user_mod->requestPasswordRestore($_POST['email'],
-            $hash,
-            $view->get('admin/emails/password_restore.html', [ 'hash' => $hash ]));
+        $user = $user_mod->get([
+            'email' => $body['email'],
+            'status' => 1,
+        ]);
 
         return json_encode([
-            'success' => empty($errors),
-            'errors' => $errors,
+            'success' => $user && (bool) $db->replace('password_restores', [
+                'user_id' => $user['id'],
+                'hash' => $hash,
+                'created_at' => time(),
+            ]) && \Aurora\Core\Kernel::config('mail')($user['email'], $lang->get('restore_your_password'), $view->get('emails/password_restore.html', [ 'hash' => $hash ])),
         ]);
     });
 
-    $router->get('admin/new_password', function() use ($view) {
-        return $view->get('admin/password_restore.html', [ 'hash' => $_GET['hash'] ]);
-    });
+    $router->post('json:api/v2/password-reset/confirm', function($body) use ($db, $user_mod, $login) {
+        $hash = $body['hash'] ?? '';
+        $password = $body['password'] ?? '';
+        $restore = $db->query('SELECT * FROM password_restores WHERE hash = ?', $hash)->fetch();
 
-    $router->post('json:admin/password_restore', function() use ($user_mod) {
-        $error = $user_mod->passwordRestore($_POST['hash'], $_POST['password'], $_POST['password_confirm']);
+        if (empty($restore) || $restore['created_at'] < strtotime('-2 hours')) {
+            return json_encode([
+                'success' => false,
+                'error' => 'expired_restore',
+            ]);
+        }
+
+        $error = $user_mod->checkPassword($password, $body['password_confirm'] ?? '');
+        if (empty($error)) {
+            $user = $user_mod->get([
+                'id' => $restore['user_id'],
+                'status' => 1,
+            ]);
+
+            if (!$user) {
+                return json_encode([
+                    'success' => false,
+                    'error' => 'no_active_user',
+                ]);
+            }
+
+            $db->delete('password_restores', $hash, 'hash');
+            $db->update($user_mod->getTable(), [ 'password' => $user_mod->getPassword($password) ], $user['id']);
+            return json_encode($login($user['id']));
+        }
+
         return json_encode([
-            'success' => empty($error),
-            'errors' => [ $error ],
+            'success' => false,
+            'error' => $error,
         ]);
     });
 
     $router->middleware('api/v2/*', function() use ($db, $user_mod) {
-        if (in_array(Helper::getCurrentPath(), [ 'api/v2/auth', 'api/v2/send_password_restore' ])) {
+        if (in_array(Helper::getCurrentPath(), [ 'api/v2/auth', 'api/v2/password-reset/request', 'api/v2/password-reset/confirm' ])) {
             return;
         }
 
@@ -565,20 +590,6 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'db_dsn' => $db->dsn,
             ],
-        ]);
-    });
-
-    $router->post('json:api/v2/send_password_restore', function($body) use ($view, $user_mod) {
-        $hash = bin2hex(random_bytes(18));
-        $user = $user_mod->get([
-            'email' => $body['email'] ?? '',
-            'status' => 1,
-        ]);
-
-        return json_encode([
-            'success' => !$user || $user_mod->requestPasswordRestore($user,
-                $hash,
-                $view->get('admin/emails/password_restore.html', [ 'hash' => $hash ])),
         ]);
     });
 

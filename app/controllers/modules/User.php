@@ -98,62 +98,6 @@ final class User extends \Aurora\App\ModuleBase
     }
 
     /**
-     * Sends an email to restore the password of an user
-     * @param array $user the user's data
-     * @param string $hash the hash to restore the password
-     * @param string $message the email's content
-     * @return bool true on success, false otherwise
-     */
-    public function requestPasswordRestore(array $user, string $hash, string $message): bool
-    {
-        $success = (bool) $this->db->replace('password_restores', [
-            'user_id' => $user['id'],
-            'hash' => $hash,
-            'created_at' => time(),
-        ]);
-
-        if (!\Aurora\Core\Kernel::config('mail')($user['email'], $this->language->get('restore_your_password'), $message)) {
-            return false;
-        }
-
-        return $success;
-    }
-
-    /**
-     * Restores an user's password
-     * @param string $hash the hash to restore the password
-     * @param string $password the new password
-     * @param string $password_confirm the confirmation of the new password
-     * @return string the error message, if empty it means the password has been successfully been restored
-     */
-    public function passwordRestore(string $hash, string $password, string $password_confirm): string
-    {
-        $restore = $this->db->query('SELECT * FROM password_restores WHERE hash = ?', $hash)->fetch();
-
-        if (empty($restore) || $restore['created_at'] < strtotime('-2 hours')) {
-            return $this->language->get('error_expired_restore');
-        }
-
-        $error = $this->checkPassword($password, $password_confirm);
-        if (empty($error)) {
-            $user = $this->get([
-                'id' => $restore['user_id'],
-                'status' => 1,
-            ]);
-
-            if (!$user) {
-                return $this->language->get('no_active_user');
-            }
-
-            $this->db->delete('password_restores', $hash, 'hash');
-            $this->db->update($this->table, [ 'password' => $this->getPassword($password) ], $user['id']);
-            $_SESSION['user'] = $user;
-        }
-
-        return $error;
-    }
-
-    /**
      * Returns an array with all the user fields that contain an error
      * @param array $data the user fields
      * @param [mixed] $id the user id
@@ -264,7 +208,7 @@ final class User extends \Aurora\App\ModuleBase
      * @param string $password_confirm the password confirmation
      * @return string the error message, if empty it means both passwords are equal and valid
      */
-    private function checkPassword(string $password, string $password_confirm): string
+    public function checkPassword(string $password, string $password_confirm): string
     {
         if (mb_strlen($password) < 8) {
             return $this->language->get('bad_password');

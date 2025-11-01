@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AdminPages from './components/AdminPages';
+import NewPassword from './pages/NewPassword';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
@@ -23,6 +24,7 @@ const App = () => {
     return <BrowserRouter>
         <QueryClientProvider className="app" client={query_client}>
             <Routes>
+                <Route path="/console/new_password" element={<NewPassword/>}/>
                 <Route path="/console" element={<Login/>}/>
                 <Route path="/console" element={<AdminPages/>}>
                     <Route path="dashboard" element={<Dashboard/>}/>
