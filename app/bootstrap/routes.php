@@ -466,7 +466,18 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('*', function() use ($view, $lang, $theme_dir) {
+    $router->middleware('*', function() use ($db, $view, $lang, $theme_dir, $user_mod) {
+        $token = preg_match('/Bearer\s(\S+)/', getallheaders()['Authorization'] ?? '', $matches)
+            ? $matches[1]
+            : false;
+
+        $GLOBALS['user'] = $user_mod->get([
+            'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
+            'status' => 1,
+        ]);
+
+        \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $GLOBALS['user']['role'] ?? 0);
+
         if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'console') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($GLOBALS['user']['id'] ?? false)) {
             echo $view->get("$theme_dir/information.html", [
                 'description' => $lang->get('under_maintenance'),
@@ -529,23 +540,8 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('api/v2/*', function() use ($db, $user_mod) {
-        if (in_array(Helper::getCurrentPath(), [ 'api/v2/auth', 'api/v2/password-reset/request', 'api/v2/password-reset/confirm' ])) {
-            return;
-        }
-
-        $token = preg_match('/Bearer\s(\S+)/', getallheaders()['Authorization'] ?? '', $matches)
-            ? $matches[1]
-            : false;
-
-        $GLOBALS['user'] = $user_mod->get([
-            'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
-            'status' => 1,
-        ]);
-
-        \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $GLOBALS['user']['role'] ?? 0);
-
-        if (empty($GLOBALS['user'])) {
+    $router->middleware('api/v2/*', function() {
+        if (empty($GLOBALS['user']) && !in_array(Helper::getCurrentPath(), [ 'api/v2/auth', 'api/v2/password-reset/request', 'api/v2/password-reset/confirm' ])) {
             http_response_code(401);
             exit;
         }
