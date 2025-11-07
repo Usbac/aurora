@@ -58,7 +58,7 @@ export const Table = ({
     const options = initialOptions.filter(opt => opt.condition === undefined || opt.condition);
     const { data: page_req, is_loading, is_error, fetch } = useRequest({
         method: 'GET',
-        url: url + (query_string ? `?${query_string}` : ''),
+        url: url + (query_string ? `${url.includes('?') ? '&' : '?'}${query_string}` : ''),
     });
 
     useEffect(() => {
@@ -77,7 +77,7 @@ export const Table = ({
 
     useEffect(() => {
         fetch();
-    }, [ query_string ]);
+    }, [ url, query_string ]);
 
     useEffect(() => {
         const page_rows = page_req?.data?.data || null;
