@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, formatSize, makeRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
 import { IconFile, IconFolderFill, IconThreeDots, IconTrash } from '../../utils/icons';
 
 export default function Media() {
@@ -54,10 +54,10 @@ export default function Media() {
             ]}
             columns={[
                 {
-                    class: 'w100',
+                    class: 'w100 align-center',
                     content: file => <>
                         {file.is_image && <a href={file.path} target="_blank" className="pointer">
-                            <img src={file.path}/>
+                            <img src={getContentUrl(file.path)} className="row-thumb"/>
                         </a>}
                         {!file.is_image && file.is_file && <a href={file.path} target="_blank" className="pointer custom-media file">
                             <IconFile/>

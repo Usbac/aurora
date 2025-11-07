@@ -281,7 +281,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
             {files.map(file => {
                 const file_path = getContentUrl(file.path);
                 return <div
-                    class="listing-row file"
+                    class="listing-row"
                     onClick={() => {
                         if (file.is_file) {
                             onSave(file.path);
@@ -294,10 +294,10 @@ export const ImageDialog = ({ onSave, onClose }) => {
                     <div class="w100 align-center">
                         {file.is_file
                             ? <a href={file_path} target="_blank" class="pointer" onClick={e => e.stopPropagation()}>
-                                <img src={file_path}/>
+                                <img src={file_path} className="row-thumb"/>
                             </a>
                             : <div className="pointer custom-media folder">
-                                <IconFolderFill/>
+                                <IconFolderFill className="row-thumb"/>
                             </div>}
                         <span class="file-name">{file.name}</span>
                     </div>
