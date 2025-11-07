@@ -20,7 +20,6 @@ export default function Media() {
                     onClick: () => navigate('/console/media/edit'),
                 },
             ]}
-            rowOnClick={file => setCurrentPath(file.path)}
             filters={{
                 order: {
                     title: 'Sort by',
@@ -57,13 +56,13 @@ export default function Media() {
                 {
                     class: 'w100 align-center',
                     content: file => <>
-                        {file.is_image && <a href={file.path} target="_blank" className="pointer">
+                        {file.is_image && <a href={getContentUrl(file.path)} target="_blank" className="pointer">
                             <img src={getContentUrl(file.path)} className="row-thumb"/>
                         </a>}
-                        {!file.is_image && file.is_file && <a href={file.path} target="_blank" className="pointer custom-media file">
+                        {!file.is_image && file.is_file && <a href={getContentUrl(file.path)} target="_blank" className="pointer custom-media file">
                             <IconFile/>
                         </a>}
-                        {!file.is_file && <div className="pointer custom-media folder">
+                        {!file.is_file && <div onClick={() => setCurrentPath(file.path)} className="pointer custom-media folder">
                             <IconFolderFill/>
                         </div>}
                         <span>{file.name}</span>
