@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
@@ -6,11 +6,12 @@ import { IconFile, IconFolderFill, IconThreeDots, IconTrash } from '../../utils/
 
 export default function Media() {
     const { user } = useOutletContext();
+    const [ current_path, setCurrentPath ] = useState('');
     const navigate = useNavigate();
 
     return <div class="content">
         <Table
-            url="/api/v2/media"
+            url={`/api/v2/media?path=${encodeURIComponent(current_path)}`}
             title="Media"
             topOptions={[
                 {
@@ -19,7 +20,7 @@ export default function Media() {
                     onClick: () => navigate('/console/media/edit'),
                 },
             ]}
-            rowOnClick={media => navigate(`/console/media/edit?id=${media.id}`)}
+            rowOnClick={file => setCurrentPath(file.path)}
             filters={{
                 order: {
                     title: 'Sort by',
@@ -62,9 +63,9 @@ export default function Media() {
                         {!file.is_image && file.is_file && <a href={file.path} target="_blank" className="pointer custom-media file">
                             <IconFile/>
                         </a>}
-                        {!file.is_file && <a href={'/admin/media?path=' + encodeURIComponent(file.path)} className="pointer custom-media folder">
+                        {!file.is_file && <div className="pointer custom-media folder">
                             <IconFolderFill/>
-                        </a>}
+                        </div>}
                         <span>{file.name}</span>
                     </>,
                 },
