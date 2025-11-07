@@ -69,12 +69,12 @@ export default function Media() {
                     </>,
                 },
                 {
-                    title: 'Slug',
+                    title: 'Information',
                     class: 'w20 file-info',
                     content: file => <p>{file.is_file ? formatSize(file.size) : file.mime}</p>,
                 },
                 {
-                    title: '',
+                    title: 'Last Modification',
                     class: 'w20',
                     content: file => <p>{formatDate(file.time)}</p>,
                 },
