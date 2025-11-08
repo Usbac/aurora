@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table } from '../../components/Table';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
 import { IconFile, IconFolderFill, IconThreeDots, IconTrash } from '../../utils/icons';
 
 export default function Media() {
     const { user } = useOutletContext();
-    const [ current_path, setCurrentPath ] = useState('');
+    const [ search_params, setSearchParams ] = useSearchParams();
     const navigate = useNavigate();
 
-    return <div class="content">
+    const setPath = (new_path) => {
+        setSearchParams({ ...search_params, path: new_path });
+    };
+
+    return <div className="content">
         <Table
-            url={`/api/v2/media?path=${encodeURIComponent(current_path)}`}
+            url={`/api/v2/media?path=${encodeURIComponent(search_params.get('path') || '')}`}
             title="Media"
             topOptions={[
                 {
@@ -62,7 +66,7 @@ export default function Media() {
                         {!file.is_image && file.is_file && <a href={getContentUrl(file.path)} target="_blank" className="pointer custom-media file">
                             <IconFile/>
                         </a>}
-                        {!file.is_file && <div onClick={() => setCurrentPath(file.path)} className="pointer custom-media folder">
+                        {!file.is_file && <div onClick={() => setPath(file.path)} className="pointer custom-media folder">
                             <IconFolderFill/>
                         </div>}
                         <span>{file.name}</span>
