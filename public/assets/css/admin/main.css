@@ -900,6 +900,12 @@ textarea.code {
     margin-right: 12px;
 }
 
+.page-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 #selected-items {
     margin-left: 6px;
     font-variant-numeric: tabular-nums;

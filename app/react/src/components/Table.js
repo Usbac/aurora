@@ -4,7 +4,7 @@ import { IconGlass } from '../utils/icons';
 
 const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
     return <div>
-        <div class="page-title">
+        <div className="page-title">
             <MenuButton/>
             <div>
                 <h2>{title}</h2>
@@ -12,7 +12,9 @@ const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
                 {selectedItems > 0 && <span id="selected-items">{selectedItems} selected</span>}
             </div>
         </div>
-        {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => <button key={i} className="button" onClick={opt.onClick}>{opt.content}</button>)}
+        <div className="page-options">
+            {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => <button key={i} className="button" onClick={opt.onClick}>{opt.content}</button>)}
+        </div>
     </div>;
 };
 
