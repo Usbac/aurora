@@ -27,26 +27,6 @@
     <?php endforeach ?>
 </div>
 
-<div id="edit-dialog" class="dialog">
-    <div>
-        <div class="top">
-            <div class="title">
-                <h2><?= $this->t('rename') ?></h2>
-                <span onclick="Dialog.close(get('#edit-dialog'))">
-                    <?= $this->include('icons/x.svg') ?>
-                </span>
-            </div>
-        </div>
-        <div class="content input-group">
-            <label for="file-name-input"><?= $this->t('name') ?></label>
-            <input id="file-name-input" type="text" name="name"/>
-        </div>
-        <div class="bottom">
-            <button class="light" onclick="Dialog.close(get('#edit-dialog'))"><?= $this->t('cancel') ?></button>
-            <button onclick="editFile()"><?= $this->t('save') ?></button>
-        </div>
-    </div>
-</div>
 <div id="folder-dialog" class="dialog">
     <div>
         <div class="top">
@@ -91,26 +71,6 @@
         </div>
     </div>
 </div>
-<div id="duplicate-dialog" class="dialog">
-    <div>
-        <div class="top">
-            <div class="title">
-                <h2><?= $this->t('duplicate') ?></h2>
-                <span onclick="Dialog.close(get('#duplicate-dialog'))">
-                    <?= $this->include('icons/x.svg') ?>
-                </span>
-            </div>
-        </div>
-        <div class="content input-group">
-            <label for="duplicate-input"><?= $this->t('name') ?></label>
-            <input id="duplicate-input" type="text" name="name"/>
-        </div>
-        <div class="bottom">
-            <button class="light" onclick="Dialog.close(get('#duplicate-dialog'))"><?= $this->t('cancel') ?></button>
-            <button onclick="duplicateFile()"><?= $this->t('save') ?></button>
-        </div>
-    </div>
-</div>
 <script>
     let path = <?= js($_GET['path'] ?? \Aurora\Core\Kernel::config('content')) ?>;
     let file_name = null;
@@ -139,20 +99,6 @@
         }
     }
 
-    function openEditFileDialog(i) {
-        file_name = get('#file-name-input').value = get('#file-name-' + i).innerText;
-        let dialog = get('#edit-dialog');
-        removeErrors(dialog);
-        Dialog.show(dialog);
-    }
-
-    function editFile() {
-        Form.send('/admin/media/save', 'edit-dialog', null, {
-            csrf: csrf_token,
-            path: path + '/' + file_name,
-        }).then(res => Listing.handleResponse(res));
-    }
-
     function openCreateFolderDialog() {
         get('#folder-input').value = '';
         let dialog = get('#folder-dialog');
@@ -177,18 +123,6 @@
         Form.send('/admin/media/move', 'move-dialog', null, {
             csrf: csrf_token,
             paths: JSON.stringify(files_names),
-        }).then(res => Listing.handleResponse(res));
-    }
-
-    function openDuplicateDialog(i) {
-        file_name = get('#duplicate-input').value = get('#file-name-' + i).innerText;
-        Dialog.show(get('#duplicate-dialog'));
-    }
-
-    function duplicateFile() {
-        Form.send('/admin/media/duplicate', 'duplicate-dialog', null, {
-            csrf: csrf_token,
-            path: path + '/' + file_name,
         }).then(res => Listing.handleResponse(res));
     }
 
