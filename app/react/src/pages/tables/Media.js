@@ -66,8 +66,11 @@ export default function Media() {
     const [ current_file, setCurrentFile ] = useState(null);
     const navigate = useNavigate();
 
-    const setPath = (new_path) => {
-        setSearchParams({ ...search_params, path: new_path });
+    const setPath = (new_path) => setSearchParams({ ...search_params, path: new_path });
+
+    const openDialog = (dialog, file) => {
+        setCurrentFile(file);
+        setCurrentDialog(dialog);
     };
 
     const closeDialog = () => setCurrentDialog(null);
@@ -151,10 +154,7 @@ export default function Media() {
                         options={[
                             {
                                 condition: Boolean(user?.actions?.edit_media),
-                                onClick: () => {
-                                    setCurrentFile(file);
-                                    setCurrentDialog('edit_file');
-                                },
+                                onClick: () => openDialog('edit_file', file),
                                 content: <><IconPencil/> Rename</>
                             },
                             {
