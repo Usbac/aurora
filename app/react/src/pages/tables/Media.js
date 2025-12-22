@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
-import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
-import { IconClipboard, IconDuplicate, IconFile, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
+import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
+import { IconClipboard, IconDuplicate, IconFile, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 
 const MediaPath = ({ path, setPath }) => {
@@ -183,7 +183,19 @@ export default function Media() {
         if (result) {
             alert('Path copied to clipboard.');
         }
-    }
+    };
+
+    const downloadFiles = () => {
+        if (confirm('This will download all the media content in the current directory as a zip file.')) {
+            makeRequest({
+                method: 'GET',
+                url: '/api/v2/media/download?path=' + current_path,
+                options: { responseType: 'blob' },
+            }).then(res => {
+                downloadFile(res.data, current_path + ' ' + new Date().toISOString().slice(0, 19).replace('T', ' ') + '.zip')
+            });
+        }
+    };
 
     const openDialog = (dialog, file) => {
         setCurrentFile(file);
@@ -197,6 +209,10 @@ export default function Media() {
             url={`/api/v2/media?path=${encodeURIComponent(current_path)}`}
             title="Media"
             topOptions={[
+                {
+                    content: <IconZip/>,
+                    onClick: downloadFiles,
+                },
                 {
                     content: <><b>+</b>&nbsp;New</>,
                     condition: Boolean(user?.actions?.edit_media),

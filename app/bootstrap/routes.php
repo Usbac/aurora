@@ -70,34 +70,6 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get('admin/settings/media_download', function() use ($lang) {
-        $file_path = Helper::getPath('content.zip');
-        $path = $_GET['path'] ?? '';
-        $absolute_path = Helper::getPath($path);
-
-        if (!\Aurora\App\Media::isValidPath($absolute_path)) {
-            http_response_code(403);
-            return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
-        }
-
-        $zip = new ZipArchive();
-        $zip->open($file_path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-        foreach (\Aurora\Core\Helper::getFileIterator($absolute_path) as $file) {
-            $real_path = $file->getRealPath();
-            $relative_path = mb_substr($real_path, mb_strlen($absolute_path) + 1);
-
-            if (!$file->isDir()) {
-                $zip->addFile($real_path, $relative_path);
-            } elseif ($relative_path !== false) {
-                $zip->addEmptyDir($relative_path);
-            }
-        }
-
-        $zip->close();
-        Helper::downloadFile($file_path, urldecode(trim($path, '/')) . ' ' . date('Y-m-d H:i:s') . '.zip', 'application/zip');
-    });
-
     /**
      * BLOG
      */
@@ -489,6 +461,33 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode([ 'success' => $success ]);
+    });
+
+    $router->get('api/v2/media/download', function() {
+        $file_path = Helper::getPath('content.zip');
+        $path = Helper::getPath(Kernel::config('content') . '/' . ltrim($_GET['path'] ?? '', '/'));
+
+        if (!\Aurora\App\Media::isValidPath($path)) {
+            http_response_code(403);
+            exit;
+        }
+
+        $zip = new ZipArchive();
+        $zip->open($file_path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        foreach (\Aurora\Core\Helper::getFileIterator($path) as $file) {
+            $real_path = $file->getRealPath();
+            $relative_path = mb_substr($real_path, mb_strlen($path) + 1);
+
+            if (!$file->isDir()) {
+                $zip->addFile($real_path, $relative_path);
+            } elseif ($relative_path !== false) {
+                $zip->addEmptyDir($relative_path);
+            }
+        }
+
+        $zip->close();
+        Helper::downloadFile($file_path, 'media.zip', 'application/zip');
     });
 
     $router->get('json:api/v2/media/folders', function() {
