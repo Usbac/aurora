@@ -714,7 +714,9 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->delete('json:api/v2/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
-        $ids = array_map(fn($id) => (int) $id, is_array($body['id']) ? $body['id'] : explode(',', $body['id']));
+        $ids = isset($body['id'])
+            ? array_map(fn($id) => (int) $id, is_array($body['id']) ? $body['id'] : explode(',', $body['id']))
+            : null;
         $mod_str = $_GET['mod'] ?? '';
 
         if (!\Aurora\App\Permission::can("edit_$mod_str")) {
@@ -739,16 +741,15 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 $ids = $valid_ids;
                 return $user_mod->remove($ids);
             })(),
-            'media' => (function() {
-                $paths = json_decode($body['paths'] ?? '') ?? [];
+            'media' => (function() use ($body) {
                 $done = 0;
 
                 try {
-                    foreach ($paths as $path) {
+                    foreach ($body as $path) {
                         $done += \Aurora\App\Media::remove($path);
                     }
 
-                    $success = $done == count($paths);
+                    $success = $done == count($body);
                 } catch (Exception) {
                     $success = false;
                 }
