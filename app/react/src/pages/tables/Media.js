@@ -125,9 +125,6 @@ export default function Media() {
     const closeDialog = () => setCurrentDialog(null);
 
     return <div className="content">
-        <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
-        {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog}/>}
-        {current_dialog == 'duplicate_file' && <DialogDuplicate file={current_file} onClose={closeDialog}/>}
         <Table
             url={`/api/v2/media?path=${encodeURIComponent(search_params.get('path') || '')}`}
             title="Media"
@@ -223,5 +220,9 @@ export default function Media() {
                 },
             ]}
         />
+        {current_dialog == 'duplicate_file' && <DialogDuplicate file={current_file} onClose={closeDialog}/>}
+        {current_dialog == 'move_file' && <DialogMove files={[ current_file ]} onClose={closeDialog}/>}
+        {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog}/>}
+        <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
     </div>
 }
