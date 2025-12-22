@@ -61,12 +61,12 @@ export default function Media() {
                     title: 'Delete',
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_media),
-                    onClick: (file) => {
+                    onClick: (files) => {
                         if (confirm('Are you sure you want to delete the selected files? This action cannot be undone.')) {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/v2/media',
-                                data: { id: file.map(l => l.id) },
+                                data: { id: files.map(l => l.id) },
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }
                     },
