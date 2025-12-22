@@ -345,20 +345,12 @@ dialog::backdrop {
     align-items: center;
 }
 
-.media-paths-container {
-    --margin: 15px;
-    display: flex;
-    position: sticky;
-    left: var(--margin);
-    bottom: var(--margin);
-    overflow: hidden;
-    width: calc(100% - (var(--margin) * 2));
-}
-
 .image-dialog .media-paths {
-    position: relative;
-    max-width: fit-content;
-    bottom: 0;
+    --margin: 10px;
+    position: sticky !important;
+    max-width: calc(100% - (var(--margin) * 2)) !important;
+    bottom: var(--margin) !important;
+    left: var(--margin) !important;
 }
 
 .image-dialog .listing {
@@ -1372,14 +1364,15 @@ textarea.code {
 }
 
 .media-paths {
-    display: flex;
-    align-items: center;
-    position: fixed;
+    display: inline-flex !important;
+    align-items: center !important;
+    position: fixed !important;
     bottom: 14px;
     background: var(--fourth-color);
     border: 1px var(--border-color) solid;
     border-radius: 6px;
     box-sizing: border-box;
+    width: initial !important;
     max-width: calc(100vw - var(--nav-width) - (var(--content-spacing) * 2));
     z-index: calc(var(--nav-z-index) - 2);
     scrollbar-width: none;
@@ -1388,7 +1381,6 @@ textarea.code {
     overflow: auto;
 }
 
-.media-paths > a,
 .media-paths > div {
     display: flex;
     justify-content: center;
@@ -1404,17 +1396,14 @@ textarea.code {
     font-size: var(--font-size-bg);
 }
 
-.media-paths > a:hover,
 .media-paths > div:hover {
     background-color: var(--third-color);
 }
 
-.media-paths > a svg,
 .media-paths > div svg {
     fill: var(--main-color);
 }
 
-.media-paths > a:last-of-type,
 .media-paths > div:last-of-type {
     font-weight: var(--font-bold);
 }

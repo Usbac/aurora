@@ -2,7 +2,22 @@ import React from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
-import { IconFile, IconFolderFill, IconThreeDots, IconTrash } from '../../utils/icons';
+import { IconFile, IconFolderFill, IconHome, IconThreeDots, IconTrash } from '../../utils/icons';
+
+const MediaPath = ({ path, setPath }) => {
+    const paths = path.split('/');
+
+    return <div className="media-paths">
+        {paths.map((folder, i) => {
+            const folder_path = paths.slice(0, i + 1).join('/');
+            
+            return <>
+                <div onClick={() => setPath(folder_path)} className="pointer">{i == 0 ? <IconHome/> : folder}</div>
+                <span>/</span>
+            </>;
+        })}
+    </div>;
+};
 
 export default function Media() {
     const { user } = useOutletContext();
@@ -14,6 +29,7 @@ export default function Media() {
     };
 
     return <div className="content">
+        <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
         <Table
             url={`/api/v2/media?path=${encodeURIComponent(search_params.get('path') || '')}`}
             title="Media"
