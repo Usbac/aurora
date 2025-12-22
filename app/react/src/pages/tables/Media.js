@@ -107,6 +107,16 @@ export default function Media() {
 
     const setPath = (new_path) => setSearchParams({ ...search_params, path: new_path });
 
+    const deleteFile = (file) => {
+        if (confirm('Are you sure you want to delete the file? This action cannot be undone.')) {
+            makeRequest({
+                method: 'DELETE',
+                url: '/api/v2/media',
+                data: { id: file.id },
+            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+        }
+    };
+
     const openDialog = (dialog, file) => {
         setCurrentFile(file);
         setCurrentDialog(dialog);
@@ -205,15 +215,7 @@ export default function Media() {
                             {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_media),
-                                onClick: () => {
-                                    if (confirm('Are you sure you want to delete the file? This action cannot be undone.')) {
-                                        makeRequest({
-                                            method: 'DELETE',
-                                            url: '/api/v2/media',
-                                            data: { id: file.id },
-                                        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
-                                    }
-                                },
+                                onClick: () => deleteFile(file),
                                 content: <><IconTrash/> Delete</>
                             },
                         ]}
