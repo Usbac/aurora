@@ -29,6 +29,7 @@
     --font-size-bg: 15px;
     --image-size: 50px;
     --nav-z-index: 10;
+    --content-spacing: 34px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     font-size: var(--font-size);
     line-height: 1.3em;
@@ -854,7 +855,6 @@ textarea.code {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    --content-spacing: 34px;
     padding: var(--content-spacing);
     position: relative;
     background-color: var(--background-color);
