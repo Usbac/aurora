@@ -100,7 +100,7 @@ export default function Media() {
                 },
                 {
                     class: 'w10 row-actions',
-                    content: tag => <DropdownMenu
+                    content: file => <DropdownMenu
                         content={<IconThreeDots/>}
                         className="three-dots"
                         options={[
@@ -112,7 +112,7 @@ export default function Media() {
                                         makeRequest({
                                             method: 'DELETE',
                                             url: '/api/v2/media',
-                                            data: { id: tag.id },
+                                            data: { id: file.id },
                                         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                                     }
                                 },
