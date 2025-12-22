@@ -163,7 +163,7 @@ export default function Media() {
             makeRequest({
                 method: 'DELETE',
                 url: '/api/v2/media',
-                data: { id: file.id },
+                data: [ getContentUrl(file.path) ],
             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
         }
     };
@@ -245,7 +245,7 @@ export default function Media() {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/v2/media',
-                                data: { id: files.map(l => l.id) },
+                                data: files.map(f => getContentUrl(f.path)),
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }
                     },
