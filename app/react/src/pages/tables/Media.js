@@ -153,6 +153,7 @@ export default function Media() {
     const [ search_params, setSearchParams ] = useSearchParams();
     const [ current_dialog, setCurrentDialog ] = useState(null);
     const [ current_file, setCurrentFile ] = useState(null);
+    const current_path = search_params.get('path') || '';
     const navigate = useNavigate();
 
     const setPath = (new_path) => setSearchParams({ ...search_params, path: new_path });
@@ -193,7 +194,7 @@ export default function Media() {
 
     return <div className="content">
         <Table
-            url={`/api/v2/media?path=${encodeURIComponent(search_params.get('path') || '')}`}
+            url={`/api/v2/media?path=${encodeURIComponent(current_path)}`}
             title="Media"
             topOptions={[
                 {
