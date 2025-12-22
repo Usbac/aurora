@@ -161,31 +161,6 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->post('json:admin/media/save', function() use ($lang) {
-        if (empty($_POST['name']) || str_contains($_POST['name'], '/')) {
-            return json_encode([
-                'success' => false,
-                'errors' => [ 'name' => $lang->get('invalid_value') ]
-            ]);
-        }
-
-        if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
-        }
-
-        try {
-            $success = \Aurora\App\Media::rename($_POST['path'] ?? '', $_POST['name']);
-        } catch (Exception) {
-            $success = false;
-        }
-
-        return json_encode([
-            'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('error_rename_item') ],
-        ]);
-    });
-
     $router->post('json:admin/media/move', function() use ($lang) {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
@@ -601,6 +576,25 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode($login($user['id']));
+    });
+
+    $router->post('json:api/v2/media/rename', function($body) {
+        if (empty($body['name']) || str_contains($body['name'], '/')) {
+            return json_encode([ 'success' => false ]);
+        }
+
+        if (!\Aurora\App\Permission::can('edit_media')) {
+            http_response_code(403);
+            exit;
+        }
+
+        try {
+            $success = \Aurora\App\Media::rename($body['path'] ?? '', $body['name']);
+        } catch (Exception) {
+            $success = false;
+        }
+
+        return json_encode([ 'success' => $success ]);
     });
 
     $router->any('json:api/v2/media/upload_image', function() {

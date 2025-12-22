@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
-import { IconFile, IconFolderFill, IconHome, IconThreeDots, IconTrash } from '../../utils/icons';
+import { IconFile, IconFolderFill, IconHome, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
+import { createPortal } from 'react-dom';
 
 const MediaPath = ({ path, setPath }) => {
     const paths = path.split('/');
@@ -19,17 +20,61 @@ const MediaPath = ({ path, setPath }) => {
     </div>;
 };
 
+const DialogEditFile = ({ file, onClose }) => {
+    const [ name, setName ] = useState(file.name);
+
+    const save = () => {
+        makeRequest({
+            method: 'POST',
+            url: '/api/v2/media/rename',
+            data: {
+                name: name,
+                path: getContentUrl(file.path),
+            },
+        }).then(res => {
+            alert(res?.data?.success ? 'Done' : 'Error renaming item. The name is invalid, the file does not comply with the server rules or the path is not writable.');
+            onClose();
+        });
+    };
+
+    return createPortal(<div className="dialog open">
+        <div>
+            <div className="top">
+                <div className="title">
+                    <h2>Rename</h2>
+                    <span onClick={onClose}>
+                        <IconX/>
+                    </span>
+                </div>
+            </div>
+            <div className="content input-group">
+                <label htmlFor="file-name-input">Name</label>
+                <input id="file-name-input" type="text" name="name" value={name} onChange={e => setName(e.target.value)}/>
+            </div>
+            <div className="bottom">
+                <button className="light" onClick={onClose}>Cancel</button>
+                <button onClick={save}>Save</button>
+            </div>
+        </div>
+    </div>, document.body);
+};
+
 export default function Media() {
     const { user } = useOutletContext();
     const [ search_params, setSearchParams ] = useSearchParams();
+    const [ current_dialog, setCurrentDialog ] = useState(null);
+    const [ current_file, setCurrentFile ] = useState(null);
     const navigate = useNavigate();
 
     const setPath = (new_path) => {
         setSearchParams({ ...search_params, path: new_path });
     };
 
+    const closeDialog = () => setCurrentDialog(null);
+
     return <div className="content">
         <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
+        {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog}/>}
         <Table
             url={`/api/v2/media?path=${encodeURIComponent(search_params.get('path') || '')}`}
             title="Media"
@@ -104,6 +149,14 @@ export default function Media() {
                         content={<IconThreeDots/>}
                         className="three-dots"
                         options={[
+                            {
+                                condition: Boolean(user?.actions?.edit_media),
+                                onClick: () => {
+                                    setCurrentFile(file);
+                                    setCurrentDialog('edit_file');
+                                },
+                                content: <><IconPencil/> Rename</>
+                            },
                             {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_media),
