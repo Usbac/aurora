@@ -188,31 +188,6 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->post('json:admin/media/duplicate', function() use ($lang) {
-        if (empty($_POST['name']) || str_contains($_POST['name'], '/')) {
-            return json_encode([
-                'success' => false,
-                'errors' => [ 'name' => $lang->get('invalid_value') ]
-            ]);
-        }
-
-        if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
-        }
-
-        try {
-            $success = \Aurora\App\Media::duplicate($_POST['path'] ?? '', $_POST['name']);
-        } catch (Exception) {
-            $success = false;
-        }
-
-        return json_encode([
-            'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('error_duplicate_item') ],
-        ]);
-    });
-
     $router->get('admin/settings/media_download', function() use ($lang) {
         $file_path = Helper::getPath('content.zip');
         $path = $_GET['path'] ?? '';
@@ -576,6 +551,28 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode($login($user['id']));
+    });
+
+    $router->post('json:api/v2/media/duplicate', function($body) {
+        if (empty($body['name']) || str_contains($body['name'], '/')) {
+            return json_encode([
+                'success' => false,
+                'error' => 'invalid_value',
+            ]);
+        }
+
+        if (!\Aurora\App\Permission::can('edit_media')) {
+            http_response_code(403);
+            exit;
+        }
+
+        try {
+            $success = \Aurora\App\Media::duplicate($body['path'] ?? '', $body['name']);
+        } catch (Exception) {
+            $success = false;
+        }
+
+        return json_encode([ 'success' => $success ]);
     });
 
     $router->post('json:api/v2/media/rename', function($body) {

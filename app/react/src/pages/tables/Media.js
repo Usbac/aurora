@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
-import { IconFile, IconFolderFill, IconHome, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
+import { IconDuplicate, IconFile, IconFolderFill, IconHome, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 
 const MediaPath = ({ path, setPath }) => {
@@ -59,6 +59,45 @@ const DialogEditFile = ({ file, onClose }) => {
     </div>, document.body);
 };
 
+const DialogDuplicate = ({ file, onClose }) => {
+    const [ name, setName ] = useState(file.name);
+
+    const save = () => {
+        makeRequest({
+            method: 'POST',
+            url: '/api/v2/media/duplicate',
+            data: {
+                name: name,
+                path: getContentUrl(file.path),
+            },
+        }).then(res => {
+            alert(res?.data?.success ? 'Done' : 'Error duplicating item. The name is invalid, the file does not comply with the server rules or the path is not writable.');
+            onClose();
+        });
+    };
+
+    return createPortal(<div className="dialog open">
+        <div>
+            <div className="top">
+                <div className="title">
+                    <h2>Duplicate</h2>
+                    <span onClick={onClose}>
+                        <IconX/>
+                    </span>
+                </div>
+            </div>
+            <div className="content input-group">
+                <label htmlFor="file-name-input">Name</label>
+                <input id="file-name-input" type="text" name="name" value={name} onChange={e => setName(e.target.value)}/>
+            </div>
+            <div className="bottom">
+                <button className="light" onClick={onClose}>Cancel</button>
+                <button onClick={save}>Save</button>
+            </div>
+        </div>
+    </div>, document.body);
+};
+
 export default function Media() {
     const { user } = useOutletContext();
     const [ search_params, setSearchParams ] = useSearchParams();
@@ -78,6 +117,7 @@ export default function Media() {
     return <div className="content">
         <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
         {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog}/>}
+        {current_dialog == 'duplicate_file' && <DialogDuplicate file={current_file} onClose={closeDialog}/>}
         <Table
             url={`/api/v2/media?path=${encodeURIComponent(search_params.get('path') || '')}`}
             title="Media"
@@ -152,6 +192,11 @@ export default function Media() {
                         content={<IconThreeDots/>}
                         className="three-dots"
                         options={[
+                            {
+                                condition: Boolean(user?.actions?.edit_media),
+                                onClick: () => openDialog('duplicate_file', file),
+                                content: <><IconDuplicate/> Duplicate</>
+                            },
                             {
                                 condition: Boolean(user?.actions?.edit_media),
                                 onClick: () => openDialog('edit_file', file),
