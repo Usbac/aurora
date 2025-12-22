@@ -330,13 +330,11 @@ export const ImageDialog = ({ onSave, onClose }) => {
             <div id="image-dialog-listing" class="listing">
                 <ListingContent/>
             </div>
-            <div class="media-paths-container">
-                <div class="media-paths">
-                    {folders.map((folder, i) => <>
-                        <div class="pointer" onClick={() => setPath(folders.slice(0, i + 1).join('/'))}>{i == 0 ? <IconHome/> : folder}</div>
-                        <span>/</span>
-                    </>)}
-                </div>
+            <div className="media-paths">
+                {folders.map((folder, i) => <>
+                    <div class="pointer" onClick={() => setPath(folders.slice(0, i + 1).join('/'))}>{i == 0 ? <IconHome/> : folder}</div>
+                    <span>/</span>
+                </>)}
             </div>
         </div>
     </div>, document.querySelector('body'));
