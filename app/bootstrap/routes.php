@@ -20,70 +20,6 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     /* MEDIA */
 
-    $router->get('admin/media', function() use ($view, $lang) {
-        $folders = [ Kernel::config('content') => '/' ];
-        $root_dir = Helper::getPath();
-        $content_dir = Helper::getPath(Kernel::config('content'));
-        $path = $_GET['path'] ?? Kernel::config('content');
-        $absolute_path = Helper::getPath($path);
-
-        if ($path == Kernel::config('content') && !file_exists($absolute_path)) {
-            mkdir($absolute_path, \Aurora\App\Media::FOLDER_PERMISSION);
-        }
-
-        if (!\Aurora\App\Media::isValidPath($absolute_path) || !file_exists($absolute_path)) {
-            http_response_code(404);
-            return;
-        }
-
-        foreach (new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($content_dir, FilesystemIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::SELF_FIRST
-            ) as $file) {
-            if ($file->isDir()) {
-                $folder_dir = $file->getPathname();
-                $folders[mb_substr($folder_dir, mb_strlen($root_dir) + 1)] = mb_substr($folder_dir, mb_strlen($content_dir) + 1);
-            }
-        }
-
-        natcasesort($folders);
-
-        return $view->get('admin/list.html', [
-            'title' => $lang->get('media'),
-            'custom_header' => $view->get('admin/partials/media_header.html', [
-                'path' => $path,
-                'folders' => $folders,
-            ]),
-            'columns' => [
-                [ 'title' => '', 'class' => 'w100' ],
-                [ 'title' => $lang->get('information'), 'class' => 'w20 file-info' ],
-                [ 'title' => $lang->get('last_modification'), 'class' => 'w20' ],
-                [ 'title' => '', 'class' => 'w10 row-actions' ],
-            ],
-            'extra_header' => 'admin/partials/extra_headers/media.html',
-            'filters' => [
-                'order' => [
-                    'title' => $lang->get('sort_by'),
-                    'options' => [
-                        'name' => $lang->get('name'),
-                        'type' => $lang->get('type'),
-                        'size' => $lang->get('size'),
-                    ]
-                ],
-                'sort' => [
-                    'options' => [
-                        'asc' => $lang->get('ascending'),
-                        'desc' => $lang->get('descending'),
-                    ],
-                ],
-            ],
-            'defaults' => [
-                'order' => 'type',
-                'sort' => 'asc',
-            ],
-        ]);
-    });
-
     $router->post('json:admin/media/upload', function() use ($lang) {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
@@ -131,60 +67,6 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([
             'success' => $success,
             'errors' => $success ? [] : [ $lang->get('error_create_folder') ],
-        ]);
-    });
-
-    $router->post('json:admin/media/remove', function() use ($lang) {
-        if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
-        }
-
-        $paths = json_decode($_POST['paths'] ?? '') ?? [];
-        $done = 0;
-
-        try {
-            foreach ($paths as $path) {
-                $done += \Aurora\App\Media::remove($path);
-            }
-
-            $success = $done == count($paths);
-        } catch (Exception) {
-            $success = false;
-        }
-
-        return json_encode([
-            'success' => $success,
-            'errors' => $success
-                ? []
-                : [ $lang->get($done == 0 ? 'error_remove_item' : 'error_remove_some_items') ],
-        ]);
-    });
-
-    $router->post('json:admin/media/move', function() use ($lang) {
-        if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
-        }
-
-        $paths = json_decode($_POST['paths'] ?? '') ?? [];
-        $done = 0;
-
-        try {
-            foreach ($paths as $path) {
-                $done += \Aurora\App\Media::move($path, $_POST['name']);
-            }
-
-            $success = $done == count($paths);
-        } catch (Exception) {
-            $success = false;
-        }
-
-        return json_encode([
-            'success' => $success,
-            'errors' => $success
-                ? []
-                : [ $lang->get($done == 0 ? 'error_move_item' : 'error_move_some_items') ],
         ]);
     });
 
@@ -592,6 +474,39 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode([ 'success' => $success ]);
+    });
+
+    $router->post('json:api/v2/media/move', function($body) {
+        if (!\Aurora\App\Permission::can('edit_media')) {
+            http_response_code(403);
+            exit;
+        }
+
+        try {
+            $success = \Aurora\App\Media::move($body['path'] ?? '', $body['name']);
+        } catch (Exception) {
+            $success = false;
+        }
+
+        return json_encode([ 'success' => $success ]);
+    });
+
+    $router->get('json:api/v2/media/folders', function() {
+        $folders = [ Kernel::config('content') => '/' ];
+        $content_dir = Helper::getPath(Kernel::config('content'));
+
+        foreach (new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($content_dir, FilesystemIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            ) as $file) {
+            if ($file->isDir()) {
+                $folders[] = mb_substr($file->getPathname(), mb_strlen($content_dir) + 1);
+            }
+        }
+
+        natcasesort($folders);
+
+        return json_encode(array_values($folders));
     });
 
     $router->any('json:api/v2/media/upload_image', function() {

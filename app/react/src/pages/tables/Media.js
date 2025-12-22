@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
-import { IconDuplicate, IconFile, IconFolderFill, IconHome, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
+import { IconDuplicate, IconFile, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 
 const MediaPath = ({ path, setPath }) => {
@@ -89,6 +89,56 @@ const DialogDuplicate = ({ file, onClose }) => {
             <div className="content input-group">
                 <label htmlFor="file-name-input">Name</label>
                 <input id="file-name-input" type="text" name="name" value={name} onChange={e => setName(e.target.value)}/>
+            </div>
+            <div className="bottom">
+                <button className="light" onClick={onClose}>Cancel</button>
+                <button onClick={save}>Save</button>
+            </div>
+        </div>
+    </div>, document.body);
+};
+
+const DialogMove = ({ file, onClose }) => {
+    const [ folders, setFolders ] = useState(undefined);
+    const initial_destination_folder = file.path.slice(0, file.path.lastIndexOf('/')).replace(/^\/+|\/+$/g, '');
+    const [ destination_folder, setDestinationFolder ] = useState(initial_destination_folder.length == 0 ? '/' : initial_destination_folder);
+
+    useEffect(() => {
+        makeRequest({
+            method: 'GET',
+            url: '/api/v2/media/folders',
+        }).then(res => setFolders(res?.data));
+    }, []);
+
+    const save = () => {
+        makeRequest({
+            method: 'POST',
+            url: '/api/v2/media/move',
+            data: {
+                name: getContentUrl(destination_folder),
+                path: getContentUrl(file.path),
+            },
+        }).then(res => {
+            alert(res?.data?.success ? 'Done' : 'Error');
+            onClose();
+        });
+    };
+
+    return createPortal(<div className="dialog open">
+        <div>
+            <div className="top">
+                <div className="title">
+                    <h2>Move</h2>
+                    <span onClick={onClose}>
+                        <IconX/>
+                    </span>
+                </div>
+            </div>
+            <div className="content input-group">
+                <label htmlFor="move-input">Folder</label>
+                <select id="move-input" disabled={!folders} value={destination_folder} onChange={e => setDestinationFolder(e.target.value)}>
+                    {folders?.map(folder => <option key={folder} value={folder}>{folder}</option>)}
+                </select>
             </div>
             <div className="bottom">
                 <button className="light" onClick={onClose}>Cancel</button>
@@ -206,6 +256,11 @@ export default function Media() {
                             },
                             {
                                 condition: Boolean(user?.actions?.edit_media),
+                                onClick: () => openDialog('move_file', file),
+                                content: <><IconMoveFile/> Move</>
+                            },
+                            {
+                                condition: Boolean(user?.actions?.edit_media),
                                 onClick: () => openDialog('edit_file', file),
                                 content: <><IconPencil/> Rename</>
                             },
@@ -221,7 +276,7 @@ export default function Media() {
             ]}
         />
         {current_dialog == 'duplicate_file' && <DialogDuplicate file={current_file} onClose={closeDialog}/>}
-        {current_dialog == 'move_file' && <DialogMove files={[ current_file ]} onClose={closeDialog}/>}
+        {current_dialog == 'move_file' && <DialogMove file={current_file} onClose={closeDialog}/>}
         {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog}/>}
         <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
     </div>
