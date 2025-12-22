@@ -68,23 +68,6 @@
         }).then(res => Listing.handleResponse(res));
     }
 
-    function copyPath(path) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(path).then(() => Snackbar.show(LANG.done));
-            return;
-        }
-
-        let input = document.createElement('input');
-        input.setAttribute('value', path);
-        document.body.appendChild(input);
-        input.select();
-        let result = document.execCommand('copy');
-        document.body.removeChild(input);
-        if (result) {
-            Snackbar.show(LANG.path_copied);
-        }
-    }
-
     function downloadAll() {
         if (confirm(LANG.download_media_description)) {
             location = '/admin/settings/media_download?path=' + path;

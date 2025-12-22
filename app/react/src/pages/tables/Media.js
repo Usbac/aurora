@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
-import { IconDuplicate, IconFile, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
+import { IconClipboard, IconDuplicate, IconFile, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 
 const MediaPath = ({ path, setPath }) => {
@@ -167,6 +167,23 @@ export default function Media() {
         }
     };
 
+    const copyPath = (path) => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(path).then(() => alert('Done'));
+            return;
+        }
+
+        let input = document.createElement('input');
+        input.setAttribute('value', path);
+        document.body.appendChild(input);
+        input.select();
+        let result = document.execCommand('copy');
+        document.body.removeChild(input);
+        if (result) {
+            alert('Path copied to clipboard.');
+        }
+    }
+
     const openDialog = (dialog, file) => {
         setCurrentFile(file);
         setCurrentDialog(dialog);
@@ -249,6 +266,10 @@ export default function Media() {
                         content={<IconThreeDots/>}
                         className="three-dots"
                         options={[
+                            {
+                                onClick: () => copyPath(getContentUrl(file.path)),
+                                content: <><IconClipboard/> Copy path</>,
+                            },
                             {
                                 condition: Boolean(user?.actions?.edit_media),
                                 onClick: () => openDialog('duplicate_file', file),
