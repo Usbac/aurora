@@ -58,7 +58,7 @@
     function openCreateFolderDialog() {
         get('#folder-input').value = '';
         let dialog = get('#folder-dialog');
-        removeErrors(dialog);
+        dialog.querySelectorAll('.field-error').forEach(el => el.remove());
         Dialog.show(dialog);
     }
 
@@ -66,16 +66,6 @@
         Form.send('/admin/media/create_folder' + window.location.search, 'folder-dialog', null, {
             csrf: csrf_token,
         }).then(res => Listing.handleResponse(res));
-    }
-
-    function downloadAll() {
-        if (confirm(LANG.download_media_description)) {
-            location = '/admin/settings/media_download?path=' + path;
-        }
-    }
-
-    function removeErrors(dialog) {
-        dialog.querySelectorAll('.field-error').forEach(el => el.remove());
     }
 
     content.addEventListener('dragover', event => event.preventDefault());
