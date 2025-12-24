@@ -52,24 +52,6 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->post('json:admin/media/create_folder', function() use ($lang) {
-        if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            return json_encode([ 'errors' => [ $lang->get('no_permission') ] ]);
-        }
-
-        try {
-            $success = \Aurora\App\Media::addFolder($_GET['path'] ?? Kernel::config('content'), $_POST['name'] ?? '');
-        } catch (Exception) {
-            $success = false;
-        }
-
-        return json_encode([
-            'success' => $success,
-            'errors' => $success ? [] : [ $lang->get('error_create_folder') ],
-        ]);
-    });
-
     /**
      * BLOG
      */
@@ -405,6 +387,21 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode($login($user['id']));
+    });
+
+    $router->post('json:api/v2/media/create_folder', function($body) {
+        if (!\Aurora\App\Permission::can('edit_media')) {
+            http_response_code(403);
+            exit;
+        }
+
+        try {
+            $success = \Aurora\App\Media::addFolder(Kernel::config('content') . '/' . ltrim($body['name'] ?? '', '/'));
+        } catch (Exception) {
+            $success = false;
+        }
+
+        return json_encode([ 'success' => $success ]);
     });
 
     $router->post('json:api/v2/media/duplicate', function($body) {

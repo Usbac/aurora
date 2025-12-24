@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
-import { IconClipboard, IconDuplicate, IconFile, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
+import { IconClipboard, IconDuplicate, IconFile, IconFolder, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 
 const MediaPath = ({ path, setPath }) => {
@@ -148,6 +148,42 @@ const DialogMove = ({ file, onClose }) => {
     </div>, document.body);
 };
 
+const DialogCreateFolder = ({ path, onClose }) => {
+    const [ name, setName ] = useState('');
+
+    const save = () => {
+        makeRequest({
+            method: 'POST',
+            url: '/api/v2/media/create_folder',
+            data: { name: path + '/' + name },
+        }).then(res => {
+            alert(res?.data?.success ? 'Done' : 'Error');
+            onClose();
+        });
+    };
+
+    return createPortal(<div className="dialog open">
+        <div>
+            <div className="top">
+                <div className="title">
+                    <h2>Create Folder</h2>
+                    <span onClick={onClose}>
+                        <IconX/>
+                    </span>
+                </div>
+            </div>
+            <div className="content input-group">
+                <label htmlFor="file-name-input">Name</label>
+                <input id="file-name-input" type="text" name="name" value={name} onChange={e => setName(e.target.value)}/>
+            </div>
+            <div className="bottom">
+                <button className="light" onClick={onClose}>Cancel</button>
+                <button onClick={save}>Save</button>
+            </div>
+        </div>
+    </div>, document.body);
+};
+
 export default function Media() {
     const { user } = useOutletContext();
     const [ search_params, setSearchParams ] = useSearchParams();
@@ -197,7 +233,7 @@ export default function Media() {
         }
     };
 
-    const openDialog = (dialog, file) => {
+    const openDialog = (dialog, file = null) => {
         setCurrentFile(file);
         setCurrentDialog(dialog);
     };
@@ -212,6 +248,10 @@ export default function Media() {
                 {
                     content: <IconZip/>,
                     onClick: downloadFiles,
+                },
+                {
+                    content: <IconFolder/>,
+                    onClick: () => openDialog('create_folder'),
                 },
                 {
                     content: <><b>+</b>&nbsp;New</>,
@@ -316,6 +356,7 @@ export default function Media() {
         {current_dialog == 'duplicate_file' && <DialogDuplicate file={current_file} onClose={closeDialog}/>}
         {current_dialog == 'move_file' && <DialogMove file={current_file} onClose={closeDialog}/>}
         {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog}/>}
+        {current_dialog == 'create_folder' && <DialogCreateFolder path={current_path} onClose={closeDialog}/>}
         <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
     </div>
 }

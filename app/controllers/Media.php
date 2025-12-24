@@ -80,23 +80,18 @@ final class Media
     /**
      * Creates a new folder with the given name in the given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
-     * @param string $name the folder name
+     * @param string $path the folder path relative to the project root directory
      * @return bool true if the folder was created successfully, false otherwise
      */
-    public static function addFolder(string $path, string $name): bool
+    public static function addFolder(string $path): bool
     {
         $path = \Aurora\Core\Helper::getPath($path);
-
-        if (empty(trim($name))) {
-            throw new \InvalidArgumentException('Folder name is empty');
-        }
 
         if (!self::isValidPath($path)) {
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
         }
 
-        return mkdir("$path/$name", self::FOLDER_PERMISSION);
+        return mkdir($path, self::FOLDER_PERMISSION);
     }
 
     /**
