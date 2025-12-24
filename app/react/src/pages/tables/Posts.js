@@ -100,7 +100,7 @@ export default function Posts() {
                             className="row-thumb"
                             style={{ visibility: post.image ? 'visible' : 'hidden' }}
                         />
-                        <div className="main-data">
+                        <div>
                             <h3>
                                 {post.title}
                                 {!post.status && <span className="title-label red">Draft</span>}

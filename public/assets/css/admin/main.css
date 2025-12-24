@@ -72,10 +72,6 @@ h3 {
     font-size: 1.2em;
 }
 
-h3 .title-label {
-    margin-left: 6px;
-}
-
 code {
     font-size: 1em;
     padding: 1px 5px;
@@ -1159,6 +1155,13 @@ textarea.code {
     margin: 0;
 }
 
+.listing-row h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
 .listing-row:not(.header):hover {
     background: var(--fourth-color);
 }
@@ -1286,10 +1289,6 @@ textarea.code {
     aspect-ratio: 16 / 9;
 }
 
-.listing-row.post .main-data {
-    flex: 1;
-}
-
 .row-thumb {
     height: var(--image-size);
     width: auto;
@@ -1324,11 +1323,6 @@ textarea.code {
 }
 
 /* user */
-
-.listing-row.user h3 {
-    display: flex;
-    align-items: center;
-}
 
 .user-image {
     border-radius: 100%;
