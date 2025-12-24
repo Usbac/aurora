@@ -1,12 +1,3 @@
-<div class="media-options">
-    <button onclick="downloadAll()" title="<?= $this->t('download_zip') ?>"><?= $this->include('icons/zip.svg') ?></button>
-    <button <?php if (!$can_edit_media): ?> disabled <?php endif ?> onclick="openCreateFolderDialog()" title="<?= $this->t('create_folder') ?>"><?= $this->include('icons/folder.svg') ?></button>
-    <div id="file-form">
-        <button onclick="get('#input-file').click()" title="<?= $this->t('upload_file') ?>" <?php if (!$can_edit_media): ?> disabled <?php endif ?>><?= $this->include('icons/upload_file.svg') ?></button>
-        <input id="input-file" type="file" class="hidden" name="file" oninput="uploadFile()"/>
-    </div>
-</div>
-
 <div id="folder-dialog" class="dialog">
     <div>
         <div class="top">
@@ -53,19 +44,6 @@
                 paths: JSON.stringify(files.map(file => path + '/' + file)),
             }).then(res => Listing.handleResponse(res));
         }
-    }
-
-    function openCreateFolderDialog() {
-        get('#folder-input').value = '';
-        let dialog = get('#folder-dialog');
-        dialog.querySelectorAll('.field-error').forEach(el => el.remove());
-        Dialog.show(dialog);
-    }
-
-    function createFolder() {
-        Form.send('/admin/media/create_folder' + window.location.search, 'folder-dialog', null, {
-            csrf: csrf_token,
-        }).then(res => Listing.handleResponse(res));
     }
 
     content.addEventListener('dragover', event => event.preventDefault());
