@@ -10,7 +10,7 @@ export default function Links() {
 
     return <div class="content">
         <Table
-            url="/api/v2/links"
+            url="/api/links"
             title="Links"
             topOptions={[
                 {
@@ -54,7 +54,7 @@ export default function Links() {
                         if (confirm('Are you sure you want to delete the selected links? This action cannot be undone.')) {
                             makeRequest({
                                 method: 'DELETE',
-                                url: '/api/v2/links',
+                                url: '/api/links',
                                 data: { id: links.map(l => l.id) },
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }
@@ -98,7 +98,7 @@ export default function Links() {
                                     if (confirm('Are you sure you want to delete the link? This action cannot be undone.')) {
                                         makeRequest({
                                             method: 'DELETE',
-                                            url: '/api/v2/links',
+                                            url: '/api/links',
                                             data: { id: link.id },
                                         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                                     }

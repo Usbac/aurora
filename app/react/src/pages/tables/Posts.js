@@ -8,7 +8,7 @@ export default function Posts() {
     const { user, settings } = useOutletContext();
     const { data: users_req, is_loading: is_loading_users, fetch: fetch_users } = useRequest({
         method: 'GET',
-        url: '/api/v2/users',
+        url: '/api/users',
         data: {
             order: 'name',
             sort: 'asc',
@@ -34,7 +34,7 @@ export default function Posts() {
 
     return <div className="content">
         <Table
-            url="/api/v2/posts"
+            url="/api/posts"
             title="Posts"
             topOptions={[
                 {
@@ -83,7 +83,7 @@ export default function Posts() {
                         if (confirm('Are you sure you want to delete the selected posts? This action cannot be undone.')) {
                             makeRequest({
                                 method: 'DELETE',
-                                url: '/api/v2/posts',
+                                url: '/api/posts',
                                 data: { id: posts.map(l => l.id) },
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }
@@ -143,7 +143,7 @@ export default function Posts() {
                                     if (confirm('Are you sure you want to delete the post? This action cannot be undone.')) {
                                         makeRequest({
                                             method: 'DELETE',
-                                            url: '/api/v2/posts',
+                                            url: '/api/posts',
                                             data: { id: post.id },
                                         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                                     }

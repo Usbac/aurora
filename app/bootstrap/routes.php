@@ -239,7 +239,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
     });
 
-    $router->post('json:api/v2/password-reset/request', function($body) use ($db, $lang, $user_mod, $view) {
+    $router->post('json:api/password-reset/request', function($body) use ($db, $lang, $user_mod, $view) {
         $hash = bin2hex(random_bytes(18));
         $user = $user_mod->get([
             'email' => $body['email'],
@@ -255,7 +255,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->post('json:api/v2/password-reset/confirm', function($body) use ($db, $user_mod, $login) {
+    $router->post('json:api/password-reset/confirm', function($body) use ($db, $user_mod, $login) {
         $hash = $body['hash'] ?? '';
         $password = $body['password'] ?? '';
         $restore = $db->query('SELECT * FROM password_restores WHERE hash = ?', $hash)->fetch();
@@ -292,14 +292,14 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('api/v2/*', function() {
-        if (empty($GLOBALS['user']) && !in_array(Helper::getCurrentPath(), [ 'api/v2/auth', 'api/v2/password-reset/request', 'api/v2/password-reset/confirm' ])) {
+    $router->middleware('api/*', function() {
+        if (empty($GLOBALS['user']) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm' ])) {
             http_response_code(401);
             exit;
         }
     });
 
-    $router->any('json:api/v2/auth', function($body) use ($user_mod, $login) {
+    $router->any('json:api/auth', function($body) use ($user_mod, $login) {
         $email = $body['email'] ?? '';
         $password = $body['password'] ?? '';
         $user = $user_mod->get([
@@ -317,7 +317,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($login($user['id']));
     });
 
-    $router->get('json:api/v2/me', function() {
+    $router->get('json:api/me', function() {
         $user = $GLOBALS['user'];
         foreach (\Aurora\App\Permission::getPermissions() as $action) {
             $user['actions'][$action] = \Aurora\App\Permission::can($action);
@@ -326,7 +326,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($user);
     });
 
-    $router->get('json:api/v2/settings', function() use ($db, $lang) {
+    $router->get('json:api/settings', function() use ($db, $lang) {
         $themes_dir = Helper::getPath(Kernel::config('views') . '/themes');
 
         return json_encode([
@@ -341,7 +341,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get('json:api/v2/users/impersonate', function() use ($user_mod, $login) {
+    $router->get('json:api/users/impersonate', function() use ($user_mod, $login) {
         $user = $user_mod->get([
             'id' => $_GET['id'] ?? 0,
             'status' => 1,
@@ -355,7 +355,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($login($user['id']));
     });
 
-    $router->post('json:api/v2/media/create_folder', function($body) {
+    $router->post('json:api/media/create_folder', function($body) {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
             exit;
@@ -370,7 +370,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->post('json:api/v2/media/duplicate', function($body) {
+    $router->post('json:api/media/duplicate', function($body) {
         if (empty($body['name']) || str_contains($body['name'], '/')) {
             return json_encode([
                 'success' => false,
@@ -392,7 +392,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->post('json:api/v2/media/rename', function($body) {
+    $router->post('json:api/media/rename', function($body) {
         if (empty($body['name']) || str_contains($body['name'], '/')) {
             return json_encode([ 'success' => false ]);
         }
@@ -411,7 +411,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->post('json:api/v2/media/move', function($body) {
+    $router->post('json:api/media/move', function($body) {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
             exit;
@@ -426,7 +426,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->post('json:api/v2/media/upload', function() {
+    $router->post('json:api/media/upload', function() {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
             exit;
@@ -455,7 +455,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->get('api/v2/media/download', function() {
+    $router->get('api/media/download', function() {
         $file_path = Helper::getPath('content.zip');
         $path = Helper::getPath(Kernel::config('content') . '/' . ltrim($_GET['path'] ?? '', '/'));
 
@@ -482,7 +482,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         Helper::downloadFile($file_path, 'media.zip', 'application/zip');
     });
 
-    $router->get('json:api/v2/media/folders', function() {
+    $router->get('json:api/media/folders', function() {
         $folders = [ Kernel::config('content') => '/' ];
         $content_dir = Helper::getPath(Kernel::config('content'));
 
@@ -500,14 +500,14 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode(array_values($folders));
     });
 
-    $router->any('json:api/v2/media/upload_image', function() {
+    $router->any('json:api/media/upload_image', function() {
         $path = Kernel::config('content') . '/' . date('Y/m/');
         \Aurora\App\Media::uploadFile($_FILES['file'], $path);
 
         return json_encode([ 'location' => "/$path/" . $_FILES['file']['name'] ]);
     });
 
-    $router->post('json:api/v2/media', function() {
+    $router->post('json:api/media', function() {
         if (!\Aurora\App\Permission::can('edit_media')) {
             http_response_code(403);
             exit;
@@ -536,7 +536,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->get('json:api/v2/db', function() use ($db) {
+    $router->get('json:api/db', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -551,7 +551,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->post('json:api/v2/db', function() use ($db, $lang) {
+    $router->post('json:api/db', function() use ($db, $lang) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -583,7 +583,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($data);
     });
 
-    $router->get('api/v2/logs', function() {
+    $router->get('api/logs', function() {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -592,7 +592,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return file_get_contents(\Aurora\Core\Helper::getPath(\Aurora\App\Setting::get('log_file')));
     });
 
-    $router->delete('json:api/v2/logs', function() {
+    $router->delete('json:api/logs', function() {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -601,7 +601,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => unlink(Helper::getPath(\Aurora\App\Setting::get('log_file'))) ]);
     });
 
-    $router->get('json:api/v2/reset_views_count', function() use ($db) {
+    $router->get('json:api/reset_views_count', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -610,7 +610,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $db->delete('views') ]);
     });
 
-    $router->post('json:api/v2/settings', function($body) use ($db) {
+    $router->post('json:api/settings', function($body) use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -633,7 +633,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->get('json:api/v2/server', function() use ($db) {
+    $router->get('json:api/server', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;
@@ -650,7 +650,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get('json:api/v2/stats', function() use ($db, $post_mod) {
+    $router->get('json:api/stats', function() use ($db, $post_mod) {
         return json_encode([
             'total_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 1 ])),
             'total_scheduled_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 'scheduled' ])),
@@ -662,7 +662,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get('json:api/v2/view_files', function() use ($theme_dir) {
+    $router->get('json:api/view_files', function() use ($theme_dir) {
         $absolute_theme_dir = Helper::getPath(Kernel::config('views') . "/$theme_dir");
         $view_files = [];
 
@@ -676,7 +676,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode(array_values($view_files));
     });
 
-    $router->post('json:api/v2/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->post('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         switch ($_GET['mod']) {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;
@@ -705,7 +705,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->delete('json:api/v2/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->delete('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         $ids = isset($body['id'])
             ? array_map(fn($id) => (int) $id, is_array($body['id']) ? $body['id'] : explode(',', $body['id']))
             : null;
@@ -757,7 +757,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $success ]);
     });
 
-    $router->get('json:api/v2/roles', function() use ($db) {
+    $router->get('json:api/roles', function() use ($db) {
         $roles = [];
         $permissions_data = $db->query('SELECT role_level, permission FROM roles_permissions ORDER BY role_level ASC, permission ASC')->fetchAll();
         foreach ($db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll() as $role) {
@@ -781,7 +781,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode($roles);
     });
 
-    $router->get('json:api/v2/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->get('json:api/{mod}', function() use ($kernel, $page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
         switch ($_GET['mod'] ?? '') {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;

@@ -9,7 +9,7 @@ export default function Users() {
     const navigate = useNavigate();
     const { data: roles_req, is_loading: is_loading_roles, fetch: fetch_roles } = useRequest({
         method: 'GET',
-        url: '/api/v2/roles',
+        url: '/api/roles',
     });
     const roles_options = useMemo(() => {
         let roles = roles_req?.data ?? {};
@@ -30,7 +30,7 @@ export default function Users() {
 
     return <div class="content">
         <Table
-            url="/api/v2/users"
+            url="/api/users"
             title="Users"
             topOptions={[
                 {
@@ -80,7 +80,7 @@ export default function Users() {
                         if (confirm('Are you sure you want to delete the selected users? This action cannot be undone.')) {
                             makeRequest({
                                 method: 'DELETE',
-                                url: '/api/v2/users',
+                                url: '/api/users',
                                 data: { id: users.map(u => u.id) },
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }
@@ -140,7 +140,7 @@ export default function Users() {
                                     if (confirm('Are you sure you want to impersonate this user?')) {
                                         makeRequest({
                                             method: 'GET',
-                                            url: '/api/v2/users/impersonate?id=' + item.id,
+                                            url: '/api/users/impersonate?id=' + item.id,
                                         }).then(res => {
                                             if (!res?.data?.success) {
                                                 alert('Error');
@@ -160,7 +160,7 @@ export default function Users() {
                                     if (confirm(`Are you sure you want to delete ${item.name}? This action cannot be undone.`)) {
                                         makeRequest({
                                             method: 'DELETE',
-                                            url: '/api/v2/users',
+                                            url: '/api/users',
                                             data: { id: item.id },
                                         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                                     }

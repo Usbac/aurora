@@ -9,7 +9,7 @@ export default function User() {
 	const [ open_image_dialog, setOpenImageDialog ] = useState(false);
 	const { data: roles_req, is_loading: is_loading_roles, fetch: fetch_roles } = useRequest({
 		method: 'GET',
-		url: '/api/v2/roles',
+		url: '/api/roles',
 	});
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function User() {
 		if (id) {
 			makeRequest({
 				method: 'GET',
-				url: `/api/v2/users?id=${id}`,
+				url: `/api/users?id=${id}`,
 			}).then(res => setData(res?.data?.data[0] ?? null));
 		} else {
 			setData({});
@@ -35,7 +35,7 @@ export default function User() {
 		if (confirm('Are you sure you want to delete the user? This action cannot be undone.')) {
 			makeRequest({
 				method: 'DELETE',
-				url: '/api/v2/users',
+				url: '/api/users',
 				data: { id: id },
 			}).then(res => {
 				if (res?.data?.success) {
@@ -52,7 +52,7 @@ export default function User() {
 		if (confirm('Are you sure you want to impersonate this user?')) {
 			makeRequest({
 				method: 'GET',
-				url: '/api/v2/users/impersonate?id=' + id,
+				url: '/api/users/impersonate?id=' + id,
 			}).then(res => {
 				if (!res?.data?.success) {
 					alert('Error');
@@ -68,7 +68,7 @@ export default function User() {
 		e.preventDefault();
 		makeRequest({
 			method: 'POST',
-			url: '/api/v2/users' + (id ? `?id=${id}` : ''),
+			url: '/api/users' + (id ? `?id=${id}` : ''),
 			data: data,
 		}).then(res => {
 			alert(res?.data?.success ? 'Done' : 'Error');

@@ -8,7 +8,7 @@ export default function Page() {
     const [ data, setData ] = useState(undefined);
     const { data: view_files_req, is_loading: is_loading_view_files, fetch: fetch_view_files } = useRequest({
         method: 'GET',
-        url: '/api/v2/view_files',
+        url: '/api/view_files',
     });
     const location = useLocation();
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ export default function Page() {
         if (id) {
             makeRequest({
                 method: 'GET',
-                url: `/api/v2/pages?id=${id}`,
+                url: `/api/pages?id=${id}`,
             }).then(res => setData(res?.data?.data[0] ?? null));
         } else {
             setData({});
@@ -33,7 +33,7 @@ export default function Page() {
         if (confirm('Are you sure you want to delete the page? This action cannot be undone.')) {
             makeRequest({
                 method: 'DELETE',
-                url: '/api/v2/pages',
+                url: '/api/pages',
                 data: { id: id },
             }).then(res => {
                 if (res?.data?.success) {
@@ -50,7 +50,7 @@ export default function Page() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/pages' + (id ? `?id=${id}` : ''),
+            url: '/api/pages' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');

@@ -3,7 +3,7 @@ import { makeRequest, useElement } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-    const [ user ] = useElement('/api/v2/me');
+    const [ user ] = useElement('/api/me');
     const logo = document.querySelector('meta[name="logo"]')?.content;
     const [ loading, setLoading ] = useState(false);
     const [ email, setEmail ] = useState('');
@@ -16,7 +16,7 @@ export default function Login() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/auth',
+            url: '/api/auth',
             data: {
                 email: email,
                 password: password,
@@ -36,7 +36,7 @@ export default function Login() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/password-reset/request',
+            url: '/api/password-reset/request',
             data: { email: email },
         }).then(res => {
             alert(res?.data?.success

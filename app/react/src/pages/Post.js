@@ -9,7 +9,7 @@ export default function Post() {
     const [ open_image_dialog, setOpenImageDialog ] = useState(false);
     const { data: users_req, is_loading: is_loading_users, fetch: fetch_users } = useRequest({
         method: 'GET',
-        url: '/api/v2/users',
+        url: '/api/users',
         data: {
             order: 'name',
             sort: 'asc',
@@ -17,7 +17,7 @@ export default function Post() {
     });
     const { data: tags_req, is_loading: is_loading_tags, fetch: fetch_tags } = useRequest({
         method: 'GET',
-        url: '/api/v2/tags',
+        url: '/api/tags',
         data: {
             order: 'name',
             sort: 'asc',
@@ -37,7 +37,7 @@ export default function Post() {
         if (id) {
             makeRequest({
                 method: 'GET',
-                url: `/api/v2/posts?id=${id}`,
+                url: `/api/posts?id=${id}`,
             }).then(res => setData(res?.data?.data[0] ?? null));
         } else {
             setData({});
@@ -48,7 +48,7 @@ export default function Post() {
         if (confirm('Are you sure you want to delete the post? This action cannot be undone.')) {
             makeRequest({
                 method: 'DELETE',
-                url: '/api/v2/posts',
+                url: '/api/posts',
                 data: { id: id },
             }).then(res => {
                 if (res?.data?.success) {
@@ -65,7 +65,7 @@ export default function Post() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/posts' + (id ? `?id=${id}` : ''),
+            url: '/api/posts' + (id ? `?id=${id}` : ''),
             data: {
                 ...data,
                 tags: Object.keys(data.tags || {}).map(tag_slug => tags.find(tag => tag.slug == tag_slug)?.id),

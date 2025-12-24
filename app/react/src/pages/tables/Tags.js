@@ -10,7 +10,7 @@ export default function Tags() {
 
     return <div class="content">
         <Table
-            url="/api/v2/tags"
+            url="/api/tags"
             title="Tags"
             topOptions={[
                 {
@@ -45,7 +45,7 @@ export default function Tags() {
                         if (confirm('Are you sure you want to delete the selected tags? This action cannot be undone.')) {
                             makeRequest({
                                 method: 'DELETE',
-                                url: '/api/v2/tags',
+                                url: '/api/tags',
                                 data: { id: tags.map(l => l.id) },
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }
@@ -84,7 +84,7 @@ export default function Tags() {
                                     if (confirm('Are you sure you want to delete the tag? This action cannot be undone.')) {
                                         makeRequest({
                                             method: 'DELETE',
-                                            url: '/api/v2/tags',
+                                            url: '/api/tags',
                                             data: { id: tag.id },
                                         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                                     }

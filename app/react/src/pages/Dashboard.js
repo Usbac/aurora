@@ -7,15 +7,15 @@ export default function Dashboard() {
     const { settings } = useOutletContext();
     const { data: links_req, is_loading: is_loading_links, fetch: fetch_links } = useRequest({
         method: 'GET',
-        url: '/api/v2/links',
+        url: '/api/links',
     });
     const { data: posts_req, is_loading: is_loading_posts, fetch: fetch_posts } = useRequest({
         method: 'GET',
-        url: '/api/v2/posts?limit=6&status=1&order=published_at&sort=desc',
+        url: '/api/posts?limit=6&status=1&order=published_at&sort=desc',
     });
     const { data: stats_req, is_loading: is_loading_stats, fetch: fetch_stats } = useRequest({
         method: 'GET',
-        url: '/api/v2/stats',
+        url: '/api/stats',
     });
     const links = links_req ? links_req.data?.data : null;
     const posts = posts_req ? posts_req.data?.data : null;

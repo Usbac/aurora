@@ -26,7 +26,7 @@ const DialogEditFile = ({ file, onClose }) => {
     const save = () => {
         makeRequest({
             method: 'POST',
-            url: '/api/v2/media/rename',
+            url: '/api/media/rename',
             data: {
                 name: name,
                 path: getContentUrl(file.path),
@@ -65,7 +65,7 @@ const DialogDuplicate = ({ file, onClose }) => {
     const save = () => {
         makeRequest({
             method: 'POST',
-            url: '/api/v2/media/duplicate',
+            url: '/api/media/duplicate',
             data: {
                 name: name,
                 path: getContentUrl(file.path),
@@ -106,14 +106,14 @@ const DialogMove = ({ file, onClose }) => {
     useEffect(() => {
         makeRequest({
             method: 'GET',
-            url: '/api/v2/media/folders',
+            url: '/api/media/folders',
         }).then(res => setFolders(res?.data));
     }, []);
 
     const save = () => {
         makeRequest({
             method: 'POST',
-            url: '/api/v2/media/move',
+            url: '/api/media/move',
             data: {
                 name: getContentUrl(destination_folder),
                 path: getContentUrl(file.path),
@@ -154,7 +154,7 @@ const DialogCreateFolder = ({ path, onClose }) => {
     const save = () => {
         makeRequest({
             method: 'POST',
-            url: '/api/v2/media/create_folder',
+            url: '/api/media/create_folder',
             data: { name: path + '/' + name },
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');
@@ -198,7 +198,7 @@ export default function Media() {
         if (confirm('Are you sure you want to delete the file? This action cannot be undone.')) {
             makeRequest({
                 method: 'DELETE',
-                url: '/api/v2/media',
+                url: '/api/media',
                 data: [ getContentUrl(file.path) ],
             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
         }
@@ -236,7 +236,7 @@ export default function Media() {
 
         makeRequest({
             method: 'POST',
-            url: '/api/v2/media/upload?path=' + encodeURIComponent(current_path),
+            url: '/api/media/upload?path=' + encodeURIComponent(current_path),
             data: form_data,
         }).then(res => {
             alert(res?.data?.success ? 'Files uploaded successfully' : 'Error uploading files');
@@ -249,7 +249,7 @@ export default function Media() {
         if (confirm('This will download all the media content in the current directory as a zip file.')) {
             makeRequest({
                 method: 'GET',
-                url: '/api/v2/media/download?path=' + current_path,
+                url: '/api/media/download?path=' + current_path,
                 options: { responseType: 'blob' },
             }).then(res => {
                 downloadFile(res.data, current_path + ' ' + new Date().toISOString().slice(0, 19).replace('T', ' ') + '.zip')
@@ -266,7 +266,7 @@ export default function Media() {
 
     return <div className="content">
         <Table
-            url={`/api/v2/media?path=${encodeURIComponent(current_path)}`}
+            url={`/api/media?path=${encodeURIComponent(current_path)}`}
             title="Media"
             topOptions={[
                 {
@@ -311,7 +311,7 @@ export default function Media() {
                         if (confirm('Are you sure you want to delete the selected files? This action cannot be undone.')) {
                             makeRequest({
                                 method: 'DELETE',
-                                url: '/api/v2/media',
+                                url: '/api/media',
                                 data: files.map(f => getContentUrl(f.path)),
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }

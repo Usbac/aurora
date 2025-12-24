@@ -238,12 +238,12 @@ export const getContentUrl = (path = '') => {
 };
 
 export const ImageDialog = ({ onSave, onClose }) => {
-    const [ user ] = useElement('/api/v2/me');
-    const [ settings ] = useElement('/api/v2/settings');
+    const [ user ] = useElement('/api/me');
+    const [ settings ] = useElement('/api/settings');
     const [ path, setPath ] = useState('');
     const { data: files_req, is_loading, fetch: fetch_files } = useRequest({
         method: 'GET',
-        url: `/api/v2/media?images=1&path=${path}`,
+        url: `/api/media?images=1&path=${path}`,
     });
     const folders = path.split('/');
     const input_ref = useRef(null);
@@ -257,7 +257,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
         form_data.append('file', e.target.files[0]);
         makeRequest({
             method: 'POST',
-            url: `/api/v2/media?path=${path}`,
+            url: `/api/media?path=${path}`,
             data: form_data,
         }).finally(() => {
             fetch_files();
@@ -370,7 +370,7 @@ export const Editor = ({ value, setValue, theme }) => {
             menubar: false,
             plugins: [ 'image', 'wordcount', 'autoresize', 'code', 'link', 'lists' ],
             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image code',
-            images_upload_url: '/api/v2/media/upload_image',
+            images_upload_url: '/api/media/upload_image',
             skin: theme === 'dark' ? 'oxide-dark' : 'oxide',
             content_css: theme === 'dark' ? 'dark' : 'default',
             setup: editor => {

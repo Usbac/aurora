@@ -14,7 +14,7 @@ export default function NewPassword() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/password-reset/confirm',
+            url: '/api/password-reset/confirm',
             data: {
                 hash: (new URLSearchParams(window.location.search)).get('hash'),
                 password: password,

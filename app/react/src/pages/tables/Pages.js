@@ -10,7 +10,7 @@ export default function Pages() {
 
     return <div class="content">
         <Table
-            url="/api/v2/pages"
+            url="/api/pages"
             title="Pages"
             topOptions={[
                 {
@@ -55,7 +55,7 @@ export default function Pages() {
                         if (confirm('Are you sure you want to delete the selected pages? This action cannot be undone.')) {
                             makeRequest({
                                 method: 'DELETE',
-                                url: '/api/v2/pages',
+                                url: '/api/pages',
                                 data: { id: pages.map(l => l.id) },
                             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                         }
@@ -103,7 +103,7 @@ export default function Pages() {
                                     if (confirm('Are you sure you want to delete the page? This action cannot be undone.')) {
                                         makeRequest({
                                             method: 'DELETE',
-                                            url: '/api/v2/pages',
+                                            url: '/api/pages',
                                             data: { id: page.id },
                                         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
                                     }

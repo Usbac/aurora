@@ -99,7 +99,7 @@ const Data = ({ data, setData, user }) => {
     const downloadDatabase = () => {
         makeRequest({
             method: 'GET',
-            url: '/api/v2/db',
+            url: '/api/db',
             options: { responseType: 'blob' },
         }).then(res => downloadFile(res.data, 'data.json'));
     };
@@ -110,7 +110,7 @@ const Data = ({ data, setData, user }) => {
             form_data.append('file', database_file);
             makeRequest({
                 method: 'POST',
-                url: '/api/v2/db',
+                url: '/api/db',
                 data: form_data,
             }).finally(() => {
                 file_ref.current.value = '';
@@ -122,7 +122,7 @@ const Data = ({ data, setData, user }) => {
         if (confirm('Are you sure about resetting the views count of all items?')) {
             makeRequest({
                 method: 'GET',
-                url: '/api/v2/reset_views_count',
+                url: '/api/reset_views_count',
             }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
         }
     };
@@ -163,7 +163,7 @@ const Advanced = ({ data, setData, user }) => {
     const loadLogs = () => {
         makeRequest({
             method: 'GET',
-            url: '/api/v2/logs',
+            url: '/api/logs',
         }).then(res => {
             setLogs(res?.data || '');
         });
@@ -176,7 +176,7 @@ const Advanced = ({ data, setData, user }) => {
     const deleteLogs = () => {
         makeRequest({
             method: 'DELETE',
-            url: '/api/v2/logs',
+            url: '/api/logs',
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');
             setLogs(undefined);
@@ -230,7 +230,7 @@ const Info = () => {
     useEffect(() => {
         makeRequest({
             method: 'GET',
-            url: '/api/v2/server',
+            url: '/api/server',
         }).then(res => setServer(res?.data));
     }, []);
 
@@ -339,7 +339,7 @@ export default function Settings() {
         delete new_data.meta;
         makeRequest({
             method: 'POST',
-            url: '/api/v2/settings',
+            url: '/api/settings',
             data: new_data,
         }).then(res => alert(res?.data?.success ? 'Done' : 'Error'))
         .finally(() => setLoading(false));

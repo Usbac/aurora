@@ -15,7 +15,7 @@ export default function Tag() {
         if (id) {
             makeRequest({
                 method: 'GET',
-                url: `/api/v2/tags?id=${id}`,
+                url: `/api/tags?id=${id}`,
             }).then(res => setData(res?.data?.data[0] ?? null));
         } else {
             setData({});
@@ -26,7 +26,7 @@ export default function Tag() {
         if (confirm('Are you sure you want to delete the tag? This action cannot be undone.')) {
             makeRequest({
                 method: 'DELETE',
-                url: '/api/v2/tags',
+                url: '/api/tags',
                 data: { id: id },
             }).then(res => {
                 if (res?.data?.success) {
@@ -43,7 +43,7 @@ export default function Tag() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/tags' + (id ? `?id=${id}` : ''),
+            url: '/api/tags' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');

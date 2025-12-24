@@ -15,7 +15,7 @@ export default function Link() {
         if (id) {
             makeRequest({
                 method: 'GET',
-                url: `/api/v2/links?id=${id}`,
+                url: `/api/links?id=${id}`,
             }).then(res => setData(res?.data?.data[0] ?? null));
         } else {
             setData({});
@@ -26,7 +26,7 @@ export default function Link() {
         if (confirm('Are you sure you want to delete the link? This action cannot be undone.')) {
             makeRequest({
                 method: 'DELETE',
-                url: '/api/v2/links',
+                url: '/api/links',
                 data: { id: id },
             }).then(res => {
                 if (res?.data?.success) {
@@ -43,7 +43,7 @@ export default function Link() {
         e.preventDefault();
         makeRequest({
             method: 'POST',
-            url: '/api/v2/links' + (id ? `?id=${id}` : ''),
+            url: '/api/links' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');
