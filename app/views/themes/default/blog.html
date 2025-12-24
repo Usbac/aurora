@@ -59,7 +59,7 @@
 
             btn.classList.add('loading');
 
-            fetch('/api/posts?page=' + next_page + '&' + args)
+            fetch('/api/blog/posts?page=' + next_page + '&' + args)
                 .then(res => res.json())
                 .then(res => {
                     window.history.replaceState(null, null, window.location.pathname + '?page=' + next_page);

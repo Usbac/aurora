@@ -22,7 +22,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
      * BLOG
      */
 
-    $router->get('json:api/posts', function() use ($view, $post_mod, $theme_dir) {
+    $router->get('json:api/blog/posts', function() use ($view, $post_mod, $theme_dir) {
         $current_page = max(1, (int) ($_GET['page'] ?? 1));
         $per_page = \Aurora\App\Setting::get('per_page');
         $where = [ $post_mod->getCondition([ 'status' => 1 ]) ];
