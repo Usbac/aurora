@@ -67,10 +67,10 @@ export default function Dashboard() {
                     <div class="card dashboard v-spacing">
                         <h3>Start Creating</h3>
                         <div class="start-creating">
-                            <a href="/console/pages/edit"><IconBook/> <span>Create Page</span></a>
-                            <a href="/console/posts/edit"><IconPencil/> <span>Write Post</span></a>
-                            <a href="/console/users/edit"><IconUser/> <span>Add User</span></a>
-                            <a href="/console/tags/edit"><IconTag/> <span>Add Tag</span></a>
+                            <a href="/admin/pages/edit"><IconBook/> <span>Create Page</span></a>
+                            <a href="/admin/posts/edit"><IconPencil/> <span>Write Post</span></a>
+                            <a href="/admin/users/edit"><IconUser/> <span>Add User</span></a>
+                            <a href="/admin/tags/edit"><IconTag/> <span>Add Tag</span></a>
                         </div>
                     </div>
                     <div class="card dashboard v-spacing">

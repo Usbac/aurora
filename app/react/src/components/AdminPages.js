@@ -18,11 +18,11 @@ export default function AdminPages() {
 
     const logout = () => {
         localStorage.removeItem('auth_token');
-        navigate('/console', { replace: true });
+        navigate('/admin', { replace: true });
     };
 
     if (user === null) {
-        return <Navigate to="/console" replace/>;
+        return <Navigate to="/admin" replace/>;
     }
 
     return <div className="admin">
@@ -32,36 +32,36 @@ export default function AdminPages() {
                 <h1>Aurora</h1>
             </header>
             <div class="admin-options">
-                <Link to="/console/dashboard">
+                <Link to="/admin/dashboard">
                     <IconHome/> Dashboard
                 </Link>
                 <a href="/" target="_blank">
                     <IconWindow/> View site
                 </a>
-                <Link to="/console/pages" data-separator>
+                <Link to="/admin/pages" data-separator>
                     <IconBook/> Pages
                 </Link>
-                <Link to="/console/posts">
+                <Link to="/admin/posts">
                     <IconPencil/> Posts
                 </Link>
-                <Link to="/console/tags">
+                <Link to="/admin/tags">
                     <IconTag/> Tags
                 </Link>
-                <Link to="/console/media">
+                <Link to="/admin/media">
                     <IconImage/> Media
                 </Link>
-                <Link to="/console/users">
+                <Link to="/admin/users">
                     <IconUser/> Users
                 </Link>
-                <Link to="/console/links">
+                <Link to="/admin/links">
                     <IconLink/> Links
                 </Link>
-                <Link to="/console/settings">
+                <Link to="/admin/settings">
                     <IconSettings/> Settings
                 </Link>
             </div>
             <div class="current-user">
-                <Link to={`/console/users/edit?id=${user?.id}`} title={user?.name}>
+                <Link to={`/admin/users/edit?id=${user?.id}`} title={user?.name}>
                     <img src={user?.image ? getContentUrl(user.image) : '/public/assets/no-image.svg'} className={!user?.image ? 'empty-img' : ''}/>
                 </Link>
                 <div id="toggle-theme" class="pointer" title="Switch theme" onClick={toggleTheme} data-theme={theme}>

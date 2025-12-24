@@ -16,10 +16,10 @@ export default function Links() {
                 {
                     content: <><b>+</b>&nbsp;New</>,
                     condition: Boolean(user?.actions?.edit_links),
-                    onClick: () => navigate('/console/links/edit'),
+                    onClick: () => navigate('/admin/links/edit'),
                 },
             ]}
-            rowOnClick={link => navigate(`/console/links/edit?id=${link.id}`)}
+            rowOnClick={link => navigate(`/admin/links/edit?id=${link.id}`)}
             filters={{
                 status: {
                     title: 'Status',

@@ -36,10 +36,10 @@ export default function Users() {
                 {
                     content: <><b>+</b>&nbsp;New</>,
                     condition: Boolean(user?.actions?.edit_users),
-                    onClick: () => navigate('/console/users/edit'),
+                    onClick: () => navigate('/admin/users/edit'),
                 },
             ]}
-            rowOnClick={item => navigate(`/console/users/edit?id=${item.id}`)}
+            rowOnClick={item => navigate(`/admin/users/edit?id=${item.id}`)}
             filters={{
                 status: {
                     title: 'Status',

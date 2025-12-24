@@ -40,7 +40,7 @@ export default function User() {
 			}).then(res => {
 				if (res?.data?.success) {
 					alert('Done');
-					navigate('/console/users', { replace: true });
+					navigate('/admin/users', { replace: true });
 				} else {
 					alert('Error');
 				}
@@ -73,7 +73,7 @@ export default function User() {
 		}).then(res => {
 			alert(res?.data?.success ? 'Done' : 'Error');
 			if (res?.data?.id) {
-				navigate(`/console/users/edit?id=${res.data.id}`, { replace: true });
+				navigate(`/admin/users/edit?id=${res.data.id}`, { replace: true });
 				setId(res.data.id);
 			}
 		});

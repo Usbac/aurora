@@ -38,7 +38,7 @@ export default function Page() {
             }).then(res => {
                 if (res?.data?.success) {
                     alert('Done');
-                    navigate('/console/pages', { replace: true });
+                    navigate('/admin/pages', { replace: true });
                 } else {
                     alert('Error');
                 }
@@ -55,7 +55,7 @@ export default function Page() {
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');
             if (res?.data?.id) {
-                navigate(`/console/pages/edit?id=${res.data.id}`, { replace: true });
+                navigate(`/admin/pages/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);
             }
         });

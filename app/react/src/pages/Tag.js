@@ -31,7 +31,7 @@ export default function Tag() {
             }).then(res => {
                 if (res?.data?.success) {
                     alert('Done');
-                    navigate('/console/tags', { replace: true });
+                    navigate('/admin/tags', { replace: true });
                 } else {
                     alert('Error');
                 }
@@ -48,7 +48,7 @@ export default function Tag() {
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');
             if (res?.data?.id) {
-                navigate(`/console/tags/edit?id=${res.data.id}`, { replace: true });
+                navigate(`/admin/tags/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);
             }
         });

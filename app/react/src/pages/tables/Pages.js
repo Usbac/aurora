@@ -16,10 +16,10 @@ export default function Pages() {
                 {
                     content: <><b>+</b>&nbsp;New</>,
                     condition: Boolean(user?.actions?.edit_pages),
-                    onClick: () => navigate('/console/pages/edit'),
+                    onClick: () => navigate('/admin/pages/edit'),
                 },
             ]}
-            rowOnClick={page => navigate(`/console/pages/edit?id=${page.id}`)}
+            rowOnClick={page => navigate(`/admin/pages/edit?id=${page.id}`)}
             filters={{
                 status: {
                     title: 'Status',

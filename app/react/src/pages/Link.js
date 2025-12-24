@@ -31,7 +31,7 @@ export default function Link() {
             }).then(res => {
                 if (res?.data?.success) {
                     alert('Done');
-                    navigate('/console/links', { replace: true });
+                    navigate('/admin/links', { replace: true });
                 } else {
                     alert('Error');
                 }
@@ -48,7 +48,7 @@ export default function Link() {
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');
             if (res?.data?.id) {
-                navigate(`/console/links/edit?id=${res.data.id}`, { replace: true });
+                navigate(`/admin/links/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);
             }
         });

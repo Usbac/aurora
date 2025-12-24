@@ -25,9 +25,9 @@ const App = () => {
     return <BrowserRouter>
         <QueryClientProvider className="app" client={query_client}>
             <Routes>
-                <Route path="/console/new_password" element={<NewPassword/>}/>
-                <Route path="/console" element={<Login/>}/>
-                <Route path="/console" element={<AdminPages/>}>
+                <Route path="/admin/new_password" element={<NewPassword/>}/>
+                <Route path="/admin" element={<Login/>}/>
+                <Route path="/admin" element={<AdminPages/>}>
                     <Route path="dashboard" element={<Dashboard/>}/>
                     <Route path="pages" element={<Pages/>}/>
                     <Route path="posts" element={<Posts/>}/>

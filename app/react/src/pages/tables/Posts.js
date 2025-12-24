@@ -40,10 +40,10 @@ export default function Posts() {
                 {
                     content: <><b>+</b>&nbsp;New</>,
                     condition: Boolean(user?.actions?.edit_posts),
-                    onClick: () => navigate('/console/posts/edit'),
+                    onClick: () => navigate('/admin/posts/edit'),
                 },
             ]}
-            rowOnClick={post => navigate(`/console/posts/edit?id=${post.id}`)}
+            rowOnClick={post => navigate(`/admin/posts/edit?id=${post.id}`)}
             filters={{
                 user: {
                     title: 'Author',

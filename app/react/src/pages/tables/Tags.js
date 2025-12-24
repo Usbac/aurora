@@ -16,10 +16,10 @@ export default function Tags() {
                 {
                     content: <><b>+</b>&nbsp;New</>,
                     condition: Boolean(user?.actions?.edit_tags),
-                    onClick: () => navigate('/console/tags/edit'),
+                    onClick: () => navigate('/admin/tags/edit'),
                 },
             ]}
-            rowOnClick={tag => navigate(`/console/tags/edit?id=${tag.id}`)}
+            rowOnClick={tag => navigate(`/admin/tags/edit?id=${tag.id}`)}
             filters={{
                 order: {
                     title: 'Sort by',

@@ -25,7 +25,7 @@ export default function NewPassword() {
                 alert('Invalid email or password');
             } else {
                 localStorage.setItem('auth_token', res.data.token);
-                navigate('/console/dashboard');
+                navigate('/admin/dashboard');
             }
         }).finally(() => setLoading(false));
     };

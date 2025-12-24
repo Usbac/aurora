@@ -53,7 +53,7 @@ export default function Post() {
             }).then(res => {
                 if (res?.data?.success) {
                     alert('Done');
-                    navigate('/console/posts', { replace: true });
+                    navigate('/admin/posts', { replace: true });
                 } else {
                     alert('Error');
                 }
@@ -73,7 +73,7 @@ export default function Post() {
         }).then(res => {
             alert(res?.data?.success ? 'Done' : 'Error');
             if (res?.data?.id) {
-                navigate(`/console/posts/edit?id=${res.data.id}`, { replace: true });
+                navigate(`/admin/posts/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);
             }
         });

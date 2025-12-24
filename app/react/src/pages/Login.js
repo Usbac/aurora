@@ -26,7 +26,7 @@ export default function Login() {
                 alert('Invalid email or password');
             } else {
                 localStorage.setItem('auth_token', res.data.token);
-                navigate('/console/dashboard');
+                navigate('/admin/dashboard');
             }
         }).finally(() => setLoading(false));
     };
@@ -51,7 +51,7 @@ export default function Login() {
     }
 
     if (user) {
-        navigate('/console/dashboard');
+        navigate('/admin/dashboard');
         return null;
     }
 
