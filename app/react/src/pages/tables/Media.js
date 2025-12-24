@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Table } from '../../components/Table';
-import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
 import { IconClipboard, IconDuplicate, IconFile, IconFolder, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
 import { createPortal } from 'react-dom';
@@ -189,8 +189,8 @@ export default function Media() {
     const [ search_params, setSearchParams ] = useSearchParams();
     const [ current_dialog, setCurrentDialog ] = useState(null);
     const [ current_file, setCurrentFile ] = useState(null);
+    const file_input_ref = useRef(null);
     const current_path = search_params.get('path') || '';
-    const navigate = useNavigate();
 
     const setPath = (new_path) => setSearchParams({ ...search_params, path: new_path });
 
@@ -219,6 +219,30 @@ export default function Media() {
         if (result) {
             alert('Path copied to clipboard.');
         }
+    };
+
+    const uploadFiles = async (e) => {
+        const files = e.target.files;
+
+        if (!files.length) {
+            return;
+        }
+
+        const form_data = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            form_data.append('file[]', files[i]);
+        }
+
+        makeRequest({
+            method: 'POST',
+            url: '/api/v2/media/upload?path=' + encodeURIComponent(current_path),
+            data: form_data,
+        }).then(res => {
+            alert(res?.data?.success ? 'Files uploaded successfully' : 'Error uploading files');
+        });
+
+        e.target.value = null;
     };
 
     const downloadFiles = () => {
@@ -254,9 +278,12 @@ export default function Media() {
                     onClick: () => openDialog('create_folder'),
                 },
                 {
-                    content: <><b>+</b>&nbsp;New</>,
+                    content: <>
+                        <b>+</b>&nbsp;New
+                        <input ref={file_input_ref} type="file" multiple onChange={uploadFiles} style={{ display: 'none' }}/>
+                    </>,
                     condition: Boolean(user?.actions?.edit_media),
-                    onClick: () => navigate('/console/media/edit'),
+                    onClick: () => file_input_ref?.current?.click(),
                 },
             ]}
             filters={{
