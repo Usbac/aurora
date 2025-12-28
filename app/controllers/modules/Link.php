@@ -56,12 +56,12 @@ final class Link extends \Aurora\App\ModuleBase
         $errors = [];
 
         if (empty($data['title'])) {
-            $errors['title'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_title';
         }
 
         if (!\Aurora\App\Permission::can('edit_links')) {
             http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         return $errors;

@@ -82,24 +82,25 @@ final class Post extends \Aurora\App\ModuleBase
         $errors = [];
 
         if (empty($data['title'])) {
-            $errors['title'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_title';
         }
 
         if (isset($data['slug']) && !empty($this->get([ 'slug' => $data['slug'], '!id' => $id ]))) {
-            $errors['slug'] = $this->language->get('repeated_slug');
+            $errors[] = 'repeated_slug';
         }
 
         if (empty($data['slug']) || !\Aurora\Core\Helper::isSlugValid($data['slug'])) {
-            $errors['slug'] = $this->language->get('invalid_slug');
+            $errors[] = 'invalid_slug';
         }
 
         if (!\Aurora\App\Permission::can('edit_posts')) {
             http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         if (!empty($data['status']) && !\Aurora\App\Permission::can('publish_posts')) {
-            $errors[0] = $this->language->get('published_posts_permission_error');
+            http_response_code(403);
+            $errors[] = 'no_publish_permission';
         }
 
         return $errors;

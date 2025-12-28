@@ -85,9 +85,9 @@ final class User extends \Aurora\App\ModuleBase
         $errors = [];
 
         if (!$user) {
-            $errors['email'] = $this->language->get('no_active_user');
+            $errors[] = 'no_active_user';
         } elseif (!password_verify($password, $user['password'])) {
-            $errors['password'] = $this->language->get('wrong_password');
+            $errors[] = 'wrong_password';
         }
 
         if (empty($errors)) {
@@ -108,35 +108,35 @@ final class User extends \Aurora\App\ModuleBase
         $errors = [];
 
         if (empty($data['name'])) {
-            $errors['name'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_name';
         }
 
         if (!empty($data['slug']) &&
             !empty($this->get([ 'slug' => $data['slug'], '!id' => $id ]))) {
-            $errors['slug'] = $this->language->get('repeated_slug');
+            $errors[] = 'repeated_slug';
         }
 
         if (empty($data['slug']) || !\Aurora\Core\Helper::isSlugValid($data['slug'])) {
-            $errors['slug'] = $this->language->get('invalid_slug');
+            $errors[] = 'invalid_slug';
         }
 
         if (!empty($data['email']) && !empty($this->get([ 'email' => $data['email'], '!id' => $id ]))) {
-            $errors['email'] = $this->language->get('repeated_email');
+            $errors[] = 'repeated_email';
         }
 
         if (empty($data['email']) ||
             filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
-            $errors['email'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_value';
         }
 
         if (empty($id) && empty($data['password'])) {
-            $errors['password'] = $this->language->get('bad_password');
+            $errors[] = 'bad_password';
         }
 
         if (!empty($data['password'])) {
             $password_error = $this->checkPassword($data['password'], $data['password_confirm'] ?? '');
             if (!empty($password_error)) {
-                $errors['password'] = $password_error;
+                $errors[] = $password_error;
             }
         }
 
@@ -146,7 +146,7 @@ final class User extends \Aurora\App\ModuleBase
 
         if (!$can_edit) {
             http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         return $errors;
@@ -206,18 +206,18 @@ final class User extends \Aurora\App\ModuleBase
      * Checks the given password and its confirmation
      * @param string $password the password
      * @param string $password_confirm the password confirmation
-     * @return string the error message, if empty it means both passwords are equal and valid
+     * @return string|false the error message, if false it means both passwords are equal and valid
      */
-    public function checkPassword(string $password, string $password_confirm): string
+    public function checkPassword(string $password, string $password_confirm): string|false
     {
         if (mb_strlen($password) < 8) {
-            return $this->language->get('bad_password');
+            return 'bad_password';
         }
 
         if ($password !== $password_confirm) {
-            return $this->language->get('bad_password_confirm');
+            return 'bad_password_confirm';
         }
 
-        return '';
+        return false;
     }
 }
