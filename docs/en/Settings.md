@@ -130,29 +130,6 @@ Code that will be added to the footer of the website. This is useful to add cust
 
 Code that will be added at the bottom of all posts pages. This is useful to add something like a comments section via js. The `$post` PHP variable will be available in this code and will contain all the post data.
 
-### HTML editor
-
-The code that defines the WYSIWYG editor used for the pages and posts in the admin panel.
-
-By default the [TinyMCE](https://www.tiny.cloud) editor is used, but you can use any other editor that can be loaded via js.
-
-The query selector for the textarea field used in both pages and posts is `textarea#html` and the endpoint which can be used to upload images is `/admin/posts/upload_image`.
-
-This is an example using the default editor.
-
-```js
-<script src="/public/assets/js/tinymce/tinymce.min.js"></script>
-<script>
-    let selector = 'textarea#html';
-    tinymce.init({
-        selector: selector,
-        plugins: [ 'image', 'wordcount', 'autoresize', 'code', 'link', 'lists' ],
-        images_upload_url: '/admin/posts/upload_image',
-        setup: editor => editor.on('Change Keyup', () => get(selector).innerHTML = editor.getContent()),
-    });
-</script>
-```
-
 ## Update
 
 This section can be used to update Aurora to the latest compatible version.
