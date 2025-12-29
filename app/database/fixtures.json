@@ -209,14 +209,6 @@
                 "value": ""
             },
             {
-                "key": "session_lifetime",
-                "value": "2592000"
-            },
-            {
-                "key": "samesite_cookie",
-                "value": "Lax"
-            },
-            {
                 "key": "display_errors",
                 "value": "1"
             },

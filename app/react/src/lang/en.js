@@ -174,8 +174,6 @@ export default {
     'confirm_reset_views': 'Are you sure about resetting the views count of all items?',
     'views_reset_successfully': 'Views count has been reset successfully',
     'error_resetting_views': 'Error resetting views count',
-    'session_lifetime': 'Session lifetime',
-    'session_samesite_cookie': 'Session SameSite cookie',
     'display_errors': 'Display errors',
     'log_errors': 'Log errors',
     'log_file': 'Log file',

@@ -26,17 +26,11 @@ return function (\Aurora\Core\Kernel $kernel) {
     $settings = $db->query('SELECT `key`, value FROM settings')->fetchAll(\PDO::FETCH_KEY_PAIR);
 
     header('X-Content-Type-Options: nosniff');
-    ini_set('session.cookie_httponly', 1);
     ini_set('error_log', \Aurora\Core\Helper::getPath($settings['log_file']));
     ini_set('display_errors', $settings['display_errors'] ? 1 : 0);
     ini_set('display_startup_errors', $settings['display_errors'] ? 1 : 0);
     error_reporting($settings['log_errors'] ? E_ALL : 0);
     date_default_timezone_set($settings['timezone']);
-    session_set_cookie_params([
-        'lifetime' => (int) $settings['session_lifetime'],
-        'samesite' => $settings['samesite_cookie'],
-    ]);
-    session_start();
 
     $languages = [];
     foreach (glob(\Aurora\Core\Helper::getPath('app/languages/*.php')) as $file) {

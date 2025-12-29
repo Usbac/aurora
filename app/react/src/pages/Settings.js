@@ -192,18 +192,6 @@ const Advanced = ({ data, setData, user }) => {
     return <div class="grid">
         <div class="card v-spacing">
             <div class="input-group">
-                <label for="session_lifetime">{t('session_lifetime')}</label>
-                <span class="description">PHP Session lifetime in seconds (e.g. 3600 = 1 hour)</span>
-                <input id="session_lifetime" type="number" value={data.session_lifetime} onChange={e => setData({ ...data, session_lifetime: e.target.value })}/>
-            </div>
-            <div class="input-group">
-                <label for="samesite_cookie">{t('session_samesite_cookie')}</label>
-                <span class="description">PHP session SameSite cookie</span>
-                <select onChange={e => setData({ ...data, samesite_cookie: e.target.value })}>
-                    {[ 'None', 'Lax', 'Strict' ].map(cookie => <option value={cookie} selected={data.samesite_cookie == cookie}>{cookie}</option>)}
-                </select>
-            </div>
-            <div class="input-group">
                 <label>{t('display_errors')}</label>
                 <Switch checked={data.display_errors == 1} onChange={e => setData({ ...data, display_errors: e.target.checked ? 1 : 0 })}/>
             </div>

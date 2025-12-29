@@ -38,8 +38,6 @@ class Set extends \Aurora\Bin\BaseCommand
             'Meta title' => 'meta_title',
             'Post code' => 'post_code',
             'RSS feed URL' => 'rss',
-            'SameSite cookie' => 'samesite_cookie',
-            'Session lifetime' => 'session_lifetime',
             'Theme' => 'theme',
             'Timezone' => 'timezone',
             'Title' => 'title',

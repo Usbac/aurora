@@ -37,8 +37,6 @@ class Listing extends \Aurora\Bin\BaseCommand
                 [ 'Meta title', $settings['meta_title'] ],
                 [ 'Post code', $settings['post_code'] ],
                 [ 'RSS feed URL', $settings['rss'] ],
-                [ 'SameSite cookie', $settings['samesite_cookie'] ],
-                [ 'Session lifetime', $settings['session_lifetime'] ],
                 [ 'Theme', $settings['theme'] ],
                 [ 'Timezone', $settings['timezone'] ],
                 [ 'Title', $settings['title'] ],
