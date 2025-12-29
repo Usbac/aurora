@@ -59,7 +59,7 @@ export default function Pages() {
                                 method: 'DELETE',
                                 url: '/api/pages',
                                 data: { id: pages.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? t('pages_deleted_successfully') : t('error_deleting_pages')));
+                            }).then(res => alert(t(res?.data?.success ? 'pages_deleted_successfully' : 'error_deleting_pages')));
                         }
                     },
                 },
@@ -107,7 +107,7 @@ export default function Pages() {
                                             method: 'DELETE',
                                             url: '/api/pages',
                                             data: { id: page.id },
-                                        }).then(res => alert(res?.data?.success ? t('page_deleted_successfully') : t('error_deleting_page')));
+                                        }).then(res => alert(t(res?.data?.success ? 'page_deleted_successfully' : 'error_deleting_page')));
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

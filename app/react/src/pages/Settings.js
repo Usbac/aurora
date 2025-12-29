@@ -128,7 +128,7 @@ const Data = ({ data, setData, user }) => {
             makeRequest({
                 method: 'GET',
                 url: '/api/reset_views_count',
-            }).then(res => alert(res?.data?.success ? t('views_reset_successfully') : t('error_resetting_views')));
+            }).then(res => alert(t(res?.data?.success ? 'views_reset_successfully' : 'error_resetting_views')));
         }
     };
 
@@ -184,7 +184,7 @@ const Advanced = ({ data, setData, user }) => {
             method: 'DELETE',
             url: '/api/logs',
         }).then(res => {
-            alert(res?.data?.success ? t('logs_deleted_successfully') : t('error_deleting_logs'));
+            alert(t(res?.data?.success ? 'logs_deleted_successfully' : 'error_deleting_logs'));
             setLogs(undefined);
         }).finally(() => loadLogs());
     };
@@ -220,7 +220,7 @@ const Advanced = ({ data, setData, user }) => {
         {data.log_file && <div class="card v-spacing">
             <div id="logs" class="input-group">
                 <label>{t('logs')}</label>
-                <textarea placeholder={logs === undefined ? t('loading') : t('no_logs')} readonly value={logs}></textarea>
+                <textarea placeholder={t(logs === undefined ? 'loading' : 'no_logs')} readonly value={logs}></textarea>
                 <div class="input-group">
                     <button type="button" class="light" onClick={downloadLogs}>{t('download')}</button>
                     <button type="button" class="delete" onClick={deleteLogs} disabled={!user?.actions?.edit_settings}>{t('clear')}</button>
@@ -351,7 +351,7 @@ export default function Settings() {
             method: 'POST',
             url: '/api/settings',
             data: new_data,
-        }).then(res => alert(res?.data?.success ? t('settings_saved_successfully') : t('error_saving_settings')))
+        }).then(res => alert(t(res?.data?.success ? 'settings_saved_successfully' : 'error_saving_settings')))
         .finally(() => setLoading(false));
     };
 

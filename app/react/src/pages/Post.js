@@ -73,7 +73,7 @@ export default function Post() {
                 tags: Object.keys(data.tags || {}).map(tag_slug => tags.find(tag => tag.slug == tag_slug)?.id),
             },
         }).then(res => {
-            alert(res?.data?.success ? t('post_saved_successfully') : t('error_saving_post'));
+            alert(t(res?.data?.success ? 'post_saved_successfully' : 'error_saving_post'));
             if (res?.data?.id) {
                 navigate(`/admin/posts/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);

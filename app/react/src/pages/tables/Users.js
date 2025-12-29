@@ -84,7 +84,7 @@ export default function Users() {
                                 method: 'DELETE',
                                 url: '/api/users',
                                 data: { id: users.map(u => u.id) },
-                            }).then(res => alert(res?.data?.success ? t('users_deleted_successfully') : t('error_deleting_users')));
+                            }).then(res => alert(t(res?.data?.success ? 'users_deleted_successfully' : 'error_deleting_users')));
                         }
                     },
                 },
@@ -164,7 +164,7 @@ export default function Users() {
                                             method: 'DELETE',
                                             url: '/api/users',
                                             data: { id: item.id },
-                                        }).then(res => alert(res?.data?.success ? t('user_deleted_successfully') : t('error_deleting_user')));
+                                        }).then(res => alert(t(res?.data?.success ? 'user_deleted_successfully' : 'error_deleting_user')));
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

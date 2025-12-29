@@ -73,7 +73,7 @@ export default function User() {
 			url: '/api/users' + (id ? `?id=${id}` : ''),
 			data: data,
 		}).then(res => {
-			alert(res?.data?.success ? t('user_saved_successfully') : t('error_saving_user'));
+			alert(t(res?.data?.success ? 'user_saved_successfully' : 'error_saving_user'));
 			if (res?.data?.id) {
 				navigate(`/admin/users/edit?id=${res.data.id}`, { replace: true });
 				setId(res.data.id);

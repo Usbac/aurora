@@ -48,7 +48,7 @@ export default function Link() {
             url: '/api/links' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
-            alert(res?.data?.success ? t('link_saved_successfully') : t('error_saving_link'));
+            alert(t(res?.data?.success ? 'link_saved_successfully' : 'error_saving_link'));
             if (res?.data?.id) {
                 navigate(`/admin/links/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);

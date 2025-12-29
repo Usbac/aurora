@@ -58,7 +58,7 @@ export default function Links() {
                                 method: 'DELETE',
                                 url: '/api/links',
                                 data: { id: links.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? t('links_deleted_successfully') : t('error_deleting_links')));
+                            }).then(res => alert(t(res?.data?.success ? 'links_deleted_successfully' : 'error_deleting_links')));
                         }
                     },
                 },
@@ -76,7 +76,7 @@ export default function Links() {
                 {
                     title: t('status'),
                     class: 'w20',
-                    content: link => <span class={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{link.status == 1 ? t('active') : t('inactive')}</span>,
+                    content: link => <span class={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{t(link.status == 1 ? 'active' : 'inactive')}</span>,
                 },
                 {
                     title: t('order'),
@@ -102,7 +102,7 @@ export default function Links() {
                                             method: 'DELETE',
                                             url: '/api/links',
                                             data: { id: link.id },
-                                        }).then(res => alert(res?.data?.success ? t('link_deleted_successfully') : t('error_deleting_link')));
+                                        }).then(res => alert(t(res?.data?.success ? 'link_deleted_successfully' : 'error_deleting_link')));
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

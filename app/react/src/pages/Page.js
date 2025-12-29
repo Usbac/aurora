@@ -55,7 +55,7 @@ export default function Page() {
             url: '/api/pages' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
-            alert(res?.data?.success ? t('page_saved_successfully') : t('error_saving_page'));
+            alert(t(res?.data?.success ? 'page_saved_successfully' : 'error_saving_page'));
             if (res?.data?.id) {
                 navigate(`/admin/pages/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);

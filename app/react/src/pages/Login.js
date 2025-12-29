@@ -41,9 +41,9 @@ export default function Login() {
             url: '/api/password-reset/request',
             data: { email: email },
         }).then(res => {
-            alert(res?.data?.success
-                ? t('password_reset_email_sent')
-                : t('error_occurred'));
+            alert(t(res?.data?.success
+                ? 'password_reset_email_sent'
+                : 'error_occurred'));
             setEmail('');
         }).finally(() => setLoading(false));
     };
@@ -68,8 +68,8 @@ export default function Login() {
                 <label htmlFor="password">{t('password')}</label>
                 <input id="password" type="password" name="password" value={password} onChange={e => setPassword(e.target.value)}/>
             </div>}
-            <button type="submit" disabled={loading}>{reset_password ? t('reset_password') : t('sign_in')}</button>
-            <button type="button" className="pointer light" onClick={() => setResetPassword(!reset_password)} disabled={loading}>{reset_password ? t('go_back') : t('forgot_password')}</button>
+            <button type="submit" disabled={loading}>{t(reset_password ? 'reset_password' : 'sign_in')}</button>
+            <button type="button" className="pointer light" onClick={() => setResetPassword(!reset_password)} disabled={loading}>{t(reset_password ? 'go_back' : 'forgot_password')}</button>
         </form>
     </div>;
 }

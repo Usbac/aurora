@@ -87,7 +87,7 @@ export default function Posts() {
                                 method: 'DELETE',
                                 url: '/api/posts',
                                 data: { id: posts.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? t('posts_deleted_successfully') : t('error_deleting_posts')));
+                            }).then(res => alert(t(res?.data?.success ? 'posts_deleted_successfully' : 'error_deleting_posts')));
                         }
                     },
                 },
@@ -147,7 +147,7 @@ export default function Posts() {
                                             method: 'DELETE',
                                             url: '/api/posts',
                                             data: { id: post.id },
-                                        }).then(res => alert(res?.data?.success ? t('post_deleted_successfully') : t('error_deleting_post')));
+                                        }).then(res => alert(t(res?.data?.success ? 'post_deleted_successfully' : 'error_deleting_post')));
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

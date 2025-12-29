@@ -49,7 +49,7 @@ export default function Tags() {
                                 method: 'DELETE',
                                 url: '/api/tags',
                                 data: { id: tags.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? t('tags_deleted_successfully') : t('error_deleting_tags')));
+                            }).then(res => alert(t(res?.data?.success ? 'tags_deleted_successfully' : 'error_deleting_tags')));
                         }
                     },
                 },
@@ -88,7 +88,7 @@ export default function Tags() {
                                             method: 'DELETE',
                                             url: '/api/tags',
                                             data: { id: tag.id },
-                                        }).then(res => alert(res?.data?.success ? t('tag_deleted_successfully') : t('error_deleting_tag')));
+                                        }).then(res => alert(t(res?.data?.success ? 'tag_deleted_successfully' : 'error_deleting_tag')));
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

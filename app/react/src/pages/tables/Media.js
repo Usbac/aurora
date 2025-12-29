@@ -34,7 +34,7 @@ const DialogEditFile = ({ file, onClose }) => {
                 path: getContentUrl(file.path),
             },
         }).then(res => {
-            alert(res?.data?.success ? t('item_renamed_successfully') : t('error_renaming_item'));
+            alert(t(res?.data?.success ? 'item_renamed_successfully' : 'error_renaming_item'));
             onClose();
         });
     };
@@ -74,7 +74,7 @@ const DialogDuplicate = ({ file, onClose }) => {
                 path: getContentUrl(file.path),
             },
         }).then(res => {
-            alert(res?.data?.success ? t('item_duplicated_successfully') : t('error_duplicating_item'));
+            alert(t(res?.data?.success ? 'item_duplicated_successfully' : 'error_duplicating_item'));
             onClose();
         });
     };
@@ -123,7 +123,7 @@ const DialogMove = ({ file, onClose }) => {
                 path: getContentUrl(file.path),
             },
         }).then(res => {
-            alert(res?.data?.success ? t('item_moved_successfully') : t('error_moving_item'));
+            alert(t(res?.data?.success ? 'item_moved_successfully' : 'error_moving_item'));
             onClose();
         });
     };
@@ -162,7 +162,7 @@ const DialogCreateFolder = ({ path, onClose }) => {
             url: '/api/media/create_folder',
             data: { name: path + '/' + name },
         }).then(res => {
-            alert(res?.data?.success ? t('folder_created_successfully') : t('error_creating_folder'));
+            alert(t(res?.data?.success ? 'folder_created_successfully' : 'error_creating_folder'));
             onClose();
         });
     };
@@ -206,7 +206,7 @@ export default function Media() {
                 method: 'DELETE',
                 url: '/api/media',
                 data: [ getContentUrl(file.path) ],
-            }).then(res => alert(res?.data?.success ? t('file_deleted_successfully') : t('error_deleting_file')));
+            }).then(res => alert(t(res?.data?.success ? 'file_deleted_successfully' : 'error_deleting_file')));
         }
     };
 
@@ -245,7 +245,7 @@ export default function Media() {
             url: '/api/media/upload?path=' + encodeURIComponent(current_path),
             data: form_data,
         }).then(res => {
-            alert(res?.data?.success ? t('files_uploaded_successfully') : t('error_uploading_files'));
+            alert(t(res?.data?.success ? 'files_uploaded_successfully' : 'error_uploading_files'));
         });
 
         e.target.value = null;
@@ -319,7 +319,7 @@ export default function Media() {
                                 method: 'DELETE',
                                 url: '/api/media',
                                 data: files.map(f => getContentUrl(f.path)),
-                            }).then(res => alert(res?.data?.success ? t('files_deleted_successfully') : t('error_deleting_files')));
+                            }).then(res => alert(t(res?.data?.success ? 'files_deleted_successfully' : 'error_deleting_files')));
                         }
                     },
                 },

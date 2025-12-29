@@ -48,7 +48,7 @@ export default function Tag() {
             url: '/api/tags' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
-            alert(res?.data?.success ? t('tag_saved_successfully') : t('error_saving_tag'));
+            alert(t(res?.data?.success ? 'tag_saved_successfully' : 'error_saving_tag'));
             if (res?.data?.id) {
                 navigate(`/admin/tags/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);
