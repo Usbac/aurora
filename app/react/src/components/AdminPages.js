@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from '../utils/icons';
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { getContentUrl, LoadingPage, useElement } from '../utils/utils';
+import { useI18n } from '../providers/I18nProvider';
 
 export default function AdminPages() {
     const dark_theme_element = document.getElementById('css-dark');
@@ -9,6 +10,7 @@ export default function AdminPages() {
     const [ settings, fetch_settings ] = useElement('/api/settings');
     const [ theme, setTheme ] = useState(dark_theme_element?.hasAttribute('disabled') ? 'light' : 'dark');
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     const toggleTheme = () => {
         const is_light_enabled = dark_theme_element.toggleAttribute('disabled');
@@ -33,41 +35,41 @@ export default function AdminPages() {
             </header>
             <div class="admin-options">
                 <Link to="/admin/dashboard">
-                    <IconHome/> Dashboard
+                    <IconHome/> {t('dashboard')}
                 </Link>
                 <a href="/" target="_blank">
-                    <IconWindow/> View site
+                    <IconWindow/> {t('view_site')}
                 </a>
                 <Link to="/admin/pages" data-separator>
-                    <IconBook/> Pages
+                    <IconBook/> {t('pages')}
                 </Link>
                 <Link to="/admin/posts">
-                    <IconPencil/> Posts
+                    <IconPencil/> {t('posts')}
                 </Link>
                 <Link to="/admin/tags">
-                    <IconTag/> Tags
+                    <IconTag/> {t('tags')}
                 </Link>
                 <Link to="/admin/media">
-                    <IconImage/> Media
+                    <IconImage/> {t('media')}
                 </Link>
                 <Link to="/admin/users">
-                    <IconUser/> Users
+                    <IconUser/> {t('users')}
                 </Link>
                 <Link to="/admin/links">
-                    <IconLink/> Links
+                    <IconLink/> {t('links')}
                 </Link>
                 <Link to="/admin/settings">
-                    <IconSettings/> Settings
+                    <IconSettings/> {t('settings')}
                 </Link>
             </div>
             <div class="current-user">
                 <Link to={`/admin/users/edit?id=${user?.id}`} title={user?.name}>
                     <img src={user?.image ? getContentUrl(user.image) : '/public/assets/no-image.svg'} className={!user?.image ? 'empty-img' : ''}/>
                 </Link>
-                <div id="toggle-theme" class="pointer" title="Switch theme" onClick={toggleTheme} data-theme={theme}>
+                <div id="toggle-theme" class="pointer" title={t('switch_theme')} onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}
                 </div>
-                <div class="pointer" title="Logout" onClick={logout}>
+                <div class="pointer" title={t('logout')} onClick={logout}>
                     <IconLogout/>
                 </div>
             </div>
