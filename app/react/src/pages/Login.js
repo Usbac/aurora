@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeRequest, useElement } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
+import { useI18n } from '../providers/I18nProvider';
 
 export default function Login() {
     const [ user ] = useElement('/api/me');
@@ -10,6 +11,7 @@ export default function Login() {
     const [ password, setPassword ] = useState('');
     const [ reset_password, setResetPassword ] = useState(false);
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     const submitLogin = async e => {
         setLoading(true);
@@ -23,7 +25,7 @@ export default function Login() {
             },
         }).then(res => {
             if (!res?.data?.success) {
-                alert('Invalid email or password');
+                alert(t('invalid_email_or_password'));
             } else {
                 localStorage.setItem('auth_token', res.data.token);
                 navigate('/admin/dashboard');
@@ -40,8 +42,8 @@ export default function Login() {
             data: { email: email },
         }).then(res => {
             alert(res?.data?.success
-                ? 'If the email is registered, you will receive an email with instructions to reset your password'
-                : 'An error occurred, please try again later');
+                ? t('password_reset_email_sent')
+                : t('error_occurred'));
             setEmail('');
         }).finally(() => setLoading(false));
     };
@@ -59,15 +61,15 @@ export default function Login() {
         <form id="login-form" className="card v-spacing" onSubmit={reset_password ? resetPassword : submitLogin}>
             {logo && <img src={logo}/>}
             <div className="input-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">{t('email')}</label>
                 <input id="email" type="email" name="email" placeholder="johndoe@mail.com" value={email} maxLength="255" onChange={e => setEmail(e.target.value)}/>
             </div>
             {!reset_password && <div className="input-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">{t('password')}</label>
                 <input id="password" type="password" name="password" value={password} onChange={e => setPassword(e.target.value)}/>
             </div>}
-            <button type="submit" disabled={loading}>{reset_password ? 'Reset Password' : 'Sign In'}</button>
-            <button type="button" className="pointer light" onClick={() => setResetPassword(!reset_password)} disabled={loading}>{reset_password ? 'Go Back' : 'Forgot Password?'}</button>
+            <button type="submit" disabled={loading}>{reset_password ? t('reset_password') : t('sign_in')}</button>
+            <button type="button" className="pointer light" onClick={() => setResetPassword(!reset_password)} disabled={loading}>{reset_password ? t('go_back') : t('forgot_password')}</button>
         </form>
     </div>;
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Input, LoadingPage, makeRequest, MenuButton, Switch } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useI18n } from '../providers/I18nProvider';
 
 export default function Link() {
     const { user } = useOutletContext();
@@ -10,6 +11,7 @@ export default function Link() {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const [ id, setId ] = useState(params.get('id'));
+    const { t } = useI18n();
 
     useEffect(() => {
         if (id) {
@@ -23,17 +25,17 @@ export default function Link() {
     }, []);
 
     const remove = () => {
-        if (confirm('Are you sure you want to delete the link? This action cannot be undone.')) {
+        if (confirm(t('confirm_delete_link'))) {
             makeRequest({
                 method: 'DELETE',
                 url: '/api/links',
                 data: { id: id },
             }).then(res => {
                 if (res?.data?.success) {
-                    alert('Done');
+                    alert(t('link_deleted_successfully'));
                     navigate('/admin/links', { replace: true });
                 } else {
-                    alert('Error');
+                    alert(t('error_deleting_link'));
                 }
             });
         }
@@ -46,7 +48,7 @@ export default function Link() {
             url: '/api/links' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
-            alert(res?.data?.success ? 'Done' : 'Error');
+            alert(res?.data?.success ? t('link_saved_successfully') : t('error_saving_link'));
             if (res?.data?.id) {
                 navigate(`/admin/links/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);
@@ -59,14 +61,14 @@ export default function Link() {
     }
 
     if (!data) {
-        return <>Error</>;
+        return <>{t('error')}</>;
     }
 
     return (<form className="content" onSubmit={submit}>
         <div>
             <div class="page-title">
                 <MenuButton/>
-                <h2>Link</h2>
+                <h2>{t('link')}</h2>
             </div>
             <div class="buttons">
                 {id && <>
@@ -75,13 +77,13 @@ export default function Link() {
                     </button>
                     <button type="button" onClick={() => window.open(data.url, '_blank').focus()}><IconEye/></button>
                 </>}
-                <button type="submit" disabled={!user?.actions?.edit_links}>Save</button>
+                <button type="submit" disabled={!user?.actions?.edit_links}>{t('save')}</button>
             </div>
         </div>
        <div class="small-form">
             <div class="card v-spacing">
                 <div class="input-group">
-                    <label htmlFor="title">Title</label>
+                    <label htmlFor="title">{t('title')}</label>
                     <Input
                         id="title"
                         type="text"
@@ -91,7 +93,7 @@ export default function Link() {
                     />
                 </div>
                 <div class="input-group">
-                    <label htmlFor="url">URL</label>
+                    <label htmlFor="url">{t('url')}</label>
                     <Input
                         id="url"
                         type="text"
@@ -101,7 +103,7 @@ export default function Link() {
                     />
                 </div>
                 <div class="input-group">
-                    <label htmlFor="order">Order</label>
+                    <label htmlFor="order">{t('order')}</label>
                     <Input
                         id="order"
                         type="number"
@@ -110,7 +112,7 @@ export default function Link() {
                     />
                 </div>
                 <div class="input-group">
-                    <label>Status</label>
+                    <label>{t('status')}</label>
                     <Switch checked={data.status == 1} onChange={e => setData({...data, status: e.target.checked })}/>
                 </div>
                 {id && <div class="extra-data">

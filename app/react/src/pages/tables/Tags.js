@@ -3,18 +3,20 @@ import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, makeRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
+import { useI18n } from '../../providers/I18nProvider';
 
 export default function Tags() {
-    const { user } = useOutletContext();
+    const { user, settings } = useOutletContext();
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     return <div class="content">
         <Table
             url="/api/tags"
-            title="Tags"
+            title={t('tags')}
             topOptions={[
                 {
-                    content: <><b>+</b>&nbsp;New</>,
+                    content: <><b>+</b>&nbsp;{t('new')}</>,
                     condition: Boolean(user?.actions?.edit_tags),
                     onClick: () => navigate('/admin/tags/edit'),
                 },
@@ -22,32 +24,32 @@ export default function Tags() {
             rowOnClick={tag => navigate(`/admin/tags/edit?id=${tag.id}`)}
             filters={{
                 order: {
-                    title: 'Sort by',
+                    title: t('sort_by'),
                     options: [
-                        { key: 'name', title: 'Name' },
-                        { key: 'slug', title: 'Slug' },
-                        { key: 'posts', title: 'No. posts' },
+                        { key: 'name', title: t('name') },
+                        { key: 'slug', title: t('slug') },
+                        { key: 'posts', title: t('no_posts') },
                     ],
                 },
                 sort: {
                     options: [
-                        { key: 'asc', title: 'Ascending' },
-                        { key: 'desc', title: 'Descending' },
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
                     ],
                 },
             }}
             options={[
                 {
-                    title: 'Delete',
+                    title: t('delete'),
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_tags),
                     onClick: (tags) => {
-                        if (confirm('Are you sure you want to delete the selected tags? This action cannot be undone.')) {
+                        if (confirm(t('confirm_delete_selected_tags'))) {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/tags',
                                 data: { id: tags.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                            }).then(res => alert(res?.data?.success ? t('tags_deleted_successfully') : t('error_deleting_tags')));
                         }
                     },
                 },
@@ -58,12 +60,12 @@ export default function Tags() {
                     content: tag => <h3>{tag.name}</h3>,
                 },
                 {
-                    title: 'Slug',
+                    title: t('slug'),
                     class: 'w30',
                     content: tag => tag.slug,
                 },
                 {
-                    title: 'No. posts',
+                    title: t('no_posts'),
                     class: 'w10 numeric',
                     content: tag => tag.posts,
                 },
@@ -75,21 +77,21 @@ export default function Tags() {
                         options={[
                             {
                                 onClick: () => window.open(`/${settings.blog_url}/tag/${tag.slug}`, '_blank').focus(),
-                                content: <><IconEye/> View</>
+                                content: <><IconEye/> {t('view')}</>
                             },
                             {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_tags),
                                 onClick: () => {
-                                    if (confirm('Are you sure you want to delete the tag? This action cannot be undone.')) {
+                                    if (confirm(t('confirm_delete_tag'))) {
                                         makeRequest({
                                             method: 'DELETE',
                                             url: '/api/tags',
                                             data: { id: tag.id },
-                                        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                                        }).then(res => alert(res?.data?.success ? t('tag_deleted_successfully') : t('error_deleting_tag')));
                                     }
                                 },
-                                content: <><IconTrash/> Delete</>
+                                content: <><IconTrash/> {t('delete')}</>
                             },
                         ]}
                     />,

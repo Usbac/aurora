@@ -4,6 +4,7 @@ import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
 import { IconClipboard, IconDuplicate, IconFile, IconFolder, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
 import { createPortal } from 'react-dom';
+import { useI18n } from '../../providers/I18nProvider';
 
 const MediaPath = ({ path, setPath }) => {
     const paths = path.split('/');
@@ -22,6 +23,7 @@ const MediaPath = ({ path, setPath }) => {
 
 const DialogEditFile = ({ file, onClose }) => {
     const [ name, setName ] = useState(file.name);
+    const { t } = useI18n();
 
     const save = () => {
         makeRequest({
@@ -32,7 +34,7 @@ const DialogEditFile = ({ file, onClose }) => {
                 path: getContentUrl(file.path),
             },
         }).then(res => {
-            alert(res?.data?.success ? 'Done' : 'Error renaming item. The name is invalid, the file does not comply with the server rules or the path is not writable.');
+            alert(res?.data?.success ? t('item_renamed_successfully') : t('error_renaming_item'));
             onClose();
         });
     };
@@ -41,19 +43,19 @@ const DialogEditFile = ({ file, onClose }) => {
         <div>
             <div className="top">
                 <div className="title">
-                    <h2>Rename</h2>
+                    <h2>{t('rename')}</h2>
                     <span onClick={onClose}>
                         <IconX/>
                     </span>
                 </div>
             </div>
             <div className="content input-group">
-                <label htmlFor="file-name-input">Name</label>
+                <label htmlFor="file-name-input">{t('name')}</label>
                 <input id="file-name-input" type="text" name="name" value={name} onChange={e => setName(e.target.value)}/>
             </div>
             <div className="bottom">
-                <button className="light" onClick={onClose}>Cancel</button>
-                <button onClick={save}>Save</button>
+                <button className="light" onClick={onClose}>{t('cancel')}</button>
+                <button onClick={save}>{t('save')}</button>
             </div>
         </div>
     </div>, document.body);
@@ -61,6 +63,7 @@ const DialogEditFile = ({ file, onClose }) => {
 
 const DialogDuplicate = ({ file, onClose }) => {
     const [ name, setName ] = useState(file.name);
+    const { t } = useI18n();
 
     const save = () => {
         makeRequest({
@@ -71,7 +74,7 @@ const DialogDuplicate = ({ file, onClose }) => {
                 path: getContentUrl(file.path),
             },
         }).then(res => {
-            alert(res?.data?.success ? 'Done' : 'Error duplicating item. The name is invalid, the file does not comply with the server rules or the path is not writable.');
+            alert(res?.data?.success ? t('item_duplicated_successfully') : t('error_duplicating_item'));
             onClose();
         });
     };
@@ -80,19 +83,19 @@ const DialogDuplicate = ({ file, onClose }) => {
         <div>
             <div className="top">
                 <div className="title">
-                    <h2>Duplicate</h2>
+                    <h2>{t('duplicate')}</h2>
                     <span onClick={onClose}>
                         <IconX/>
                     </span>
                 </div>
             </div>
             <div className="content input-group">
-                <label htmlFor="file-name-input">Name</label>
+                <label htmlFor="file-name-input">{t('name')}</label>
                 <input id="file-name-input" type="text" name="name" value={name} onChange={e => setName(e.target.value)}/>
             </div>
             <div className="bottom">
-                <button className="light" onClick={onClose}>Cancel</button>
-                <button onClick={save}>Save</button>
+                <button className="light" onClick={onClose}>{t('cancel')}</button>
+                <button onClick={save}>{t('save')}</button>
             </div>
         </div>
     </div>, document.body);
@@ -102,6 +105,7 @@ const DialogMove = ({ file, onClose }) => {
     const [ folders, setFolders ] = useState(undefined);
     const initial_destination_folder = file.path.slice(0, file.path.lastIndexOf('/')).replace(/^\/+|\/+$/g, '');
     const [ destination_folder, setDestinationFolder ] = useState(initial_destination_folder.length == 0 ? '/' : initial_destination_folder);
+    const { t } = useI18n();
 
     useEffect(() => {
         makeRequest({
@@ -119,7 +123,7 @@ const DialogMove = ({ file, onClose }) => {
                 path: getContentUrl(file.path),
             },
         }).then(res => {
-            alert(res?.data?.success ? 'Done' : 'Error');
+            alert(res?.data?.success ? t('item_moved_successfully') : t('error_moving_item'));
             onClose();
         });
     };
@@ -128,21 +132,21 @@ const DialogMove = ({ file, onClose }) => {
         <div>
             <div className="top">
                 <div className="title">
-                    <h2>Move</h2>
+                    <h2>{t('move')}</h2>
                     <span onClick={onClose}>
                         <IconX/>
                     </span>
                 </div>
             </div>
             <div className="content input-group">
-                <label htmlFor="move-input">Folder</label>
+                <label htmlFor="move-input">{t('folder')}</label>
                 <select id="move-input" disabled={!folders} value={destination_folder} onChange={e => setDestinationFolder(e.target.value)}>
                     {folders?.map(folder => <option key={folder} value={folder}>{folder}</option>)}
                 </select>
             </div>
             <div className="bottom">
-                <button className="light" onClick={onClose}>Cancel</button>
-                <button onClick={save}>Save</button>
+                <button className="light" onClick={onClose}>{t('cancel')}</button>
+                <button onClick={save}>{t('save')}</button>
             </div>
         </div>
     </div>, document.body);
@@ -150,6 +154,7 @@ const DialogMove = ({ file, onClose }) => {
 
 const DialogCreateFolder = ({ path, onClose }) => {
     const [ name, setName ] = useState('');
+    const { t } = useI18n();
 
     const save = () => {
         makeRequest({
@@ -157,7 +162,7 @@ const DialogCreateFolder = ({ path, onClose }) => {
             url: '/api/media/create_folder',
             data: { name: path + '/' + name },
         }).then(res => {
-            alert(res?.data?.success ? 'Done' : 'Error');
+            alert(res?.data?.success ? t('folder_created_successfully') : t('error_creating_folder'));
             onClose();
         });
     };
@@ -166,19 +171,19 @@ const DialogCreateFolder = ({ path, onClose }) => {
         <div>
             <div className="top">
                 <div className="title">
-                    <h2>Create Folder</h2>
+                    <h2>{t('create_folder')}</h2>
                     <span onClick={onClose}>
                         <IconX/>
                     </span>
                 </div>
             </div>
             <div className="content input-group">
-                <label htmlFor="file-name-input">Name</label>
+                <label htmlFor="file-name-input">{t('name')}</label>
                 <input id="file-name-input" type="text" name="name" value={name} onChange={e => setName(e.target.value)}/>
             </div>
             <div className="bottom">
-                <button className="light" onClick={onClose}>Cancel</button>
-                <button onClick={save}>Save</button>
+                <button className="light" onClick={onClose}>{t('cancel')}</button>
+                <button onClick={save}>{t('save')}</button>
             </div>
         </div>
     </div>, document.body);
@@ -191,22 +196,23 @@ export default function Media() {
     const [ current_file, setCurrentFile ] = useState(null);
     const file_input_ref = useRef(null);
     const current_path = search_params.get('path') || '';
+    const { t } = useI18n();
 
     const setPath = (new_path) => setSearchParams({ ...search_params, path: new_path });
 
     const deleteFile = (file) => {
-        if (confirm('Are you sure you want to delete the file? This action cannot be undone.')) {
+        if (confirm(t('confirm_delete_file'))) {
             makeRequest({
                 method: 'DELETE',
                 url: '/api/media',
                 data: [ getContentUrl(file.path) ],
-            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+            }).then(res => alert(res?.data?.success ? t('file_deleted_successfully') : t('error_deleting_file')));
         }
     };
 
     const copyPath = (path) => {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(path).then(() => alert('Done'));
+            navigator.clipboard.writeText(path).then(() => alert(t('path_copied_to_clipboard')));
             return;
         }
 
@@ -217,7 +223,7 @@ export default function Media() {
         let result = document.execCommand('copy');
         document.body.removeChild(input);
         if (result) {
-            alert('Path copied to clipboard.');
+            alert(t('path_copied_to_clipboard'));
         }
     };
 
@@ -239,14 +245,14 @@ export default function Media() {
             url: '/api/media/upload?path=' + encodeURIComponent(current_path),
             data: form_data,
         }).then(res => {
-            alert(res?.data?.success ? 'Files uploaded successfully' : 'Error uploading files');
+            alert(res?.data?.success ? t('files_uploaded_successfully') : t('error_uploading_files'));
         });
 
         e.target.value = null;
     };
 
     const downloadFiles = () => {
-        if (confirm('This will download all the media content in the current directory as a zip file.')) {
+        if (confirm(t('confirm_download_media'))) {
             makeRequest({
                 method: 'GET',
                 url: '/api/media/download?path=' + current_path,
@@ -267,7 +273,7 @@ export default function Media() {
     return <div className="content">
         <Table
             url={`/api/media?path=${encodeURIComponent(current_path)}`}
-            title="Media"
+            title={t('media')}
             topOptions={[
                 {
                     content: <IconZip/>,
@@ -279,7 +285,7 @@ export default function Media() {
                 },
                 {
                     content: <>
-                        <b>+</b>&nbsp;New
+                        <b>+</b>&nbsp;{t('new')}
                         <input ref={file_input_ref} type="file" multiple onChange={uploadFiles} style={{ display: 'none' }}/>
                     </>,
                     condition: Boolean(user?.actions?.edit_media),
@@ -288,32 +294,32 @@ export default function Media() {
             ]}
             filters={{
                 order: {
-                    title: 'Sort by',
+                    title: t('sort_by'),
                     options: [
-                        { key: 'type', title: 'Type' },
-                        { key: 'name', title: 'Name' },
-                        { key: 'size', title: 'Size' },
+                        { key: 'type', title: t('type') },
+                        { key: 'name', title: t('name') },
+                        { key: 'size', title: t('size') },
                     ],
                 },
                 sort: {
                     options: [
-                        { key: 'asc', title: 'Ascending' },
-                        { key: 'desc', title: 'Descending' },
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
                     ],
                 },
             }}
             options={[
                 {
-                    title: 'Delete',
+                    title: t('delete'),
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_media),
                     onClick: (files) => {
-                        if (confirm('Are you sure you want to delete the selected files? This action cannot be undone.')) {
+                        if (confirm(t('confirm_delete_selected_files'))) {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/media',
                                 data: files.map(f => getContentUrl(f.path)),
-                            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                            }).then(res => alert(res?.data?.success ? t('files_deleted_successfully') : t('error_deleting_files')));
                         }
                     },
                 },
@@ -335,12 +341,12 @@ export default function Media() {
                     </>,
                 },
                 {
-                    title: 'Information',
+                    title: t('information'),
                     class: 'w20 file-info',
                     content: file => <p>{file.is_file ? formatSize(file.size) : file.mime}</p>,
                 },
                 {
-                    title: 'Last Modification',
+                    title: t('last_modification'),
                     class: 'w20',
                     content: file => <p>{formatDate(file.time)}</p>,
                 },
@@ -352,28 +358,28 @@ export default function Media() {
                         options={[
                             {
                                 onClick: () => copyPath(getContentUrl(file.path)),
-                                content: <><IconClipboard/> Copy path</>,
+                                content: <><IconClipboard/> {t('copy_path')}</>,
                             },
                             {
                                 condition: Boolean(user?.actions?.edit_media),
                                 onClick: () => openDialog('duplicate_file', file),
-                                content: <><IconDuplicate/> Duplicate</>
+                                content: <><IconDuplicate/> {t('duplicate')}</>
                             },
                             {
                                 condition: Boolean(user?.actions?.edit_media),
                                 onClick: () => openDialog('move_file', file),
-                                content: <><IconMoveFile/> Move</>
+                                content: <><IconMoveFile/> {t('move')}</>
                             },
                             {
                                 condition: Boolean(user?.actions?.edit_media),
                                 onClick: () => openDialog('edit_file', file),
-                                content: <><IconPencil/> Rename</>
+                                content: <><IconPencil/> {t('rename')}</>
                             },
                             {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_media),
                                 onClick: () => deleteFile(file),
-                                content: <><IconTrash/> Delete</>
+                                content: <><IconTrash/> {t('delete')}</>
                             },
                         ]}
                     />,

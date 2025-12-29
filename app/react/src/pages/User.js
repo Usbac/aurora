@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest, formatDate, getRoleTitle, getSlug } from '../utils/utils';
 import { IconEye, IconTrash, IconUsers } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useI18n } from '../providers/I18nProvider';
 
 export default function User() {
 	const { user, settings, fetch_user } = useOutletContext();
@@ -17,6 +18,7 @@ export default function User() {
 	const [ id, setId ] = useState(params.get('id'));
 	const roles = roles_req?.data ?? {};
 	const is_current_user = id && user?.id == id;
+	const { t } = useI18n();
 
 	useEffect(() => {
 		fetch_roles();
@@ -32,30 +34,30 @@ export default function User() {
 	}, []);
 
 	const remove = () => {
-		if (confirm('Are you sure you want to delete the user? This action cannot be undone.')) {
+		if (confirm(t('confirm_delete_user', data.name))) {
 			makeRequest({
 				method: 'DELETE',
 				url: '/api/users',
 				data: { id: id },
 			}).then(res => {
 				if (res?.data?.success) {
-					alert('Done');
+					alert(t('user_deleted_successfully'));
 					navigate('/admin/users', { replace: true });
 				} else {
-					alert('Error');
+					alert(t('error_deleting_user'));
 				}
 			});
 		}
 	};
 
 	const impersonate = () => {
-		if (confirm('Are you sure you want to impersonate this user?')) {
+		if (confirm(t('confirm_impersonate_user'))) {
 			makeRequest({
 				method: 'GET',
 				url: '/api/users/impersonate?id=' + id,
 			}).then(res => {
 				if (!res?.data?.success) {
-					alert('Error');
+					alert(t('error_impersonating_user'));
 				} else {
 					localStorage.setItem('auth_token', res.data.token);
 					fetch_user();
@@ -71,7 +73,7 @@ export default function User() {
 			url: '/api/users' + (id ? `?id=${id}` : ''),
 			data: data,
 		}).then(res => {
-			alert(res?.data?.success ? 'Done' : 'Error');
+			alert(res?.data?.success ? t('user_saved_successfully') : t('error_saving_user'));
 			if (res?.data?.id) {
 				navigate(`/admin/users/edit?id=${res.data.id}`, { replace: true });
 				setId(res.data.id);
@@ -84,7 +86,7 @@ export default function User() {
 	}
 
 	if (!data) {
-		return <>Error</>;
+		return <>{t('error')}</>;
 	}
 
 	return (<form id="user-form" className="content" onSubmit={submit}>
@@ -92,7 +94,7 @@ export default function User() {
 		<div>
 			<div class="page-title">
 				<MenuButton/>
-				<h2>User</h2>
+				<h2>{t('user')}</h2>
 			</div>
 			<div class="buttons">
 				{id && <>
@@ -102,7 +104,7 @@ export default function User() {
 					{!is_current_user && user?.role > data.role && <button type="button" onClick={impersonate}><IconUsers/></button>}
 					<button type="button" onClick={() => window.open(`/${settings.blog_url}/author/${data.slug}`, '_blank').focus()}><IconEye/></button>
 				</>}
-				<button type="submit" disabled={!user?.actions?.edit_users}>Save</button>
+				<button type="submit" disabled={!user?.actions?.edit_users}>{t('save')}</button>
 			</div>
 		</div>
 		<div class="grid grid-two-columns wide">
@@ -112,31 +114,31 @@ export default function User() {
 				</div>
 				{id && <div class="extra-info">
 					<p>ID: {id}</p>
-					<p>No. posts: {data.posts}</p>
-					<p>Last active: {formatDate(data.last_active)}</p>
+					<p>{t('no_posts')}: {data.posts}</p>
+					<p>{t('last_active')}: {formatDate(data.last_active)}</p>
 				</div>}
 			</div>
 			<div class="grid">
 				<div class="card v-spacing">
 					<div class="input-group">
-						<label htmlFor="name">Name</label>
+						<label htmlFor="name">{t('name')}</label>
 						<Input id="name" type="text" value={data.name} onChange={e => setData({ ...data, name: e.target.value })} charCount={true}/>
 					</div>
 					<div class="input-group">
-						<label htmlFor="slug">Slug</label>
+						<label htmlFor="slug">{t('slug')}</label>
 						<Input id="slug" type="text" value={data.slug} onChange={e => setData({ ...data, slug: getSlug(e.target.value) })} charCount={true}/>
 						<a href={getUrl(`/${settings.blog_url}/author/${data.slug}`)} target="_blank">{getUrl(`/${settings.blog_url}/author/${data.slug}`)}</a>
 					</div>
 					<div class="input-group">
-						<label htmlFor="email">Email</label>
+						<label htmlFor="email">{t('email')}</label>
 						<Input id="email" type="text" value={data.email} onChange={e => setData({ ...data, email: e.target.value })}/>
 					</div>
 					<div class="input-group">
-						<label htmlFor="bio">Bio</label>
+						<label htmlFor="bio">{t('bio')}</label>
 						<Textarea id="bio" value={data.bio} onChange={e => setData({ ...data, bio: e.target.value })} charCount={true}/>
 					</div>
 					<div class="input-group">
-						<label htmlFor="role">Role</label>
+						<label htmlFor="role">{t('role')}</label>
 						<select id="role" onChange={e => setData({ ...data, role: e.target.value })}>
 							{Object.keys(roles).map(key => {
 								const role = roles[key];
@@ -145,18 +147,18 @@ export default function User() {
 						</select>
 					</div>
 					<div class="input-group">
-						<label>Status</label>
+						<label>{t('status')}</label>
 						<Switch checked={data.status == 1} onChange={e => setData({ ...data, status: e.target.checked ? 1 : 0 })} disabled={is_current_user}/>
 					</div>
 				</div>
 				<div class="card v-spacing">
-					<h3>Password</h3>
+					<h3>{t('password')}</h3>
 					<div class="input-group">
-						<label htmlFor="password">New password</label>
+						<label htmlFor="password">{t('new_password')}</label>
 						<Input id="password" type="password" value={data.password || ''} onChange={e => setData({ ...data, password: e.target.value })}/>
 					</div>
 					<div class="input-group">
-						<label htmlFor="password-confirm">Password confirm</label>
+						<label htmlFor="password-confirm">{t('password_confirm')}</label>
 						<Input id="password-confirm" type="password" value={data.password_confirm || ''} onChange={e => setData({ ...data, password_confirm: e.target.value })}/>
 					</div>
 				</div>

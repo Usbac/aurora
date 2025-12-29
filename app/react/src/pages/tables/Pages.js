@@ -3,18 +3,20 @@ import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, makeRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
+import { useI18n } from '../../providers/I18nProvider';
 
 export default function Pages() {
     const { user, settings } = useOutletContext();
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     return <div class="content">
         <Table
             url="/api/pages"
-            title="Pages"
+            title={t('pages')}
             topOptions={[
                 {
-                    content: <><b>+</b>&nbsp;New</>,
+                    content: <><b>+</b>&nbsp;{t('new')}</>,
                     condition: Boolean(user?.actions?.edit_pages),
                     onClick: () => navigate('/admin/pages/edit'),
                 },
@@ -22,42 +24,42 @@ export default function Pages() {
             rowOnClick={page => navigate(`/admin/pages/edit?id=${page.id}`)}
             filters={{
                 status: {
-                    title: 'Status',
+                    title: t('status'),
                     options: [
-                        { key: '', title: 'All' },
-                        { key: '1', title: 'Published' },
-                        { key: '0', title: 'Draft' },
+                        { key: '', title: t('all') },
+                        { key: '1', title: t('published') },
+                        { key: '0', title: t('draft') },
                     ],
                 },
                 order: {
-                    title: 'Sort by',
+                    title: t('sort_by'),
                     options: [
-                        { key: 'title', title: 'Title' },
-                        { key: 'status', title: 'Status' },
-                        { key: 'slug', title: 'Slug' },
-                        { key: 'edited', title: 'Edited' },
-                        { key: 'views', title: 'No. views' },
+                        { key: 'title', title: t('title') },
+                        { key: 'status', title: t('status') },
+                        { key: 'slug', title: t('slug') },
+                        { key: 'edited', title: t('edited') },
+                        { key: 'views', title: t('no_views') },
                     ],
                 },
                 sort: {
                     options: [
-                        { key: 'asc', title: 'Ascending' },
-                        { key: 'desc', title: 'Descending' },
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
                     ],
                 },
             }}
             options={[
                 {
-                    title: 'Delete',
+                    title: t('delete'),
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_pages),
                     onClick: (pages) => {
-                        if (confirm('Are you sure you want to delete the selected pages? This action cannot be undone.')) {
+                        if (confirm(t('confirm_delete_selected_pages'))) {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/pages',
                                 data: { id: pages.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                            }).then(res => alert(res?.data?.success ? t('pages_deleted_successfully') : t('error_deleting_pages')));
                         }
                     },
                 },
@@ -67,21 +69,21 @@ export default function Pages() {
                     class: 'w100',
                     content: page => <h3>
                         {page.title}
-                        {!page.status && <span class="title-label red">Draft</span>}
+                        {!page.status && <span class="title-label red">{t('draft')}</span>}
                     </h3>,
                 },
                 {
-                    title: 'Slug',
+                    title: t('slug'),
                     class: 'w20',
                     content: page => '/' + page.slug,
                 },
                 {
-                    title: 'Edited',
+                    title: t('edited'),
                     class: 'w20',
                     content: page => formatDate(page.edited_at),
                 },
                 {
-                    title: 'No. views',
+                    title: t('no_views'),
                     class: 'w10 numeric',
                     condition: Boolean(settings.views_count),
                     content: page => page.views,
@@ -94,21 +96,21 @@ export default function Pages() {
                         options={[
                             {
                                 onClick: () => window.open(`/${page.slug}`, '_blank').focus(),
-                                content: <><IconEye/> View</>
+                                content: <><IconEye/> {t('view')}</>
                             },
                             {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_pages),
                                 onClick: () => {
-                                    if (confirm('Are you sure you want to delete the page? This action cannot be undone.')) {
+                                    if (confirm(t('confirm_delete_page'))) {
                                         makeRequest({
                                             method: 'DELETE',
                                             url: '/api/pages',
                                             data: { id: page.id },
-                                        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                                        }).then(res => alert(res?.data?.success ? t('page_deleted_successfully') : t('error_deleting_page')));
                                     }
                                 },
-                                content: <><IconTrash/> Delete</>
+                                content: <><IconTrash/> {t('delete')}</>
                             },
                         ]}
                     />,

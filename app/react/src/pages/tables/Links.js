@@ -3,18 +3,20 @@ import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, makeRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
+import { useI18n } from '../../providers/I18nProvider';
 
 export default function Links() {
     const { user } = useOutletContext();
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     return <div class="content">
         <Table
             url="/api/links"
-            title="Links"
+            title={t('links')}
             topOptions={[
                 {
-                    content: <><b>+</b>&nbsp;New</>,
+                    content: <><b>+</b>&nbsp;{t('new')}</>,
                     condition: Boolean(user?.actions?.edit_links),
                     onClick: () => navigate('/admin/links/edit'),
                 },
@@ -22,41 +24,41 @@ export default function Links() {
             rowOnClick={link => navigate(`/admin/links/edit?id=${link.id}`)}
             filters={{
                 status: {
-                    title: 'Status',
+                    title: t('status'),
                     options: [
-                        { key: '', title: 'All' },
-                        { key: '1', title: 'Active' },
-                        { key: '0', title: 'Inactive' },
+                        { key: '', title: t('all') },
+                        { key: '1', title: t('active') },
+                        { key: '0', title: t('inactive') },
                     ],
                 },
                 order: {
-                    title: 'Sort by',
+                    title: t('sort_by'),
                     options: [
-                        { key: 'title', title: 'Title' },
-                        { key: 'url', title: 'URL' },
-                        { key: 'status', title: 'Status' },
-                        { key: 'order', title: 'Order' },
+                        { key: 'title', title: t('title') },
+                        { key: 'url', title: t('url') },
+                        { key: 'status', title: t('status') },
+                        { key: 'order', title: t('order') },
                     ],
                 },
                 sort: {
                     options: [
-                        { key: 'asc', title: 'Ascending' },
-                        { key: 'desc', title: 'Descending' },
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
                     ],
                 },
             }}
             options={[
                 {
-                    title: 'Delete',
+                    title: t('delete'),
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_links),
                     onClick: (links) => {
-                        if (confirm('Are you sure you want to delete the selected links? This action cannot be undone.')) {
+                        if (confirm(t('confirm_delete_selected_links'))) {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/links',
                                 data: { id: links.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                            }).then(res => alert(res?.data?.success ? t('links_deleted_successfully') : t('error_deleting_links')));
                         }
                     },
                 },
@@ -67,17 +69,17 @@ export default function Links() {
                     content: link => <h3>{link.title}</h3>,
                 },
                 {
-                    title: 'URL',
+                    title: t('url'),
                     class: 'w20',
                     content: link => link.url,
                 },
                 {
-                    title: 'Status',
+                    title: t('status'),
                     class: 'w20',
-                    content: link => <span class={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{link.status == 1 ? 'Active' : 'Inactive'}</span>,
+                    content: link => <span class={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{link.status == 1 ? t('active') : t('inactive')}</span>,
                 },
                 {
-                    title: 'Order',
+                    title: t('order'),
                     class: 'w10 numeric',
                     content: link => link.order,
                 },
@@ -89,21 +91,21 @@ export default function Links() {
                         options={[
                             {
                                 onClick: () => window.open(link.url, '_blank').focus(),
-                                content: <><IconEye/> View</>
+                                content: <><IconEye/> {t('view')}</>
                             },
                             {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_links),
                                 onClick: () => {
-                                    if (confirm('Are you sure you want to delete the link? This action cannot be undone.')) {
+                                    if (confirm(t('confirm_delete_link'))) {
                                         makeRequest({
                                             method: 'DELETE',
                                             url: '/api/links',
                                             data: { id: link.id },
-                                        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                                        }).then(res => alert(res?.data?.success ? t('link_deleted_successfully') : t('error_deleting_link')));
                                     }
                                 },
-                                content: <><IconTrash/> Delete</>
+                                content: <><IconTrash/> {t('delete')}</>
                             },
                         ]}
                     />,

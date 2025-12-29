@@ -3,10 +3,12 @@ import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash, IconUsers } from '../../utils/icons';
+import { useI18n } from '../../providers/I18nProvider';
 
 export default function Users() {
     const { user, settings, fetch_user } = useOutletContext();
     const navigate = useNavigate();
+    const { t } = useI18n();
     const { data: roles_req, is_loading: is_loading_roles, fetch: fetch_roles } = useRequest({
         method: 'GET',
         url: '/api/roles',
@@ -15,10 +17,10 @@ export default function Users() {
         let roles = roles_req?.data ?? {};
 
         return [
-            { key: '', title: 'All' },
+            { key: '', title: t('all') },
             ...Object.keys(roles).map(key => ({ key: roles[key].level, title: getRoleTitle(roles[key].slug) })),
         ];
-    }, [ roles_req ]);
+    }, [ roles_req, t ]);
 
     useEffect(() => {
         fetch_roles();
@@ -31,10 +33,10 @@ export default function Users() {
     return <div class="content">
         <Table
             url="/api/users"
-            title="Users"
+            title={t('users')}
             topOptions={[
                 {
-                    content: <><b>+</b>&nbsp;New</>,
+                    content: <><b>+</b>&nbsp;{t('new')}</>,
                     condition: Boolean(user?.actions?.edit_users),
                     onClick: () => navigate('/admin/users/edit'),
                 },
@@ -42,47 +44,47 @@ export default function Users() {
             rowOnClick={item => navigate(`/admin/users/edit?id=${item.id}`)}
             filters={{
                 status: {
-                    title: 'Status',
+                    title: t('status'),
                     options: [
-                        { key: '', title: 'All' },
-                        { key: '1', title: 'Active' },
-                        { key: '0', title: 'Inactive' },
+                        { key: '', title: t('all') },
+                        { key: '1', title: t('active') },
+                        { key: '0', title: t('inactive') },
                     ],
                 },
                 role: {
-                    title: 'Role',
+                    title: t('role'),
                     options: roles_options,
                 },
                 order: {
-                    title: 'Sort by',
+                    title: t('sort_by'),
                     options: [
-                        { key: 'name', title: 'Name' },
-                        { key: 'email', title: 'Email' },
-                        { key: 'status', title: 'Status' },
-                        { key: 'role', title: 'Role' },
-                        { key: 'last_active', title: 'Last Active' },
-                        { key: 'posts', title: 'No. posts' },
+                        { key: 'name', title: t('name') },
+                        { key: 'email', title: t('email') },
+                        { key: 'status', title: t('status') },
+                        { key: 'role', title: t('role') },
+                        { key: 'last_active', title: t('last_active') },
+                        { key: 'posts', title: t('no_posts') },
                     ],
                 },
                 sort: {
                     options: [
-                        { key: 'asc', title: 'Ascending' },
-                        { key: 'desc', title: 'Descending' },
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
                     ],
                 },
             }}
             options={[
                 {
-                    title: 'Delete',
+                    title: t('delete'),
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_users),
                     onClick: (users) => {
-                        if (confirm('Are you sure you want to delete the selected users? This action cannot be undone.')) {
+                        if (confirm(t('confirm_delete_selected_users'))) {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/users',
                                 data: { id: users.map(u => u.id) },
-                            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                            }).then(res => alert(res?.data?.success ? t('users_deleted_successfully') : t('error_deleting_users')));
                         }
                     },
                 },
@@ -102,25 +104,25 @@ export default function Users() {
                         <div>
                             <h3>
                                 {item.name}
-                                {item.id == user?.id && <span class="you-tag">(you)</span>}
-                                {item.status != 1 && <span class="title-label red">Inactive</span>}
+                                {item.id == user?.id && <span class="you-tag">{t('you')}</span>}
+                                {item.status != 1 && <span class="title-label red">{t('inactive')}</span>}
                             </h3>
                             <p class="subtitle">{item.email}</p>
                         </div>
                     </>),
                 },
                 {
-                    title: 'Role',
+                    title: t('role'),
                     class: 'w20',
                     content: item => getRoleTitle(item.role_slug),
                 },
                 {
-                    title: 'Last Active',
+                    title: t('last_active'),
                     class: 'w20',
                     content: item => formatDate(item.last_active),
                 },
                 {
-                    title: 'No. posts',
+                    title: t('no_posts'),
                     class: 'w10 numeric',
                     content: item => item.posts,
                 },
@@ -132,18 +134,18 @@ export default function Users() {
                         options={[
                             {
                                 onClick: () => window.open(`/${settings.blog_url}/author/${item.slug}`, '_blank').focus(),
-                                content: <><IconEye/> View</>
+                                content: <><IconEye/> {t('view')}</>
                             },
                             {
                                 condition: item.id != user?.id && user.role > item.role,
                                 onClick: () => {
-                                    if (confirm('Are you sure you want to impersonate this user?')) {
+                                    if (confirm(t('confirm_impersonate_user'))) {
                                         makeRequest({
                                             method: 'GET',
                                             url: '/api/users/impersonate?id=' + item.id,
                                         }).then(res => {
                                             if (!res?.data?.success) {
-                                                alert('Error');
+                                                alert(t('error_impersonating_user'));
                                             } else {
                                                 localStorage.setItem('auth_token', res.data.token);
                                                 fetch_user();
@@ -151,21 +153,21 @@ export default function Users() {
                                         });
                                     }
                                 },
-                                content: <><IconUsers/> Impersonate</>
+                                content: <><IconUsers/> {t('impersonate')}</>
                             },
                             {
                                 class: 'danger',
                                 condition: item.id != user?.id && Boolean(user?.actions?.edit_users),
                                 onClick: () => {
-                                    if (confirm(`Are you sure you want to delete ${item.name}? This action cannot be undone.`)) {
+                                    if (confirm(t('confirm_delete_user', item.name))) {
                                         makeRequest({
                                             method: 'DELETE',
                                             url: '/api/users',
                                             data: { id: item.id },
-                                        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                                        }).then(res => alert(res?.data?.success ? t('user_deleted_successfully') : t('error_deleting_user')));
                                     }
                                 },
-                                content: <><IconTrash/> Delete</>
+                                content: <><IconTrash/> {t('delete')}</>
                             },
                         ]}
                     />,

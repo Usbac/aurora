@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getSlug, Input, LoadingPage, makeRequest, MenuButton, Textarea } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { useI18n } from '../providers/I18nProvider';
 
 export default function Tag() {
     const { user, settings } = useOutletContext();
@@ -10,6 +11,7 @@ export default function Tag() {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const [ id, setId ] = useState(params.get('id'));
+    const { t } = useI18n();
 
     useEffect(() => {
         if (id) {
@@ -23,17 +25,17 @@ export default function Tag() {
     }, []);
 
     const remove = () => {
-        if (confirm('Are you sure you want to delete the tag? This action cannot be undone.')) {
+        if (confirm(t('confirm_delete_tag'))) {
             makeRequest({
                 method: 'DELETE',
                 url: '/api/tags',
                 data: { id: id },
             }).then(res => {
                 if (res?.data?.success) {
-                    alert('Done');
+                    alert(t('tag_deleted_successfully'));
                     navigate('/admin/tags', { replace: true });
                 } else {
-                    alert('Error');
+                    alert(t('error_deleting_tag'));
                 }
             });
         }
@@ -46,7 +48,7 @@ export default function Tag() {
             url: '/api/tags' + (id ? `?id=${id}` : ''),
             data: data,
         }).then(res => {
-            alert(res?.data?.success ? 'Done' : 'Error');
+            alert(res?.data?.success ? t('tag_saved_successfully') : t('error_saving_tag'));
             if (res?.data?.id) {
                 navigate(`/admin/tags/edit?id=${res.data.id}`, { replace: true });
                 setId(res.data.id);
@@ -59,14 +61,14 @@ export default function Tag() {
     }
 
     if (!data) {
-        return <>Error</>;
+        return <>{t('error')}</>;
     }
 
     return (<form className="content" onSubmit={submit}>
         <div>
             <div class="page-title">
                 <MenuButton/>
-                <h2>Tag</h2>
+                <h2>{t('tag')}</h2>
             </div>
             <div class="buttons">
                 {id && <>
@@ -75,13 +77,13 @@ export default function Tag() {
                     </button>
                     <button type="button" onClick={() => window.open(`/${settings.blog_url}/tag/${data.slug}`, '_blank').focus()}><IconEye/></button>
                 </>}
-                <button type="submit" disabled={!user?.actions?.edit_tags}>Save</button>
+                <button type="submit" disabled={!user?.actions?.edit_tags}>{t('save')}</button>
             </div>
         </div>
        <div class="grid small-form">
             <div class="card v-spacing">
                 <div class="input-group">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">{t('name')}</label>
                     <Input
                         id="name"
                         type="text"
@@ -91,7 +93,7 @@ export default function Tag() {
                     />
                 </div>
                 <div class="input-group">
-                    <label htmlFor="slug">Slug</label>
+                    <label htmlFor="slug">{t('slug')}</label>
                     <Input
                         id="slug"
                         type="text"
@@ -101,7 +103,7 @@ export default function Tag() {
                     />
                 </div>
                 <div class="input-group">
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description">{t('description')}</label>
                     <Textarea
                         id="description"
                         value={data.description}
@@ -111,12 +113,12 @@ export default function Tag() {
                 </div>
                 {id && <div class="extra-data">
                     <span>ID: {id}</span>
-                    <span>No. posts: {data.posts}</span>
+                    <span>{t('no_posts')}: {data.posts}</span>
                 </div>}
             </div>
             <div class="card v-spacing">
                 <div class="input-group">
-                    <label htmlFor="meta_title">Meta title</label>
+                    <label htmlFor="meta_title">{t('meta_title')}</label>
                     <Input
                         id="meta_title"
                         value={data.meta_title}
@@ -125,7 +127,7 @@ export default function Tag() {
                     />
                 </div>
                 <div class="input-group">
-                    <label htmlFor="meta_description">Meta description</label>
+                    <label htmlFor="meta_description">{t('meta_description')}</label>
                     <Textarea
                         id="meta_description"
                         value={data.meta_description}

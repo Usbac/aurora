@@ -3,6 +3,7 @@ import { Table } from '../../components/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, getContentUrl, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
+import { useI18n } from '../../providers/I18nProvider';
 
 export default function Posts() {
     const { user, settings } = useOutletContext();
@@ -15,14 +16,15 @@ export default function Posts() {
         },
     });
     const navigate = useNavigate();
+    const { t } = useI18n();
     const users_options = useMemo(() => {
         let users = users_req?.data?.data ?? {};
 
         return [
-            { key: '', title: 'All' },
+            { key: '', title: t('all') },
             ...Object.keys(users).map(key => ({ key: users[key].id, title: users[key].name })),
         ];
-    }, [ users_req ]);
+    }, [ users_req, t ]);
 
     useEffect(() => {
         fetch_users();
@@ -35,10 +37,10 @@ export default function Posts() {
     return <div className="content">
         <Table
             url="/api/posts"
-            title="Posts"
+            title={t('posts')}
             topOptions={[
                 {
-                    content: <><b>+</b>&nbsp;New</>,
+                    content: <><b>+</b>&nbsp;{t('new')}</>,
                     condition: Boolean(user?.actions?.edit_posts),
                     onClick: () => navigate('/admin/posts/edit'),
                 },
@@ -46,46 +48,46 @@ export default function Posts() {
             rowOnClick={post => navigate(`/admin/posts/edit?id=${post.id}`)}
             filters={{
                 user: {
-                    title: 'Author',
+                    title: t('author'),
                     options: users_options,
                 },
                 status: {
-                    title: 'Status',
+                    title: t('status'),
                     options: [
-                        { key: '', title: 'All' },
-                        { key: '1', title: 'Published' },
-                        { key: 'scheduled', title: 'Scheduled' },
-                        { key: '0', title: 'Draft' },
+                        { key: '', title: t('all') },
+                        { key: '1', title: t('published') },
+                        { key: 'scheduled', title: t('scheduled') },
+                        { key: '0', title: t('draft') },
                     ],
                 },
                 order: {
-                    title: 'Sort by',
+                    title: t('sort_by'),
                     options: [
-                        { key: 'title', title: 'Title' },
-                        { key: 'author', title: 'Author' },
-                        { key: 'date', title: 'Publish Date' },
-                        { key: 'views', title: 'No. views' },
+                        { key: 'title', title: t('title') },
+                        { key: 'author', title: t('author') },
+                        { key: 'date', title: t('publish_date') },
+                        { key: 'views', title: t('no_views') },
                     ],
                 },
                 sort: {
                     options: [
-                        { key: 'asc', title: 'Ascending' },
-                        { key: 'desc', title: 'Descending' },
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
                     ],
                 },
             }}
             options={[
                 {
-                    title: 'Delete',
+                    title: t('delete'),
                     class: 'danger',
                     condition: Boolean(user?.actions?.edit_posts),
                     onClick: (posts) => {
-                        if (confirm('Are you sure you want to delete the selected posts? This action cannot be undone.')) {
+                        if (confirm(t('confirm_delete_selected_posts'))) {
                             makeRequest({
                                 method: 'DELETE',
                                 url: '/api/posts',
                                 data: { id: posts.map(l => l.id) },
-                            }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                            }).then(res => alert(res?.data?.success ? t('posts_deleted_successfully') : t('error_deleting_posts')));
                         }
                     },
                 },
@@ -103,25 +105,25 @@ export default function Posts() {
                         <div>
                             <h3>
                                 {post.title}
-                                {!post.status && <span className="title-label red">Draft</span>}
-                                {post.status && post.published_at > Date.now() / 1000 && <span className="title-label">Scheduled</span>}
+                                {!post.status && <span className="title-label red">{t('draft')}</span>}
+                                {post.status && post.published_at > Date.now() / 1000 && <span className="title-label">{t('scheduled')}</span>}
                             </h3>
                             <p className="subtitle">{Object.values(post.tags)?.join(', ') || ''}</p>
                         </div>
                     </>,
                 },
                 {
-                    title: 'Author',
+                    title: t('author'),
                     class: 'w20',
                     content: post => post.user_name || '',
                 },
                 {
-                    title: 'Publish Date',
+                    title: t('publish_date'),
                     class: 'w20',
                     content: post => formatDate(post.published_at),
                 },
                 {
-                    title: 'No. views',
+                    title: t('no_views'),
                     class: 'w10 numeric',
                     condition: Boolean(settings.views_count),
                     content: post => post.views || '',
@@ -134,21 +136,21 @@ export default function Posts() {
                         options={[
                             {
                                 onClick: () => window.open(`/${settings.blog_url}/${post.slug}`, '_blank').focus(),
-                                content: <><IconEye/> View</>
+                                content: <><IconEye/> {t('view')}</>
                             },
                             {
                                 class: 'danger',
                                 condition: Boolean(user?.actions?.edit_posts),
                                 onClick: () => {
-                                    if (confirm('Are you sure you want to delete the post? This action cannot be undone.')) {
+                                    if (confirm(t('confirm_delete_post'))) {
                                         makeRequest({
                                             method: 'DELETE',
                                             url: '/api/posts',
                                             data: { id: post.id },
-                                        }).then(res => alert(res?.data?.success ? 'Done' : 'Error'));
+                                        }).then(res => alert(res?.data?.success ? t('post_deleted_successfully') : t('error_deleting_post')));
                                     }
                                 },
-                                content: <><IconTrash/> Delete</>
+                                content: <><IconTrash/> {t('delete')}</>
                             },
                         ]}
                     />,
