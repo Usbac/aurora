@@ -119,7 +119,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
         $post = $post_mod->get([
             'slug' => $_GET['slug'] ?? '',
-            empty($_SESSION['user']) ? $post_cond : '',
+            empty($GLOBALS['user']) ? $post_cond : '',
         ]);
 
         if (!$post) {
@@ -156,7 +156,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     $router->get([ '/', '{slug}' ], function() use ($db, $view, $link_mod, $page_mod, $theme_dir) {
         $page = $page_mod->get([
             'slug' => $_GET['slug'] ?? '',
-            empty($_SESSION['user']) ? $page_mod->getCondition([ 'status' => 1 ]) : '',
+            empty($GLOBALS['user']) ? $page_mod->getCondition([ 'status' => 1 ]) : '',
         ]);
 
         if (!$page) {

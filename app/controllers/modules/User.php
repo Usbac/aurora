@@ -91,7 +91,7 @@ final class User extends \Aurora\App\ModuleBase
         }
 
         if (empty($errors)) {
-            $_SESSION['user'] = $user;
+            $GLOBALS['user'] = $user;
         }
 
         return $errors;
