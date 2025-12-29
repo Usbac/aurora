@@ -85,13 +85,17 @@ class DB
      * @param string $table the table
      * @param [mixed] $id the row id
      * @param [string] $column the column to be compared with the given id
-     * @return bool true on success, false otherwise
+     * @return bool true if the row(s) has been deleted, false otherwise
      */
     public function delete(string $table, $id = null, string $column = 'id'): bool
     {
-        return !isset($id)
-            ? $this->connection->exec("DELETE FROM $table") !== false
-            : $this->connection->prepare("DELETE FROM $table WHERE `$column` = ?")->execute([ $id ]);
+        if (!isset($id)) {
+            $stmt = $this->connection->prepare("DELETE FROM $table");
+            return $stmt->execute() && $stmt->rowCount() > 0;
+        }
+        
+        $stmt = $this->connection->prepare("DELETE FROM $table WHERE `$column` = ?");
+        return $stmt->execute([ $id ]) && $stmt->rowCount() > 0;
     }
 
     /**
