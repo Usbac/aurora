@@ -19,6 +19,7 @@ import Tag from './pages/Tag';
 import Page from './pages/Page';
 import Post from './pages/Post';
 import User from './pages/User';
+import Information from './pages/Information';
 
 const App = () => {
     const query_client = new QueryClient();
@@ -43,8 +44,8 @@ const App = () => {
                         <Route path="links/edit" element={<Link/>}/>
                         <Route path="tags/edit" element={<Tag/>}/>
                         <Route path="users/edit" element={<User/>}/>
+                        <Route path="*" element={<Information title="404" subtitle="Not found"/>}/>
                     </Route>
-                    <Route path="*" element={<div>404 Not Found</div>}/>
                 </Routes>
             </QueryClientProvider>
         </I18nProvider>
