@@ -862,7 +862,6 @@ body[data-nav-open] {
 #toggle-theme {
     display: flex;
     user-select: none;
-    margin: 0 auto 0 10px;
 }
 
 .admin > .content > *:first-child {
@@ -929,6 +928,7 @@ body[data-nav-open] {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
     text-decoration: none;
     color: white;
     margin-top: auto;
@@ -951,6 +951,21 @@ body[data-nav-open] {
     width: 20px;
     height: 20px;
     fill: white;
+}
+
+.current-user select {
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+.current-user > *:last-child {
+    margin-left: auto;
 }
 
 /* dashboard */

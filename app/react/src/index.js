@@ -30,7 +30,7 @@ const AdminPages = () => {
     const [ settings, fetch_settings ] = useElement('/api/settings');
     const [ theme, setTheme ] = useState(dark_theme_element?.hasAttribute('disabled') ? 'light' : 'dark');
     const navigate = useNavigate();
-    const { t } = useI18n();
+    const { t, language, getLanguages, changeLanguage } = useI18n();
 
     const toggleTheme = () => {
         const is_light_enabled = dark_theme_element.toggleAttribute('disabled');
@@ -92,6 +92,9 @@ const AdminPages = () => {
                 <div id="toggle-theme" class="pointer" title={t('switch_theme')} onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}
                 </div>
+                <select onChange={e => changeLanguage(e.target.value)}>
+                    {getLanguages().map((lang) => <option key={lang} value={lang} selected={lang === language}>{lang.toUpperCase()}</option>)}
+                </select>
                 <div class="pointer" title={t('logout')} onClick={logout}>
                     <IconLogout/>
                 </div>
