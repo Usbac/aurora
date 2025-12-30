@@ -109,7 +109,7 @@ const App = () => {
     const query_client = new QueryClient();
 
     return <BrowserRouter>
-        <I18nProvider defaultLanguage="en">
+        <I18nProvider defaultLanguage={document.documentElement.lang}>
             <QueryClientProvider className="app" client={query_client}>
                 <Routes>
                     <Route path="/admin/new_password" element={<NewPassword/>}/>
