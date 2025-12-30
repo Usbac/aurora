@@ -32,9 +32,16 @@ final class Helper
     public static function getUrl(string $path = ''): string
     {
         $path = ltrim($path, '/');
-        $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] ?? 80) == 443;
+        return 'http' . (self::isHttps() ? 's' : '') . '://' . ($_SERVER['SERVER_NAME'] ?? 'localhost') . (empty($path) ? '' : "/$path");
+    }
 
-        return 'http' . ($https ? 's' : '') . '://' . ($_SERVER['SERVER_NAME'] ?? 'localhost') . (empty($path) ? '' : "/$path");
+    /**
+     * Returns true if the current request is made via HTTPS, false otherwise
+     * @return bool true if the current request is made via HTTPS, false otherwise
+     */
+    public static function isHttps(): bool
+    {
+        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] ?? 80) == 443;
     }
 
     /**
