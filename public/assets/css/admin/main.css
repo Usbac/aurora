@@ -1110,12 +1110,11 @@ body[data-nav-open] {
 }
 
 .listing > svg {
-    width: var(--image-size);
-    height: var(--image-size);
     display: flex;
-    animation: rotation 1s infinite linear;
     align-self: center;
     margin-top: 40px;
+    width: var(--image-size);
+    height: var(--image-size);
 }
 
 .listing-title {

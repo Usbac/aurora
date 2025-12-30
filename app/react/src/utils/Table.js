@@ -148,8 +148,8 @@ export const Table = ({
     };
 
     const Rows = () => {
-        if (is_loading) {
-            return <IconSpinner/>;
+        if (is_loading || true) {
+            return <IconSpinner className="loading-icon"/>;
         }
 
         if (is_error) {
