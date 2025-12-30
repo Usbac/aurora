@@ -5,7 +5,6 @@ composer.lock
 app/database/db.sqlite
 public/content/*
 public/assets/js/tinymce
-public/assets/js/admin2.*
 app/react/node_modules
 app/react/package-lock.json
 vendor
