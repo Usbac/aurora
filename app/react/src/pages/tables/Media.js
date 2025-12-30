@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Table } from '../../components/Table';
+import { Table } from '../../utils/Table';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
 import { IconClipboard, IconDuplicate, IconFile, IconFolder, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';

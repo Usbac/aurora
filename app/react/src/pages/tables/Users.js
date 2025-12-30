@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Table } from '../../components/Table';
+import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash, IconUsers } from '../../utils/icons';

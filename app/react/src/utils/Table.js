@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { MenuButton, useRequest } from '../utils/utils';
-import { IconGlass } from '../utils/icons';
+import { MenuButton, useRequest } from './utils';
+import { IconGlass } from './icons';
 
 const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
     return <div>
