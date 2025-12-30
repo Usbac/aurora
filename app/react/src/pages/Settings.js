@@ -43,8 +43,8 @@ const General = ({ data, setData }) => {
             </div>
             <div class="input-group-container">
                 <div class="input-group">
-                    <label>{t('system_language')}</label>
-                    <span class="description">{t('system_language')}</span>
+                    <label>{t('website_language')}</label>
+                    <span class="description">{t('website_language_description')}</span>
                     <select onChange={e => setData({ ...data, language: e.target.value })}>
                         {data.meta.languages.map(lang => <option value={lang} selected={data.language == lang}>{lang}</option>)}
                     </select>
