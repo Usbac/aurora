@@ -10,7 +10,7 @@
         <meta property="og:title" content="<?= e(setting('meta_title')) ?>"/>
         <meta property="og:description" content="<?= e(setting('meta_description')) ?>"/>
     <?php endif ?>
-    <link rel="canonical" href="<?= e($this->url($_SERVER['REQUEST_URI'])) ?>"/>
+    <link rel="canonical" href="<?= e(\Aurora\Core\Helper::getUrl($_SERVER['REQUEST_URI'])) ?>"/>
 </head>
 <body>
     <?= $this->include('themes/default/partials/header.html') ?>

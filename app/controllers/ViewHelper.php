@@ -88,12 +88,4 @@ final class ViewHelper
     {
         return $this->language->getCode();
     }
-
-    /**
-     * @see \Aurora\Core\Helper::getUrl
-     */
-    public function url(string $path = ''): string
-    {
-        return \Aurora\Core\Helper::getUrl($path);
-    }
 }
