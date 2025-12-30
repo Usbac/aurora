@@ -269,7 +269,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
         const files = files_req ? files_req.data?.data : [];
 
         if (is_loading || !user || !settings) {
-            return <svg class="loading-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" fill="none" strokeWidth="10" r="36" strokeDasharray="171 56"></circle></svg>;
+            return <IconSpinner className="loading-icon"/>;
         }
 
         return <>
