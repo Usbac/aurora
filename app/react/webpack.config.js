@@ -7,7 +7,7 @@ module.exports = (env, argv) => {
     entry: './src/index.js',
     output: {
       path: path.resolve(__dirname, '../../public/assets/js'),
-      filename: 'admin2.js',
+      filename: 'admin.js',
       clean: false,
     },
     devtool: is_prod ? false : 'source-map',
