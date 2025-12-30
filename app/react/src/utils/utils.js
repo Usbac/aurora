@@ -10,10 +10,10 @@ export const makeRequest = async ({ method = 'GET', url, data = {}, options = {}
             method,
             url,
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
                 'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
             },
             data: data instanceof FormData ? data : JSON.stringify(data),
+            withCredentials: true,
             ...options,
         });
 

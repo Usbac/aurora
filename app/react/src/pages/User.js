@@ -59,7 +59,6 @@ export default function User() {
 				if (!res?.data?.success) {
 					alert(t('error_impersonating_user'));
 				} else {
-					localStorage.setItem('auth_token', res.data.token);
 					fetch_user();
 				}
 			});

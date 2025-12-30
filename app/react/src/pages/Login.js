@@ -27,7 +27,6 @@ export default function Login() {
             if (!res?.data?.success) {
                 alert(t('invalid_email_or_password'));
             } else {
-                localStorage.setItem('auth_token', res.data.token);
                 navigate('/admin/dashboard');
             }
         }).finally(() => setLoading(false));

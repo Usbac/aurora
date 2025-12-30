@@ -71,33 +71,6 @@ final class User extends \Aurora\App\ModuleBase
     }
 
     /**
-     * Handles the login of an user
-     * @param string $email the user's email
-     * @param string $password the user's password
-     * @return array the array with the login errors, if empty it means the user has successfully logged in.
-     */
-    public function handleLogin(string $email, string $password): array
-    {
-        $user = $this->get([
-            'email' => $email,
-            'status' => 1,
-        ]);
-        $errors = [];
-
-        if (!$user) {
-            $errors[] = 'no_active_user';
-        } elseif (!password_verify($password, $user['password'])) {
-            $errors[] = 'wrong_password';
-        }
-
-        if (empty($errors)) {
-            $GLOBALS['user'] = $user;
-        }
-
-        return $errors;
-    }
-
-    /**
      * Returns an array with all the user fields that contain an error
      * @param array $data the user fields
      * @param [mixed] $id the user id
@@ -179,17 +152,6 @@ final class User extends \Aurora\App\ModuleBase
         }
 
         return implode(' AND ', $where);
-    }
-
-    /**
-     * Returns the user with additional data mapped into it
-     * @param mixed $data the user data
-     * @return mixed the user with additional data
-     */
-    protected function getRowData($data): mixed
-    {
-        unset($data['password']);
-        return $data;
     }
 
     /**

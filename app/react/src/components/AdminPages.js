@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from '../utils/icons';
 import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { getContentUrl, LoadingPage, useElement } from '../utils/utils';
+import { getContentUrl, LoadingPage, makeRequest, useElement } from '../utils/utils';
 import { useI18n } from '../providers/I18nProvider';
 
 export default function AdminPages() {
@@ -19,8 +19,11 @@ export default function AdminPages() {
     };
 
     const logout = () => {
-        localStorage.removeItem('auth_token');
-        navigate('/admin', { replace: true });
+        makeRequest({
+            method: 'POST',
+            url: '/api/logout',
+        }).catch(err => alert('Error during logout: ' + err))
+            .finally(() => navigate('/admin', { replace: true }));
     };
 
     if (user === null) {

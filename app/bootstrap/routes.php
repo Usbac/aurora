@@ -14,6 +14,27 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     $rss = \Aurora\App\Setting::get('rss');
     $router = $kernel->router;
 
+    $getAuthToken = function() {
+        $headers = getallheaders();
+
+        return preg_match('/Bearer\s(\S+)/', $headers['Authorization'] ?? '', $matches)
+            ? $matches[1]
+            : ($_COOKIE['auth_token'] ?? false);
+    };
+
+    $setAuthToken = function($token, $time) {
+        return setcookie('auth_token',
+            $token,
+            [
+                'expires' => $time,
+                'path' => '/',
+                'domain' => '',
+                'secure' => \Aurora\Core\Helper::isHttps(),
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]);
+    };
+
     $router->get([ 'admin', 'admin/*' ], function() use ($view) {
         return $view->get('admin.html');
     });
@@ -183,7 +204,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $login = function($user_id) use ($db) {
+    $login = function($user_id) use ($db, $setAuthToken) {
         $data = [ 'token' => bin2hex(random_bytes(64)) ];
 
         try {
@@ -193,13 +214,15 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 'created_at' => time(),
             ]);
         } catch (\Exception) {
-            $data = [
+            return [
                 'success' => false,
                 'error' => 'server_error',
             ];
         }
 
-        if (!$data['success']) {
+        if ($data['success']) {
+            $setAuthToken($data['token'], time() + (60 * 60 * 24 * 30)); // 30 days
+        } else {
             unset($data['token']);
         }
 
@@ -218,13 +241,9 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('*', function() use ($db, $view, $lang, $theme_dir, $user_mod) {
-        $token = preg_match('/Bearer\s(\S+)/', getallheaders()['Authorization'] ?? '', $matches)
-            ? $matches[1]
-            : false;
-
+    $router->middleware('*', function() use ($db, $view, $lang, $theme_dir, $user_mod, $getAuthToken) {
         $GLOBALS['user'] = $user_mod->get([
-            'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
+            'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $getAuthToken())->fetchColumn(),
             'status' => 1,
         ]);
 
@@ -293,7 +312,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->middleware('api/*', function() {
-        if (empty($GLOBALS['user']) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm' ])) {
+        if (empty($GLOBALS['user']) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm', 'api/logout' ])) {
             http_response_code(401);
             exit;
         }
@@ -315,6 +334,16 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode($login($user['id']));
+    });
+
+    $router->post('json:api/logout', function() use ($db, $getAuthToken, $setAuthToken) {
+        $token = $getAuthToken();
+
+        if ($token) {
+            $db->delete('tokens', $token, 'token');
+        }
+
+        return json_encode([ 'success' => $setAuthToken('', time() - 3600) ]);
     });
 
     $router->get('json:api/me', function() {
