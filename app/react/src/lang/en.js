@@ -197,4 +197,5 @@ export default {
     'post_code': 'Post code',
     'settings_saved_successfully': 'Settings have been saved successfully',
     'error_saving_settings': 'Error saving settings',
+    'no_items_found': 'No items found',
 };

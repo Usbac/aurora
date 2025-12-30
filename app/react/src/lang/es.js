@@ -197,4 +197,5 @@ export default {
     'post_code': 'Código de publicación',
     'settings_saved_successfully': 'La configuración ha sido guardada exitosamente',
     'error_saving_settings': 'Error al guardar la configuración',
+    'no_items_found': 'No se encontraron elementos',
 };

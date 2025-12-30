@@ -1092,6 +1092,13 @@ textarea.code {
     margin-top: 40px;
 }
 
+.listing-title {
+    text-align: center;
+    font-weight: 400;
+    font-size: 18px;
+    margin: 40px 0;
+}
+
 .batch-options-container {
     display: flex;
     justify-content: flex-end;

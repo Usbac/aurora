@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { MenuButton, useRequest } from './utils';
-import { IconGlass } from './icons';
+import { IconGlass, IconSpinner } from './icons';
+import { useI18n } from '../providers/I18nProvider';
 
 const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
     return <div>
@@ -62,6 +63,7 @@ export const Table = ({
         method: 'GET',
         url: url + (query_string ? `${url.includes('?') ? '&' : '?'}${query_string}` : ''),
     });
+    const { t } = useI18n();
 
     useEffect(() => {
         let aux = { ...initialFilters };
@@ -146,8 +148,17 @@ export const Table = ({
     };
 
     const Rows = () => {
-        if (is_loading) return <p>Cargando...</p>;
-        if (is_error) return <p>Error al cargar los datos.</p>;
+        if (is_loading) {
+            return <IconSpinner/>;
+        }
+
+        if (is_error) {
+            return <p className="listing-title">{t('error_occurred')}</p>;
+        }
+
+        if (rows.length == 0) {
+            return <p className="listing-title">{t('no_items_found')}</p>;
+        }
 
         return rows.map((row, i) => <div
             key={i}
