@@ -151,12 +151,23 @@ button.loading,
     cursor: wait;
 }
 
+.loading-page {
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: calc(100vh - (var(--content-spacing) * 2));
+}
+
+.loading-page svg {
+    width: 50px;
+    height: 50px;
+}
+
 .loading-icon {
     --size: 19.5px;
     animation: rotation 1s infinite linear;
     width: var(--size);
     height: var(--size);
-    stroke: var(--main-color);
+    fill: var(--main-color);
 }
 
 .light .loading-icon {

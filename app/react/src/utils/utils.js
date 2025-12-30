@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { IconFolderFill, IconHome, IconUploadFile, IconX } from './icons';
+import { IconFolderFill, IconHome, IconSpinner, IconUploadFile, IconX } from './icons';
 import { createPortal } from 'react-dom';
 import { Editor as TinyMCE } from '@tinymce/tinymce-react';
 import axios from 'axios';
@@ -73,7 +73,7 @@ export const MenuButton = () => <svg xmlns="http://www.w3.org/2000/svg" width="1
 
 export const LoadingPage = () => <div className="content">
     <div className="loading-page">
-        <div className="spinner"/>
+        <IconSpinner className="loading-icon"/>
     </div>
 </div>;
 
