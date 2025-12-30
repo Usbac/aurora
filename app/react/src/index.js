@@ -98,6 +98,7 @@ const AdminPages = () => {
             </div>
         </nav>
         {user && settings ? <Outlet context={{ user: user, fetch_user: fetch_user, settings: settings, fetch_settings: fetch_settings, theme: theme }}/> : <LoadingPage/>}
+        <div class="nav-background" onClick={() => document.body.toggleAttribute('data-nav-open')}></div>
     </div>;
 };
 
