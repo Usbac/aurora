@@ -170,10 +170,6 @@ button.loading,
     fill: var(--main-color);
 }
 
-.light .loading-icon {
-    stroke: var(--main-color);
-}
-
 input,
 select {
     padding: var(--input-padding);
