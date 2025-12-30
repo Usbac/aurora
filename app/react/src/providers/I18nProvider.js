@@ -36,10 +36,15 @@ export const I18nProvider = ({ children, defaultLanguage = 'en' }) => {
         }
     };
 
+    const getLanguages = () => {
+        return Object.keys(translations);
+    };
+
     return <I18nContext.Provider value={{
         language: language,
         t: t,
         changeLanguage: changeLanguage,
+        getLanguages: getLanguages,
     }}>
         {children}
     </I18nContext.Provider>;
