@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState, forwardRef } from 'react';
 import { MenuButton, useRequest } from './utils';
 import { IconGlass, IconSpinner } from './icons';
 import { useI18n } from '../providers/I18nProvider';
@@ -40,7 +40,7 @@ const getQueryString = (filters, search, page) => {
     return (new URLSearchParams(values)).toString();
 };
 
-export const Table = ({
+export const Table = forwardRef(({
     url,
     title = '',
     topOptions = [],
@@ -48,7 +48,7 @@ export const Table = ({
     columns = [],
     rowOnClick = null,
     options: initialOptions = [],
-}) => {
+}, ref) => {
     const params = useMemo(() => new URLSearchParams(window.location.search), []);
     const [ page, setPage ] = useState(params.get('page') ? parseInt(params.get('page')) : 1);
     const [ select_mode, setSelectMode ] = useState(false);
@@ -63,7 +63,12 @@ export const Table = ({
         method: 'GET',
         url: url + (query_string ? `${url.includes('?') ? '&' : '?'}${query_string}` : ''),
     });
+    const fetch_ref = useRef(fetch);
     const { t } = useI18n();
+
+    useEffect(() => {
+        fetch_ref.current = fetch;
+    }, [ fetch ]);
 
     useEffect(() => {
         let aux = { ...initialFilters };
@@ -97,6 +102,13 @@ export const Table = ({
     useEffect(() => {
         setSelectedRows([]);
     }, [ select_mode ]);
+
+    useImperativeHandle(ref, () => ({
+        refetch: () => {
+            setPage(1);
+            fetch_ref.current();
+        },
+    }), []);
 
     const submit = e => {
         e.preventDefault();
@@ -205,4 +217,4 @@ export const Table = ({
         </div>
         {page_req?.data?.meta?.next_page && <button id="load-more" class="light" onClick={() => setPage(page + 1)}>Load more</button>}
     </>;
-};
+});
