@@ -971,6 +971,10 @@ body[data-nav-open] {
     outline: none;
 }
 
+.current-user > * {
+    display: flex;
+}
+
 .current-user > *:last-child {
     margin-left: auto;
 }
