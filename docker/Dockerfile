@@ -1,3 +1,15 @@
+FROM node:20-alpine AS frontend
+
+WORKDIR /app
+
+COPY app/react/package*.json ./
+
+RUN npm install
+
+COPY app/react .
+
+RUN npm run build
+
 FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \

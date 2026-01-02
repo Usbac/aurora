@@ -15,13 +15,11 @@
     ],
     "scripts": {
         "post-autoload-dump": [
-            "cp -a vendor/tinymce/tinymce/. public/assets/js/tinymce",
             "mkdir -p public/content"
         ]
     },
     "require": {
         "php": ">=8.0.0",
-        "tinymce/tinymce": "^6.7",
         "symfony/console": "^5.4"
     },
     "autoload": {

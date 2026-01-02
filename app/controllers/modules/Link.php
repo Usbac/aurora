@@ -56,12 +56,12 @@ final class Link extends \Aurora\App\ModuleBase
         $errors = [];
 
         if (empty($data['title'])) {
-            $errors['title'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_title';
         }
 
         if (!\Aurora\App\Permission::can('edit_links')) {
             http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         return $errors;
@@ -75,6 +75,10 @@ final class Link extends \Aurora\App\ModuleBase
     public function getCondition(array $filters): string
     {
         $where = [];
+
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'links.id = ' . ((int) $filters['id']);
+        }
 
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = 'links.status = ' . ((int) $filters['status']);
@@ -96,10 +100,10 @@ final class Link extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'title' => $data['title'],
-            'url' => $data['url'],
-            'order' => $data['order'],
-            'status' => $data['status'],
+            'title' => $data['title'] ?? '',
+            'url' => $data['url'] ?? '',
+            'order' => $data['order'] ?? 0,
+            'status' => $data['status'] ?? false,
         ];
     }
 }

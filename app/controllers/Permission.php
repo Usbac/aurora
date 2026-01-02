@@ -66,4 +66,13 @@ final class Permission
 
         return self::$user_role >= self::$permissions[$key];
     }
+
+    /**
+     * Returns the list of permission keys
+     * @return array the list of permission keys
+     */
+    public static function getPermissions(): array
+    {
+        return array_keys(self::$permissions);
+    }
 }

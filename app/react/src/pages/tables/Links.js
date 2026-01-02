@@ -1,0 +1,128 @@
+import React, { useRef } from 'react';
+import { Table } from '../../utils/Table';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { DropdownMenu, makeRequest } from '../../utils/utils';
+import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
+import { useI18n } from '../../providers/I18nProvider';
+
+export default function Links() {
+    const { user } = useOutletContext();
+    const navigate = useNavigate();
+    const { t } = useI18n();
+    const table_ref = useRef(null);
+
+    return <div class="content">
+        <Table
+            ref={table_ref}
+            url="/api/links"
+            title={t('links')}
+            topOptions={[
+                {
+                    content: <><b>+</b>&nbsp;{t('new')}</>,
+                    condition: Boolean(user?.actions?.edit_links),
+                    onClick: () => navigate('/admin/links/edit'),
+                },
+            ]}
+            rowOnClick={link => navigate(`/admin/links/edit?id=${link.id}`)}
+            filters={{
+                status: {
+                    title: t('status'),
+                    options: [
+                        { key: '', title: t('all') },
+                        { key: '1', title: t('active') },
+                        { key: '0', title: t('inactive') },
+                    ],
+                },
+                order: {
+                    title: t('sort_by'),
+                    options: [
+                        { key: 'title', title: t('title') },
+                        { key: 'url', title: t('url') },
+                        { key: 'status', title: t('status') },
+                        { key: 'order', title: t('order') },
+                    ],
+                },
+                sort: {
+                    options: [
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
+                    ],
+                },
+            }}
+            options={[
+                {
+                    title: t('delete'),
+                    class: 'danger',
+                    condition: Boolean(user?.actions?.edit_links),
+                    onClick: (links) => {
+                        if (confirm(t('confirm_delete_selected_links'))) {
+                            makeRequest({
+                                method: 'DELETE',
+                                url: '/api/links',
+                                data: { id: links.map(l => l.id) },
+                            }).then(res => {
+                                alert(t(res?.data?.success ? 'links_deleted_successfully' : 'error_deleting_links'));
+                                if (res?.data?.success) {
+                                    table_ref?.current?.refetch();
+                                }
+                            });
+                        }
+                    },
+                },
+            ]}
+            columns={[
+                {
+                    class: 'w100',
+                    content: link => <h3>{link.title}</h3>,
+                },
+                {
+                    title: t('url'),
+                    class: 'w20',
+                    content: link => link.url,
+                },
+                {
+                    title: t('status'),
+                    class: 'w20',
+                    content: link => <span class={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{t(link.status == 1 ? 'active' : 'inactive')}</span>,
+                },
+                {
+                    title: t('order'),
+                    class: 'w10 numeric',
+                    content: link => link.order,
+                },
+                {
+                    class: 'w10 row-actions',
+                    content: link => <DropdownMenu
+                        content={<IconThreeDots/>}
+                        className="three-dots"
+                        options={[
+                            {
+                                onClick: () => window.open(link.url, '_blank').focus(),
+                                content: <><IconEye/> {t('view')}</>
+                            },
+                            {
+                                class: 'danger',
+                                condition: Boolean(user?.actions?.edit_links),
+                                onClick: () => {
+                                    if (confirm(t('confirm_delete_link'))) {
+                                        makeRequest({
+                                            method: 'DELETE',
+                                            url: '/api/links',
+                                            data: { id: link.id },
+                                        }).then(res => {
+                                            alert(t(res?.data?.success ? 'link_deleted_successfully' : 'error_deleting_link'));
+                                            if (res?.data?.success) {
+                                                table_ref?.current?.refetch();
+                                            }
+                                        });
+                                    }
+                                },
+                                content: <><IconTrash/> {t('delete')}</>
+                            },
+                        ]}
+                    />,
+                },
+            ]}
+        />
+    </div>
+}

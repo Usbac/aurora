@@ -51,20 +51,20 @@ final class Page extends \Aurora\App\ModuleBase
         $errors = [];
 
         if (empty($data['title'])) {
-            $errors['title'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_title';
         }
 
         if (isset($data['slug']) && !empty($this->get([ 'slug' => $data['slug'], '!id' => $id ]))) {
-            $errors['slug'] = $this->language->get('repeated_slug');
+            $errors[] = 'repeated_slug';
         }
 
         if (!empty($data['slug']) && !\Aurora\Core\Helper::isSlugValid($data['slug'])) {
-            $errors['slug'] = $this->language->get('invalid_slug');
+            $errors[] = 'invalid_slug';
         }
 
         if (!\Aurora\App\Permission::can('edit_pages')) {
             http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         return $errors;
@@ -78,6 +78,10 @@ final class Page extends \Aurora\App\ModuleBase
     public function getCondition(array $filters): string
     {
         $where = [];
+
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'pages.id = ' . ((int) $filters['id']);
+        }
 
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = 'pages.status = ' . ((int) $filters['status']);
@@ -99,15 +103,15 @@ final class Page extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'title' => $data['title'],
-            'slug' => $data['slug'],
-            'html' => $data['html'],
-            'status' => $data['status'],
-            'static' => $data['static'],
-            'static_file' => $data['static_file'],
-            'meta_title' => $data['meta_title'],
-            'meta_description' => $data['meta_description'],
-            'canonical_url' => $data['canonical_url'],
+            'title' => $data['title'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'html' => $data['html'] ?? '',
+            'status' => $data['status'] ?? false,
+            'static' => $data['static'] ?? false,
+            'static_file' => $data['static_file'] ?? '',
+            'meta_title' => $data['meta_title'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
+            'canonical_url' => $data['canonical_url'] ?? '',
             'edited_at' => time(),
         ];
     }

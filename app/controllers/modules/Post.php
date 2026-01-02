@@ -82,24 +82,25 @@ final class Post extends \Aurora\App\ModuleBase
         $errors = [];
 
         if (empty($data['title'])) {
-            $errors['title'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_title';
         }
 
         if (isset($data['slug']) && !empty($this->get([ 'slug' => $data['slug'], '!id' => $id ]))) {
-            $errors['slug'] = $this->language->get('repeated_slug');
+            $errors[] = 'repeated_slug';
         }
 
         if (empty($data['slug']) || !\Aurora\Core\Helper::isSlugValid($data['slug'])) {
-            $errors['slug'] = $this->language->get('invalid_slug');
+            $errors[] = 'invalid_slug';
         }
 
         if (!\Aurora\App\Permission::can('edit_posts')) {
             http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         if (!empty($data['status']) && !\Aurora\App\Permission::can('publish_posts')) {
-            $errors[0] = $this->language->get('published_posts_permission_error');
+            http_response_code(403);
+            $errors[] = 'no_publish_permission';
         }
 
         return $errors;
@@ -114,12 +115,21 @@ final class Post extends \Aurora\App\ModuleBase
     {
         $where = [];
 
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'posts.id = ' . ((int) $filters['id']);
+        }
+
         if (isset($filters['status']) && $filters['status'] !== '') {
-            $where[] = match (strval($filters['status'])) {
+            $val = match (strval($filters['status'])) {
                 '1' => 'posts.status AND posts.published_at <= ' . time(),
                 '0' => 'posts.status = 0',
                 'scheduled' => 'posts.status AND posts.published_at > ' . time(),
+                default => '',
             };
+
+            if ($val) {
+                $where[] = $val;
+            }
         }
 
         if (isset($filters['user']) && $filters['user'] !== '') {
@@ -191,18 +201,18 @@ final class Post extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'title' => $data['title'],
-            'slug' => $data['slug'],
-            'description' => $data['description'],
-            'html' => $data['html'],
-            'user_id' => $data['user_id'],
+            'title' => $data['title'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'description' => $data['description'] ?? '',
+            'html' => $data['html'] ?? '',
+            'user_id' => $data['user_id'] ?? 0,
             'image' => $data['image'] ?? null,
-            'image_alt' => $data['image_alt'],
-            'status' => $data['status'],
-            'meta_title' => $data['meta_title'],
-            'meta_description' => $data['meta_description'],
-            'canonical_url' => $data['canonical_url'],
-            'published_at' => (int) strtotime($data['published_at']),
+            'image_alt' => $data['image_alt'] ?? '',
+            'status' => $data['status'] ?? false,
+            'meta_title' => $data['meta_title'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
+            'canonical_url' => $data['canonical_url'] ?? '',
+            'published_at' => (int) ($data['published_at'] ?? 0),
         ];
     }
 }

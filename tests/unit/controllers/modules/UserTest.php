@@ -112,9 +112,9 @@ final class UserTest extends \Aurora\Tests\Modules\Base
      */
     public function testCheckFields(): void
     {
-        $_SESSION['user'] = [ 'role' => 1 ];
+        $GLOBALS['user'] = [ 'role' => 1 ];
         \Aurora\App\Permission::set([ 'edit_users' => 1 ], 1);
-        \Aurora\App\Permission::addMethod('edit_user', fn($user) => ($user['role'] ?? 0) <= ($_SESSION['user']['role'] ?? 0) && \Aurora\App\Permission::can('edit_users'));
+        \Aurora\App\Permission::addMethod('edit_user', fn($user) => ($user['role'] ?? 0) <= ($GLOBALS['user']['role'] ?? 0) && \Aurora\App\Permission::can('edit_users'));
 
         $this->assertEquals([
             'slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
@@ -126,7 +126,7 @@ final class UserTest extends \Aurora\Tests\Modules\Base
             'You do not have permissions to perform this action',
         ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com' ], 1));
 
-        $_SESSION['user'] = [ 'role' => 2 ];
+        $GLOBALS['user'] = [ 'role' => 2 ];
 
         $this->assertEquals([], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com' ], 1));
 

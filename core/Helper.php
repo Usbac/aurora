@@ -11,7 +11,7 @@ final class Helper
      */
     public static function getPath(string $path = ''): string
     {
-        return dirname(__DIR__) . (empty($path) ? '' : '/' . ltrim($path, '/'));
+        return dirname(__DIR__) . (empty($path) ? '' : '/' . trim($path, '/'));
     }
 
     /**
@@ -32,9 +32,16 @@ final class Helper
     public static function getUrl(string $path = ''): string
     {
         $path = ltrim($path, '/');
-        $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] ?? 80) == 443;
+        return 'http' . (self::isHttps() ? 's' : '') . '://' . ($_SERVER['SERVER_NAME'] ?? 'localhost') . (empty($path) ? '' : "/$path");
+    }
 
-        return 'http' . ($https ? 's' : '') . '://' . ($_SERVER['SERVER_NAME'] ?? 'localhost') . (empty($path) ? '' : "/$path");
+    /**
+     * Returns true if the current request is made via HTTPS, false otherwise
+     * @return bool true if the current request is made via HTTPS, false otherwise
+     */
+    public static function isHttps(): bool
+    {
+        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] ?? 80) == 443;
     }
 
     /**
@@ -150,16 +157,6 @@ final class Helper
     }
 
     /**
-     * Returns true if the given CSRF token is valid, false otherwise
-     * @param string $value the CSRF token
-     * @return bool true if the given CSRF token is valid, false otherwise
-     */
-    public static function isCsrfTokenValid(string $value): bool
-    {
-        return isset($_COOKIE['csrf_token']) && $_COOKIE['csrf_token'] === $value;
-    }
-
-    /**
      * Returns true if the given slug is valid
      * @param string $value the slug
      * @return bool true if the given slug is valid
@@ -189,4 +186,31 @@ final class Helper
 
         return $file_exists ? readfile($file_path) : false;
     }
+
+    public static function getRequestData(): array
+        {
+            if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && !empty($_POST)) {
+                return $_POST;
+            }
+
+            $raw_input = file_get_contents('php://input');
+
+            if (empty($raw_input)) {
+                return [];
+            }
+
+            $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
+
+            if (stripos($content_type, 'application/json') !== false) {
+                $decoded = json_decode($raw_input, true);
+                return is_array($decoded) ? $decoded : [];
+            }
+
+            if (stripos($content_type, 'application/x-www-form-urlencoded') !== false) {
+                parse_str($raw_input, $data);
+                return $data;
+            }
+
+            return [ '_raw' => $raw_input ];
+        }
 }
