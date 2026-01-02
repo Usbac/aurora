@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, makeRequest } from '../../utils/utils';
@@ -9,9 +9,11 @@ export default function Pages() {
     const { user, settings } = useOutletContext();
     const navigate = useNavigate();
     const { t } = useI18n();
+    const table_ref = useRef(null);
 
     return <div class="content">
         <Table
+            ref={table_ref}
             url="/api/pages"
             title={t('pages')}
             topOptions={[
@@ -59,7 +61,12 @@ export default function Pages() {
                                 method: 'DELETE',
                                 url: '/api/pages',
                                 data: { id: pages.map(l => l.id) },
-                            }).then(res => alert(t(res?.data?.success ? 'pages_deleted_successfully' : 'error_deleting_pages')));
+                            }).then(res => {
+                                alert(t(res?.data?.success ? 'pages_deleted_successfully' : 'error_deleting_pages'));
+                                if (res?.data?.success) {
+                                    table_ref?.current?.refetch();
+                                }
+                            });
                         }
                     },
                 },
@@ -107,7 +114,12 @@ export default function Pages() {
                                             method: 'DELETE',
                                             url: '/api/pages',
                                             data: { id: page.id },
-                                        }).then(res => alert(t(res?.data?.success ? 'page_deleted_successfully' : 'error_deleting_page')));
+                                        }).then(res => {
+                                            alert(t(res?.data?.success ? 'page_deleted_successfully' : 'error_deleting_page'));
+                                            if (res?.data?.success) {
+                                                table_ref?.current?.refetch();
+                                            }
+                                        });
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

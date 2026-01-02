@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, makeRequest } from '../../utils/utils';
@@ -9,9 +9,11 @@ export default function Links() {
     const { user } = useOutletContext();
     const navigate = useNavigate();
     const { t } = useI18n();
+    const table_ref = useRef(null);
 
     return <div class="content">
         <Table
+            ref={table_ref}
             url="/api/links"
             title={t('links')}
             topOptions={[
@@ -58,7 +60,12 @@ export default function Links() {
                                 method: 'DELETE',
                                 url: '/api/links',
                                 data: { id: links.map(l => l.id) },
-                            }).then(res => alert(t(res?.data?.success ? 'links_deleted_successfully' : 'error_deleting_links')));
+                            }).then(res => {
+                                alert(t(res?.data?.success ? 'links_deleted_successfully' : 'error_deleting_links'));
+                                if (res?.data?.success) {
+                                    table_ref?.current?.refetch();
+                                }
+                            });
                         }
                     },
                 },
@@ -102,7 +109,12 @@ export default function Links() {
                                             method: 'DELETE',
                                             url: '/api/links',
                                             data: { id: link.id },
-                                        }).then(res => alert(t(res?.data?.success ? 'link_deleted_successfully' : 'error_deleting_link')));
+                                        }).then(res => {
+                                            alert(t(res?.data?.success ? 'link_deleted_successfully' : 'error_deleting_link'));
+                                            if (res?.data?.success) {
+                                                table_ref?.current?.refetch();
+                                            }
+                                        });
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

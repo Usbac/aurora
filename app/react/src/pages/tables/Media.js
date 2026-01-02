@@ -21,7 +21,7 @@ const MediaPath = ({ path, setPath }) => {
     </div>;
 };
 
-const DialogEditFile = ({ file, onClose }) => {
+const DialogEditFile = ({ file, onClose, onSuccess }) => {
     const [ name, setName ] = useState(file.name);
     const { t } = useI18n();
 
@@ -35,6 +35,9 @@ const DialogEditFile = ({ file, onClose }) => {
             },
         }).then(res => {
             alert(t(res?.data?.success ? 'item_renamed_successfully' : 'error_renaming_item'));
+            if (res?.data?.success && onSuccess) {
+                onSuccess();
+            }
             onClose();
         });
     };
@@ -61,7 +64,7 @@ const DialogEditFile = ({ file, onClose }) => {
     </div>, document.body);
 };
 
-const DialogDuplicate = ({ file, onClose }) => {
+const DialogDuplicate = ({ file, onClose, onSuccess }) => {
     const [ name, setName ] = useState(file.name);
     const { t } = useI18n();
 
@@ -75,6 +78,9 @@ const DialogDuplicate = ({ file, onClose }) => {
             },
         }).then(res => {
             alert(t(res?.data?.success ? 'item_duplicated_successfully' : 'error_duplicating_item'));
+            if (res?.data?.success && onSuccess) {
+                onSuccess();
+            }
             onClose();
         });
     };
@@ -101,7 +107,7 @@ const DialogDuplicate = ({ file, onClose }) => {
     </div>, document.body);
 };
 
-const DialogMove = ({ file, onClose }) => {
+const DialogMove = ({ file, onClose, onSuccess }) => {
     const [ folders, setFolders ] = useState(undefined);
     const initial_destination_folder = file.path.slice(0, file.path.lastIndexOf('/')).replace(/^\/+|\/+$/g, '');
     const [ destination_folder, setDestinationFolder ] = useState(initial_destination_folder.length == 0 ? '/' : initial_destination_folder);
@@ -124,6 +130,9 @@ const DialogMove = ({ file, onClose }) => {
             },
         }).then(res => {
             alert(t(res?.data?.success ? 'item_moved_successfully' : 'error_moving_item'));
+            if (res?.data?.success && onSuccess) {
+                onSuccess();
+            }
             onClose();
         });
     };
@@ -152,7 +161,7 @@ const DialogMove = ({ file, onClose }) => {
     </div>, document.body);
 };
 
-const DialogCreateFolder = ({ path, onClose }) => {
+const DialogCreateFolder = ({ path, onClose, onSuccess }) => {
     const [ name, setName ] = useState('');
     const { t } = useI18n();
 
@@ -163,6 +172,9 @@ const DialogCreateFolder = ({ path, onClose }) => {
             data: { name: path + '/' + name },
         }).then(res => {
             alert(t(res?.data?.success ? 'folder_created_successfully' : 'error_creating_folder'));
+            if (res?.data?.success && onSuccess) {
+                onSuccess();
+            }
             onClose();
         });
     };
@@ -195,6 +207,7 @@ export default function Media() {
     const [ current_dialog, setCurrentDialog ] = useState(null);
     const [ current_file, setCurrentFile ] = useState(null);
     const file_input_ref = useRef(null);
+    const table_ref = useRef(null);
     const current_path = search_params.get('path') || '';
     const { t } = useI18n();
 
@@ -206,7 +219,12 @@ export default function Media() {
                 method: 'DELETE',
                 url: '/api/media',
                 data: [ getContentUrl(file.path) ],
-            }).then(res => alert(t(res?.data?.success ? 'file_deleted_successfully' : 'error_deleting_file')));
+            }).then(res => {
+                alert(t(res?.data?.success ? 'file_deleted_successfully' : 'error_deleting_file'));
+                if (res?.data?.success) {
+                    table_ref?.current?.refetch();
+                }
+            });
         }
     };
 
@@ -246,6 +264,9 @@ export default function Media() {
             data: form_data,
         }).then(res => {
             alert(t(res?.data?.success ? 'files_uploaded_successfully' : 'error_uploading_files'));
+            if (res?.data?.success) {
+                table_ref?.current?.refetch();
+            }
         });
 
         e.target.value = null;
@@ -270,8 +291,13 @@ export default function Media() {
 
     const closeDialog = () => setCurrentDialog(null);
 
+    const refreshTable = () => {
+        table_ref?.current?.refetch();
+    };
+
     return <div className="content">
         <Table
+            ref={table_ref}
             url={`/api/media?path=${encodeURIComponent(current_path)}`}
             title={t('media')}
             topOptions={[
@@ -319,7 +345,12 @@ export default function Media() {
                                 method: 'DELETE',
                                 url: '/api/media',
                                 data: files.map(f => getContentUrl(f.path)),
-                            }).then(res => alert(t(res?.data?.success ? 'files_deleted_successfully' : 'error_deleting_files')));
+                            }).then(res => {
+                                alert(t(res?.data?.success ? 'files_deleted_successfully' : 'error_deleting_files'));
+                                if (res?.data?.success) {
+                                    table_ref?.current?.refetch();
+                                }
+                            });
                         }
                     },
                 },
@@ -386,10 +417,10 @@ export default function Media() {
                 },
             ]}
         />
-        {current_dialog == 'duplicate_file' && <DialogDuplicate file={current_file} onClose={closeDialog}/>}
-        {current_dialog == 'move_file' && <DialogMove file={current_file} onClose={closeDialog}/>}
-        {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog}/>}
-        {current_dialog == 'create_folder' && <DialogCreateFolder path={current_path} onClose={closeDialog}/>}
+        {current_dialog == 'duplicate_file' && <DialogDuplicate file={current_file} onClose={closeDialog} onSuccess={refreshTable}/>}
+        {current_dialog == 'move_file' && <DialogMove file={current_file} onClose={closeDialog} onSuccess={refreshTable}/>}
+        {current_dialog == 'edit_file' && <DialogEditFile file={current_file} onClose={closeDialog} onSuccess={refreshTable}/>}
+        {current_dialog == 'create_folder' && <DialogCreateFolder path={current_path} onClose={closeDialog} onSuccess={refreshTable}/>}
         <MediaPath path={search_params.get('path') || ''} setPath={setPath}/>
     </div>
 }

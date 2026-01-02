@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, getContentUrl, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
@@ -17,6 +17,7 @@ export default function Posts() {
     });
     const navigate = useNavigate();
     const { t } = useI18n();
+    const table_ref = useRef(null);
     const users_options = useMemo(() => {
         let users = users_req?.data?.data ?? {};
 
@@ -36,6 +37,7 @@ export default function Posts() {
 
     return <div className="content">
         <Table
+            ref={table_ref}
             url="/api/posts"
             title={t('posts')}
             topOptions={[
@@ -87,7 +89,12 @@ export default function Posts() {
                                 method: 'DELETE',
                                 url: '/api/posts',
                                 data: { id: posts.map(l => l.id) },
-                            }).then(res => alert(t(res?.data?.success ? 'posts_deleted_successfully' : 'error_deleting_posts')));
+                            }).then(res => {
+                                alert(t(res?.data?.success ? 'posts_deleted_successfully' : 'error_deleting_posts'));
+                                if (res?.data?.success) {
+                                    table_ref?.current?.refetch();
+                                }
+                            });
                         }
                     },
                 },
@@ -147,7 +154,12 @@ export default function Posts() {
                                             method: 'DELETE',
                                             url: '/api/posts',
                                             data: { id: post.id },
-                                        }).then(res => alert(t(res?.data?.success ? 'post_deleted_successfully' : 'error_deleting_post')));
+                                        }).then(res => {
+                                            alert(t(res?.data?.success ? 'post_deleted_successfully' : 'error_deleting_post'));
+                                            if (res?.data?.success) {
+                                                table_ref?.current?.refetch();
+                                            }
+                                        });
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>

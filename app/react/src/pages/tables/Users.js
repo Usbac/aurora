@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
@@ -9,6 +9,7 @@ export default function Users() {
     const { user, settings, fetch_user } = useOutletContext();
     const navigate = useNavigate();
     const { t } = useI18n();
+    const table_ref = useRef(null);
     const { data: roles_req, is_loading: is_loading_roles, fetch: fetch_roles } = useRequest({
         method: 'GET',
         url: '/api/roles',
@@ -32,6 +33,7 @@ export default function Users() {
 
     return <div class="content">
         <Table
+            ref={table_ref}
             url="/api/users"
             title={t('users')}
             topOptions={[
@@ -84,7 +86,12 @@ export default function Users() {
                                 method: 'DELETE',
                                 url: '/api/users',
                                 data: { id: users.map(u => u.id) },
-                            }).then(res => alert(t(res?.data?.success ? 'users_deleted_successfully' : 'error_deleting_users')));
+                            }).then(res => {
+                                alert(t(res?.data?.success ? 'users_deleted_successfully' : 'error_deleting_users'));
+                                if (res?.data?.success) {
+                                    table_ref?.current?.refetch();
+                                }
+                            });
                         }
                     },
                 },
@@ -163,7 +170,12 @@ export default function Users() {
                                             method: 'DELETE',
                                             url: '/api/users',
                                             data: { id: item.id },
-                                        }).then(res => alert(t(res?.data?.success ? 'user_deleted_successfully' : 'error_deleting_user')));
+                                        }).then(res => {
+                                            alert(t(res?.data?.success ? 'user_deleted_successfully' : 'error_deleting_user'));
+                                            if (res?.data?.success) {
+                                                table_ref?.current?.refetch();
+                                            }
+                                        });
                                     }
                                 },
                                 content: <><IconTrash/> {t('delete')}</>
