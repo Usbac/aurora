@@ -106,7 +106,7 @@ const Data = ({ data, setData, user }) => {
         request({
             method: 'GET',
             url: '/api/db',
-            options: { responseType: 'blob' },
+            options: { response_type: 'blob' },
         }).then(res => downloadFile(res.data, 'data.json'));
     };
 

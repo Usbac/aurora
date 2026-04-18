@@ -2,23 +2,76 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IconFolderFill, IconHome, IconSpinner, IconUploadFile, IconX } from './icons';
 import { createPortal } from 'react-dom';
 import { Editor as TinyMCE } from '@tinymce/tinymce-react';
-import axios from 'axios';
+import { useI18n } from '../providers/I18nProvider';
+
+const apiFetch = async ({ method = 'GET', url, data = {}, options = {} }) => {
+    const {
+        response_type,
+        headers = {},
+        ...fetch_options
+    } = options;
+    const request_headers = new Headers(headers);
+    const http_method = (method || 'GET').toString().toUpperCase();
+    let final_url = url;
+    let body;
+
+    if (data instanceof FormData) {
+        body = data;
+    } else if (http_method === 'GET' || http_method === 'HEAD') {
+        const query_params = new URLSearchParams();
+        if (data && typeof data === 'object') {
+            for (const [ key, value ] of Object.entries(data)) {
+                if (value !== undefined && value !== null) {
+                    query_params.append(key, String(value));
+                }
+            }
+        }
+        const query_string = query_params.toString();
+        if (query_string) {
+            final_url += (final_url.includes('?') ? '&' : '?') + query_string;
+        }
+    } else {
+        if (!request_headers.has('Content-Type')) {
+            request_headers.set('Content-Type', 'application/json');
+        }
+        body = JSON.stringify(data ?? {});
+    }
+
+    const http_response = await fetch(final_url, {
+        method: http_method,
+        credentials: 'include',
+        headers: request_headers,
+        body,
+        ...fetch_options,
+    });
+
+    if (!http_response.ok) {
+        const error = new Error(`HTTP ${http_response.status}`);
+        error.response = { status: http_response.status };
+        throw error;
+    }
+
+    let parsed_body;
+    if (response_type === 'blob') {
+        parsed_body = await http_response.blob();
+    } else {
+        const response_text = await http_response.text();
+        parsed_body = response_text ? JSON.parse(response_text) : null;
+    }
+
+    return {
+        data: parsed_body,
+        status: http_response.status,
+        statusText: http_response.statusText,
+    };
+}
 
 export const useApi = () => {
     const { t } = useI18n();
 
-    const request = useCallback(async ({ method = 'GET', url, data = {}, options = {} }) => {
+    const request = useCallback(async (params) => {
         try {
-            return await axios({
-                method,
-                url,
-                headers: {
-                    'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
-                },
-                data: data instanceof FormData ? data : JSON.stringify(data),
-                withCredentials: true,
-                ...options,
-            });
+            return await apiFetch(params);
         } catch (err) {
             console.error(err);
             alert(t(err.response?.status === 403 ? 'forbidden_action' : 'error_generic'));
@@ -28,7 +81,6 @@ export const useApi = () => {
 
     return { request };
 }
-
 
 export const useRequest = (params) => {
     const [ data, setData ] = useState(null);
@@ -40,17 +92,7 @@ export const useRequest = (params) => {
         setIsError(false);
 
         try {
-            const { method = 'GET', url, data = {}, options = {} } = params;
-            const res = await axios({
-                method,
-                url,
-                headers: {
-                    'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
-                },
-                data: data instanceof FormData ? data : JSON.stringify(data),
-                withCredentials: true,
-                ...options,
-            });
+            const res = await apiFetch(params);
             setData(res);
         } catch (err) {
             setIsError(true);

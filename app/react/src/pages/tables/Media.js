@@ -282,7 +282,7 @@ export default function Media() {
             request({
                 method: 'GET',
                 url: '/api/media/download?path=' + current_path,
-                options: { responseType: 'blob' },
+                options: { response_type: 'blob' },
             }).then(res => {
                 downloadFile(res.data, current_path + ' ' + new Date().toISOString().slice(0, 19).replace('T', ' ') + '.zip')
             });
