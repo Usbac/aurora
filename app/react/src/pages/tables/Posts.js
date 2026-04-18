@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, getContentUrl, LoadingPage, useApi, useRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, getContentUrl, useApi, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 
@@ -32,10 +32,6 @@ export default function Posts() {
         fetch_users();
     }, []);
 
-    if (is_loading_users) {
-        return <LoadingPage/>;
-    }
-
     return <div className="content">
         <Table
             ref={table_ref}
@@ -52,6 +48,7 @@ export default function Posts() {
             filters={{
                 user: {
                     title: t('author'),
+                    disabled: is_loading_users,
                     options: users_options,
                 },
                 status: {

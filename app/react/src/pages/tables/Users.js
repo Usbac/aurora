@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, LoadingPage, useApi, useRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, useApi, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash, IconUsers } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 
@@ -28,10 +28,6 @@ export default function Users() {
         fetch_roles();
     }, []);
 
-    if (is_loading_roles) {
-        return <LoadingPage/>;
-    }
-
     return <div class="content">
         <Table
             ref={table_ref}
@@ -56,6 +52,7 @@ export default function Users() {
                 },
                 role: {
                     title: t('role'),
+                    disabled: is_loading_roles,
                     options: roles_options,
                 },
                 order: {
