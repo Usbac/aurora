@@ -114,7 +114,6 @@ export const useApi = () => {
         try {
             return await makeRequest(params);
         } catch (err) {
-            console.error(err);
             alert(t(err.response?.status === 403 ? 'forbidden_action' : 'error_generic'));
             throw err;
         }
