@@ -4,6 +4,35 @@ import { createPortal } from 'react-dom';
 import { Editor as TinyMCE } from '@tinymce/tinymce-react';
 import { useI18n } from '../providers/I18nProvider';
 
+/**
+ * Performs an HTTP request using fetch with built-in handling for:
+ * - query parameters for GET/HEAD requests
+ * - JSON serialization for request bodies
+ * - FormData support
+ * - response parsing (json, text, blob)
+ * @param {Object} params
+ * @param {string} [params.method='GET'] - HTTP method (GET, POST, PUT, DELETE, etc.)
+ * @param {string} params.url - Request URL
+ * @param {Object|FormData} [params.data={}] - Data to send (query params or request body)
+ * @param {Object} [params.options={}] - Additional fetch options
+ * @param {'json'|'text'|'blob'} [params.options.response_type='json'] - Expected response type
+ * @param {Object} [params.options.headers={}] - Custom request headers
+ * @param {Object} [params.options.*] - Other fetch-compatible options (mode, signal, etc.)
+ * @returns {Promise<{ data: any, status: number, statusText: string }>}
+ * @throws {Error} Throws if the HTTP response is not OK (status >= 400).
+ * The error includes `error.response.status`.
+ * @example
+ * const res = await apiFetch({
+ *   method: 'POST',
+ *   url: '/api/users',
+ *   data: { name: 'John' }
+ * });
+ * @example
+ * const res = await apiFetch({
+ *   url: '/api/users',
+ *   data: { page: 1 }
+ * });
+*/
 const apiFetch = async ({ method = 'GET', url, data = {}, options = {} }) => {
     const {
         response_type,
@@ -72,6 +101,13 @@ const apiFetch = async ({ method = 'GET', url, data = {}, options = {} }) => {
     };
 }
 
+/**
+ * React hook that wraps {@link apiFetch} as `request` and shows translated alerts on failure (403 vs generic).
+ *
+ * Must run under `I18nProvider` so `useI18n()` resolves.
+ * @returns {{ request: (params: Object) => Promise<{ data: *, status: number, statusText: string }> }}
+ *   The `request` function delegates to {@link apiFetch}; on rejection it `alert`s and rethrows.
+ */
 export const useApi = () => {
     const { t } = useI18n();
 
@@ -88,6 +124,17 @@ export const useApi = () => {
     return { request };
 }
 
+/**
+ * Fetches data with {@link apiFetch} on demand; exposes loading and error state (no global alerts).
+ * @param {Object} params - The same shape as {@link apiFetch} (`method`, `url`, `data`, `options`).
+ * @returns {{
+ *   data: { data: *, status: number, statusText: string } | null,
+ *   is_loading: boolean,
+ *   is_error: boolean,
+ *   fetch: () => Promise<void>
+ * }}
+ *   Call `fetch()` to run or retry the request. `data` is the last successful envelope, or `null`.
+ */
 export const useRequest = (params) => {
     const [ data, setData ] = useState(null);
     const [ is_loading, setIsLoading ] = useState(true);
@@ -115,6 +162,11 @@ export const useRequest = (params) => {
     };
 };
 
+/**
+ * GETs a JSON URL once and returns `[ value, refetch ]` for simple read-only resources (e.g. `/api/me`).
+ * @param {string} url - The request URL (GET, no body).
+ * @returns {[*, () => Promise<void>]} Tuple: parsed `data` from the response body, or `undefined` while loading / on error; then a function to repeat the request.
+ */
 export const useElement = (url) => {
     const { data, is_loading, is_error, fetch } = useRequest({
         method: 'GET',
@@ -131,16 +183,29 @@ export const useElement = (url) => {
     ];
 };
 
+/**
+ * Renders the admin nav hamburger control; toggles `document.body` attribute `data-nav-open` on click.
+ * @returns {React.ReactElement}
+ */
 export const MenuButton = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list pointer" viewBox="0 0 16 16" onClick={() => document.body.toggleAttribute('data-nav-open')}>
     <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
 </svg>;
 
+/**
+ * Full-page centered spinner while async data is loading.
+ * @returns {React.ReactElement}
+ */
 export const LoadingPage = () => <div className="content">
     <div className="loading-page">
         <IconSpinner className="loading-icon"/>
     </div>
 </div>;
 
+/**
+ * Text input with optional character counter when `charCount` is set on props.
+ * @param {React.InputHTMLAttributes<HTMLInputElement> & { charCount?: boolean }} props - Forwarded to `<input>`.
+ * @returns {React.ReactElement}
+ */
 export const Input = (props) => {
     const char_count = props.value?.length || 0;
 
@@ -150,6 +215,11 @@ export const Input = (props) => {
     </>;
 };
 
+/**
+ * Multiline input with optional character counter when `charCount` is set on props.
+ * @param {React.TextareaHTMLAttributes<HTMLTextAreaElement> & { charCount?: boolean }} props - Forwarded to `<textarea>`.
+ * @returns {React.ReactElement}
+ */
 export const Textarea = (props) => {
     const char_count = props.value?.length || 0;
 
@@ -159,6 +229,14 @@ export const Textarea = (props) => {
     </>
 };
 
+/**
+ * `<input type="datetime-local">` bound to a Unix timestamp (seconds) for `value` / `onChange`.
+ * Remaining props are forwarded to {@link Input}.
+ * @param {Object} props
+ * @param {number|null|undefined} props.value - The time in **seconds** since epoch, or null/undefined.
+ * @param {function (number|null): void} props.onChange - Called with seconds since epoch, or `null` when cleared.
+ * @returns {React.ReactElement}
+ */
 export const DateTimeInput = ({ value, onChange, ...props }) => {
     let formatted_value = '';
 
@@ -191,6 +269,11 @@ export const DateTimeInput = ({ value, onChange, ...props }) => {
     />;
 };
 
+/**
+ * Styled checkbox: native input plus a slider button that forwards clicks to the input.
+ * @param {React.InputHTMLAttributes<HTMLInputElement>} props - Forwarded to the hidden `<input type="checkbox">`.
+ * @returns {React.ReactElement}
+ */
 export const Switch = (props) => {
     const ref = useRef(null);
 
@@ -200,6 +283,14 @@ export const Switch = (props) => {
     </div>;
 };
 
+/**
+ * Dropdown anchored to a trigger `content`; shows `options` as menu rows with optional `condition` and `class`.
+ * @param {Object} props
+ * @param {React.ReactNode} props.content - The visible trigger (e.g. icon).
+ * @param {string} props.className - Extra class names on the wrapper.
+ * @param {Array<{ content: React.ReactNode, onClick: function, class?: string, condition?: boolean }>} [props.options=[]] - Menu rows; filtered by `condition` when present.
+ * @returns {React.ReactElement}
+ */
 export const DropdownMenu = ({ content, className, options = [] }) => {
     const [ open, setOpen ] = useState(false);
     const dropdown_ref = useRef(null);
@@ -266,6 +357,13 @@ export const DropdownMenu = ({ content, className, options = [] }) => {
     </div>;
 };
 
+/**
+ * Formats a Unix timestamp (seconds) for a timezone and locale using `Intl.DateTimeFormat`.
+ * @param {number} timestamp - The Unix time in **seconds**.
+ * @param {string} timezone - The IANA time zone name (e.g. `Europe/Madrid`).
+ * @param {string} locale - The BCP 47 locale tag.
+ * @returns {string} The formatted date-time string.
+ */
 export const formatDate = (timestamp, timezone, locale) => {
     return new Intl.DateTimeFormat(locale, {
         timeZone: timezone,
@@ -277,6 +375,11 @@ export const formatDate = (timestamp, timezone, locale) => {
     }).format(new Date(timestamp * 1000));
 };
 
+/**
+ * Human-readable byte size (B, kB, MB, GB, TB).
+ * @param {number} bytes - The size in bytes.
+ * @returns {string} The formatted label (e.g. `1.50MB`).
+ */
 export const formatSize = (bytes) => {
     if (bytes === 0) {
         return '0B';
@@ -288,6 +391,11 @@ export const formatSize = (bytes) => {
     return `${size.toFixed(2)}${[ 'B', 'kB', 'MB', 'GB', 'TB' ][factor] ?? ''}`;
 };
 
+/**
+ * Builds an absolute URL from the current origin and a path (no trailing slash on origin only).
+ * @param {string} [path=''] - The path without leading slash, or empty for origin only.
+ * @returns {string} The full URL.
+ */
 export const getUrl = (path = '') => {
     const { protocol, hostname, port } = window.location;
     const base = `${protocol}//${hostname}${port ? ':' + port : ''}`;
@@ -296,11 +404,23 @@ export const getUrl = (path = '') => {
     return path ? `${base}/${path}` : base;
 };
 
+/**
+ * Prefixes a path with the site content base from `<meta name="content_path">` (uploads / static files).
+ * @param {string} [path=''] - The path inside content; slashes are normalized.
+ * @returns {string} The URL path starting with `/…/`.
+ */
 export const getContentUrl = (path = '') => {
     const content_path = document.querySelector('meta[name="content_path"]')?.content || '/';
     return '/' + content_path + '/' + path.replace(/^\/+|\/+$/g, '');
 };
 
+/**
+ * Modal image picker (portal to `document.body`): browses `/api/media`, uploads files, calls `onSave` with a content path or `null`.
+ * @param {Object} props
+ * @param {function (string|null): void} props.onSave - Called with the selected file path, or `null` when removing the image.
+ * @param {function (): void} props.onClose - Called to dismiss the dialog.
+ * @returns {React.ReactElement}
+ */
 export const ImageDialog = ({ onSave, onClose }) => {
     const [ user ] = useElement('/api/me');
     const [ settings ] = useElement('/api/settings');
@@ -317,6 +437,11 @@ export const ImageDialog = ({ onSave, onClose }) => {
         fetch_files();
     }, [ path ]);
 
+    /**
+     * Uploads the first selected file to the current media path, then refreshes the listing.
+     * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event.
+     * @returns {Promise<void>}
+     */
     const uploadFile = async (e) => {
         const form_data = new FormData();
         form_data.append('file', e.target.files[0]);
@@ -330,6 +455,10 @@ export const ImageDialog = ({ onSave, onClose }) => {
         });
     };
 
+    /**
+     * Lists files in the current folder or a loading spinner.
+     * @returns {React.ReactElement}
+     */
     const ListingContent = () => {
         const files = files_req ? files_req.data?.data : [];
 
@@ -405,6 +534,12 @@ export const ImageDialog = ({ onSave, onClose }) => {
     </div>, document.querySelector('body'));
 };
 
+/**
+ * Triggers a browser download of raw `data` as `filename` via a temporary `<a download>`.
+ * @param {BlobPart|BlobPart[]} data - The file contents (e.g. `ArrayBuffer` or `Uint8Array`).
+ * @param {string} filename - The suggested download file name.
+ * @returns {void}
+ */
 export const downloadFile = (data, filename) => {
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(new Blob([ data ]));
@@ -414,6 +549,11 @@ export const downloadFile = (data, filename) => {
     link.remove();
 };
 
+/**
+ * Maps a stored role slug to a short English display title for the admin UI.
+ * @param {string} role_slug - The role key (`contributor`, `editor`, `admin`, `owner`, …).
+ * @returns {string} The display label, or an empty string if unknown.
+ */
 export const getRoleTitle = (role_slug) => {
     switch (role_slug) {
         case 'contributor': return 'Contributor';
@@ -424,8 +564,21 @@ export const getRoleTitle = (role_slug) => {
     }
 };
 
+/**
+ * Normalizes a string into a URL slug (lowercase, non-alphanumeric stripped, spaces to hyphens).
+ * @param {string} str - The raw title or name.
+ * @returns {string} The slug.
+ */
 export const getSlug = (str) => str.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 
+/**
+ * TinyMCE rich text editor with Aurora toolbar, image upload, and light/dark skin from `theme`.
+ * @param {Object} props
+ * @param {string} props.value - The HTML content.
+ * @param {function (string): void} props.setValue - Called when the editor content changes.
+ * @param {'light'|'dark'} props.theme - Chooses TinyMCE `oxide` vs `oxide-dark` skin.
+ * @returns {React.ReactElement}
+ */
 export const Editor = ({ value, setValue, theme }) => {
     return <TinyMCE
         licenseKey="gpl"
