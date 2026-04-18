@@ -22,18 +22,18 @@ import { useI18n } from '../providers/I18nProvider';
  * @throws {Error} Throws if the HTTP response is not OK (status >= 400).
  * The error includes `error.response.status`.
  * @example
- * const res = await apiFetch({
+ * const res = await makeRequest({
  *   method: 'POST',
  *   url: '/api/users',
  *   data: { name: 'John' }
  * });
  * @example
- * const res = await apiFetch({
+ * const res = await makeRequest({
  *   url: '/api/users',
  *   data: { page: 1 }
  * });
 */
-const apiFetch = async ({ method = 'GET', url, data = {}, options = {} }) => {
+const makeRequest = async ({ method = 'GET', url, data = {}, options = {} }) => {
     const {
         response_type,
         headers = {},
@@ -102,18 +102,18 @@ const apiFetch = async ({ method = 'GET', url, data = {}, options = {} }) => {
 }
 
 /**
- * React hook that wraps {@link apiFetch} as `request` and shows translated alerts on failure (403 vs generic).
+ * React hook that wraps {@link makeRequest} as `request` and shows translated alerts on failure (403 vs generic).
  *
  * Must run under `I18nProvider` so `useI18n()` resolves.
  * @returns {{ request: (params: Object) => Promise<{ data: *, status: number, statusText: string }> }}
- *   The `request` function delegates to {@link apiFetch}; on rejection it `alert`s and rethrows.
+ *   The `request` function delegates to {@link makeRequest}; on rejection it `alert`s and rethrows.
  */
 export const useApi = () => {
     const { t } = useI18n();
 
     const request = useCallback(async (params) => {
         try {
-            return await apiFetch(params);
+            return await makeRequest(params);
         } catch (err) {
             console.error(err);
             alert(t(err.response?.status === 403 ? 'forbidden_action' : 'error_generic'));
@@ -125,8 +125,8 @@ export const useApi = () => {
 }
 
 /**
- * Fetches data with {@link apiFetch} on demand; exposes loading and error state (no global alerts).
- * @param {Object} params - The same shape as {@link apiFetch} (`method`, `url`, `data`, `options`).
+ * Fetches data with {@link makeRequest} on demand; exposes loading and error state (no global alerts).
+ * @param {Object} params - The same shape as {@link makeRequest} (`method`, `url`, `data`, `options`).
  * @returns {{
  *   data: { data: *, status: number, statusText: string } | null,
  *   is_loading: boolean,
@@ -145,7 +145,7 @@ export const useRequest = (params) => {
         setIsError(false);
 
         try {
-            const res = await apiFetch(params);
+            const res = await makeRequest(params);
             setData(res);
         } catch (err) {
             setIsError(true);
