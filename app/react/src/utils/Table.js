@@ -64,7 +64,7 @@ const getQueryString = (filters, search, page) => {
  * @param {string} props.url - List API endpoint (GET); the built query string is appended with `?` or `&` as needed.
  * @param {string} [props.title=''] - Shown in the header next to the menu.
  * @param {Array<{ condition?: boolean, onClick: function (): void, content: React.ReactNode }>} [props.topOptions=[]] - Buttons in the page title row.
- * @param {Object<string, { title?: string, options: Array<{ key: *, title: string, selected?: boolean }> }>} [props.filters={}] - Filter dropdowns; the first option starts selected per filter.
+ * @param {Object<string, { title?: string, disabled?: boolean, options: Array<{ key: *, title: string, selected?: boolean }> }>} [props.filters={}] - Filter dropdowns; the first option starts selected per filter. Set `disabled` to disable the `<select>`.
  * @param {Array<{ class: string, title?: string, condition?: boolean, content: function (Object, number): React.ReactNode }>} [props.columns=[]] - Column definitions; `content(row, rowIndex)` renders each cell.
  * @param {function (Object, React.SyntheticEvent): void | null} [props.rowOnClick=null] - Invoked on row click when not in selection mode.
  * @param {Array<{ title: React.ReactNode, class?: string, condition?: boolean, onClick: function (Object[]): void }>} [props.options=[]] - Batch actions when selection mode is on; `onClick` receives the selected row objects.
@@ -170,6 +170,7 @@ export const Table = ({
 
     /**
      * Single filter `<select>` bound to `filters[id]`; updates selection and resets to page 1 on change.
+     * Honors `filters[id].disabled` to disable the control.
      * @param {Object} props
      * @param {string} props.id - Key in `filters`.
      * @returns {React.ReactElement}
@@ -179,7 +180,9 @@ export const Table = ({
 
         return <div class="input-group">
             {filter.title && <label>{filter.title}</label>}
-            <select onChange={e => {
+            <select
+                disabled={Boolean(filter.disabled)}
+                onChange={e => {
                 let aux = { ...filter };
 
                 Object.keys(aux.options).map(opt_key => {
