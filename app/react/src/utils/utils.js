@@ -103,7 +103,6 @@ const makeRequest = async ({ method = 'GET', url, data = {}, options = {} }) => 
 
 /**
  * React hook that wraps {@link makeRequest} as `request` and shows translated alerts on failure (403 vs generic).
- *
  * Must run under `I18nProvider` so `useI18n()` resolves.
  * @returns {{ request: (params: Object) => Promise<{ data: *, status: number, statusText: string }> }}
  *   The `request` function delegates to {@link makeRequest}; on rejection it `alert`s and rethrows.

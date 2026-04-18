@@ -1,7 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 
+/** @type {React.Context<null | { language: string, t: function (string, ...*): string, changeLanguage: function (string): void, getLanguages: function (): string[] }>} */
 const I18nContext = createContext();
 
+/**
+ * Loads every locale module from `../lang/*.js` (via `require.context`), provides translation helpers, and persists the active language in `localStorage` under `lang`.
+ * @param {Object} props
+ * @param {React.ReactNode} props.children
+ * @param {string} [props.defaultLanguage='en'] - Initial language when `localStorage` has no `lang` value.
+ * @returns {React.ReactElement}
+ */
 export const I18nProvider = ({ children, defaultLanguage = 'en' }) => {
     const [ language, setLanguage ] = useState(localStorage.getItem('lang') || defaultLanguage);
     const translations = useMemo(() => {
@@ -50,6 +58,17 @@ export const I18nProvider = ({ children, defaultLanguage = 'en' }) => {
     </I18nContext.Provider>;
 };
 
+/**
+ * Returns the i18n context from {@link I18nProvider}: current `language`, `t` for translated strings, `changeLanguage`, and `getLanguages`.
+ * @returns {{
+ *   language: string,
+ *   t: function (string, ...*): string,
+ *   changeLanguage: function (string): void,
+ *   getLanguages: function (): string[]
+ * }}
+ *   `t` looks up the key in the active locale and replaces `%s`, `%d`, and `%f` placeholders in order with the extra arguments.
+ * @throws {Error} When used outside an {@link I18nProvider}.
+ */
 export const useI18n = () => {
     const context = useContext(I18nContext);
 

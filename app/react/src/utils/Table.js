@@ -3,6 +3,15 @@ import { MenuButton, useRequest } from './utils';
 import { IconGlass, IconSpinner } from './icons';
 import { useI18n } from '../providers/I18nProvider';
 
+/**
+ * Page title row with menu, total item count, optional selection count, and top action buttons.
+ * @param {Object} props
+ * @param {string} props.title
+ * @param {number} props.totalItems
+ * @param {number} [props.selectedItems=0]
+ * @param {Array<{ condition?: boolean, onClick: function (): void, content: React.ReactNode }>} [props.options=[]]
+ * @returns {React.ReactElement}
+ */
 const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
     return <div>
         <div className="page-title">
@@ -19,6 +28,13 @@ const Header = ({ title, totalItems, selectedItems = 0, options = [] }) => {
     </div>;
 };
 
+/**
+ * Builds a URL query string from the first selected option per filter, optional search text, and page when greater than 1.
+ * @param {Object<string, { options: Array<{ key: *, selected?: boolean }> }>} filters - Filter state keyed by id.
+ * @param {string} search - Search term or empty string.
+ * @param {number} page - 1-based page; omitted from the string when 1.
+ * @returns {string} URL-encoded query string without a leading `?`.
+ */
 const getQueryString = (filters, search, page) => {
     let values = {};
 
@@ -40,6 +56,20 @@ const getQueryString = (filters, search, page) => {
     return (new URLSearchParams(values)).toString();
 };
 
+/**
+ * Admin listing table: GETs `url` with filters, search, and pagination query params.
+ * Initializes `page` and `search` from the current URL; supports infinite scroll, row selection with batch actions, and an optional row click handler.
+ * The forwarded `ref` exposes `{ refetch() }`, which resets to page 1 and reloads (via `useImperativeHandle`).
+ * @param {Object} props
+ * @param {string} props.url - List API endpoint (GET); the built query string is appended with `?` or `&` as needed.
+ * @param {string} [props.title=''] - Shown in the header next to the menu.
+ * @param {Array<{ condition?: boolean, onClick: function (): void, content: React.ReactNode }>} [props.topOptions=[]] - Buttons in the page title row.
+ * @param {Object<string, { title?: string, options: Array<{ key: *, title: string, selected?: boolean }> }>} [props.filters={}] - Filter dropdowns; the first option starts selected per filter.
+ * @param {Array<{ class: string, title?: string, condition?: boolean, content: function (Object, number): React.ReactNode }>} [props.columns=[]] - Column definitions; `content(row, rowIndex)` renders each cell.
+ * @param {function (Object, React.SyntheticEvent): void | null} [props.rowOnClick=null] - Invoked on row click when not in selection mode.
+ * @param {Array<{ title: React.ReactNode, class?: string, condition?: boolean, onClick: function (Object[]): void }>} [props.options=[]] - Batch actions when selection mode is on; `onClick` receives the selected row objects.
+ * @returns {React.ReactElement}
+ */
 export const Table = forwardRef(({
     url,
     title = '',
@@ -136,6 +166,12 @@ export const Table = forwardRef(({
         setSelectedRows(aux);
     };
 
+    /**
+     * Single filter `<select>` bound to `filters[id]`; updates selection and resets to page 1 on change.
+     * @param {Object} props
+     * @param {string} props.id - Key in `filters`.
+     * @returns {React.ReactElement}
+     */
     const Filter = ({ id }) => {
         const filter = filters[id];
 
@@ -159,6 +195,10 @@ export const Table = forwardRef(({
         </div>;
     };
 
+    /**
+     * Renders loading, error, empty, or the row list with optional selection and `rowOnClick` behavior.
+     * @returns {React.ReactElement}
+     */
     const Rows = () => {
         if (is_loading) {
             return <IconSpinner className="loading-icon"/>;
