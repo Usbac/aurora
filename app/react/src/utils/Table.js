@@ -182,6 +182,7 @@ export const Table = ({
             {filter.title && <label>{filter.title}</label>}
             <select
                 disabled={Boolean(filter.disabled)}
+                aria-busy={filter.disabled ? true : undefined}
                 onChange={e => {
                 let aux = { ...filter };
 

@@ -144,7 +144,7 @@ export default function Post() {
                     </div>
                     <div class="input-group">
                         <label htmlFor="user-id">{t('author')}</label>
-                        <select id="user-id" disabled={is_loading_users} onChange={e => setData({ ...data, user_id: e.target.value })}>
+                        <select id="user-id" disabled={is_loading_users} aria-busy={is_loading_users ? true : undefined} onChange={e => setData({ ...data, user_id: e.target.value })}>
                             <option value="">{t('none')}</option>
                             {Object.values(users).map(user => <option value={user.id} selected={data.user_id == user.id}>{user.name}</option>)}
                         </select>
@@ -155,7 +155,7 @@ export default function Post() {
                     </div>
                     {tags.length > 0 && <div className="input-group">
                         <label>{t('tags')}</label>
-                        <div className="checkbox">
+                        <div className="checkbox" aria-busy={is_loading_tags ? true : undefined}>
                             {tags.map(tag => <label>
                                 <input
                                     type="checkbox"
