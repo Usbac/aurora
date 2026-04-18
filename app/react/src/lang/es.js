@@ -14,6 +14,7 @@ export default {
     'name': 'Nombre',
     'cancel': 'Cancelar',
     'save': 'Guardar',
+    'forbidden_action': 'No tienes permisos para ejecutar esa acción.',
     'item_renamed_successfully': 'El elemento ha sido renombrado exitosamente',
     'error_renaming_item': 'Error al renombrar el elemento. El nombre no es válido, el archivo no cumple con las reglas del servidor o la ruta no es escribible.',
     'duplicate': 'Duplicar',
