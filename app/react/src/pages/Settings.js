@@ -167,6 +167,7 @@ const Advanced = ({ data, setData, user }) => {
         request({
             method: 'GET',
             url: '/api/logs',
+            options: { response_type: 'text' },
         }).then(res => {
             setLogs(res?.data || '');
         });

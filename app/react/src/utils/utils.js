@@ -52,11 +52,17 @@ const apiFetch = async ({ method = 'GET', url, data = {}, options = {} }) => {
     }
 
     let parsed_body;
-    if (response_type === 'blob') {
-        parsed_body = await http_response.blob();
-    } else {
-        const response_text = await http_response.text();
-        parsed_body = response_text ? JSON.parse(response_text) : null;
+    switch (response_type) {
+        case 'blob':
+            parsed_body = await http_response.blob();
+            break;
+        case 'text':
+            parsed_body = await http_response.text();
+            break;
+        default:
+            const response_text = await http_response.text();
+            parsed_body = response_text ? JSON.parse(response_text) : null;
+            break;
     }
 
     return {
