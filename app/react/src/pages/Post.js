@@ -82,7 +82,7 @@ export default function Post() {
         });
     };
 
-    if (data === undefined || is_loading_users || is_loading_tags) {
+    if (data === undefined) {
         return <LoadingPage/>;
     }
 
@@ -144,7 +144,7 @@ export default function Post() {
                     </div>
                     <div class="input-group">
                         <label htmlFor="user-id">{t('author')}</label>
-                        <select id="user-id" onChange={e => setData({ ...data, user_id: e.target.value })}>
+                        <select id="user-id" disabled={is_loading_users} onChange={e => setData({ ...data, user_id: e.target.value })}>
                             <option value="">{t('none')}</option>
                             {Object.values(users).map(user => <option value={user.id} selected={data.user_id == user.id}>{user.name}</option>)}
                         </select>
@@ -160,6 +160,7 @@ export default function Post() {
                                 <input
                                     type="checkbox"
                                     data-multiselect
+                                    disabled={is_loading_tags}
                                     value={tag.id}
                                     checked={tag.slug in (data.tags || {})}
                                     onChange={e => {

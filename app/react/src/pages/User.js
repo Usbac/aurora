@@ -81,7 +81,7 @@ export default function User() {
 		});
 	};
 
-	if (data === undefined || is_loading_roles) {
+	if (data === undefined) {
 		return <LoadingPage/>;
 	}
 
@@ -139,7 +139,7 @@ export default function User() {
 					</div>
 					<div class="input-group">
 						<label htmlFor="role">{t('role')}</label>
-						<select id="role" onChange={e => setData({ ...data, role: e.target.value })}>
+						<select id="role" disabled={is_loading_roles} onChange={e => setData({ ...data, role: e.target.value })}>
 							{Object.keys(roles).map(key => {
 								const role = roles[key];
 								return <option value={role.level} selected={data.role == role.level}>{getRoleTitle(role.slug)}</option>;

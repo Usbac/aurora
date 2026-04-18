@@ -64,7 +64,7 @@ export default function Page() {
         });
     };
 
-    if (data === undefined || is_loading_view_files) {
+    if (data === undefined) {
         return <LoadingPage/>;
     }
 
@@ -123,7 +123,7 @@ export default function Page() {
                     </div>
                     <div class="input-group">
                         <label htmlFor="static-file">{t('static_file')}</label>
-                        <select id="static-file" onChange={e => setData({ ...data, static_file: e.target.value })}>
+                        <select id="static-file" disabled={is_loading_view_files} onChange={e => setData({ ...data, static_file: e.target.value })}>
                             <option value="">{t('none')}</option>
                             {view_files.map(file => <option key={file} value={file} selected={file === data.static_file}>{file}</option>)}
                         </select>
