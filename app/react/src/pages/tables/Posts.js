@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, getContentUrl, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, getContentUrl, LoadingPage, useApi, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 
@@ -17,6 +17,7 @@ export default function Posts() {
     });
     const navigate = useNavigate();
     const { t } = useI18n();
+    const { request } = useApi();
     const table_ref = useRef(null);
     const users_options = useMemo(() => {
         let users = users_req?.data?.data ?? {};
@@ -85,7 +86,7 @@ export default function Posts() {
                     condition: Boolean(user?.actions?.edit_posts),
                     onClick: (posts) => {
                         if (confirm(t('confirm_delete_selected_posts'))) {
-                            makeRequest({
+                            request({
                                 method: 'DELETE',
                                 url: '/api/posts',
                                 data: { id: posts.map(l => l.id) },
@@ -150,7 +151,7 @@ export default function Posts() {
                                 condition: Boolean(user?.actions?.edit_posts),
                                 onClick: () => {
                                     if (confirm(t('confirm_delete_post'))) {
-                                        makeRequest({
+                                        request({
                                             method: 'DELETE',
                                             url: '/api/posts',
                                             data: { id: post.id },

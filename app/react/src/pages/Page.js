@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Editor, getSlug, getUrl, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
+import { Editor, getSlug, getUrl, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
@@ -17,12 +17,13 @@ export default function Page() {
     const [ id, setId ] = useState(params.get('id'));
     const view_files = view_files_req?.data ?? [];
     const { t } = useI18n();
+    const { request } = useApi();
 
     useEffect(() => {
         fetch_view_files();
 
         if (id) {
-            makeRequest({
+            request({
                 method: 'GET',
                 url: `/api/pages?id=${id}`,
             }).then(res => setData(res?.data?.data[0] ?? null));
@@ -33,7 +34,7 @@ export default function Page() {
 
     const remove = () => {
         if (confirm(t('confirm_delete_page'))) {
-            makeRequest({
+            request({
                 method: 'DELETE',
                 url: '/api/pages',
                 data: { id: id },
@@ -50,7 +51,7 @@ export default function Page() {
 
     const submit = e => {
         e.preventDefault();
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/pages' + (id ? `?id=${id}` : ''),
             data: data,

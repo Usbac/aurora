@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, makeRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, useApi } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 
@@ -9,6 +9,7 @@ export default function Pages() {
     const { user, settings } = useOutletContext();
     const navigate = useNavigate();
     const { t } = useI18n();
+    const { request } = useApi();
     const table_ref = useRef(null);
 
     return <div class="content">
@@ -57,7 +58,7 @@ export default function Pages() {
                     condition: Boolean(user?.actions?.edit_pages),
                     onClick: (pages) => {
                         if (confirm(t('confirm_delete_selected_pages'))) {
-                            makeRequest({
+                            request({
                                 method: 'DELETE',
                                 url: '/api/pages',
                                 data: { id: pages.map(l => l.id) },
@@ -110,7 +111,7 @@ export default function Pages() {
                                 condition: Boolean(user?.actions?.edit_pages),
                                 onClick: () => {
                                     if (confirm(t('confirm_delete_page'))) {
-                                        makeRequest({
+                                        request({
                                             method: 'DELETE',
                                             url: '/api/pages',
                                             data: { id: page.id },

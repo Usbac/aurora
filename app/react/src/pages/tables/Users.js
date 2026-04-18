@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, LoadingPage, makeRequest, useRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, getContentUrl, getRoleTitle, LoadingPage, useApi, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash, IconUsers } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 
@@ -9,6 +9,7 @@ export default function Users() {
     const { user, settings, fetch_user } = useOutletContext();
     const navigate = useNavigate();
     const { t } = useI18n();
+    const { request } = useApi();
     const table_ref = useRef(null);
     const { data: roles_req, is_loading: is_loading_roles, fetch: fetch_roles } = useRequest({
         method: 'GET',
@@ -82,7 +83,7 @@ export default function Users() {
                     condition: Boolean(user?.actions?.edit_users),
                     onClick: (users) => {
                         if (confirm(t('confirm_delete_selected_users'))) {
-                            makeRequest({
+                            request({
                                 method: 'DELETE',
                                 url: '/api/users',
                                 data: { id: users.map(u => u.id) },
@@ -147,7 +148,7 @@ export default function Users() {
                                 condition: item.id != user?.id && user.role > item.role,
                                 onClick: () => {
                                     if (confirm(t('confirm_impersonate_user'))) {
-                                        makeRequest({
+                                        request({
                                             method: 'GET',
                                             url: '/api/users/impersonate?id=' + item.id,
                                         }).then(res => {
@@ -166,7 +167,7 @@ export default function Users() {
                                 condition: item.id != user?.id && Boolean(user?.actions?.edit_users),
                                 onClick: () => {
                                     if (confirm(t('confirm_delete_user', item.name))) {
-                                        makeRequest({
+                                        request({
                                             method: 'DELETE',
                                             url: '/api/users',
                                             data: { id: item.id },

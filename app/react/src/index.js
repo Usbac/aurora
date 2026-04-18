@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { I18nProvider } from './providers/I18nProvider';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from './utils/icons';
 import { Link as RouterLink, Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { getContentUrl, LoadingPage, makeRequest, useElement } from './utils/utils';
+import { getContentUrl, LoadingPage, useApi, useElement } from './utils/utils';
 import { useI18n } from './providers/I18nProvider';
 import NewPassword from './pages/NewPassword';
 import Login from './pages/Login';
@@ -31,6 +31,7 @@ const AdminPages = () => {
     const [ theme, setTheme ] = useState(dark_theme_element?.hasAttribute('disabled') ? 'light' : 'dark');
     const navigate = useNavigate();
     const { t, language, getLanguages, changeLanguage } = useI18n();
+    const { request } = useApi();
 
     const toggleTheme = () => {
         const is_light_enabled = dark_theme_element.toggleAttribute('disabled');
@@ -39,11 +40,10 @@ const AdminPages = () => {
     };
 
     const logout = () => {
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/logout',
-        }).catch(err => alert('Error during logout: ' + err))
-            .finally(() => navigate('/admin', { replace: true }));
+        }).finally(() => navigate('/admin', { replace: true }));
     };
 
     if (user === null) {

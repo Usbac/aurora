@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, makeRequest } from '../../utils/utils';
+import { DropdownMenu, useApi } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 
@@ -9,6 +9,7 @@ export default function Tags() {
     const { user, settings } = useOutletContext();
     const navigate = useNavigate();
     const { t } = useI18n();
+    const { request } = useApi();
     const table_ref = useRef(null);
 
     return <div class="content">
@@ -47,7 +48,7 @@ export default function Tags() {
                     condition: Boolean(user?.actions?.edit_tags),
                     onClick: (tags) => {
                         if (confirm(t('confirm_delete_selected_tags'))) {
-                            makeRequest({
+                            request({
                                 method: 'DELETE',
                                 url: '/api/tags',
                                 data: { id: tags.map(l => l.id) },
@@ -91,7 +92,7 @@ export default function Tags() {
                                 condition: Boolean(user?.actions?.edit_tags),
                                 onClick: () => {
                                     if (confirm(t('confirm_delete_tag'))) {
-                                        makeRequest({
+                                        request({
                                             method: 'DELETE',
                                             url: '/api/tags',
                                             data: { id: tag.id },

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DateTimeInput, Editor, getContentUrl, getSlug, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest } from '../utils/utils';
+import { DateTimeInput, Editor, getContentUrl, getSlug, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
@@ -31,13 +31,14 @@ export default function Post() {
     const users = users_req?.data?.data ?? {};
     const tags = tags_req?.data?.data ?? [];
     const { t } = useI18n();
+    const { request } = useApi();
 
     useEffect(() => {
         fetch_users();
         fetch_tags();
 
         if (id) {
-            makeRequest({
+            request({
                 method: 'GET',
                 url: `/api/posts?id=${id}`,
             }).then(res => setData(res?.data?.data[0] ?? null));
@@ -48,7 +49,7 @@ export default function Post() {
 
     const remove = () => {
         if (confirm(t('confirm_delete_post'))) {
-            makeRequest({
+            request({
                 method: 'DELETE',
                 url: '/api/posts',
                 data: { id: id },
@@ -65,7 +66,7 @@ export default function Post() {
 
     const submit = e => {
         e.preventDefault();
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/posts' + (id ? `?id=${id}` : ''),
             data: {

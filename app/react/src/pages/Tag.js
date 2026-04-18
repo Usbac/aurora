@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getSlug, Input, LoadingPage, makeRequest, MenuButton, Textarea } from '../utils/utils';
+import { getSlug, Input, LoadingPage, MenuButton, Textarea, useApi } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
@@ -12,10 +12,11 @@ export default function Tag() {
     const params = new URLSearchParams(location.search);
     const [ id, setId ] = useState(params.get('id'));
     const { t } = useI18n();
+    const { request } = useApi();
 
     useEffect(() => {
         if (id) {
-            makeRequest({
+            request({
                 method: 'GET',
                 url: `/api/tags?id=${id}`,
             }).then(res => setData(res?.data?.data[0] ?? null));
@@ -26,7 +27,7 @@ export default function Tag() {
 
     const remove = () => {
         if (confirm(t('confirm_delete_tag'))) {
-            makeRequest({
+            request({
                 method: 'DELETE',
                 url: '/api/tags',
                 data: { id: id },
@@ -43,7 +44,7 @@ export default function Tag() {
 
     const submit = e => {
         e.preventDefault();
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/tags' + (id ? `?id=${id}` : ''),
             data: data,

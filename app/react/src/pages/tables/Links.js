@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, makeRequest } from '../../utils/utils';
+import { DropdownMenu, useApi } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 
@@ -9,6 +9,7 @@ export default function Links() {
     const { user } = useOutletContext();
     const navigate = useNavigate();
     const { t } = useI18n();
+    const { request } = useApi();
     const table_ref = useRef(null);
 
     return <div class="content">
@@ -56,7 +57,7 @@ export default function Links() {
                     condition: Boolean(user?.actions?.edit_links),
                     onClick: (links) => {
                         if (confirm(t('confirm_delete_selected_links'))) {
-                            makeRequest({
+                            request({
                                 method: 'DELETE',
                                 url: '/api/links',
                                 data: { id: links.map(l => l.id) },
@@ -105,7 +106,7 @@ export default function Links() {
                                 condition: Boolean(user?.actions?.edit_links),
                                 onClick: () => {
                                     if (confirm(t('confirm_delete_link'))) {
-                                        makeRequest({
+                                        request({
                                             method: 'DELETE',
                                             url: '/api/links',
                                             data: { id: link.id },

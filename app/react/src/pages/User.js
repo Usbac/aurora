@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea, useRequest, formatDate, getRoleTitle, getSlug } from '../utils/utils';
+import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest, formatDate, getRoleTitle, getSlug } from '../utils/utils';
 import { IconEye, IconTrash, IconUsers } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
@@ -19,12 +19,13 @@ export default function User() {
 	const roles = roles_req?.data ?? {};
 	const is_current_user = id && user?.id == id;
 	const { t } = useI18n();
+	const { request } = useApi();
 
 	useEffect(() => {
 		fetch_roles();
 
 		if (id) {
-			makeRequest({
+			request({
 				method: 'GET',
 				url: `/api/users?id=${id}`,
 			}).then(res => setData(res?.data?.data[0] ?? null));
@@ -35,7 +36,7 @@ export default function User() {
 
 	const remove = () => {
 		if (confirm(t('confirm_delete_user', data.name))) {
-			makeRequest({
+			request({
 				method: 'DELETE',
 				url: '/api/users',
 				data: { id: id },
@@ -52,7 +53,7 @@ export default function User() {
 
 	const impersonate = () => {
 		if (confirm(t('confirm_impersonate_user'))) {
-			makeRequest({
+			request({
 				method: 'GET',
 				url: '/api/users/impersonate?id=' + id,
 			}).then(res => {
@@ -67,7 +68,7 @@ export default function User() {
 
 	const submit = e => {
 		e.preventDefault();
-		makeRequest({
+		request({
 			method: 'POST',
 			url: '/api/users' + (id ? `?id=${id}` : ''),
 			data: data,

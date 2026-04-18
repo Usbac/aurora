@@ -4,25 +4,31 @@ import { createPortal } from 'react-dom';
 import { Editor as TinyMCE } from '@tinymce/tinymce-react';
 import axios from 'axios';
 
-export const makeRequest = async ({ method = 'GET', url, data = {}, options = {} }) => {
-    try {
-        const res = await axios({
-            method,
-            url,
-            headers: {
-                'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
-            },
-            data: data instanceof FormData ? data : JSON.stringify(data),
-            withCredentials: true,
-            ...options,
-        });
+export const useApi = () => {
+    const { t } = useI18n();
 
-        return res;
-    } catch (err) {
-        console.error(err);
-        throw err;
-    }
-};
+    const request = useCallback(async ({ method = 'GET', url, data = {}, options = {} }) => {
+        try {
+            return await axios({
+                method,
+                url,
+                headers: {
+                    'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
+                },
+                data: data instanceof FormData ? data : JSON.stringify(data),
+                withCredentials: true,
+                ...options,
+            });
+        } catch (err) {
+            console.error(err);
+            alert(t(err.response?.status === 403 ? 'forbidden_action' : 'error_generic'));
+            throw err;
+        }
+    }, [ t ]);
+
+    return { request };
+}
+
 
 export const useRequest = (params) => {
     const [ data, setData ] = useState(null);
@@ -34,7 +40,17 @@ export const useRequest = (params) => {
         setIsError(false);
 
         try {
-            const res = await makeRequest(params);
+            const { method = 'GET', url, data = {}, options = {} } = params;
+            const res = await axios({
+                method,
+                url,
+                headers: {
+                    'Content-Type': data instanceof FormData ? 'multipart/form-data' : 'application/json',
+                },
+                data: data instanceof FormData ? data : JSON.stringify(data),
+                withCredentials: true,
+                ...options,
+            });
             setData(res);
         } catch (err) {
             setIsError(true);
@@ -247,6 +263,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
     });
     const folders = path.split('/');
     const input_ref = useRef(null);
+    const { request } = useApi();
 
     useEffect(() => {
         fetch_files();
@@ -255,7 +272,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
     const uploadFile = async (e) => {
         const form_data = new FormData();
         form_data.append('file', e.target.files[0]);
-        makeRequest({
+        request({
             method: 'POST',
             url: `/api/media?path=${path}`,
             data: form_data,

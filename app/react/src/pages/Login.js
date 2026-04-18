@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeRequest, useElement } from '../utils/utils';
+import { useApi, useElement } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
 
@@ -12,11 +12,12 @@ export default function Login() {
     const [ reset_password, setResetPassword ] = useState(false);
     const navigate = useNavigate();
     const { t } = useI18n();
+    const { request } = useApi();
 
     const submitLogin = async e => {
         setLoading(true);
         e.preventDefault();
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/auth',
             data: {
@@ -35,7 +36,7 @@ export default function Login() {
     const resetPassword = async e => {
        setLoading(true);
         e.preventDefault();
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/password-reset/request',
             data: { email: email },

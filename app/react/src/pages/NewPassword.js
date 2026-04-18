@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeRequest } from '../utils/utils';
+import { useApi } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
 
@@ -10,11 +10,12 @@ export default function NewPassword() {
     const [ password_confirm, setPasswordConfirm ] = useState('');
     const navigate = useNavigate();
     const { t } = useI18n();
+    const { request } = useApi();
 
     const submit = async e => {
         setLoading(true);
         e.preventDefault();
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/password-reset/confirm',
             data: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { downloadFile, formatSize, getContentUrl, ImageDialog, Input, LoadingPage, makeRequest, MenuButton, Switch, Textarea } from '../utils/utils';
+import { downloadFile, formatSize, getContentUrl, ImageDialog, Input, LoadingPage, useApi, MenuButton, Switch, Textarea } from '../utils/utils';
 import { IconCode, IconDatabase, IconNote, IconServer, IconSettings, IconSync, IconTerminal } from '../utils/icons';
 import { useLocation, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
@@ -100,9 +100,10 @@ const Data = ({ data, setData, user }) => {
     const file_ref = useRef(null);
     const [ database_file, setDatabaseFile ] = useState(null);
     const { t } = useI18n();
+    const { request } = useApi();
 
     const downloadDatabase = () => {
-        makeRequest({
+        request({
             method: 'GET',
             url: '/api/db',
             options: { responseType: 'blob' },
@@ -113,7 +114,7 @@ const Data = ({ data, setData, user }) => {
         if (confirm(t('confirm_update_database'))) {
             let form_data = new FormData();
             form_data.append('file', database_file);
-            makeRequest({
+            request({
                 method: 'POST',
                 url: '/api/db',
                 data: form_data,
@@ -125,7 +126,7 @@ const Data = ({ data, setData, user }) => {
 
     const resetViewsCount = () => {
         if (confirm(t('confirm_reset_views'))) {
-            makeRequest({
+            request({
                 method: 'GET',
                 url: '/api/reset_views_count',
             }).then(res => alert(t(res?.data?.success ? 'views_reset_successfully' : 'error_resetting_views')));
@@ -161,13 +162,9 @@ const Data = ({ data, setData, user }) => {
 const Advanced = ({ data, setData, user }) => {
     const [ logs, setLogs ] = useState(undefined);
     const { t } = useI18n();
-
-    useEffect(() => {
-        loadLogs();
-    }, []);
-
+    const { request } = useApi();
     const loadLogs = () => {
-        makeRequest({
+        request({
             method: 'GET',
             url: '/api/logs',
         }).then(res => {
@@ -175,12 +172,16 @@ const Advanced = ({ data, setData, user }) => {
         });
     };
 
+    useEffect(() => {
+        loadLogs();
+    }, []);
+
     const downloadLogs = () => {
         downloadFile(logs, `Aurora ${new Date().toISOString().slice(0, 19).replace('T', ' ')}.log`);
     };
 
     const deleteLogs = () => {
-        makeRequest({
+        request({
             method: 'DELETE',
             url: '/api/logs',
         }).then(res => {
@@ -221,9 +222,10 @@ const Advanced = ({ data, setData, user }) => {
 const Info = () => {
     const [ server, setServer ] = useState(undefined);
     const { t } = useI18n();
+    const { request } = useApi();
 
     useEffect(() => {
-        makeRequest({
+        request({
             method: 'GET',
             url: '/api/server',
         }).then(res => setServer(res?.data));
@@ -304,6 +306,7 @@ export default function Settings() {
     const [ data, setData ] = useState(undefined);
     const [ loading, setLoading ] = useState(false);
     const { t } = useI18n();
+    const { request } = useApi();
     const SECTIONS = [
         { id: 'general', name: t('general'), icon: IconSettings, section: General },
         { id: 'meta', name: t('meta'), icon: IconNote, section: Meta },
@@ -335,7 +338,7 @@ export default function Settings() {
         setLoading(true);
         let new_data = { ...data };
         delete new_data.meta;
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/settings',
             data: new_data,

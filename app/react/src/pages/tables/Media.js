@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Table } from '../../utils/Table';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
-import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, makeRequest } from '../../utils/utils';
+import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, useApi } from '../../utils/utils';
 import { IconClipboard, IconDuplicate, IconFile, IconFolder, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 import { useI18n } from '../../providers/I18nProvider';
@@ -24,9 +24,10 @@ const MediaPath = ({ path, setPath }) => {
 const DialogEditFile = ({ file, onClose, onSuccess }) => {
     const [ name, setName ] = useState(file.name);
     const { t } = useI18n();
+    const { request } = useApi();
 
     const save = () => {
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/media/rename',
             data: {
@@ -67,9 +68,10 @@ const DialogEditFile = ({ file, onClose, onSuccess }) => {
 const DialogDuplicate = ({ file, onClose, onSuccess }) => {
     const [ name, setName ] = useState(file.name);
     const { t } = useI18n();
+    const { request } = useApi();
 
     const save = () => {
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/media/duplicate',
             data: {
@@ -112,16 +114,17 @@ const DialogMove = ({ file, onClose, onSuccess }) => {
     const initial_destination_folder = file.path.slice(0, file.path.lastIndexOf('/')).replace(/^\/+|\/+$/g, '');
     const [ destination_folder, setDestinationFolder ] = useState(initial_destination_folder.length == 0 ? '/' : initial_destination_folder);
     const { t } = useI18n();
+    const { request } = useApi();
 
     useEffect(() => {
-        makeRequest({
+        request({
             method: 'GET',
             url: '/api/media/folders',
         }).then(res => setFolders(res?.data));
     }, []);
 
     const save = () => {
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/media/move',
             data: {
@@ -164,9 +167,10 @@ const DialogMove = ({ file, onClose, onSuccess }) => {
 const DialogCreateFolder = ({ path, onClose, onSuccess }) => {
     const [ name, setName ] = useState('');
     const { t } = useI18n();
+    const { request } = useApi();
 
     const save = () => {
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/media/create_folder',
             data: { name: path + '/' + name },
@@ -210,12 +214,13 @@ export default function Media() {
     const table_ref = useRef(null);
     const current_path = search_params.get('path') || '';
     const { t } = useI18n();
+    const { request } = useApi();
 
     const setPath = (new_path) => setSearchParams({ ...search_params, path: new_path });
 
     const deleteFile = (file) => {
         if (confirm(t('confirm_delete_file'))) {
-            makeRequest({
+            request({
                 method: 'DELETE',
                 url: '/api/media',
                 data: [ getContentUrl(file.path) ],
@@ -258,7 +263,7 @@ export default function Media() {
             form_data.append('file[]', files[i]);
         }
 
-        makeRequest({
+        request({
             method: 'POST',
             url: '/api/media/upload?path=' + encodeURIComponent(current_path),
             data: form_data,
@@ -274,7 +279,7 @@ export default function Media() {
 
     const downloadFiles = () => {
         if (confirm(t('confirm_download_media'))) {
-            makeRequest({
+            request({
                 method: 'GET',
                 url: '/api/media/download?path=' + current_path,
                 options: { responseType: 'blob' },
@@ -341,7 +346,7 @@ export default function Media() {
                     condition: Boolean(user?.actions?.edit_media),
                     onClick: (files) => {
                         if (confirm(t('confirm_delete_selected_files'))) {
-                            makeRequest({
+                            request({
                                 method: 'DELETE',
                                 url: '/api/media',
                                 data: files.map(f => getContentUrl(f.path)),
