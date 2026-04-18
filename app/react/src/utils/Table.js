@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef, useState, forwardRef } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { MenuButton, useRequest } from './utils';
 import { IconGlass, IconSpinner } from './icons';
 import { useI18n } from '../providers/I18nProvider';
@@ -59,7 +59,7 @@ const getQueryString = (filters, search, page) => {
 /**
  * Admin listing table: GETs `url` with filters, search, and pagination query params.
  * Initializes `page` and `search` from the current URL; supports infinite scroll, row selection with batch actions, and an optional row click handler.
- * The forwarded `ref` exposes `{ refetch() }`, which resets to page 1 and reloads (via `useImperativeHandle`).
+ * Optional `ref` exposes `{ refetch() }`, which resets to page 1 and reloads (via `useImperativeHandle`).
  * @param {Object} props
  * @param {string} props.url - List API endpoint (GET); the built query string is appended with `?` or `&` as needed.
  * @param {string} [props.title=''] - Shown in the header next to the menu.
@@ -68,9 +68,10 @@ const getQueryString = (filters, search, page) => {
  * @param {Array<{ class: string, title?: string, condition?: boolean, content: function (Object, number): React.ReactNode }>} [props.columns=[]] - Column definitions; `content(row, rowIndex)` renders each cell.
  * @param {function (Object, React.SyntheticEvent): void | null} [props.rowOnClick=null] - Invoked on row click when not in selection mode.
  * @param {Array<{ title: React.ReactNode, class?: string, condition?: boolean, onClick: function (Object[]): void }>} [props.options=[]] - Batch actions when selection mode is on; `onClick` receives the selected row objects.
+ * @param {React.Ref<{ refetch: function (): void }>} [props.ref] - When set, receives the imperative handle with `refetch`.
  * @returns {React.ReactElement}
  */
-export const Table = forwardRef(({
+export const Table = ({
     url,
     title = '',
     topOptions = [],
@@ -78,7 +79,8 @@ export const Table = forwardRef(({
     columns = [],
     rowOnClick = null,
     options: initialOptions = [],
-}, ref) => {
+    ref,
+}) => {
     const params = useMemo(() => new URLSearchParams(window.location.search), []);
     const [ page, setPage ] = useState(params.get('page') ? parseInt(params.get('page')) : 1);
     const [ select_mode, setSelectMode ] = useState(false);
@@ -257,4 +259,4 @@ export const Table = forwardRef(({
         </div>
         {page_req?.data?.meta?.next_page && <button id="load-more" class="light" onClick={() => setPage(page + 1)}>Load more</button>}
     </>;
-});
+};
