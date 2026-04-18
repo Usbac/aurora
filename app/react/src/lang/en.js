@@ -15,6 +15,7 @@ export default {
     'cancel': 'Cancel',
     'save': 'Save',
     'forbidden_action': 'You do not have permission to perform this action.',
+    'error_generic': 'Something went wrong. Please try again.',
     'item_renamed_successfully': 'Item has been renamed successfully',
     'error_renaming_item': 'Error renaming item. The name is invalid, the file does not comply with the server rules or the path is not writable.',
     'duplicate': 'Duplicate',
