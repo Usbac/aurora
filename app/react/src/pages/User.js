@@ -80,7 +80,7 @@ export default function User() {
 					setId(res.data.id);
 				}
 			} else {
-				const parts = res?.data?.errors.map(c => t(c));
+				const parts = (res?.data?.errors ?? []).map(c => t(c));
 				alert(parts.length ? parts.join('\n') : t('error_generic'));
 			}
 		});
