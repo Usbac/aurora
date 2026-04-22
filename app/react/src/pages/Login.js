@@ -26,7 +26,7 @@ export default function Login() {
             },
         }).then(res => {
             if (!res?.data?.success) {
-                alert(t('invalid_email_or_password'));
+                alert(t(res?.data?.error ?? 'error_occurred'));
             } else {
                 navigate('/admin/dashboard');
             }

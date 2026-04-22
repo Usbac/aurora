@@ -73,10 +73,15 @@ export default function User() {
 			url: '/api/users' + (id ? `?id=${id}` : ''),
 			data: data,
 		}).then(res => {
-			alert(t(res?.data?.success ? 'user_saved_successfully' : 'error_saving_user'));
-			if (res?.data?.id) {
-				navigate(`/admin/users/edit?id=${res.data.id}`, { replace: true });
-				setId(res.data.id);
+			if (res?.data?.success) {
+				alert(t('user_saved_successfully'));
+				if (res?.data?.id) {
+					navigate(`/admin/users/edit?id=${res.data.id}`, { replace: true });
+					setId(res.data.id);
+				}
+			} else {
+				const parts = res?.data?.errors.map(c => t(c));
+				alert(parts.length ? parts.join('\n') : t('error_generic'));
 			}
 		});
 	};
