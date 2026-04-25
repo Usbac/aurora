@@ -11,7 +11,7 @@ final class Helper
      */
     public static function getPath(string $path = ''): string
     {
-        return dirname(__DIR__) . (empty($path) ? '' : '/' . trim($path, '/'));
+        return dirname(__DIR__, 2) . (empty($path) ? '' : '/' . trim($path, '/'));
     }
 
     /**

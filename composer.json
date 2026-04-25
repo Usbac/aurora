@@ -27,7 +27,7 @@
             "Aurora\\App\\": "app/controllers",
             "Aurora\\App\\Modules\\": "app/controllers/modules",
             "Aurora\\Bin\\": "bin",
-            "Aurora\\Core\\": "core",
+            "Aurora\\Core\\": "app/core",
             "Aurora\\Tests\\Modules\\": "tests/unit/controllers/modules"
         }
     },
