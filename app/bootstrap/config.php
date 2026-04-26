@@ -19,6 +19,7 @@ return [
     'db'        => $db,
     'content'   => 'public/content',
     'per_page'  => 20,
+    'max_active_sessions' => 10,
     'mail'      => fn($to, $subject, $message) => mail($to, $subject, $message),
     'views'     => 'app/views',
 ];

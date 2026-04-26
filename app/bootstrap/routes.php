@@ -221,6 +221,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         if ($data['success']) {
+            $total = (int) $db->query('SELECT COUNT(*) FROM tokens WHERE user_id = ?', $user_id)->fetchColumn();
+            $to_remove = (int) ($total - \Aurora\Core\Kernel::config('max_active_sessions'));
+            if ($to_remove > 0) {
+                $db->query('DELETE FROM tokens WHERE user_id = ? ORDER BY created_at ASC, token ASC LIMIT ?', $user_id, $to_remove);
+            }
+
             $setAuthToken($data['token'], time() + (60 * 60 * 24 * 30)); // 30 days
         } else {
             unset($data['token']);

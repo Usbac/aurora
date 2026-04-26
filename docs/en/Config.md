@@ -49,6 +49,16 @@ Path to the content directory within the public directory.
 'public/content'
 ```
 
+### `max_active_sessions`
+
+Number of maximum **active sessions** per user. When a new login (or any flow that issues a session token) would exceed this count, the **oldest** sessions for that user are removed first.
+
+#### Example
+
+```php
+10
+```
+
 ### `mail`
 
 Mail function that will be used to send emails.
