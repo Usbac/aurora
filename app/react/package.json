@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode production && npm run copy-tinymce",
     "watch": "webpack --watch",
-    "copy-tinymce": "shx rm -rf ../../public/assets/js/tinymce && shx cp -r node_modules/tinymce ../../public/assets/js/tinymce",
+    "copy-tinymce": "shx rm -rf ../public/assets/js/tinymce && shx cp -r node_modules/tinymce ../public/assets/js/tinymce",
     "postinstall": "npm run copy-tinymce"
   },
   "dependencies": {
