@@ -1,5 +1,6 @@
 Options -Indexes
 
 RewriteEngine on
-RewriteRule ^$ public/ [L]
-RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+RewriteRule ^$ app/public/ [L]
+RewriteRule ^public/(.*)$ app/public/$1 [L,NC]
+RewriteRule ^((?!app/public/).*)$ app/public/$1 [L,NC]
