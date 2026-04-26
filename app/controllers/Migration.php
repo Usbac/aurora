@@ -75,6 +75,7 @@ final class Migration
             'user_id'    => 'INTEGER',
             'token'      => 'TEXT',
             'created_at' => 'INTEGER',
+            'user_agent' => 'TEXT',
             ''           => 'CONSTRAINT tokens_pk UNIQUE (`user_id`, `token`)',
         ],
         'users' => [

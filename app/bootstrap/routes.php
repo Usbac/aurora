@@ -211,6 +211,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             $data['success'] = (bool) $db->insert('tokens', [
                 'user_id' => $user_id,
                 'token' => $data['token'],
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
                 'created_at' => time(),
             ]);
         } catch (\Exception) {
