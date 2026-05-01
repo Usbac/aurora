@@ -12,7 +12,10 @@ final class User extends \Aurora\App\ModuleBase
     protected string $join = 'LEFT JOIN posts ON posts.user_id = users.id
         LEFT JOIN roles ON roles.level = users.role';
     protected string $group_by = 'users.id';
-    protected array $relations = [ 'password_restores' => 'user_id' ];
+    protected array $relations = [
+        'password_restores' => 'user_id',
+        'tokens' => 'user_id',
+    ];
     protected array $orders = [
         'name' => 'users.name',
         'email' => 'users.email',
