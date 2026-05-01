@@ -634,7 +634,9 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             exit;
         }
 
-        return json_encode([ 'success' => unlink(Helper::getPath(\Aurora\App\Setting::get('log_file'))) ]);
+        $path = Helper::getPath(\Aurora\App\Setting::get('log_file'));
+
+        return json_encode([ 'success' => !file_exists($path) || (is_writable($path) && unlink($path)) ]);
     });
 
     $router->get('json:api/reset_views_count', function() use ($db) {
