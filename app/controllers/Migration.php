@@ -72,6 +72,7 @@ final class Migration
             'meta_description' => 'TEXT',
         ],
         'tokens' => [
+            'id'         => 'INTEGER PRIMARY KEY',
             'user_id'    => 'INTEGER',
             'token'      => 'TEXT',
             'created_at' => 'INTEGER',
