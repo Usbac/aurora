@@ -116,6 +116,10 @@ svg {
     background: #40cd52;
 }
 
+.title-label.blue {
+    background: #0985ff;
+}
+
 .align-center {
     display: flex;
     align-items: center;
