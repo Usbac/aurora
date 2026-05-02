@@ -212,6 +212,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 'user_id' => $user_id,
                 'token' => $data['token'],
                 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                'ip' => Helper::getUserIP(),
                 'created_at' => time(),
             ]);
         } catch (\Exception) {
