@@ -218,7 +218,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         } catch (\Exception) {
             return [
                 'success' => false,
-                'error' => 'server_error',
+                'error' => 'error_generic',
             ];
         }
 
