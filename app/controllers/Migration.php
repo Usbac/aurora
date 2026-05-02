@@ -75,9 +75,10 @@ final class Migration
             'id'         => 'INTEGER PRIMARY KEY',
             'user_id'    => 'INTEGER',
             'token'      => 'TEXT',
+            'user_agent' => 'TEXT',
             'ip'         => 'TEXT',
             'created_at' => 'INTEGER',
-            'user_agent' => 'TEXT',
+            'updated_at' => 'INTEGER',
             ''           => 'CONSTRAINT tokens_pk UNIQUE (`user_id`, `token`)',
         ],
         'users' => [
