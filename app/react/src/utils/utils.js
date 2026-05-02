@@ -363,6 +363,8 @@ export const DropdownMenu = ({ content, className, options = [] }) => {
  * @returns {string} The formatted date-time string.
  */
 export const formatDate = (timestamp, timezone, locale) => {
+    timestamp = Number(timestamp);
+
     return new Intl.DateTimeFormat(locale, {
         timeZone: timezone,
         day: '2-digit',
@@ -370,7 +372,7 @@ export const formatDate = (timestamp, timezone, locale) => {
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-    }).format(new Date(timestamp * 1000));
+    }).format(new Date((Number.isFinite(timestamp) ? timestamp : 0) * 1000));
 };
 
 /**
