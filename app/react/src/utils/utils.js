@@ -131,7 +131,7 @@ export const useApi = () => {
  *   is_error: boolean,
  *   fetch: () => Promise<void>
  * }}
- *   Call `fetch()` to run or retry the request. `data` is the last successful envelope, or `null`.
+ * Call `fetch()` to run or retry the request. `data` is the last successful envelope, or `null`.
  */
 export const useRequest = (params) => {
     const [ data, setData ] = useState(null);
