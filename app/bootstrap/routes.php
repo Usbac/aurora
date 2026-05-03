@@ -2,7 +2,7 @@
 
 use Aurora\Core\{DB, Helper, Kernel, Language, View};
 
-return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang) {
+return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang, array $user) {
     $user_mod = new \Aurora\App\Modules\User($db, $lang);
     $tag_mod = new \Aurora\App\Modules\Tag($db, $lang);
     $link_mod = new \Aurora\App\Modules\Link($db, $lang);
@@ -135,12 +135,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get("$blog_url/{slug}", function() use ($db, $view, $link_mod, $post_mod, $theme_dir) {
+    $router->get("$blog_url/{slug}", function() use ($db, $view, $link_mod, $post_mod, $theme_dir, &$user) {
         $post_cond = $post_mod->getCondition([ 'status' => 1 ]);
 
         $post = $post_mod->get([
             'slug' => $_GET['slug'] ?? '',
-            empty($GLOBALS['user']) ? $post_cond : '',
+            empty($user) ? $post_cond : '',
         ]);
 
         if (!$post) {
@@ -174,10 +174,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         });
     }
 
-    $router->get([ '/', '{slug}' ], function() use ($db, $view, $link_mod, $page_mod, $theme_dir) {
+    $router->get([ '/', '{slug}' ], function() use ($db, $view, $link_mod, $page_mod, $theme_dir, &$user) {
         $page = $page_mod->get([
             'slug' => $_GET['slug'] ?? '',
-            empty($GLOBALS['user']) ? $page_mod->getCondition([ 'status' => 1 ]) : '',
+            empty($user) ? $page_mod->getCondition([ 'status' => 1 ]) : '',
         ]);
 
         if (!$page) {
@@ -250,17 +250,17 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('*', function() use ($db, $view, $lang, $theme_dir, $user_mod, $getAuthToken) {
+    $router->middleware('*', function() use ($db, $view, $lang, $theme_dir, $user_mod, $getAuthToken, &$user) {
         $token = $getAuthToken();
-        $GLOBALS['user'] = $user_mod->get([
+        $user = $user_mod->get([
             'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
             'status' => 1,
         ]);
-        $GLOBALS['user']['token'] = $token;
+        $user['token'] = $token;
 
-        \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $GLOBALS['user']['role'] ?? 0);
+        \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $user['role'] ?? 0);
 
-        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($GLOBALS['user']['id'] ?? false)) {
+        if (\Aurora\App\Setting::get('maintenance') && !str_starts_with(Helper::getCurrentPath(), 'admin') && !str_starts_with(Helper::getCurrentPath(), 'api') && !Helper::isValidId($user['id'] ?? false)) {
             echo $view->get("$theme_dir/information.html", [
                 'description' => $lang->get('under_maintenance'),
                 'subdescription' => $lang->get('come_back_soon'),
@@ -322,15 +322,15 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('api/*', function() use ($db) {
-        if (empty($GLOBALS['user']) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm', 'api/logout' ])) {
+    $router->middleware('api/*', function() use ($db, &$user) {
+        if (empty($user) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm', 'api/logout' ])) {
             http_response_code(401);
             exit;
         }
 
         $db->query('UPDATE tokens
             SET updated_at = ?, user_agent = ?
-            WHERE token = ?', time(), $_SERVER['HTTP_USER_AGENT'] ?? '', $GLOBALS['user']['token']);
+            WHERE token = ?', time(), $_SERVER['HTTP_USER_AGENT'] ?? '', $user['token']);
     });
 
     $router->any('json:api/auth', function($body) use ($user_mod, $login) {
@@ -361,18 +361,16 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => $setAuthToken('', time() - 3600) ]);
     });
 
-    $router->get('json:api/me', function() {
-        $user = $GLOBALS['user'];
+    $router->get('json:api/me', function() use (&$user) {
+        $me = $user;
         foreach (\Aurora\App\Permission::getPermissions() as $action) {
-            $user['actions'][$action] = \Aurora\App\Permission::can($action);
+            $me['actions'][$action] = \Aurora\App\Permission::can($action);
         }
 
-        return json_encode($user);
+        return json_encode($me);
     });
 
-    $router->get('json:api/me/sessions', function() use ($db) {
-        $user = $GLOBALS['user'];
-
+    $router->get('json:api/me/sessions', function() use ($db, &$user) {
         return json_encode(array_map(fn($t) => [
             'id' => $t['id'],
             'user_agent' => $t['user_agent'],
@@ -383,8 +381,8 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ], $db->query('SELECT * FROM tokens WHERE user_id = ?', $user['id'])->fetchAll()));
     });
 
-    $router->delete('json:api/me/sessions/{id}', function() use ($db) {
-        $stmt = $db->query('DELETE FROM tokens WHERE id = ? AND user_id = ?', $_GET['id'], $GLOBALS['user']['id']);
+    $router->delete('json:api/me/sessions/{id}', function() use ($db, &$user) {
+        $stmt = $db->query('DELETE FROM tokens WHERE id = ? AND user_id = ?', $_GET['id'], $user['id']);
         return json_encode([ 'success' => $stmt->rowCount() > 0 ]);
     });
 
@@ -403,18 +401,18 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get('json:api/users/impersonate', function() use ($user_mod, $login) {
-        $user = $user_mod->get([
+    $router->get('json:api/users/impersonate', function() use ($user_mod, $login, &$user) {
+        $subject = $user_mod->get([
             'id' => $_GET['id'] ?? 0,
             'status' => 1,
         ]);
 
-        if (!\Aurora\App\Permission::can('impersonate') || empty($user) || $user['role'] > $GLOBALS['user']['role']) {
+        if (!\Aurora\App\Permission::can('impersonate') || empty($subject) || $subject['role'] > ($user['role'] ?? 0)) {
             http_response_code(403);
             exit;
         }
 
-        return json_encode($login($user['id']));
+        return json_encode($login($subject['id']));
     });
 
     $router->post('json:api/media/create_folder', function($body) {
@@ -769,7 +767,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->delete('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->delete('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod, &$user) {
         $ids = isset($body['id'])
             ? array_map(fn($id) => (int) $id, is_array($body['id']) ? $body['id'] : explode(',', $body['id']))
             : null;
@@ -785,12 +783,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             'posts' => $post_mod->remove($ids),
             'tags' => $tag_mod->remove($ids),
             'links' => $link_mod->remove($ids),
-            'users' => (function() use ($user_mod, $ids) {
+            'users' => (function() use ($user_mod, $ids, &$user) {
                 $valid_ids = [];
 
-                foreach ($user_mod->getPage(null, null, 'users.id IN (' . implode(',', $ids) . ')') as $user) {
-                    if (\Aurora\App\Permission::edit_user($user) && $user['id'] != $GLOBALS['user']['id']) {
-                        $valid_ids[] = $user['id'];
+                foreach ($user_mod->getPage(null, null, 'users.id IN (' . implode(',', $ids) . ')') as $row) {
+                    if (\Aurora\App\Permission::edit_user($row) && $row['id'] != $user['id']) {
+                        $valid_ids[] = $row['id'];
                     }
                 }
 

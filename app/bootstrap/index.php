@@ -41,11 +41,16 @@ return function (\Aurora\Core\Kernel $kernel) {
 
     $view = new \Aurora\Core\View(\Aurora\Core\Helper::getPath($kernel->config('views')), new \Aurora\App\ViewHelper($kernel->config('date_format'), $lang));
 
-    \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $GLOBALS['user']['role']?? 0);
-    \Aurora\App\Permission::addMethod('impersonate', fn($user) => ($user['status'] ?? false) && $user['role'] <= ($GLOBALS['user']['role'] ?? 0) && \Aurora\App\Permission::can('impersonate'));
-    \Aurora\App\Permission::addMethod('edit_user', fn($user) => ($user['role'] ?? 0) <= ($GLOBALS['user']['role'] ?? 0) && \Aurora\App\Permission::can('edit_users'));
+    $user = &$GLOBALS['user'];
+    \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $user['role'] ?? 0);
+    \Aurora\App\Permission::addMethod('impersonate', function ($subject) use (&$user) {
+        return ($subject['status'] ?? false) && $subject['role'] <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('impersonate');
+    });
+    \Aurora\App\Permission::addMethod('edit_user', function ($subject) use (&$user) {
+        return ($subject['role'] ?? 0) <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('edit_users');
+    });
     \Aurora\App\Setting::set($settings);
     \Aurora\App\Media::setDirectory($kernel->config('content'));
 
-    (require('routes.php'))($kernel, $db, $view, $lang);
+    (require('routes.php'))($kernel, $db, $view, $lang, $user);
 };
