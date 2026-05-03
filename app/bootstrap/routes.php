@@ -87,23 +87,23 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get("$blog_url/author/{author}", function() use ($view, $user_mod, $link_mod, $post_mod, $theme_dir) {
         $current_page = max(1, (int) ($_GET['page'] ?? 1));
-        $user = $user_mod->get([ 'slug' => $_GET['author'] ]);
+        $author = $user_mod->get([ 'slug' => $_GET['author'] ]);
         $per_page = \Aurora\App\Setting::get('per_page');
 
-        if (!$user) {
+        if (!$author) {
             http_response_code(404);
             return;
         }
 
         $where = implode(' AND ', [
             $post_mod->getCondition([ 'status' => 1 ]),
-            'users.id = ' . ((int) $user['id']),
+            'users.id = ' . ((int) $author['id']),
         ]);
 
         return $view->get("$theme_dir/blog.html", [
             'header_links' => $link_mod->getHeaderLinks(),
-            'title' => $user['name'],
-            'user' => $user,
+            'title' => $author['name'],
+            'user' => $author,
             'posts' => $post_mod->getPage($current_page, $per_page, $where, 'date', false, true),
             'next_page' => $post_mod->isNextPageAvailable($current_page, $per_page, $where),
             'current_page' => $current_page,
