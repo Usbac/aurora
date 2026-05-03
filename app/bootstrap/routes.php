@@ -251,10 +251,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->middleware('*', function() use ($db, $view, $lang, $theme_dir, $user_mod, $getAuthToken) {
+        $token = $getAuthToken();
         $GLOBALS['user'] = $user_mod->get([
-            'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $getAuthToken())->fetchColumn(),
+            'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
             'status' => 1,
         ]);
+        $GLOBALS['user']['token'] = $token;
 
         \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $GLOBALS['user']['role'] ?? 0);
 
@@ -320,11 +322,15 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->middleware('api/*', function() {
+    $router->middleware('api/*', function() use ($db) {
         if (empty($GLOBALS['user']) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm', 'api/logout' ])) {
             http_response_code(401);
             exit;
         }
+
+        $db->query('UPDATE tokens
+            SET updated_at = ?, user_agent = ?
+            WHERE token = ?', time(), $_SERVER['HTTP_USER_AGENT'] ?? '', $GLOBALS['user']['token']);
     });
 
     $router->any('json:api/auth', function($body) use ($user_mod, $login) {
@@ -362,6 +368,24 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         return json_encode($user);
+    });
+
+    $router->get('json:api/me/sessions', function() use ($db) {
+        $user = $GLOBALS['user'];
+
+        return json_encode(array_map(fn($t) => [
+            'id' => $t['id'],
+            'user_agent' => $t['user_agent'],
+            'ip' => $t['ip'],
+            'current' => $t['token'] == $user['token'],
+            'created_at' => $t['created_at'],
+            'updated_at' => $t['updated_at'],
+        ], $db->query('SELECT * FROM tokens WHERE user_id = ?', $user['id'])->fetchAll()));
+    });
+
+    $router->delete('json:api/me/sessions/{id}', function() use ($db) {
+        $stmt = $db->query('DELETE FROM tokens WHERE id = ? AND user_id = ?', $_GET['id'], $GLOBALS['user']['id']);
+        return json_encode([ 'success' => $stmt->rowCount() > 0 ]);
     });
 
     $router->get('json:api/settings', function() use ($db, $lang) {
