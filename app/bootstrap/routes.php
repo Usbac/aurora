@@ -2,7 +2,7 @@
 
 use Aurora\Core\{DB, Helper, Kernel, Language, View};
 
-return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang, array $user) {
+return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang, ?array $user) {
     $user_mod = new \Aurora\App\Modules\User($db, $lang);
     $tag_mod = new \Aurora\App\Modules\Tag($db, $lang);
     $link_mod = new \Aurora\App\Modules\Link($db, $lang);
