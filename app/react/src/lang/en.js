@@ -212,4 +212,5 @@ export default {
     'no_items_found': 'No items found',
     'active_sessions': 'Active sessions',
     'session_deleted_successfully': 'Session has been deleted successfully',
+    'registered': 'Registered',
 };

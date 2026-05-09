@@ -35,8 +35,8 @@ const Session = ({ id, userAgent, ip, createdAt, updatedAt, current, fetchSessio
 		<Icon fill={theme != 'dark' ? 'black' : 'white'}/>
 		<div>
 			<b>{device.os}{device.version ? ` (${device.version})` : ''}{current && <span className="title-label green">Current session</span>}</b>
-			<p>Registered: {formatDate(createdAt)}</p>
-			<p>Last Active: {formatDate(updatedAt)}</p>
+			<p>{t('registered')}: {formatDate(createdAt)}</p>
+			<p>{t('last_active')}: {formatDate(updatedAt)}</p>
 			{ip && <p>IP: {ip}</p>}
 		</div>
 		{!current && <button type="button" class="delete" disabled={revoking} onClick={() => revoke()}>Revoke</button>}

@@ -212,4 +212,5 @@ export default {
     'no_items_found': 'No se encontraron elementos',
     'active_sessions': 'Sesiones Activas',
     'session_deleted_successfully': 'La sesión ha sido eliminada exitosamente',
+    'registered': 'Registrado',
 };
