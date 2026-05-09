@@ -599,3 +599,94 @@ export const Editor = ({ value, setValue, theme }) => {
         }}
     />;
 };
+
+/**
+ * Returns the OS and version based on the user agent.
+ * @param {string} user_agent The user agent.
+ * @returns {{ os: string, version: string }} The OS and version.
+ */
+export const getDeviceInfo = (user_agent) => {
+    const ua = (user_agent || '').trim();
+
+    if (!ua) {
+        return { os: 'Unknown', version: '' };
+    }
+
+    // Chrome OS
+    const chrome = ua.match(/CrOS [^ ]+ ([\d.]+)/i);
+    if (chrome) {
+        return { os: 'Chrome OS', version: chrome[1] };
+    }
+
+    // Windows
+    const windows = ua.match(/Windows NT ([\d.]+)/i);
+    if (windows) {
+        return {
+            os: 'Windows',
+            version: {
+                '10.0': '10/11',
+                '6.3': '8.1',
+                '6.2': '8',
+                '6.1': '7',
+                '6.0': 'Vista',
+                '5.2': 'XP x64',
+                '5.1': 'XP',
+                '5.0': '2000',
+            }[windows[1]] ?? windows[1],
+        };
+    }
+
+    if (/Windows Phone/i.test(ua)) {
+        const wp = ua.match(/Windows Phone(?: OS)? ([\d.]+)/i);
+        return { os: 'Windows Phone', version: wp ? wp[1] : '' };
+    }
+
+    // Android
+    const android = ua.match(/Android ([\d.]+)/i);
+    if (android) {
+        return { os: 'Android', version: android[1] };
+    }
+
+    // iOS / iPadOS (WebKit clients)
+    const ios = ua.match(/(?:CPU (?:iPhone )?OS|CPU OS) ([\d_]+)/i);
+    if (ios) {
+        const ver = ios[1].replace(/_/g, '.');
+        if (/iPad/i.test(ua)) {
+            return { os: 'iPadOS', version: ver };
+        }
+
+        if (/iPhone|iPod/i.test(ua)) {
+            return { os: 'iOS', version: ver };
+        }
+    }
+
+    // macOS
+    const mac = ua.match(/Mac OS X ([\d_]+)/i);
+    if (mac) {
+        return { os: 'macOS', version: mac[1].replace(/_/g, '.') };
+    }
+
+    // Linux / generic
+    if (/Linux/i.test(ua)) {
+        return { os: 'Linux', version: '' };
+    }
+
+    return { os: 'Unknown', version: '' };
+};
+
+/**
+ * Returns the device type based on the user agent.
+ * @param {String} user_agent The user agent.
+ * @returns {String} The device type (Mobile, Tablet, Desktop).
+ */
+export const getDeviceType = (user_agent) => {
+    if (/Mobi|Android/i.test(user_agent)) {
+        return 'Mobile';
+    }
+
+    if (/Tablet|iPad/i.test(user_agent)) {
+        return 'Tablet';
+    }
+
+    return 'Desktop';
+};
