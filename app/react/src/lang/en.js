@@ -210,4 +210,5 @@ export default {
     'settings_saved_successfully': 'Settings have been saved successfully',
     'error_saving_settings': 'Error saving settings',
     'no_items_found': 'No items found',
+    'active_sessions': 'Active sessions',
 };
