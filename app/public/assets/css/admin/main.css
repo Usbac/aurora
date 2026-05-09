@@ -1409,6 +1409,30 @@ body[data-nav-open] {
     object-fit: cover;
 }
 
+.session {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.session b {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.session > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+
+.session p {
+    margin: 0;
+}
+
 /* media */
 
 .media-options {

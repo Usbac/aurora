@@ -143,8 +143,7 @@ export const useRequest = (params) => {
         setIsError(false);
 
         try {
-            const res = await makeRequest(params);
-            setData(res);
+            setData(await makeRequest(params));
         } catch (err) {
             setIsError(true);
         } finally {

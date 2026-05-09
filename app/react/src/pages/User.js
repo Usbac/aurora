@@ -1,8 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest, formatDate, getRoleTitle, getSlug } from '../utils/utils';
-import { IconEye, IconTrash, IconUsers } from '../utils/icons';
+import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest, formatDate, getRoleTitle, getSlug, getDeviceInfo, getDeviceType } from '../utils/utils';
+import { IconDatabase, IconDesktop, IconEye, IconKey, IconMobile, IconTrash, IconUsers } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
+
+const Session = ({ id, userAgent, ip, createdAt, updatedAt, current, fetchSessions, t }) => {
+	const [ revoking, setRevoking ] = useState(false);
+	const { request } = useApi();
+	const { theme } = useOutletContext();
+	const device = getDeviceInfo(userAgent);
+	const type = getDeviceType(userAgent);
+	let Icon = IconKey;
+
+	if (!userAgent) {
+		Icon = IconKey;
+	} else if (type == 'Desktop') {
+		Icon = IconDesktop;
+	} else if (type == 'Mobile' || type == 'Tablet') {
+		Icon = IconMobile;
+	}
+
+	const revoke = () => {
+		setRevoking(true);
+		request({
+			method: 'DELETE',
+			url: '/api/me/sessions/' + id,
+		}).then(res => {
+			alert(t(res?.data?.success ? 'session_deleted_successfully' : 'error_occurred'));
+			return fetchSessions();
+		}).finally(() => setRevoking(false));
+	};
+
+	return (<div className="session">
+		<Icon fill={theme != 'dark' ? 'black' : 'white'}/>
+		<div>
+			<b>{device.os}{device.version ? ` (${device.version})` : ''}{current && <span className="title-label green">Current session</span>}</b>
+			<p>Registered: {formatDate(createdAt)}</p>
+			<p>Last Active: {formatDate(updatedAt)}</p>
+			{ip && <p>IP: {ip}</p>}
+		</div>
+		{!current && <button type="button" class="delete" disabled={revoking} onClick={() => revoke()}>Revoke</button>}
+	</div>);
+};
 
 export default function User() {
 	const { user, settings, fetch_user } = useOutletContext();
@@ -12,17 +51,23 @@ export default function User() {
 		method: 'GET',
 		url: '/api/roles',
 	});
+	const { data: sessions_req, fetch: fetch_sessions } = useRequest({
+		method: 'GET',
+		url: '/api/me/sessions',
+	});
 	const location = useLocation();
 	const navigate = useNavigate();
 	const params = new URLSearchParams(location.search);
 	const [ id, setId ] = useState(params.get('id'));
 	const roles = roles_req?.data ?? {};
+	const sessions = sessions_req?.data ?? [];
 	const is_current_user = id && user?.id == id;
 	const { t } = useI18n();
 	const { request } = useApi();
 
 	useEffect(() => {
 		fetch_roles();
+		fetch_sessions();
 
 		if (id) {
 			request({
@@ -167,6 +212,20 @@ export default function User() {
 						<Input id="password-confirm" type="password" value={data.password_confirm || ''} onChange={e => setData({ ...data, password_confirm: e.target.value })}/>
 					</div>
 				</div>
+				{sessions && is_current_user && <div class="card v-spacing">
+					<h3>{t('active_sessions')}</h3>
+					{sessions.sort((a, b) => b.updated_at - a.updated_at).map(session => <Session
+						key={session.id}
+						id={session.id}
+						userAgent={session.user_agent}
+						ip={session.ip}
+						createdAt={session.created_at}
+						updatedAt={session.updated_at}
+						current={session.current}
+						fetchSessions={fetch_sessions}
+						t={t}
+					/>)}
+				</div>}
 			</div>
 		</div>
 	</form>);
