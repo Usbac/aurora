@@ -91,7 +91,7 @@ export default {
     'error_deleting_tag': 'Error deleting tag',
     'role': 'Role',
     'email': 'Email',
-    'last_active': 'Last Active',
+    'last_active': 'Last active',
     'confirm_delete_selected_users': 'Are you sure you want to delete the selected users? This action cannot be undone.',
     'users_deleted_successfully': 'Selected users have been deleted successfully',
     'error_deleting_users': 'Error deleting selected users',

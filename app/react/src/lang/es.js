@@ -91,7 +91,7 @@ export default {
     'error_deleting_tag': 'Error al eliminar la etiqueta',
     'role': 'Rol',
     'email': 'Correo electrónico',
-    'last_active': 'Última Actividad',
+    'last_active': 'Última actividad',
     'confirm_delete_selected_users': '¿Estás seguro de que quieres eliminar los usuarios seleccionados? Esta acción no se puede deshacer.',
     'users_deleted_successfully': 'Los usuarios seleccionados han sido eliminados exitosamente',
     'error_deleting_users': 'Error al eliminar los usuarios seleccionados',
