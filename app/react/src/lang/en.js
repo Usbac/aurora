@@ -211,4 +211,5 @@ export default {
     'error_saving_settings': 'Error saving settings',
     'no_items_found': 'No items found',
     'active_sessions': 'Active sessions',
+    'session_deleted_successfully': 'Session has been deleted successfully',
 };

@@ -211,4 +211,5 @@ export default {
     'error_saving_settings': 'Error al guardar la configuración',
     'no_items_found': 'No se encontraron elementos',
     'active_sessions': 'Sesiones Activas',
+    'session_deleted_successfully': 'La sesión ha sido eliminada exitosamente',
 };
