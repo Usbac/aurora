@@ -281,78 +281,99 @@ export const Switch = (props) => {
 };
 
 /**
- * Dropdown anchored to a trigger `content`; shows `options` as menu rows with optional `condition` and `class`.
+ * Generic dropdown: `trigger` toggles a fixed-position panel with `children` (viewport-clamped positioning).
+ * @param {Object} props
+ * @param {React.ReactNode} props.trigger - The visible clickable anchor.
+ * @param {React.ReactNode} props.children - Content shown inside the floating panel when open.
+ * @param {string} [props.className] - Extra classes on the trigger wrapper (`dropdown` base is always applied).
+ * @param {string} [props.panelClassName] - Classes on the panel element (omit for unstyled panels; base layout uses inline `position`/`zIndex`).
+ * @returns {React.ReactElement}
+ */
+export const Dropdown = ({ trigger, children, className, panelClassName }) => {
+    const [ open, setOpen ] = useState(false);
+    const panel_ref = useRef(null);
+    const anchor_ref = useRef(null);
+
+    useEffect(() => {
+        const update_position = () => {
+            const MARGIN = 4;
+
+            if (!panel_ref.current || !anchor_ref.current) {
+                return;
+            }
+
+            const btn_rect = anchor_ref.current.getBoundingClientRect();
+            panel_ref.current.style.top = (btn_rect.top + btn_rect.height + MARGIN) + 'px';
+            panel_ref.current.style.left = btn_rect.left + 'px';
+            const panel_rect = panel_ref.current.getBoundingClientRect();
+
+            if ((panel_rect.x + panel_rect.width) >= (window.innerWidth - MARGIN)) {
+                panel_ref.current.style.left = ((btn_rect.x - panel_rect.width) + btn_rect.width) + 'px';
+            }
+
+            if (panel_rect.y + panel_rect.height >= (window.innerHeight - MARGIN)) {
+                panel_ref.current.style.top = (btn_rect.y - panel_rect.height - MARGIN) + 'px';
+            }
+        };
+
+        const handle_click = e => {
+            if (!anchor_ref.current?.contains(e?.target)) {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener('scroll', update_position);
+        window.addEventListener('resize', update_position);
+        document.addEventListener('click', handle_click, true);
+        update_position();
+
+        return () => {
+            document.removeEventListener('scroll', update_position);
+            window.removeEventListener('resize', update_position);
+            document.removeEventListener('click', handle_click, true);
+        };
+    }, [ open ]);
+
+    return <div
+        ref={anchor_ref}
+        class={`dropdown ${className || ''}`}
+        onClick={e => {
+            e.stopPropagation();
+            if (!panel_ref?.current?.contains(e.target)) {
+                setOpen(!open);
+            }
+        }}
+    >
+        {trigger}
+        <div
+            ref={panel_ref}
+            class={panelClassName}
+            style={{
+                display: open ? 'flex' : 'none',
+                position: 'fixed',
+                zIndex: 1,
+            }}
+        >
+            {children}
+        </div>
+    </div>;
+};
+
+/**
+ * Dropdown anchored to a trigger `content`.
  * @param {Object} props
  * @param {React.ReactNode} props.content - The visible trigger (e.g. icon).
  * @param {string} props.className - Extra class names on the wrapper.
  * @param {Array<{ content: React.ReactNode, onClick: function, class?: string, condition?: boolean }>} [props.options=[]] - Menu rows; filtered by `condition` when present.
  * @returns {React.ReactElement}
  */
-export const DropdownMenu = ({ content, className, options = [] }) => {
-    const [ open, setOpen ] = useState(false);
-    const dropdown_ref = useRef(null);
-    const button_ref = useRef(null);
-
-    useEffect(() => {
-        let updateActiveDropdown = () => {
-            const MARGIN = 4;
-
-            if (!dropdown_ref.current || !button_ref.current) {
-                return;
-            }
-
-            let btn_rect = button_ref.current.getBoundingClientRect();
-            dropdown_ref.current.style.top = (btn_rect.top + btn_rect.height + MARGIN) + 'px';
-            dropdown_ref.current.style.left = btn_rect.left + 'px';
-            let dropdown_rect = dropdown_ref.current.getBoundingClientRect();
-
-            if ((dropdown_rect.x + dropdown_rect.width) >= (window.innerWidth - MARGIN)) {
-                dropdown_ref.current.style.left = ((btn_rect.x - dropdown_rect.width) + btn_rect.width) + 'px';
-            }
-
-            if (dropdown_rect.y + dropdown_rect.height >= (window.innerHeight - MARGIN)) {
-                dropdown_ref.current.style.top = (btn_rect.y - dropdown_rect.height - MARGIN) + 'px';
-            }
-        };
-
-        let handleClick = e => {
-            if (!button_ref.current?.contains(e?.target)) {
-                setOpen(false);
-            }
-        };
-
-        document.addEventListener('scroll', updateActiveDropdown);
-        window.addEventListener('resize', updateActiveDropdown);
-        document.addEventListener('click', handleClick, true);
-        updateActiveDropdown();
-
-        return () => {
-            window.removeEventListener('scroll', updateActiveDropdown);
-            window.removeEventListener('resize', updateActiveDropdown);
-            document.removeEventListener('click', handleClick, true);
-        };
-    }, [ open ]);
-
-    return <div
-        ref={button_ref}
-        class={`dropdown ${className}`}
-        onClick={e => {
-            e.stopPropagation();
-            if (!dropdown_ref?.current?.contains(e.target)) {
-                setOpen(!open);
-            }
-        }}
-    >
-        {content}
-        <div ref={dropdown_ref} class="dropdown-menu" style={{ display: open ? 'flex' : 'none' }}>
-            {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => <div
-                key={i}
-                class={opt.class}
-                onClick={opt.onClick}
-            >{opt.content}</div>)}
-        </div>
-    </div>;
-};
+export const DropdownMenu = ({ content, className, options = [] }) => (
+    <Dropdown trigger={content} className={className} panelClassName="dropdown-menu">
+        {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => (
+            <div key={i} class={opt.class} onClick={opt.onClick}>{opt.content}</div>
+        ))}
+    </Dropdown>
+);
 
 /**
  * Formats a Unix timestamp (seconds) for a timezone and locale using `Intl.DateTimeFormat`.
