@@ -287,9 +287,10 @@ export const Switch = (props) => {
  * @param {React.ReactNode} props.children - Content shown inside the floating panel when open.
  * @param {string} [props.className] - Extra classes on the trigger wrapper (`dropdown` base is always applied).
  * @param {string} [props.panelClassName] - Classes on the panel element (omit for unstyled panels; base layout uses inline `position`/`zIndex`).
+ * @param {'left'|'right'|'center'} [props.align='right'] - Horizontal alignment vs the trigger: `auto` keeps previous behavior (left edge, then flip to align the panel’s right edge with the trigger if it overflows the viewport); `left` / `right` / `center` fix that relation and then clamp to the viewport.
  * @returns {React.ReactElement}
  */
-export const Dropdown = ({ trigger, children, className, panelClassName }) => {
+export const Dropdown = ({ trigger, children, className, panelClassName, align = 'right' }) => {
     const [ open, setOpen ] = useState(false);
     const panel_ref = useRef(null);
     const anchor_ref = useRef(null);
@@ -305,11 +306,20 @@ export const Dropdown = ({ trigger, children, className, panelClassName }) => {
             const btn_rect = anchor_ref.current.getBoundingClientRect();
             panel_ref.current.style.top = (btn_rect.top + btn_rect.height + MARGIN) + 'px';
             panel_ref.current.style.left = btn_rect.left + 'px';
-            const panel_rect = panel_ref.current.getBoundingClientRect();
 
-            if ((panel_rect.x + panel_rect.width) >= (window.innerWidth - MARGIN)) {
-                panel_ref.current.style.left = ((btn_rect.x - panel_rect.width) + btn_rect.width) + 'px';
+            const panel_rect_after_left = panel_ref.current.getBoundingClientRect();
+            const panel_w = panel_rect_after_left.width;
+
+            let ideal_left = 0;
+            switch (align) {
+                case 'right': ideal_left = btn_rect.right - panel_w; break;
+                case 'center': ideal_left = btn_rect.left + btn_rect.width / 2 - panel_w / 2; break;
+                case 'left': default: ideal_left = btn_rect.left; break;
             }
+
+            const max_left = window.innerWidth - panel_w - MARGIN;
+            panel_ref.current.style.left = Math.max(MARGIN, Math.min(ideal_left, max_left)) + 'px';
+            const panel_rect = panel_ref.current.getBoundingClientRect();
 
             if (panel_rect.y + panel_rect.height >= (window.innerHeight - MARGIN)) {
                 panel_ref.current.style.top = (btn_rect.y - panel_rect.height - MARGIN) + 'px';
@@ -332,7 +342,7 @@ export const Dropdown = ({ trigger, children, className, panelClassName }) => {
             window.removeEventListener('resize', update_position);
             document.removeEventListener('click', handle_click, true);
         };
-    }, [ open ]);
+    }, [ open, align ]);
 
     return <div
         ref={anchor_ref}
@@ -365,10 +375,11 @@ export const Dropdown = ({ trigger, children, className, panelClassName }) => {
  * @param {React.ReactNode} props.content - The visible trigger (e.g. icon).
  * @param {string} props.className - Extra class names on the wrapper.
  * @param {Array<{ content: React.ReactNode, onClick: function, class?: string, condition?: boolean }>} [props.options=[]] - Menu rows; filtered by `condition` when present.
+ * @param {'left'|'right'|'center'} [props.align] - Passed through to {@link Dropdown}.
  * @returns {React.ReactElement}
  */
-export const DropdownMenu = ({ content, className, options = [] }) => (
-    <Dropdown trigger={content} className={className} panelClassName="dropdown-menu">
+export const DropdownMenu = ({ content, className, options = [], align = 'right' }) => (
+    <Dropdown trigger={content} className={className} panelClassName="dropdown-menu" align={align}>
         {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => (
             <div key={i} class={opt.class} onClick={opt.onClick}>{opt.content}</div>
         ))}
