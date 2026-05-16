@@ -1294,6 +1294,7 @@ body[data-nav-open] {
     z-index: 1;
     box-shadow: var(--box-shadow);
     overflow: hidden;
+    cursor: default;
 }
 
 .dropdown-menu[data-active] {
