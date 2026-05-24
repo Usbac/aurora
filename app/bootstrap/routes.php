@@ -649,7 +649,8 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             exit;
         }
 
-        return file_get_contents(\Aurora\Core\Helper::getPath(\Aurora\App\Setting::get('log_file')));
+        $path = \Aurora\Core\Helper::getPath(\Aurora\App\Setting::get('log_file'));
+        return file_exists($path) ? file_get_contents($path) : '';
     });
 
     $router->delete('json:api/logs', function() {
