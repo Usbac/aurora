@@ -379,7 +379,7 @@ export const Dropdown = ({ trigger, children, className, panelClassName, align =
  * @returns {React.ReactElement}
  */
 export const DropdownMenu = ({ content, className, options = [], align = 'right' }) => (
-    <Dropdown trigger={content} className={className} panelClassName="dropdown-menu" align={align}>
+    <Dropdown trigger={content} className={className} panelClassName="dropdown-content dropdown-menu" align={align}>
         {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => (
             <div key={i} class={opt.class} onClick={opt.onClick}>{opt.content}</div>
         ))}

@@ -1298,31 +1298,6 @@ body[data-nav-open] {
     cursor: default;
 }
 
-.dropdown-content[data-active] {
-    display: flex;
-}
-
-.dropdown-menu {
-    display: none;
-    flex-direction: column;
-    position: fixed;
-    min-width: 140px;
-    max-height: 60vh;
-    border-radius: var(--border-radius);
-    color: var(--main-color);
-    background-color: var(--fourth-color);
-    padding: 8px;
-    text-align: left;
-    z-index: 1;
-    box-shadow: var(--box-shadow);
-    overflow: hidden;
-    cursor: default;
-}
-
-.dropdown-menu[data-active] {
-    display: flex;
-}
-
 .dropdown-menu > * {
     display: flex;
     align-items: center;
