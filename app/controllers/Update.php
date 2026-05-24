@@ -23,13 +23,15 @@ final class Update
     public const ERROR_CONNECTION = 1;
     public const ERROR_ZIP = 2;
     public const ERROR_COPY = 3;
+    public const ERROR_BUILD = 4;
 
     /**
      * Updates the system to the given release zip
      * @param string $zip path to the release zip file
+     * @param callable|null $on_build_output optional callback invoked with each line of React build output
      * @return int|bool true on success, an error code otherwise
      */
-    public function run(string $zip): int|bool
+    public function run(string $zip, ?callable $on_build_output = null): int|bool
     {
         $temp_dir = sys_get_temp_dir();
         $zip_dir = tempnam($temp_dir, 'aurora-update');
