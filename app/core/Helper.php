@@ -85,12 +85,10 @@ final class Helper
      */
     public static function copy(string $source, string $destination, int $permission = 0755): bool
     {
+        mkdir(is_dir($destination) ? $destination : dirname($destination), $permission, true);
+
         if (is_file($source)) {
             return copy($source, $destination);
-        }
-
-        if (!is_dir($destination)) {
-            mkdir($destination, $permission);
         }
 
         $iterator = self::getFileIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS, \RecursiveIteratorIterator::SELF_FIRST);
