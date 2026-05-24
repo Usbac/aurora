@@ -275,6 +275,76 @@ const Info = () => {
     </div>;
 };
 
+const UpdateSection = ({ user }) => {
+    const [ status, setStatus ] = useState('loading');
+    const [ release, setRelease ] = useState(null);
+    const [ updating, setUpdating ] = useState(false);
+    const { t } = useI18n();
+    const { request } = useApi();
+
+    const checkVersion = () => {
+        setStatus('loading');
+        request({
+            method: 'GET',
+            url: '/api/update_version',
+        }).then(res => {
+            const data = res?.data;
+
+            if (data === false) {
+                setStatus('up_to_date');
+            } else if (typeof data === 'object' && data !== null) {
+                setStatus('available');
+                setRelease(data);
+            } else {
+                setStatus('error');
+            }
+        }).catch(() => setStatus('error'));
+    };
+
+    useEffect(() => {
+        checkVersion();
+    }, []);
+
+    const runUpdate = () => {
+        if (!confirm(t('update_confirm', release.version))) {
+            return;
+        }
+
+        setUpdating(true);
+        request({
+            method: 'POST',
+            url: '/api/update',
+            data: { zip: release.zip },
+        }).then(res => {
+            if (res?.data?.success) {
+                setTimeout(() => location.reload(), 2000);
+            } else if (res?.data?.error) {
+                alert(t(res.data.error));
+            }
+        }).finally(() => setUpdating(false));
+    };
+
+    const title = {
+        loading: t('update_check'),
+        up_to_date: t('update_not_found'),
+        available: t('update_found', release?.version),
+        error: t('update_check_error'),
+    }[status];
+
+    return <div class="grid">
+        <div class="card v-spacing">
+            <div class="input-group">
+                <label>{title}</label>
+                <span class="description">{t('update_description')}</span>
+                <span class="description">{t('update_description_cli')} <code>php aurora update</code> {t('update_description_terminal')}</span>
+                {status === 'error'
+                    ? <button type="button" class="light" onClick={checkVersion}>{t('try_again')}</button>
+                    : <button type="button" class="light" onClick={runUpdate} disabled={status !== 'available' || updating || !user?.actions?.update}>{t(status === 'loading' || updating ? 'loading' : 'update_now')}</button>}
+            </div>
+        </div>
+    </div>;
+};
+
 const Code = ({ data, setData }) => {
     const { t } = useI18n();
 
@@ -315,7 +385,7 @@ export default function Settings() {
         { id: 'advanced', name: t('advanced'), icon: IconTerminal, section: Advanced },
         { id: 'info', name: t('server_info'), icon: IconServer, section: Info },
         { id: 'code', name: t('code'), icon: IconCode, section: Code },
-        //{ id: 'update', name: 'Update', icon: IconSync, section: <></> },
+        { id: 'update', name: t('update'), icon: IconSync, section: UpdateSection },
     ];
 
     useEffect(() => {

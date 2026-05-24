@@ -712,6 +712,35 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
+    $router->get('json:api/update_version', function() {
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            http_response_code(403);
+            exit;
+        }
+
+        return json_encode((new \Aurora\App\Update())->getLatestRelease());
+    });
+
+    $router->post('json:api/update', function($body) {
+        if (!\Aurora\App\Permission::can('update')) {
+            http_response_code(403);
+            exit;
+        }
+
+        $result = (new \Aurora\App\Update())->run($body['zip'] ?? '');
+        $error = match ($result) {
+            \Aurora\App\Update::ERROR_CONNECTION => 'update_error_connection',
+            \Aurora\App\Update::ERROR_ZIP => 'update_error_zip',
+            \Aurora\App\Update::ERROR_COPY => 'update_error_copy',
+            default => null,
+        };
+
+        return json_encode([
+            'success' => $result === true,
+            'error' => $error,
+        ]);
+    });
+
     $router->get('json:api/stats', function() use ($db, $post_mod) {
         return json_encode([
             'total_posts' => $db->count('posts', '', $post_mod->getCondition([ 'status' => 1 ])),
