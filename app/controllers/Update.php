@@ -26,7 +26,7 @@ final class Update
 
     /**
      * Updates the system to the given release zip
-     * @param string path to the release zip file
+     * @param string $zip path to the release zip file
      * @return int|bool true on success, an error code otherwise
      */
     public function run(string $zip): int|bool
