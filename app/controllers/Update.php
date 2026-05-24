@@ -5,8 +5,7 @@ namespace Aurora\App;
 final class Update
 {
     private const UPDATE_DIRECTORIES = [
-        'app/bootstrap/index.php',
-        'app/bootstrap/routes.php',
+        'app/bootstrap',
         'app/controllers',
         'app/core',
         'app/database',
