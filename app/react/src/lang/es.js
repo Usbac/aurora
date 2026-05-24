@@ -218,6 +218,7 @@ export default {
     'update_description_terminal': 'en el terminal.',
     'update_error_connection': 'El archivo de actualización no se pudo descargar.',
     'update_error_copy': 'Los archivos de actualización no se pudieron copiar.',
+    'update_error_build': 'No se pudo compilar el panel de administración React. Asegúrate de que Node.js y npm estén instalados.',
     'update_error_zip': 'El archivo de actualización no se pudo extraer.',
     'update_found': 'Aurora %s está disponible',
     'update_not_found': 'Tienes la última versión compatible de Aurora',
