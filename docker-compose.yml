@@ -6,4 +6,5 @@ services:
       - "80:80"
     volumes:
       - ./:/var/www/html
+      - ./docker/php.ini:/usr/local/etc/php/php.ini:ro
     restart: unless-stopped
