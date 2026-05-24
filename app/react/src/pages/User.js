@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest, formatDate, getRoleTitle, getSlug, getDeviceInfo, getDeviceType } from '../utils/utils';
-import { IconDatabase, IconDesktop, IconEye, IconKey, IconMobile, IconTrash, IconUsers } from '../utils/icons';
+import { getContentUrl, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest, formatDate, getRoleTitle, getSlug, getDeviceInfo, getDeviceType, Dropdown } from '../utils/utils';
+import { IconDatabase, IconDesktop, IconEye, IconInfo, IconKey, IconMobile, IconTrash, IconUsers } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
 
@@ -34,7 +34,11 @@ const Session = ({ id, userAgent, ip, createdAt, updatedAt, current, fetchSessio
 	return (<div className="session">
 		<Icon fill={theme != 'dark' ? 'black' : 'white'}/>
 		<div>
-			<b>{device.os}{device.version ? ` (${device.version})` : ''}{current && <span className="title-label green">Current session</span>}</b>
+			<b>
+				{device.os}{device.version ? ` (${device.version})` : ''}
+				{current && <span className="title-label green">Current session</span>}
+				{userAgent && <Dropdown trigger={<IconInfo fill={theme != 'dark' ? 'black' : 'white'}/>} panelClassName="dropdown-content" align="center" children={<span>{userAgent}</span>}/>}
+			</b>
 			<p>{t('registered')}: {formatDate(createdAt)}</p>
 			<p>{t('last_active')}: {formatDate(updatedAt)}</p>
 			{ip && <p>IP: {ip}</p>}

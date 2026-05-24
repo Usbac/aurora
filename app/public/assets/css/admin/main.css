@@ -1280,6 +1280,28 @@ body[data-nav-open] {
     cursor: pointer;
 }
 
+.dropdown-content {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    min-width: 140px;
+    max-width: min(360px, 90vw);
+    max-height: 60vh;
+    border-radius: var(--border-radius);
+    color: var(--main-color);
+    background-color: var(--fourth-color);
+    padding: 8px;
+    text-align: left;
+    z-index: 1;
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    cursor: default;
+}
+
+.dropdown-content[data-active] {
+    display: flex;
+}
+
 .dropdown-menu {
     display: none;
     flex-direction: column;
@@ -1432,6 +1454,16 @@ body[data-nav-open] {
 
 .session p {
     margin: 0;
+}
+
+.session .dropdown {
+    display: flex;
+    align-items: center;
+}
+
+.session .dropdown svg {
+    width: 13px;
+    height: 13px;
 }
 
 /* media */
