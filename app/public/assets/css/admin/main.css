@@ -846,7 +846,7 @@ body[data-nav-open] {
     margin-top: 20px;
 }
 
-.admin-options a[data-checked] {
+.admin-options a[data-checked="true"] {
     font-weight: var(--font-bold);
     background-color: #3b4253;
 }

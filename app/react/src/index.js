@@ -50,6 +50,10 @@ const AdminPages = () => {
         return <Navigate to="/admin" replace/>;
     }
 
+    const NavLink = ({ to, Icon, textKey, ...props }) => <RouterLink to={to} data-checked={location.pathname.startsWith(to)} {...props}>
+        <Icon/> {t(textKey)}
+    </RouterLink>
+
     return <div className="admin">
         <nav>
             <header>
@@ -57,33 +61,15 @@ const AdminPages = () => {
                 <h1>Aurora</h1>
             </header>
             <div class="admin-options">
-                <RouterLink to="/admin/dashboard">
-                    <IconHome/> {t('dashboard')}
-                </RouterLink>
-                <a href="/" target="_blank">
-                    <IconWindow/> {t('view_site')}
-                </a>
-                <RouterLink to="/admin/pages" data-separator>
-                    <IconBook/> {t('pages')}
-                </RouterLink>
-                <RouterLink to="/admin/posts">
-                    <IconPencil/> {t('posts')}
-                </RouterLink>
-                <RouterLink to="/admin/tags">
-                    <IconTag/> {t('tags')}
-                </RouterLink>
-                <RouterLink to="/admin/media">
-                    <IconImage/> {t('media')}
-                </RouterLink>
-                <RouterLink to="/admin/users">
-                    <IconUser/> {t('users')}
-                </RouterLink>
-                <RouterLink to="/admin/links">
-                    <IconLink/> {t('links')}
-                </RouterLink>
-                <RouterLink to="/admin/settings">
-                    <IconSettings/> {t('settings')}
-                </RouterLink>
+                <NavLink to="/admin/dashboard" Icon={IconHome} textKey="dashboard"/>
+                <a href="/" target="_blank"><IconWindow/> {t('view_site')}</a>
+                <NavLink to="/admin/pages" Icon={IconBook} textKey="pages" data-separator/>
+                <NavLink to="/admin/posts" Icon={IconPencil} textKey="posts"/>
+                <NavLink to="/admin/tags" Icon={IconTag} textKey="tags"/>
+                <NavLink to="/admin/media" Icon={IconImage} textKey="media"/>
+                <NavLink to="/admin/users" Icon={IconUser} textKey="users"/>
+                <NavLink to="/admin/links" Icon={IconLink} textKey="links"/>
+                <NavLink to="/admin/settings" Icon={IconSettings} textKey="settings"/>
             </div>
             <div class="current-user">
                 <RouterLink to={`/admin/users/edit?id=${user?.id}`} title={user?.name}>
