@@ -732,6 +732,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             \Aurora\App\Update::ERROR_CONNECTION => 'update_error_connection',
             \Aurora\App\Update::ERROR_ZIP => 'update_error_zip',
             \Aurora\App\Update::ERROR_COPY => 'update_error_copy',
+            \Aurora\App\Update::ERROR_BUILD => 'update_error_build',
             default => null,
         };
 
