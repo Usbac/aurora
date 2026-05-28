@@ -43,4 +43,6 @@ COPY ./php.ini /usr/local/etc/php/php.ini
 
 WORKDIR /var/www/html
 
+RUN composer install --no-interaction --prefer-dist
+
 EXPOSE 80
