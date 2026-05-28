@@ -37,11 +37,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
-COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+COPY docker/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-COPY ./php.ini /usr/local/etc/php/php.ini
+COPY docker/php.ini /usr/local/etc/php/php.ini
 
 WORKDIR /var/www/html
+
+COPY composer.json composer.lock ./
 
 RUN composer install --no-interaction --prefer-dist
 
