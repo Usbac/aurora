@@ -33,32 +33,96 @@ final class Update
      */
     public function run(string $zip, ?callable $on_build_output = null): int|bool
     {
-        $temp_dir = sys_get_temp_dir();
-        $zip_dir = tempnam($temp_dir, 'aurora-update');
+        $temp = sys_get_temp_dir();
+        $zip_file = tempnam($temp, 'aurora-update');
 
-        if (!file_put_contents($zip_dir, fopen($zip, 'r', false, self::getStreamContext()))) {
+        if (!file_put_contents($zip_file, fopen($zip, 'r', false, self::getStreamContext()))) {
             return self::ERROR_CONNECTION;
         }
 
-        $zip = new \ZipArchive();
-
-        if ($zip->open($zip_dir) !== true || !$zip->extractTo($temp_dir) || !($index = $zip->getNameIndex(0))) {
+        $archive = new \ZipArchive();
+        if ($archive->open($zip_file) !== true || !$archive->extractTo($temp) || !($index = $archive->getNameIndex(0))) {
+            @unlink($zip_file);
             return self::ERROR_ZIP;
         }
 
-        $new_version_dir = "$temp_dir/" . trim($index, '/');
+        $archive->close();
+        @unlink($zip_file);
 
-        if (!$zip->close()) {
-            return self::ERROR_ZIP;
-        }
+        $root = \Aurora\Core\Helper::getPath();
+        $update = "$temp/" . trim($index, '/');
+        $backup = "$temp/" . uniqid('aurora-backup-');
+        mkdir($backup);
 
         foreach (self::UPDATE_DIRECTORIES as $dir) {
-            if (!\Aurora\Core\Helper::copy("$new_version_dir/$dir", \Aurora\Core\Helper::getPath("/$dir"))) {
+            if (file_exists("$root/$dir") && !\Aurora\Core\Helper::copy("$root/$dir", "$backup/$dir")) {
+                $this->removeDir($backup);
                 return self::ERROR_COPY;
             }
         }
 
+        foreach (self::UPDATE_DIRECTORIES as $dir) {
+            if (!\Aurora\Core\Helper::copy("$update/$dir", "$root/$dir")) {
+                $this->restore($backup, $root);
+                $this->removeDir($backup);
+                return self::ERROR_COPY;
+            }
+        }
+
+        if (!$this->buildReact($on_build_output)) {
+            $this->restore($backup, $root);
+            $this->removeDir($backup);
+            return self::ERROR_BUILD;
+        }
+
+        $this->removeDir($backup);
         return true;
+    }
+
+    private function buildReact(?callable $on_output = null): bool
+    {
+        $react_dir = \Aurora\Core\Helper::getPath('app/react');
+
+        if (!is_file("$react_dir/package.json")) {
+            return true;
+        }
+
+        $output = [];
+        $return_var = 0;
+        exec('npm --prefix "' . $react_dir . '" install && npm --prefix "' . $react_dir . '" run build 2>&1', $output, $return_var);
+
+        if ($on_output && $output) {
+            foreach ($output as $line) {
+                $on_output($line);
+            }
+        }
+
+        return $return_var === 0;
+    }
+
+    private function restore(string $backup, string $root): void
+    {
+        foreach (self::UPDATE_DIRECTORIES as $dir) {
+            if (file_exists("$backup/$dir")) {
+                \Aurora\Core\Helper::copy("$backup/$dir", "$root/$dir");
+            }
+        }
+    }
+
+    private function removeDir(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        foreach (new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
+        ) as $item) {
+            $item->isDir() ? rmdir($item) : unlink($item);
+        }
+
+        rmdir($dir);
     }
 
     /**
