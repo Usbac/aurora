@@ -728,7 +728,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             exit;
         }
 
-        $result = (new \Aurora\App\Update())->run($body['zip'] ?? '');
+        $result = (new \Aurora\App\Update())->run($body['zip'] ?? '', fn($line) => Helper::log($line));
         $error = match ($result) {
             \Aurora\App\Update::ERROR_CONNECTION => 'update_error_connection',
             \Aurora\App\Update::ERROR_ZIP => 'update_error_zip',

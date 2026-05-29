@@ -213,6 +213,22 @@ final class Helper
         }
 
     /**
+     * Appends a message to the log file
+     * @param string $message the message
+     * @param string|null $path the log file path. Defaults to the configured log file path
+     */
+    public static function log(string $message, ?string $path = null): void
+    {
+        $path ??= ini_get('error_log');
+
+        if (empty($path)) {
+            return;
+        }
+
+        file_put_contents($path, sprintf("[%s UTC] %s\n", gmdate('d-M-Y H:i:s'), $message), FILE_APPEND | LOCK_EX);
+    }
+
+    /**
      * Removes the given directory recursively
      * @param string $dir the directory
      */

@@ -37,7 +37,10 @@ class Update extends \Aurora\Bin\BaseCommand
             return Command::SUCCESS;
         }
 
-        switch ($update->run($latest_release['zip'], fn($line) => $output->writeln($line))) {
+        switch ($update->run($latest_release['zip'], function ($line) use ($output) {
+            \Aurora\Core\Helper::log($line);
+            $output->writeln($line);
+        })) {
             case \Aurora\App\Update::ERROR_CONNECTION:
                 $io->error('The update file could not be downloaded.');
                 return Command::FAILURE;
