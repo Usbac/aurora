@@ -79,6 +79,11 @@ final class Update
         return true;
     }
 
+    /**
+     * Builds the React admin panel
+     * @param callable|null $on_output optional callback invoked with each line of React build output
+     * @return bool true if the React admin panel was built successfully, false otherwise
+     */
     private function buildReact(?callable $on_output = null): bool
     {
         $react_dir = \Aurora\Core\Helper::getPath('app/react');
@@ -100,6 +105,11 @@ final class Update
         return $return_var === 0;
     }
 
+    /**
+     * Restores the backup files
+     * @param string $backup the backup directory
+     * @param string $root the root directory
+     */
     private function restore(string $backup, string $root): void
     {
         foreach (self::UPDATE_DIRECTORIES as $dir) {
