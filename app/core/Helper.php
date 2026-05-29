@@ -211,4 +211,24 @@ final class Helper
 
             return [ '_raw' => $raw_input ];
         }
+
+    /**
+     * Removes the given directory recursively
+     * @param string $dir the directory
+     */
+    public static function removeDirRecursive(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        foreach (new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
+        ) as $item) {
+            $item->isDir() ? rmdir($item) : unlink($item);
+        }
+
+        rmdir($dir);
+    }
 }

@@ -56,7 +56,7 @@ final class Update
 
         foreach (self::UPDATE_DIRECTORIES as $dir) {
             if (file_exists("$root/$dir") && !\Aurora\Core\Helper::copy("$root/$dir", "$backup/$dir")) {
-                $this->removeDir($backup);
+                \Aurora\Core\Helper::removeDirRecursive($backup);
                 return self::ERROR_COPY;
             }
         }
@@ -64,18 +64,18 @@ final class Update
         foreach (self::UPDATE_DIRECTORIES as $dir) {
             if (!\Aurora\Core\Helper::copy("$update/$dir", "$root/$dir")) {
                 $this->restore($backup, $root);
-                $this->removeDir($backup);
+                \Aurora\Core\Helper::removeDirRecursive($backup);
                 return self::ERROR_COPY;
             }
         }
 
         if (!$this->buildReact($on_build_output)) {
             $this->restore($backup, $root);
-            $this->removeDir($backup);
+            \Aurora\Core\Helper::removeDirRecursive($backup);
             return self::ERROR_BUILD;
         }
 
-        $this->removeDir($backup);
+        \Aurora\Core\Helper::removeDirRecursive($backup);
         return true;
     }
 
@@ -107,22 +107,6 @@ final class Update
                 \Aurora\Core\Helper::copy("$backup/$dir", "$root/$dir");
             }
         }
-    }
-
-    private function removeDir(string $dir): void
-    {
-        if (!is_dir($dir)) {
-            return;
-        }
-
-        foreach (new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST,
-        ) as $item) {
-            $item->isDir() ? rmdir($item) : unlink($item);
-        }
-
-        rmdir($dir);
     }
 
     /**
