@@ -227,6 +227,8 @@ export default {
     'try_again': 'Try again',
     'no_items_found': 'No items found',
     'active_sessions': 'Active sessions',
+    'current_session': 'Current session',
+    'revoke_session': 'Revoke',
     'session_deleted_successfully': 'Session has been deleted successfully',
     'registered': 'Registered',
 };

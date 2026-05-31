@@ -36,14 +36,14 @@ const Session = ({ id, userAgent, ip, createdAt, updatedAt, current, fetchSessio
 		<div>
 			<b>
 				{device.os}{device.version ? ` (${device.version})` : ''}
-				{current && <span className="title-label green">Current session</span>}
+				{current && <span className="title-label green">{t('current_session')}</span>}
 				{userAgent && <Dropdown trigger={<IconInfo fill={theme != 'dark' ? 'black' : 'white'}/>} panelClassName="dropdown-content" align="center" children={<span>{userAgent}</span>}/>}
 			</b>
 			<p>{t('registered')}: {formatDate(createdAt)}</p>
 			<p>{t('last_active')}: {formatDate(updatedAt)}</p>
 			{ip && <p>IP: {ip}</p>}
 		</div>
-		{!current && <button type="button" class="delete" disabled={revoking} onClick={() => revoke()}>Revoke</button>}
+		{!current && <button type="button" class="delete" disabled={revoking} onClick={() => revoke()}>{t('revoke_session')}</button>}
 	</div>);
 };
 
