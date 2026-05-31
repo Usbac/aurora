@@ -63,7 +63,7 @@ export default function User() {
 	const navigate = useNavigate();
 	const params = new URLSearchParams(location.search);
 	const [ id, setId ] = useState(params.get('id'));
-	const roles = roles_req?.data ?? {};
+	const roles = Array.isArray(roles_req?.data) ? roles_req.data : [];
 	const sessions = sessions_req?.data ?? [];
 	const is_current_user = id && user?.id == id;
 	const { t } = useI18n();
@@ -194,11 +194,14 @@ export default function User() {
 					</div>
 					<div className="input-group">
 						<label htmlFor="role">{t('role')}</label>
-						<select id="role" disabled={is_loading_roles} aria-busy={is_loading_roles ? true : undefined} onChange={e => setData({ ...data, role: e.target.value })}>
-							{Object.keys(roles).map(key => {
-								const role = roles[key];
-								return <option value={role.level} selected={data.role == role.level}>{getRoleTitle(role.slug)}</option>;
-							})}
+						<select
+							id="role"
+							value={data.role ?? ''}
+							disabled={is_loading_roles}
+							aria-busy={is_loading_roles ? true : undefined}
+							onChange={e => setData({ ...data, role: parseInt(e.target.value, 10) })}
+						>
+							{roles.map(role => <option key={role.level} value={role.level}>{getRoleTitle(role.slug)}</option>)}
 						</select>
 					</div>
 					<div className="input-group">
