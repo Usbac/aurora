@@ -43,9 +43,6 @@ return function (\Aurora\Core\Kernel $kernel) {
 
     $user = &$GLOBALS['user'];
     \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $user['role'] ?? 0);
-    \Aurora\App\Permission::addMethod('impersonate', function ($subject) use (&$user) {
-        return ($subject['status'] ?? false) && $subject['role'] <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('impersonate');
-    });
     \Aurora\App\Permission::addMethod('editUser', function ($subject) use (&$user) {
         return \Aurora\App\Modules\User::canEdit($user, $subject);
     });

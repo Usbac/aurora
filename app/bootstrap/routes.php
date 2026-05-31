@@ -426,7 +426,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             'status' => 1,
         ]);
 
-        if (!\Aurora\App\Permission::can('impersonate') || empty($subject) || $subject['role'] > ($user['role'] ?? 0)) {
+        if (!\Aurora\App\Permission::can('impersonate') || empty($subject) || (int) ($subject['role'] ?? 0) >= (int) ($user['role'] ?? 0)) {
             http_response_code(403);
             exit;
         }
