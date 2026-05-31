@@ -115,24 +115,6 @@ final class UserTest extends \Aurora\Tests\Modules\Base
         $user = &$GLOBALS['user'];
         $user = [ 'role' => 1 ];
         \Aurora\App\Permission::set([ 'edit_users' => 1 ], 1);
-        \Aurora\App\Permission::addMethod('editUser', function ($subject) use (&$user) {
-            if (!\Aurora\App\Permission::can('edit_users')) {
-                return false;
-            }
-
-            if (($subject['id'] ?? null) == ($user['id'] ?? null)) {
-                return true;
-            }
-
-            $user_role = (int) ($user['role'] ?? 0);
-            $subject_role = (int) ($subject['role'] ?? 0);
-
-            if (($user['role_slug'] ?? '') === 'owner') {
-                return $subject_role <= $user_role;
-            }
-
-            return $subject_role < $user_role;
-        });
 
         $this->assertEquals([
             'slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',

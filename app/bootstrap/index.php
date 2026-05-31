@@ -47,7 +47,7 @@ return function (\Aurora\Core\Kernel $kernel) {
         return ($subject['status'] ?? false) && $subject['role'] <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('impersonate');
     });
     \Aurora\App\Permission::addMethod('editUser', function ($subject) use (&$user) {
-        return ($subject['role'] ?? 0) <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('edit_users');
+        return \Aurora\App\Modules\User::canEdit($user, $subject);
     });
     \Aurora\App\Setting::set($settings);
     \Aurora\App\Media::setDirectory($kernel->config('content'));

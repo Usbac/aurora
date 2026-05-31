@@ -76,10 +76,11 @@ final class User extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the user fields that contain an error
      * @param array $data the user fields
-     * @param [mixed] $id the user id
+     * @param mixed $id the user id
+     * @param mixed $user the user data
      * @return array the array with the user fields that contain an error
      */
-    public function checkFields(array $data, $id = null): array
+    public function checkFields(array $data, $id, $user): array
     {
         $errors = [];
 
@@ -116,15 +117,59 @@ final class User extends \Aurora\App\ModuleBase
             }
         }
 
-        $can_edit = empty($id)
-            ? \Aurora\App\Permission::can('edit_users')
-            : \Aurora\App\Permission::editUser($this->get([ 'id' => $id ]));
+        $subject = \Aurora\Core\Helper::isValidId($id) ? $this->get([ 'id' => $id ]) : null;
 
-        if (!$can_edit) {
+        if (!self::canEdit($user, $subject, (int) ($data['role'] ?? 0))) {
             $errors[] = 'no_permission';
         }
 
         return $errors;
+    }
+
+    /**
+     * Returns true if the given actor user can edit the subject user and assign the given role
+     * @param array $actor the user performing the action
+     * @param array|null $subject the user being edited, null when creating a new user
+     * @param int|null $new_role the role to assign, null to skip role assignment checks
+     * @return bool true if the actor can edit the subject user, false otherwise
+     */
+    public static function canEdit(array $actor, ?array $subject, ?int $new_role = null): bool
+    {
+        if (!\Aurora\App\Permission::can('edit_users')) {
+            return false;
+        }
+
+        $actor_role = (int) ($actor['role'] ?? 0);
+        $is_owner = ($actor['role_slug'] ?? '') === 'owner';
+
+        if ($subject !== null) {
+            if (((int) ($subject['id'] ?? 0)) === ((int) ($actor['id'] ?? 0))) {
+                return $new_role === null || $new_role <= $actor_role;
+            }
+
+            $subject_role = (int) ($subject['role'] ?? 0);
+            $can_edit_subject = $is_owner
+                ? $subject_role <= $actor_role
+                : $subject_role < $actor_role;
+
+            if (!$can_edit_subject) {
+                return false;
+            }
+        }
+
+        if ($new_role !== null) {
+            if ($new_role > $actor_role) {
+                return false;
+            }
+
+            $editing_self = $subject !== null && ((int) ($subject['id'] ?? 0)) === ((int) ($actor['id'] ?? 0));
+
+            if (!$is_owner && !$editing_self && $new_role >= $actor_role) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
