@@ -85,17 +85,20 @@ final class Helper
      */
     public static function copy(string $source, string $destination, int $permission = 0755): bool
     {
-        mkdir(is_dir($destination) ? $destination : dirname($destination), $permission, true);
-
         if (is_file($source)) {
-            return copy($source, $destination);
+            mkdir(dirname($destination), $permission, true);
+            return @copy($source, $destination);
+        }
+
+        if (!is_dir($destination) && !mkdir($destination, $permission, true)) {
+            return false;
         }
 
         $iterator = self::getFileIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS, \RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $item) {
             $new_path = "$destination/" . call_user_func([ $iterator, 'getSubPathname' ]);
             $res = $item->isDir()
-                ? (is_dir($new_path) || mkdir($new_path, $permission))
+                ? (is_dir($new_path) || mkdir($new_path, $permission, true))
                 : copy($item, $new_path);
 
             if (!$res) {
