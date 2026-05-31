@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { downloadFile, formatSize, getContentUrl, ImageDialog, Input, LoadingPage, useApi, MenuButton, Switch, Textarea } from '../utils/utils';
 import { IconCode, IconDatabase, IconNote, IconServer, IconSettings, IconSync, IconTerminal } from '../utils/icons';
-import { useLocation, useOutletContext } from 'react-router-dom';
+import { Navigate, useLocation, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
 
 const General = ({ data, setData }) => {
@@ -412,6 +412,10 @@ export default function Settings() {
         }).then(res => alert(t(res?.data?.success ? 'settings_saved_successfully' : 'error_saving_settings')))
         .finally(() => setLoading(false));
     };
+
+    if (!user?.actions?.edit_settings) {
+        return <Navigate to="/admin/dashboard" replace/>;
+    }
 
     if (!data) {
         return <LoadingPage/>;

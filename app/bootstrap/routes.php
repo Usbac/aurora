@@ -399,10 +399,17 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->get('json:api/settings', function() use ($db, $lang) {
+        $settings = \Aurora\App\Setting::get();
+
+        if (!\Aurora\App\Permission::can('edit_settings')) {
+            return json_encode(array_intersect_key($settings,
+                array_flip([ 'blog_url', 'views_count', 'language', 'timezone', 'date_format' ])));
+        }
+
         $themes_dir = Helper::getPath(Kernel::config('views') . '/themes');
 
         return json_encode([
-            ...\Aurora\App\Setting::get(),
+            ...$settings,
             'meta' => [
                 'roles' => $db->query('SELECT * FROM roles ORDER BY level ASC')->fetchAll(),
                 'themes' => array_filter(scandir($themes_dir), fn($file) => is_dir("$themes_dir/$file") && $file != '.' && $file != '..'),
@@ -726,7 +733,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->get('json:api/update_version', function() {
-        if (!\Aurora\App\Permission::can('edit_settings')) {
+        if (!\Aurora\App\Permission::can('update')) {
             http_response_code(403);
             exit;
         }

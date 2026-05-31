@@ -68,7 +68,7 @@ const AdminPages = () => {
                 <NavLink to="/admin/media" Icon={IconImage} textKey="media"/>
                 <NavLink to="/admin/users" Icon={IconUser} textKey="users"/>
                 <NavLink to="/admin/links" Icon={IconLink} textKey="links"/>
-                <NavLink to="/admin/settings" Icon={IconSettings} textKey="settings"/>
+                {user?.actions?.edit_settings && <NavLink to="/admin/settings" Icon={IconSettings} textKey="settings"/>}
             </div>
             <div class="current-user">
                 <RouterLink to={`/admin/users/edit?id=${user?.id}`} title={user?.name}>
