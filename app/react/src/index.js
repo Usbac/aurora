@@ -59,7 +59,7 @@ const AdminPages = () => {
                 <img src="/public/assets/logo.svg"/>
                 <h1>Aurora</h1>
             </header>
-            <div class="admin-options">
+            <div className="admin-options">
                 <NavLink to="/admin/dashboard" Icon={IconHome} textKey="dashboard"/>
                 <a href="/" target="_blank"><IconWindow/> {t('view_site')}</a>
                 <NavLink to="/admin/pages" Icon={IconBook} textKey="pages" data-separator/>
@@ -70,23 +70,23 @@ const AdminPages = () => {
                 <NavLink to="/admin/links" Icon={IconLink} textKey="links"/>
                 {user?.actions?.edit_settings && <NavLink to="/admin/settings" Icon={IconSettings} textKey="settings"/>}
             </div>
-            <div class="current-user">
+            <div className="current-user">
                 <RouterLink to={`/admin/users/edit?id=${user?.id}`} title={user?.name}>
                     <img src={user?.image ? getContentUrl(user.image) : '/public/assets/no-image.svg'} className={!user?.image ? 'empty-img' : ''}/>
                 </RouterLink>
-                <div id="toggle-theme" class="pointer" title={t('switch_theme')} onClick={toggleTheme} data-theme={theme}>
+                <div id="toggle-theme" className="pointer" title={t('switch_theme')} onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}
                 </div>
                 <select onChange={e => changeLanguage(e.target.value)}>
                     {getLanguages().map((lang) => <option key={lang} value={lang} selected={lang === language}>{lang.toUpperCase()}</option>)}
                 </select>
-                <div class="pointer" title={t('logout')} onClick={logout}>
+                <div className="pointer" title={t('logout')} onClick={logout}>
                     <IconLogout/>
                 </div>
             </div>
         </nav>
         {user && settings ? <Outlet context={{ user: user, fetch_user: fetch_user, settings: settings, fetch_settings: fetch_settings, theme: theme }}/> : <LoadingPage/>}
-        <div class="nav-background" onClick={() => document.body.toggleAttribute('data-nav-open')}></div>
+        <div className="nav-background" onClick={() => document.body.toggleAttribute('data-nav-open')}></div>
     </div>;
 };
 

@@ -178,7 +178,7 @@ export const Table = ({
     const Filter = ({ id }) => {
         const filter = filters[id];
 
-        return <div class="input-group">
+        return <div className="input-group">
             {filter.title && <label>{filter.title}</label>}
             <select
                 disabled={Boolean(filter.disabled)}
@@ -220,7 +220,7 @@ export const Table = ({
 
         return rows.map((row, i) => <div
             key={i}
-            class="listing-row"
+            className="listing-row"
             onClick={e => select_mode ? toggleRow(i) : (rowOnClick ? rowOnClick(row, e) : null)}
             data-selected={selected_rows.includes(i)}
         >
@@ -235,12 +235,12 @@ export const Table = ({
             selectedItems={selected_rows.length}
             options={topOptions}
         />
-        <form class="filters" onSubmit={submit}>
+        <form className="filters" onSubmit={submit}>
             {Object.keys(filters).map(key => <Filter key={key} id={key}/>)}
             <input type="text" name="search" placeholder="Search" value={input_search} onChange={e => setInputSearch(e.target.value)}/>
             <button type="submit"><IconGlass/></button>
         </form>
-        {options.length > 0 && <div class="batch-options-container">
+        {options.length > 0 && <div className="batch-options-container">
             {select_mode && <div>
                 {options.map((opt, i) => <button
                     key={i}
@@ -251,16 +251,16 @@ export const Table = ({
             </div>}
             <button onClick={() => setSelectMode(!select_mode)}>{select_mode ? 'Done' : 'Select'}</button>
         </div>}
-        <div class="listing-container">
-            <div class="listing">
-                <div class="listing-row header">
+        <div className="listing-container">
+            <div className="listing">
+                <div className="listing-row header">
                     {columns.filter(c => c.condition === undefined || c.condition).map(c => <div className={c.class} title={c.title ?? undefined}>{c.title ?? ''}</div>)}
                 </div>
             </div>
-            <div class="listing">
+            <div className="listing">
                 <Rows/>
             </div>
         </div>
-        {page_req?.data?.meta?.next_page && <button id="load-more" class="light" onClick={() => setPage(page + 1)}>Load more</button>}
+        {page_req?.data?.meta?.next_page && <button id="load-more" className="light" onClick={() => setPage(page + 1)}>Load more</button>}
     </>;
 };

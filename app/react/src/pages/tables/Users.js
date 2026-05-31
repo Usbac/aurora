@@ -28,7 +28,7 @@ export default function Users() {
         fetch_roles();
     }, []);
 
-    return <div class="content">
+    return <div className="content">
         <Table
             ref={table_ref}
             url="/api/users"
@@ -98,7 +98,7 @@ export default function Users() {
                 {
                     class: 'w100 align-center',
                     content: item => (<>
-                        <div class="user-image">
+                        <div className="user-image">
                             <img
                                 src={item.image ? getContentUrl(item.image) : '/assets/no-image.svg'}
                                 className={item.image ? '' : 'empty-img'}
@@ -109,10 +109,10 @@ export default function Users() {
                         <div>
                             <h3>
                                 {item.name}
-                                {item.id == user?.id && <span class="you-tag">{t('you')}</span>}
-                                {item.status != 1 && <span class="title-label red">{t('inactive')}</span>}
+                                {item.id == user?.id && <span className="you-tag">{t('you')}</span>}
+                                {item.status != 1 && <span className="title-label red">{t('inactive')}</span>}
                             </h3>
-                            <p class="subtitle">{item.email}</p>
+                            <p className="subtitle">{item.email}</p>
                         </div>
                     </>),
                 },

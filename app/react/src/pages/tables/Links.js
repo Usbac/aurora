@@ -12,7 +12,7 @@ export default function Links() {
     const { request } = useApi();
     const table_ref = useRef(null);
 
-    return <div class="content">
+    return <div className="content">
         <Table
             ref={table_ref}
             url="/api/links"
@@ -84,7 +84,7 @@ export default function Links() {
                 {
                     title: t('status'),
                     class: 'w20',
-                    content: link => <span class={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{t(link.status == 1 ? 'active' : 'inactive')}</span>,
+                    content: link => <span className={`title-label ${link.status == 1 ? 'green' : 'red'}`}>{t(link.status == 1 ? 'active' : 'inactive')}</span>,
                 },
                 {
                     title: t('order'),

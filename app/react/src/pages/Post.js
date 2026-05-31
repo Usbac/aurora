@@ -92,13 +92,13 @@ export default function Post() {
 
     return (<form className="content" onSubmit={submit}>
         <div>
-            <div class="page-title">
+            <div className="page-title">
                 <MenuButton/>
                 <h2>{t('post')}</h2>
             </div>
-            <div class="buttons">
+            <div className="buttons">
                 {id && <>
-                    <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_posts}>
+                    <button type="button" className="delete" onClick={remove} disabled={!user?.actions?.edit_posts}>
                         <IconTrash/>
                     </button>
                     <button type="button" onClick={() => window.open(getUrl(data.slug), '_blank').focus()}><IconEye/></button>
@@ -106,50 +106,50 @@ export default function Post() {
                 <button type="submit" disabled={!user?.actions?.edit_posts}>{t('save')}</button>
             </div>
         </div>
-        <div class="grid grid-two-columns">
-            <div class="grid">
-                <div class="card v-spacing">
-                    <div class="input-group">
+        <div className="grid grid-two-columns">
+            <div className="grid">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label htmlFor="title">{t('title')}</label>
                         <Input id="title" type="text" value={data.title} onChange={e => setData({ ...data, title: e.target.value })} charCount={true}/>
                     </div>
                 </div>
                 <Editor value={data.html} setValue={content => setData(prev => ({ ...prev, html: content }))} theme={theme}/>
             </div>
-            <div class="grid">
-                <div class="card v-spacing">
-                    <div class="input-group">
+            <div className="grid">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label>{t('image')}</label>
-                        <img src={data.image ? getContentUrl(data.image) : '/public/assets/no-image.svg'} class={`post-image pointer ${!data.image ? 'empty-img' : ''}`} alt="Post image" onClick={() => setOpenImageDialog(true)}/>
+                        <img src={data.image ? getContentUrl(data.image) : '/public/assets/no-image.svg'} className={`post-image pointer ${!data.image ? 'empty-img' : ''}`} alt="Post image" onClick={() => setOpenImageDialog(true)}/>
                         {open_image_dialog && <ImageDialog onSave={path => setData({ ...data, image: path })} onClose={() => setOpenImageDialog(false)}/>}
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="slug">{t('slug')}</label>
                         <Input id="slug" type="text" placeholder="lorem-ipsum" value={data.slug} onChange={e => setData({ ...data, slug: getSlug(e.target.value) })} maxlength="255" charCount={true}/>
                         <a href={`/${settings.blog_url}/${data.slug}`} target="_blank">{getUrl(`/${settings.blog_url}/${data.slug}`)}</a>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="description">{t('description')}</label>
                         <Textarea id="description" charCount={true} value={data.description} onChange={e => setData({ ...data, description: e.target.value })}/>
                     </div>
-                    {id && <div class="extra-data">
+                    {id && <div className="extra-data">
                         <span>ID: {id}</span>
                         <span>{t('no_views')}: {data.views}</span>
                     </div>}
                 </div>
-                <div class="card v-spacing">
-                    <div class="input-group">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label htmlFor="published-at">{t('publish_date')}</label>
                         <DateTimeInput id="published-at" value={data.published_at} onChange={value => setData({ ...data, published_at: value })}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="user-id">{t('author')}</label>
                         <select id="user-id" disabled={is_loading_users} aria-busy={is_loading_users ? true : undefined} onChange={e => setData({ ...data, user_id: e.target.value })}>
                             <option value="">{t('none')}</option>
                             {Object.values(users).map(user => <option value={user.id} selected={data.user_id == user.id}>{user.name}</option>)}
                         </select>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="published">{t('published')}</label>
                         <Switch id="published" checked={data.status == 1} onChange={e => setData({ ...data, status: e.target.checked ? 1 : 0 })}/>
                     </div>
@@ -179,20 +179,20 @@ export default function Post() {
                         </div>
                     </div>}
                 </div>
-                <div class="card v-spacing">
-                    <div class="input-group">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label htmlFor="image-alt">{t('image_alt')}</label>
                         <Input id="image-alt" type="text" value={data.image_alt} onChange={e => setData({ ...data, image_alt: e.target.value })}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="meta-title">{t('meta_title')}</label>
                         <Input id="meta-title" type="text" placeholder="lorem ipsum" value={data.meta_title} onChange={e => setData({ ...data, meta_title: e.target.value })} charCount={true}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="meta-description">{t('meta_description')}</label>
                         <Textarea id="meta-description" value={data.meta_description} onChange={e => setData({ ...data, meta_description: e.target.value })} charCount={true}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="canonical-url">{t('canonical_url')}</label>
                         <Input id="canonical-url" type="text" placeholder={`/${settings.blog_url}/lorem-ipsum`} value={data.canonical_url} onChange={e => setData({ ...data, canonical_url: e.target.value })}/>
                     </div>

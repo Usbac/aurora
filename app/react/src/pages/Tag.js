@@ -67,13 +67,13 @@ export default function Tag() {
 
     return (<form className="content" onSubmit={submit}>
         <div>
-            <div class="page-title">
+            <div className="page-title">
                 <MenuButton/>
                 <h2>{t('tag')}</h2>
             </div>
-            <div class="buttons">
+            <div className="buttons">
                 {id && <>
-                    <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_tags}>
+                    <button type="button" className="delete" onClick={remove} disabled={!user?.actions?.edit_tags}>
                         <IconTrash/>
                     </button>
                     <button type="button" onClick={() => window.open(`/${settings.blog_url}/tag/${data.slug}`, '_blank').focus()}><IconEye/></button>
@@ -81,9 +81,9 @@ export default function Tag() {
                 <button type="submit" disabled={!user?.actions?.edit_tags}>{t('save')}</button>
             </div>
         </div>
-       <div class="grid small-form">
-            <div class="card v-spacing">
-                <div class="input-group">
+       <div className="grid small-form">
+            <div className="card v-spacing">
+                <div className="input-group">
                     <label htmlFor="name">{t('name')}</label>
                     <Input
                         id="name"
@@ -93,7 +93,7 @@ export default function Tag() {
                         charCount={true}
                     />
                 </div>
-                <div class="input-group">
+                <div className="input-group">
                     <label htmlFor="slug">{t('slug')}</label>
                     <Input
                         id="slug"
@@ -103,7 +103,7 @@ export default function Tag() {
                         charCount={true}
                     />
                 </div>
-                <div class="input-group">
+                <div className="input-group">
                     <label htmlFor="description">{t('description')}</label>
                     <Textarea
                         id="description"
@@ -112,13 +112,13 @@ export default function Tag() {
                         charCount={true}
                     />
                 </div>
-                {id && <div class="extra-data">
+                {id && <div className="extra-data">
                     <span>ID: {id}</span>
                     <span>{t('no_posts')}: {data.posts}</span>
                 </div>}
             </div>
-            <div class="card v-spacing">
-                <div class="input-group">
+            <div className="card v-spacing">
+                <div className="input-group">
                     <label htmlFor="meta_title">{t('meta_title')}</label>
                     <Input
                         id="meta_title"
@@ -127,7 +127,7 @@ export default function Tag() {
                         charCount={true}
                     />
                 </div>
-                <div class="input-group">
+                <div className="input-group">
                     <label htmlFor="meta_description">{t('meta_description')}</label>
                     <Textarea
                         id="meta_description"

@@ -74,13 +74,13 @@ export default function Page() {
 
     return (<form className="content" onSubmit={submit}>
         <div>
-            <div class="page-title">
+            <div className="page-title">
                 <MenuButton/>
                 <h2>{t('page')}</h2>
             </div>
-            <div class="buttons">
+            <div className="buttons">
                 {id && <>
-                    <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_pages}>
+                    <button type="button" className="delete" onClick={remove} disabled={!user?.actions?.edit_pages}>
                         <IconTrash/>
                     </button>
                     <button type="button" onClick={() => window.open(getUrl(data.slug), '_blank').focus()}><IconEye/></button>
@@ -88,10 +88,10 @@ export default function Page() {
                 <button type="submit" disabled={!user?.actions?.edit_pages}>{t('save')}</button>
             </div>
         </div>
-        <div class="grid grid-two-columns">
-            <div class="grid">
-                <div class="card v-spacing">
-                    <div class="input-group">
+        <div className="grid grid-two-columns">
+            <div className="grid">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label htmlFor="title">{t('title')}</label>
                         <Input id="title" type="text" value={data.title} onChange={e => setData({ ...data, title: e.target.value })} charCount={true}/>
                     </div>
@@ -100,28 +100,28 @@ export default function Page() {
                     <Editor key={theme} value={data.html} setValue={content => setData(prev => ({ ...prev, html: content }))} theme={theme}/>
                 </div>
             </div>
-            <div class="grid">
-                <div class="card v-spacing">
-                    <div class="input-group">
+            <div className="grid">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label htmlFor="slug">{t('slug')}</label>
                         <Input id="slug" type="text" placeholder="lorem-ipsum" value={data.slug} onChange={e => setData({ ...data, slug: getSlug(e.target.value) })} maxLength="255" charCount={true}/>
                         <a href={getUrl(data.slug)} target="_blank">{getUrl(data.slug)}</a>
                     </div>
-                    {id && <div class="extra-data">
+                    {id && <div className="extra-data">
                         <span>ID: {id}</span>
                         <span>{t('no_views')}: {data.views}</span>
                     </div>}
                 </div>
-                <div class="card v-spacing">
-                    <div class="input-group">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label htmlFor="status">{t('published')}</label>
                         <Switch checked={data.status == 1} onChange={e => setData({ ...data, status: e.target.checked ? 1 : 0 })}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="static">{t('static')}</label>
                         <Switch checked={data.static == 1} onChange={e => setData({ ...data, static: e.target.checked ? 1 : 0 })}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="static-file">{t('static_file')}</label>
                         <select id="static-file" disabled={is_loading_view_files} aria-busy={is_loading_view_files ? true : undefined} onChange={e => setData({ ...data, static_file: e.target.value })}>
                             <option value="">{t('none')}</option>
@@ -129,16 +129,16 @@ export default function Page() {
                         </select>
                     </div>
                 </div>
-                <div class="card v-spacing">
-                    <div class="input-group">
+                <div className="card v-spacing">
+                    <div className="input-group">
                         <label htmlFor="meta-title">{t('meta_title')}</label>
                         <Input id="meta-title" type="text" placeholder="lorem ipsum" value={data.meta_title} onChange={e => setData({...data, meta_title: e.target.value})} charCount={true}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="meta-description">{t('meta_description')}</label>
                         <Textarea id="meta-description" charCount={true} value={data.meta_description} onChange={e => setData({...data, meta_description: e.target.value})}/>
                     </div>
-                    <div class="input-group">
+                    <div className="input-group">
                         <label htmlFor="canonical-url">{t('canonical_url')}</label>
                         <Input id="canonical-url" type="text" placeholder={getUrl('/about')} value={data.canonical_url} onChange={e => setData({...data, canonical_url: e.target.value})}/>
                     </div>

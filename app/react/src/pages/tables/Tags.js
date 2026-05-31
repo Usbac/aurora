@@ -12,7 +12,7 @@ export default function Tags() {
     const { request } = useApi();
     const table_ref = useRef(null);
 
-    return <div class="content">
+    return <div className="content">
         <Table
             ref={table_ref}
             url="/api/tags"

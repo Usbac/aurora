@@ -184,7 +184,7 @@ export const useElement = (url) => {
  * Renders the admin nav hamburger control; toggles `document.body` attribute `data-nav-open` on click.
  * @returns {React.ReactElement}
  */
-export const MenuButton = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list pointer" viewBox="0 0 16 16" onClick={() => document.body.toggleAttribute('data-nav-open')}>
+export const MenuButton = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list pointer" viewBox="0 0 16 16" onClick={() => document.body.toggleAttribute('data-nav-open')}>
     <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
 </svg>;
 
@@ -208,7 +208,7 @@ export const Input = (props) => {
 
     return <>
         <input {...props}/>
-        {props.charCount && <span class="char-counter">{char_count} character{char_count !== 1 ? 's' : ''}</span>}
+        {props.charCount && <span className="char-counter">{char_count} character{char_count !== 1 ? 's' : ''}</span>}
     </>;
 };
 
@@ -222,7 +222,7 @@ export const Textarea = (props) => {
 
     return <>
         <textarea {...props}></textarea>
-        {props.charCount && <span class="char-counter">{char_count} character{char_count !== 1 ? 's' : ''}</span>}
+        {props.charCount && <span className="char-counter">{char_count} character{char_count !== 1 ? 's' : ''}</span>}
     </>
 };
 
@@ -274,9 +274,9 @@ export const DateTimeInput = ({ value, onChange, ...props }) => {
 export const Switch = (props) => {
     const ref = useRef(null);
 
-    return <div class="switch">
+    return <div className="switch">
         <input ref={ref} type="checkbox" {...props}/>
-        <button type="button" class="slider" onClick={() => ref.current.click()}></button>
+        <button type="button" className="slider" onClick={() => ref.current.click()}></button>
     </div>;
 };
 
@@ -346,7 +346,7 @@ export const Dropdown = ({ trigger, children, className, panelClassName, align =
 
     return <div
         ref={anchor_ref}
-        class={`dropdown ${className || ''}`}
+        className={`dropdown ${className || ''}`}
         onClick={e => {
             e.stopPropagation();
             if (!panel_ref?.current?.contains(e.target)) {
@@ -357,7 +357,7 @@ export const Dropdown = ({ trigger, children, className, panelClassName, align =
         {trigger}
         <div
             ref={panel_ref}
-            class={panelClassName}
+            className={panelClassName}
             style={{
                 display: open ? 'flex' : 'none',
                 position: 'fixed',
@@ -381,7 +381,7 @@ export const Dropdown = ({ trigger, children, className, panelClassName, align =
 export const DropdownMenu = ({ content, className, options = [], align = 'right' }) => (
     <Dropdown trigger={content} className={className} panelClassName="dropdown-content dropdown-menu" align={align}>
         {options.filter(opt => opt.condition === undefined || opt.condition).map((opt, i) => (
-            <div key={i} class={opt.class} onClick={opt.onClick}>{opt.content}</div>
+            <div key={i} className={opt.class} onClick={opt.onClick}>{opt.content}</div>
         ))}
     </Dropdown>
 );
@@ -498,15 +498,15 @@ export const ImageDialog = ({ onSave, onClose }) => {
         }
 
         return <>
-            <div class="listing-row header">
-                <div class="w100"></div>
-                <div class="w20" title="Information">Information</div>
-                <div class="w20" title="Last modification">Last modification</div>
+            <div className="listing-row header">
+                <div className="w100"></div>
+                <div className="w20" title="Information">Information</div>
+                <div className="w20" title="Last modification">Last modification</div>
             </div>
             {files.map(file => {
                 const file_path = getContentUrl(file.path);
                 return <div
-                    class="listing-row"
+                    className="listing-row"
                     onClick={() => {
                         if (file.is_file) {
                             onSave(file.path);
@@ -516,48 +516,48 @@ export const ImageDialog = ({ onSave, onClose }) => {
                         }
                     }}
                 >
-                    <div class="w100 align-center">
+                    <div className="w100 align-center">
                         {file.is_file
-                            ? <a href={file_path} target="_blank" class="pointer" onClick={e => e.stopPropagation()}>
+                            ? <a href={file_path} target="_blank" className="pointer" onClick={e => e.stopPropagation()}>
                                 <img src={file_path} className="row-thumb"/>
                             </a>
                             : <div className="pointer custom-media folder">
                                 <IconFolderFill className="row-thumb"/>
                             </div>}
-                        <span class="file-name">{file.name}</span>
+                        <span className="file-name">{file.name}</span>
                     </div>
-                    <div class="w20 file-info">
+                    <div className="w20 file-info">
                         {file.is_file && <p>{formatSize(file.size)}</p>}
                         <p>{file.mime}</p>
                     </div>
-                    <div class="w20">{formatDate(file.time, settings.timezone, settings.language)}</div>
+                    <div className="w20">{formatDate(file.time, settings.timezone, settings.language)}</div>
                 </div>;
             })}
-            {files.length == 0 && <span class="empty">No items</span>}
+            {files.length == 0 && <span className="empty">No items</span>}
         </>;
     };
 
-    return createPortal(<div id="image-dialog" class="dialog image-dialog open">
+    return createPortal(<div id="image-dialog" className="dialog image-dialog open">
         <div>
-            <div class="top">
-                <div class="title">
+            <div className="top">
+                <div className="title">
                     <h2>Image picker</h2>
                     <span onClick={() => onClose()}><IconX/></span>
                 </div>
-                <div class="header">
+                <div className="header">
                     <div id="image-dialog-file-form">
-                        <button type="button" class="light" onClick={() => { onSave(null); onClose(); }}>Remove image</button>
+                        <button type="button" className="light" onClick={() => { onSave(null); onClose(); }}>Remove image</button>
                         <button type="button" id="image-dialog-file-button" onClick={() => input_ref.current.click()} disabled={!user?.actions?.edit_media}><IconUploadFile/></button>
-                        <input ref={input_ref} type="file" class="hidden" accept="image/*" onInput={uploadFile}/>
+                        <input ref={input_ref} type="file" className="hidden" accept="image/*" onInput={uploadFile}/>
                     </div>
                 </div>
             </div>
-            <div id="image-dialog-listing" class="listing">
+            <div id="image-dialog-listing" className="listing">
                 <ListingContent/>
             </div>
             <div className="media-paths">
                 {folders.map((folder, i) => <>
-                    <div class="pointer" onClick={() => setPath(folders.slice(0, i + 1).join('/'))}>{i == 0 ? <IconHome/> : folder}</div>
+                    <div className="pointer" onClick={() => setPath(folders.slice(0, i + 1).join('/'))}>{i == 0 ? <IconHome/> : folder}</div>
                     <span>/</span>
                 </>)}
             </div>

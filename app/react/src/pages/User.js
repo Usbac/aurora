@@ -43,7 +43,7 @@ const Session = ({ id, userAgent, ip, createdAt, updatedAt, current, fetchSessio
 			<p>{t('last_active')}: {formatDate(updatedAt)}</p>
 			{ip && <p>IP: {ip}</p>}
 		</div>
-		{!current && <button type="button" class="delete" disabled={revoking} onClick={() => revoke()}>{t('revoke_session')}</button>}
+		{!current && <button type="button" className="delete" disabled={revoking} onClick={() => revoke()}>{t('revoke_session')}</button>}
 	</div>);
 };
 
@@ -147,13 +147,13 @@ export default function User() {
 	return (<form id="user-form" className="content" onSubmit={submit}>
 		{open_image_dialog && <ImageDialog onSave={path => { setOpenImageDialog(false); setData({ ...data, image: path }); }} onClose={() => setOpenImageDialog(false)}/>}
 		<div>
-			<div class="page-title">
+			<div className="page-title">
 				<MenuButton/>
 				<h2>{t('user')}</h2>
 			</div>
-			<div class="buttons">
+			<div className="buttons">
 				{id && <>
-					{!is_current_user && <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_users}>
+					{!is_current_user && <button type="button" className="delete" onClick={remove} disabled={!user?.actions?.edit_users}>
 						<IconTrash/>
 					</button>}
 					{!is_current_user && user?.role > data.role && <button type="button" onClick={impersonate}><IconUsers/></button>}
@@ -162,37 +162,37 @@ export default function User() {
 				<button type="submit" disabled={!user?.actions?.edit_users}>{t('save')}</button>
 			</div>
 		</div>
-		<div class="grid grid-two-columns wide">
+		<div className="grid grid-two-columns wide">
 			<div>
-				<div class="user-image pointer" onClick={() => setOpenImageDialog(true)}>
-					<img src={data.image ? getContentUrl(data.image) : '/public/assets/no-image.svg'} class={!data.image ? 'empty-img' : ''}/>
+				<div className="user-image pointer" onClick={() => setOpenImageDialog(true)}>
+					<img src={data.image ? getContentUrl(data.image) : '/public/assets/no-image.svg'} className={!data.image ? 'empty-img' : ''}/>
 				</div>
-				{id && <div class="extra-info">
+				{id && <div className="extra-info">
 					<p>ID: {id}</p>
 					<p>{t('no_posts')}: {data.posts}</p>
 					<p>{t('last_active')}: {formatDate(data.last_active)}</p>
 				</div>}
 			</div>
-			<div class="grid">
-				<div class="card v-spacing">
-					<div class="input-group">
+			<div className="grid">
+				<div className="card v-spacing">
+					<div className="input-group">
 						<label htmlFor="name">{t('name')}</label>
 						<Input id="name" type="text" value={data.name} onChange={e => setData({ ...data, name: e.target.value })} charCount={true}/>
 					</div>
-					<div class="input-group">
+					<div className="input-group">
 						<label htmlFor="slug">{t('slug')}</label>
 						<Input id="slug" type="text" value={data.slug} onChange={e => setData({ ...data, slug: getSlug(e.target.value) })} charCount={true}/>
 						<a href={getUrl(`/${settings.blog_url}/author/${data.slug}`)} target="_blank">{getUrl(`/${settings.blog_url}/author/${data.slug}`)}</a>
 					</div>
-					<div class="input-group">
+					<div className="input-group">
 						<label htmlFor="email">{t('email')}</label>
 						<Input id="email" type="text" value={data.email} onChange={e => setData({ ...data, email: e.target.value })}/>
 					</div>
-					<div class="input-group">
+					<div className="input-group">
 						<label htmlFor="bio">{t('bio')}</label>
 						<Textarea id="bio" value={data.bio} onChange={e => setData({ ...data, bio: e.target.value })} charCount={true}/>
 					</div>
-					<div class="input-group">
+					<div className="input-group">
 						<label htmlFor="role">{t('role')}</label>
 						<select id="role" disabled={is_loading_roles} aria-busy={is_loading_roles ? true : undefined} onChange={e => setData({ ...data, role: e.target.value })}>
 							{Object.keys(roles).map(key => {
@@ -201,23 +201,23 @@ export default function User() {
 							})}
 						</select>
 					</div>
-					<div class="input-group">
+					<div className="input-group">
 						<label>{t('status')}</label>
 						<Switch checked={data.status == 1} onChange={e => setData({ ...data, status: e.target.checked ? 1 : 0 })} disabled={is_current_user}/>
 					</div>
 				</div>
-				<div class="card v-spacing">
+				<div className="card v-spacing">
 					<h3>{t('password')}</h3>
-					<div class="input-group">
+					<div className="input-group">
 						<label htmlFor="password">{t('new_password')}</label>
 						<Input id="password" type="password" value={data.password || ''} onChange={e => setData({ ...data, password: e.target.value })}/>
 					</div>
-					<div class="input-group">
+					<div className="input-group">
 						<label htmlFor="password-confirm">{t('password_confirm')}</label>
 						<Input id="password-confirm" type="password" value={data.password_confirm || ''} onChange={e => setData({ ...data, password_confirm: e.target.value })}/>
 					</div>
 				</div>
-				{sessions && is_current_user && <div class="card v-spacing">
+				{sessions && is_current_user && <div className="card v-spacing">
 					<h3>{t('active_sessions')}</h3>
 					{sessions.sort((a, b) => b.updated_at - a.updated_at).map(session => <Session
 						key={session.id}

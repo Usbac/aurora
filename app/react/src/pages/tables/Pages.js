@@ -12,7 +12,7 @@ export default function Pages() {
     const { request } = useApi();
     const table_ref = useRef(null);
 
-    return <div class="content">
+    return <div className="content">
         <Table
             ref={table_ref}
             url="/api/pages"
@@ -77,7 +77,7 @@ export default function Pages() {
                     class: 'w100',
                     content: page => <h3>
                         {page.title}
-                        {!page.status && <span class="title-label red">{t('draft')}</span>}
+                        {!page.status && <span className="title-label red">{t('draft')}</span>}
                     </h3>,
                 },
                 {

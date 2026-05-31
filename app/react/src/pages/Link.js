@@ -67,13 +67,13 @@ export default function Link() {
 
     return (<form className="content" onSubmit={submit}>
         <div>
-            <div class="page-title">
+            <div className="page-title">
                 <MenuButton/>
                 <h2>{t('link')}</h2>
             </div>
-            <div class="buttons">
+            <div className="buttons">
                 {id && <>
-                    <button type="button" class="delete" onClick={remove} disabled={!user?.actions?.edit_links}>
+                    <button type="button" className="delete" onClick={remove} disabled={!user?.actions?.edit_links}>
                         <IconTrash/>
                     </button>
                     <button type="button" onClick={() => window.open(data.url, '_blank').focus()}><IconEye/></button>
@@ -81,9 +81,9 @@ export default function Link() {
                 <button type="submit" disabled={!user?.actions?.edit_links}>{t('save')}</button>
             </div>
         </div>
-       <div class="small-form">
-            <div class="card v-spacing">
-                <div class="input-group">
+       <div className="small-form">
+            <div className="card v-spacing">
+                <div className="input-group">
                     <label htmlFor="title">{t('title')}</label>
                     <Input
                         id="title"
@@ -93,7 +93,7 @@ export default function Link() {
                         charCount={true}
                     />
                 </div>
-                <div class="input-group">
+                <div className="input-group">
                     <label htmlFor="url">{t('url')}</label>
                     <Input
                         id="url"
@@ -103,7 +103,7 @@ export default function Link() {
                         charCount={true}
                     />
                 </div>
-                <div class="input-group">
+                <div className="input-group">
                     <label htmlFor="order">{t('order')}</label>
                     <Input
                         id="order"
@@ -112,11 +112,11 @@ export default function Link() {
                         onChange={e => setData({...data, order: e.target.value})}
                     />
                 </div>
-                <div class="input-group">
+                <div className="input-group">
                     <label>{t('status')}</label>
                     <Switch checked={data.status == 1} onChange={e => setData({...data, status: e.target.checked })}/>
                 </div>
-                {id && <div class="extra-data">
+                {id && <div className="extra-data">
                     <span>ID: {id}</span>
                 </div>}
             </div>
