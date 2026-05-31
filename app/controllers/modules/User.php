@@ -121,7 +121,6 @@ final class User extends \Aurora\App\ModuleBase
             : \Aurora\App\Permission::edit_user($this->get([ 'id' => $id ]));
 
         if (!$can_edit) {
-            http_response_code(403);
             $errors[] = 'no_permission';
         }
 

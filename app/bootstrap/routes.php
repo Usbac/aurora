@@ -796,6 +796,11 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
         $id = $_GET['id'] ?? '';
         $errors = $mod->checkFields($body, $id);
+
+        if (array_key_exists('no_permission', $errors)) {
+            http_response_code(403);
+        }
+
         if (!empty($errors)) {
             return json_encode([
                 'success' => false,
