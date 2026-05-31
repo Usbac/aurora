@@ -218,6 +218,7 @@ export default {
     'update_error_connection': 'The update file could not be downloaded.',
     'update_error_copy': 'The update files could not be copied.',
     'update_error_build': 'The React admin panel could not be built. Make sure Node.js and npm are installed.',
+    'update_error_composer': 'PHP dependencies could not be installed. Make sure Composer is installed.',
     'update_error_zip': 'The update file could not be extracted.',
     'update_found': 'Aurora %s is available',
     'update_not_found': 'You have the latest compatible version of Aurora',

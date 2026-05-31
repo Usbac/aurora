@@ -53,6 +53,9 @@ class Update extends \Aurora\Bin\BaseCommand
             case \Aurora\App\Update::ERROR_BUILD:
                 $io->error("The React admin panel could not be built.\nPlease make sure Node.js and npm are installed and try again.");
                 return Command::FAILURE;
+            case \Aurora\App\Update::ERROR_COMPOSER:
+                $io->error("PHP dependencies could not be installed.\nPlease make sure Composer is installed and try again.");
+                return Command::FAILURE;
         }
 
         $io->success('Aurora has been succesfully updated to version ' . $latest_release['version'] . '.');

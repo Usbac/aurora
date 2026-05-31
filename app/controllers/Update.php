@@ -24,11 +24,12 @@ final class Update
     public const ERROR_ZIP = 2;
     public const ERROR_COPY = 3;
     public const ERROR_BUILD = 4;
+    public const ERROR_COMPOSER = 5;
 
     /**
      * Updates the system to the given release zip
      * @param string $zip path to the release zip file
-     * @param callable|null $on_build_output optional callback invoked with each line of React build output
+     * @param callable|null $on_build_output optional callback invoked with each line of composer and React build output
      * @return int|bool true on success, an error code otherwise
      */
     public function run(string $zip, ?callable $on_build_output = null): int|bool
@@ -62,11 +63,21 @@ final class Update
         }
 
         foreach (self::UPDATE_DIRECTORIES as $dir) {
+            if (!file_exists("$update/$dir")) {
+                continue;
+            }
+
             if (!\Aurora\Core\Helper::copy("$update/$dir", "$root/$dir")) {
                 $this->restore($backup, $root);
                 \Aurora\Core\Helper::removeDirRecursive($backup);
                 return self::ERROR_COPY;
             }
+        }
+
+        if (!$this->installComposer($on_build_output)) {
+            $this->restore($backup, $root);
+            \Aurora\Core\Helper::removeDirRecursive($backup);
+            return self::ERROR_COMPOSER;
         }
 
         if (!$this->buildReact($on_build_output)) {
@@ -77,6 +88,32 @@ final class Update
 
         \Aurora\Core\Helper::removeDirRecursive($backup);
         return true;
+    }
+
+    /**
+     * Installs PHP dependencies via Composer
+     * @param callable|null $on_output optional callback invoked with each line of Composer output
+     * @return bool true if dependencies were installed successfully, false otherwise
+     */
+    private function installComposer(?callable $on_output = null): bool
+    {
+        $root = \Aurora\Core\Helper::getPath();
+
+        if (!is_file("$root/composer.json")) {
+            return true;
+        }
+
+        $output = [];
+        $return_var = 0;
+        exec('composer install --no-interaction --prefer-dist --working-dir "' . $root . '" 2>&1', $output, $return_var);
+
+        if ($on_output && $output) {
+            foreach ($output as $line) {
+                $on_output($line);
+            }
+        }
+
+        return $return_var === 0;
     }
 
     /**
