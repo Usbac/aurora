@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { I18nProvider } from './providers/I18nProvider';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from './utils/icons';
-import { Link as RouterLink, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { getContentUrl, LoadingPage, useApi, useElement } from './utils/utils';
 import { useI18n } from './providers/I18nProvider';
 import NewPassword from './pages/NewPassword';
@@ -29,6 +29,7 @@ const AdminPages = () => {
     const [ settings, fetch_settings ] = useElement('/api/settings');
     const [ theme, setTheme ] = useState(dark_theme_element?.hasAttribute('disabled') ? 'light' : 'dark');
     const navigate = useNavigate();
+    const location = useLocation();
     const { t, language, getLanguages, changeLanguage } = useI18n();
     const { request } = useApi();
 
