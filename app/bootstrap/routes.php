@@ -363,6 +363,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('json:api/me', function() use (&$user) {
         $me = $user;
+        unset($me['password']);
         foreach (\Aurora\App\Permission::getPermissions() as $action) {
             $me['actions'][$action] = \Aurora\App\Permission::can($action);
         }

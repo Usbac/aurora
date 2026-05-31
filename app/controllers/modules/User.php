@@ -185,4 +185,15 @@ final class User extends \Aurora\App\ModuleBase
 
         return false;
     }
+
+    /**
+     * Returns the user with additional data mapped into it
+     * @param mixed $data the user data
+     * @return mixed the user with additional data
+     */
+    protected function getRowData($data): mixed
+    {
+        unset($data['password']);
+        return $data;
+    }
 }
