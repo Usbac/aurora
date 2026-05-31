@@ -255,7 +255,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $user = $user_mod->get([
             'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
             'status' => 1,
-        ]);
+        ]) ?: [];
         $user['token'] = $token;
 
         \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $user['role'] ?? 0);
@@ -276,13 +276,16 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             'status' => 1,
         ]);
 
-        return json_encode([
-            'success' => $user && (bool) $db->replace('password_restores', [
+        if ($user) {
+            $db->replace('password_restores', [
                 'user_id' => $user['id'],
                 'hash' => $hash,
                 'created_at' => time(),
-            ]) && \Aurora\Core\Kernel::config('mail')($user['email'], $lang->get('restore_your_password'), $view->get('emails/password_restore.html', [ 'hash' => $hash ])),
-        ]);
+            ]);
+            \Aurora\Core\Kernel::config('mail')($user['email'], $lang->get('restore_your_password'), $view->get('emails/password_restore.html', [ 'hash' => $hash ]));
+        }
+
+        return json_encode([ 'success' => true ]);
     });
 
     $router->post('json:api/password-reset/confirm', function($body) use ($db, $user_mod, $login) {
@@ -328,9 +331,11 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             exit;
         }
 
-        $db->query('UPDATE tokens
-            SET updated_at = ?, user_agent = ?
-            WHERE token = ?', time(), $_SERVER['HTTP_USER_AGENT'] ?? '', $user['token']);
+        if (!empty($user['id'])) {
+            $db->query('UPDATE tokens
+                SET updated_at = ?, user_agent = ?
+                WHERE token = ?', time(), $_SERVER['HTTP_USER_AGENT'] ?? '', $user['token']);
+        }
     });
 
     $router->any('json:api/auth', function($body) use ($user_mod, $login) {
@@ -735,6 +740,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             \Aurora\App\Update::ERROR_ZIP => 'update_error_zip',
             \Aurora\App\Update::ERROR_COPY => 'update_error_copy',
             \Aurora\App\Update::ERROR_BUILD => 'update_error_build',
+            \Aurora\App\Update::ERROR_COMPOSER => 'update_error_composer',
             default => null,
         };
 
