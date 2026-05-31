@@ -33,7 +33,7 @@ class Update extends \Aurora\Bin\BaseCommand
         }
 
         if (!$io->confirm("Are you sure about updating Aurora to version " . $latest_release['version'] . "?\n It is recommended to make a backup of your files before continuing.", false)) {
-            $output->writeln('The update has ben cancelled.');
+            $output->writeln('The update has been cancelled.');
             return Command::SUCCESS;
         }
 
@@ -58,7 +58,7 @@ class Update extends \Aurora\Bin\BaseCommand
                 return Command::FAILURE;
         }
 
-        $io->success('Aurora has been succesfully updated to version ' . $latest_release['version'] . '.');
+        $io->success('Aurora has been successfully updated to version ' . $latest_release['version'] . '.');
         return Command::SUCCESS;
     }
 }
