@@ -78,8 +78,8 @@ const AdminPages = () => {
                 <div id="toggle-theme" className="pointer" title={t('switch_theme')} onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}
                 </div>
-                <select onChange={e => changeLanguage(e.target.value)}>
-                    {getLanguages().map((lang) => <option key={lang} value={lang} selected={lang === language}>{lang.toUpperCase()}</option>)}
+                <select value={language} onChange={e => changeLanguage(e.target.value)}>
+                    {getLanguages().map((lang) => <option key={lang} value={lang}>{lang.toUpperCase()}</option>)}
                 </select>
                 <div className="pointer" title={t('logout')} onClick={logout}>
                     <IconLogout/>
