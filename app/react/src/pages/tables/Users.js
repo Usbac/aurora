@@ -16,11 +16,11 @@ export default function Users() {
         url: '/api/roles',
     });
     const roles_options = useMemo(() => {
-        let roles = roles_req?.data ?? {};
+        const roles = Array.isArray(roles_req?.data) ? roles_req.data : [];
 
         return [
             { key: '', title: t('all') },
-            ...Object.keys(roles).map(key => ({ key: roles[key].level, title: getRoleTitle(roles[key].slug) })),
+            ...roles.map(role => ({ key: role.level, title: getRoleTitle(role.slug) })),
         ];
     }, [ roles_req, t ]);
 
