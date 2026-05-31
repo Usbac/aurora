@@ -186,7 +186,6 @@ export default {
     'confirm_reset_views': '¿Estás seguro de restablecer el contador de vistas de todos los elementos?',
     'views_reset_successfully': 'El contador de vistas ha sido restablecido exitosamente',
     'error_resetting_views': 'Error al restablecer el contador de vistas',
-    'display_errors': 'Mostrar errores',
     'log_errors': 'Registrar errores',
     'log_file': 'Archivo de registro',
     'logs': 'Registros',

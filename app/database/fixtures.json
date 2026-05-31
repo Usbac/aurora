@@ -209,10 +209,6 @@
                 "value": ""
             },
             {
-                "key": "display_errors",
-                "value": "1"
-            },
-            {
                 "key": "log_errors",
                 "value": "1"
             },

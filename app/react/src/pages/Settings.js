@@ -194,10 +194,6 @@ const Advanced = ({ data, setData, user }) => {
     return <div class="grid">
         <div class="card v-spacing">
             <div class="input-group">
-                <label>{t('display_errors')}</label>
-                <Switch checked={data.display_errors == 1} onChange={e => setData({ ...data, display_errors: e.target.checked ? 1 : 0 })}/>
-            </div>
-            <div class="input-group">
                 <label>{t('log_errors')}</label>
                 <Switch checked={data.log_errors == 1} onChange={e => setData({ ...data, log_errors: e.target.checked ? 1 : 0 })}/>
             </div>
