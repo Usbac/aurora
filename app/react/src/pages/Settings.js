@@ -271,7 +271,7 @@ const Info = () => {
     </div>;
 };
 
-const UpdateSection = ({ user }) => {
+const Update = ({ user }) => {
     const [ status, setStatus ] = useState('loading');
     const [ release, setRelease ] = useState(null);
     const [ updating, setUpdating ] = useState(false);
@@ -335,7 +335,7 @@ const UpdateSection = ({ user }) => {
                 <span class="description">{t('update_description_cli')} <code>php aurora update</code> {t('update_description_terminal')}</span>
                 {status === 'error'
                     ? <button type="button" class="light" onClick={checkVersion}>{t('try_again')}</button>
-                    : <button type="button" class="light" onClick={runUpdate} disabled={status !== 'available' || updating || !user?.actions?.update}>{t(status === 'loading' || updating ? 'loading' : 'update_now')}</button>}
+                    : <button type="button" class="light" onClick={runUpdate} disabled={status !== 'available' || updating || !user?.actions?.update}>{t(status === 'loading' ? 'checking_versions' : (updating ? 'updating' : 'update_now'))}</button>}
             </div>
         </div>
     </div>;
@@ -381,7 +381,7 @@ export default function Settings() {
         { id: 'advanced', name: t('advanced'), icon: IconTerminal, section: Advanced },
         { id: 'info', name: t('server_info'), icon: IconServer, section: Info },
         { id: 'code', name: t('code'), icon: IconCode, section: Code },
-        { id: 'update', name: t('update'), icon: IconSync, section: UpdateSection },
+        { id: 'update', name: t('update'), icon: IconSync, section: Update },
     ];
 
     useEffect(() => {

@@ -222,6 +222,8 @@ export default {
     'update_found': 'Aurora %s is available',
     'update_not_found': 'You have the latest compatible version of Aurora',
     'update_now': 'Update now!',
+    'updating': 'Updating',
+    'checking_versions': 'Checking versions',
     'try_again': 'Try again',
     'no_items_found': 'No items found',
     'active_sessions': 'Active sessions',
