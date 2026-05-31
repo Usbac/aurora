@@ -804,7 +804,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $id = $_GET['id'] ?? '';
         $errors = $mod->checkFields($body, $id);
 
-        if (array_key_exists('no_permission', $errors)) {
+        if (in_array('no_permission', $errors, true)) {
             http_response_code(403);
         }
 
@@ -843,7 +843,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                 $valid_ids = [];
 
                 foreach ($user_mod->getPage(null, null, 'users.id IN (' . implode(',', $ids) . ')') as $row) {
-                    if (\Aurora\App\Permission::edit_user($row) && $row['id'] != $user['id']) {
+                    if (\Aurora\App\Permission::editUser($row) && $row['id'] != $user['id']) {
                         $valid_ids[] = $row['id'];
                     }
                 }
