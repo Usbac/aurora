@@ -103,8 +103,9 @@ export default function User() {
 	const impersonate = () => {
 		if (confirm(t('confirm_impersonate_user'))) {
 			request({
-				method: 'GET',
-				url: '/api/users/impersonate?id=' + id,
+				method: 'POST',
+				url: '/api/users/impersonate',
+				data: { id: id },
 			}).then(res => {
 				if (!res?.data?.success) {
 					alert(t('error_impersonating_user'));

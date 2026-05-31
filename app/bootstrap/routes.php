@@ -420,9 +420,9 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
     });
 
-    $router->get('json:api/users/impersonate', function() use ($user_mod, $login, &$user) {
+    $router->post('json:api/users/impersonate', function($body) use ($user_mod, $login, &$user) {
         $subject = $user_mod->get([
-            'id' => $_GET['id'] ?? 0,
+            'id' => $body['id'] ?? 0,
             'status' => 1,
         ]);
 

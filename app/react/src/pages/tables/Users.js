@@ -146,8 +146,9 @@ export default function Users() {
                                 onClick: () => {
                                     if (confirm(t('confirm_impersonate_user'))) {
                                         request({
-                                            method: 'GET',
-                                            url: '/api/users/impersonate?id=' + item.id,
+                                            method: 'POST',
+                                            url: '/api/users/impersonate',
+                                            data: { id: item.id },
                                         }).then(res => {
                                             if (!res?.data?.success) {
                                                 alert(t('error_impersonating_user'));
