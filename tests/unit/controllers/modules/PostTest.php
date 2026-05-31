@@ -138,28 +138,28 @@ final class PostTest extends \Aurora\Tests\Modules\Base
         $this->assertEquals([
             'title' => 'Invalid value',
             'slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
-        ], $this->mod->checkFields([ 'title' => '', 'slug' => '' ], 0));
+        ], $this->mod->checkFields([ 'title' => '', 'slug' => '' ], 0, []));
 
-        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Top countries', 'slug' => 'top-countries' ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Top countries', 'slug' => 'top-countries' ], 1, []));
 
-        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech' ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech' ], 1, []));
 
         $this->assertEquals([
             'slug' => 'Slug already in use, try a different one',
-        ], $this->mod->checkFields([ 'title' => 'Top beaches', 'slug' => 'top-beaches' ], 1));
+        ], $this->mod->checkFields([ 'title' => 'Top beaches', 'slug' => 'top-beaches' ], 1, []));
 
         \Aurora\App\Permission::set([ 'edit_posts' => 2 ], 1);
         $this->assertEquals([
             'You do not have permissions to perform this action',
-        ], $this->mod->checkFields([ 'title' => 'Travel', 'slug' => 'travel' ], 0));
+        ], $this->mod->checkFields([ 'title' => 'Travel', 'slug' => 'travel' ], 0, []));
 
         \Aurora\App\Permission::set([ 'edit_posts' => 1, 'publish_posts' => 2 ], 1);
 
-        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech', 'status' => 0 ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech', 'status' => 0 ], 1, []));
 
         $this->assertEquals([
             'You are not allowed to handle published posts',
-        ], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech', 'status' => 1 ], 1));
+        ], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech', 'status' => 1 ], 1, []));
     }
 
     public function testGetCondition(): void

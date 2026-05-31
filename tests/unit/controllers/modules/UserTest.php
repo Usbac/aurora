@@ -116,36 +116,60 @@ final class UserTest extends \Aurora\Tests\Modules\Base
         $user = [ 'role' => 1 ];
         \Aurora\App\Permission::set([ 'edit_users' => 1 ], 1);
         \Aurora\App\Permission::addMethod('editUser', function ($subject) use (&$user) {
-            return ($subject['role'] ?? 0) <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('edit_users');
+            if (!\Aurora\App\Permission::can('edit_users')) {
+                return false;
+            }
+
+            if (($subject['id'] ?? null) == ($user['id'] ?? null)) {
+                return true;
+            }
+
+            $user_role = (int) ($user['role'] ?? 0);
+            $subject_role = (int) ($subject['role'] ?? 0);
+
+            if (($user['role_slug'] ?? '') === 'owner') {
+                return $subject_role <= $user_role;
+            }
+
+            return $subject_role < $user_role;
         });
 
         $this->assertEquals([
             'slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
             'password' => 'Password must be at least 8 characters long',
             'email' => 'Invalid value',
-        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => '' ]));
+        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => '' ], '', $user));
 
         $this->assertEquals([
             'You do not have permissions to perform this action',
-        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com' ], 1));
+        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com' ], 1, $user));
 
-        $user = [ 'role' => 2 ];
+        $user = [ 'id' => 3, 'role' => 3, 'role_slug' => 'admin' ];
 
-        $this->assertEquals([], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com' ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com' ], 1, $user));
+
+        $user = [ 'id' => 3, 'role' => 3, 'role_slug' => 'admin' ];
+
+        $this->assertContains('no_permission', $this->mod->checkFields([
+            'name' => 'John',
+            'slug' => 'john',
+            'email' => 'john@mail.com',
+            'role' => 3,
+        ], 2, $user));
 
         $this->assertEquals([
             'slug' => 'Slug already in use, try a different one',
-        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'leon-kennedy', 'email' => 'john@mail.com' ], 1));
+        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'leon-kennedy', 'email' => 'john@mail.com' ], 1, $user));
 
         $this->assertEquals([
             'password' => 'Password must be at least 8 characters long',
-        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123', 'password_confirm' => '123' ], 1));
+        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123', 'password_confirm' => '123' ], 1, $user));
 
         $this->assertEquals([
             'password' => 'Password and its confirmation must match',
-        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123456789', 'password_confirm' => '123' ], 1));
+        ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123456789', 'password_confirm' => '123' ], 1, $user));
 
-        $this->assertEquals([], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123456789', 'password_confirm' => '123456789' ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123456789', 'password_confirm' => '123456789' ], 1, $user));
     }
 
     public function testGetCondition(): void

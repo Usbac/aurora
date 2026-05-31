@@ -8,7 +8,7 @@ interface ModuleInterface
 
     public function save(int $id, array $data): bool;
 
-    public function checkFields(array $data, $id = null): array;
+    public function checkFields(array $data, $id, $user): array;
 
     public function getCondition(array $search): string;
 }

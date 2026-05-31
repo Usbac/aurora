@@ -71,18 +71,18 @@ final class TagTest extends \Aurora\Tests\Modules\Base
         $this->assertEquals([
             'name' => 'Invalid value',
             'slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
-        ], $this->mod->checkFields([ 'name' => '', 'slug' => '' ], 0));
+        ], $this->mod->checkFields([ 'name' => '', 'slug' => '' ], 0, []));
 
-        $this->assertEquals([], $this->mod->checkFields([ 'name' => 'Tech', 'slug' => 'tech' ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'name' => 'Tech', 'slug' => 'tech' ], 1, []));
 
         $this->assertEquals([
             'slug' => 'Slug already in use, try a different one',
-        ], $this->mod->checkFields([ 'name' => 'Health & Wellness', 'slug' => 'health-wellness' ], 10000));
+        ], $this->mod->checkFields([ 'name' => 'Health & Wellness', 'slug' => 'health-wellness' ], 10000, []));
 
         \Aurora\App\Permission::set([ 'edit_tags' => 2 ], 1);
         $this->assertEquals([
             'You do not have permissions to perform this action',
-        ], $this->mod->checkFields([ 'name' => 'Travel', 'slug' => 'travel' ], 0));
+        ], $this->mod->checkFields([ 'name' => 'Travel', 'slug' => 'travel' ], 0, []));
     }
 
     public function testGetCondition(): void

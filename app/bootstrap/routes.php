@@ -789,7 +789,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode(array_values($view_files));
     });
 
-    $router->post('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod) {
+    $router->post('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod, $user) {
         switch ($_GET['mod']) {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;
@@ -802,7 +802,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         $id = $_GET['id'] ?? '';
-        $errors = $mod->checkFields($body, $id);
+        $errors = $mod->checkFields($body, $id, $user);
 
         if (in_array('no_permission', $errors, true)) {
             http_response_code(403);

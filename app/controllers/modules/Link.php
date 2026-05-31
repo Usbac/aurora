@@ -48,10 +48,11 @@ final class Link extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the link fields that contain an error
      * @param array $data the link fields
-     * @param [mixed] $id the link id
+     * @param mixed $id the link id
+     * @param mixed $user the user data
      * @return array the array with the link fields that contain an error
      */
-    public function checkFields(array $data, $id = null): array
+    public function checkFields(array $data, $id, $user): array
     {
         $errors = [];
 

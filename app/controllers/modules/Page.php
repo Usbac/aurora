@@ -43,10 +43,11 @@ final class Page extends \Aurora\App\ModuleBase
     /**
      * Returns an array with all the page fields that contain an error
      * @param array $data the page fields
-     * @param [mixed] $id the page id
+     * @param mixed $id the page id
+     * @param mixed $user the user data
      * @return array the array with the page fields that contain an error
      */
-    public function checkFields(array $data, $id = null): array
+    public function checkFields(array $data, $id, $user): array
     {
         $errors = [];
 
