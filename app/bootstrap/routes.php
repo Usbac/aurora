@@ -255,8 +255,11 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $user = $user_mod->get([
             'id' => $db->query('SELECT user_id FROM tokens WHERE token = ?', $token)->fetchColumn(),
             'status' => 1,
-        ]) ?: [];
-        $user['token'] = $token;
+        ]) ?: null;
+
+        if ($user) {
+            $user['token'] = $token;
+        }
 
         \Aurora\App\Permission::set($db->query('SELECT permission, role_level FROM roles_permissions ORDER BY permission')->fetchAll(\PDO::FETCH_KEY_PAIR), $user['role'] ?? 0);
 
@@ -368,9 +371,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('json:api/me', function() use (&$user) {
         $me = $user;
-        unset($me['password']);
-        foreach (\Aurora\App\Permission::getPermissions() as $action) {
-            $me['actions'][$action] = \Aurora\App\Permission::can($action);
+
+        if ($me) {
+            unset($me['password']);
+            foreach (\Aurora\App\Permission::getPermissions() as $action) {
+                $me['actions'][$action] = \Aurora\App\Permission::can($action);
+            }
         }
 
         return json_encode($me);
