@@ -46,7 +46,7 @@ return function (\Aurora\Core\Kernel $kernel) {
     \Aurora\App\Permission::addMethod('impersonate', function ($subject) use (&$user) {
         return ($subject['status'] ?? false) && $subject['role'] <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('impersonate');
     });
-    \Aurora\App\Permission::addMethod('edit_user', function ($subject) use (&$user) {
+    \Aurora\App\Permission::addMethod('editUser', function ($subject) use (&$user) {
         return ($subject['role'] ?? 0) <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('edit_users');
     });
     \Aurora\App\Setting::set($settings);
