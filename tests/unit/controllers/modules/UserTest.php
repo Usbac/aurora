@@ -115,7 +115,7 @@ final class UserTest extends \Aurora\Tests\Modules\Base
         $user = &$GLOBALS['user'];
         $user = [ 'role' => 1 ];
         \Aurora\App\Permission::set([ 'edit_users' => 1 ], 1);
-        \Aurora\App\Permission::addMethod('edit_user', function ($subject) use (&$user) {
+        \Aurora\App\Permission::addMethod('editUser', function ($subject) use (&$user) {
             return ($subject['role'] ?? 0) <= ($user['role'] ?? 0) && \Aurora\App\Permission::can('edit_users');
         });
 
