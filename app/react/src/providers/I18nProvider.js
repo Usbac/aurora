@@ -28,11 +28,9 @@ export const I18nProvider = ({ children, defaultLanguage = 'en' }) => {
     }, [ language ]);
 
     const t = (key, ...params) => {
-        const translation = translations[language]?.[key];
-
-        if (!translation) {
-            throw new Error(`Unknown translation key: "${key}" for language "${language}"`);
-        }
+        const translation = translations[language]?.[key]
+            ?? translations['en'][key]
+            ?? key;
 
         let i = 0;
         return translation.replace(/%s|%d|%f/g, e => params[i++] ?? e);
@@ -67,6 +65,7 @@ export const I18nProvider = ({ children, defaultLanguage = 'en' }) => {
  *   getLanguages: function (): string[]
  * }}
  *   `t` looks up the key in the active locale and replaces `%s`, `%d`, and `%f` placeholders in order with the extra arguments.
+ *   Falls back to English, then to the key itself when a translation is missing.
  * @throws {Error} When used outside an {@link I18nProvider}.
  */
 export const useI18n = () => {
