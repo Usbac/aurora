@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApi, useElement } from '../utils/utils';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
 
 export default function Login() {
@@ -53,8 +53,7 @@ export default function Login() {
     }
 
     if (user) {
-        navigate('/admin/dashboard');
-        return null;
+        return <Navigate to="/admin/dashboard" replace/>;
     }
 
     return <div className="login-page">
