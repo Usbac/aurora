@@ -172,7 +172,7 @@ export const useElement = (url) => {
 
     useEffect(() => {
         fetch();
-    }, []);
+    }, [ fetch ]);
 
     return [
         is_loading ? undefined : (data?.data && !is_error ? data.data : null),
