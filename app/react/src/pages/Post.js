@@ -144,9 +144,9 @@ export default function Post() {
                     </div>
                     <div className="input-group">
                         <label htmlFor="user-id">{t('author')}</label>
-                        <select id="user-id" disabled={is_loading_users} aria-busy={is_loading_users ? true : undefined} onChange={e => setData({ ...data, user_id: e.target.value })}>
+                        <select id="user-id" value={data.user_id ?? ''} disabled={is_loading_users} aria-busy={is_loading_users ? true : undefined} onChange={e => setData({ ...data, user_id: e.target.value })}>
                             <option value="">{t('none')}</option>
-                            {Object.values(users).map(user => <option value={user.id} selected={data.user_id == user.id}>{user.name}</option>)}
+                            {Object.values(users).map(user => <option key={user.id} value={user.id}>{user.name}</option>)}
                         </select>
                     </div>
                     <div className="input-group">

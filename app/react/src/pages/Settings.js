@@ -32,8 +32,8 @@ const General = ({ data, setData }) => {
             <div className="input-group-container">
                 <div className="input-group">
                     <label>{t('theme')}</label>
-                    <select onChange={e => setData({ ...data, theme: e.target.value })}>
-                        {Object.keys(data.meta.themes).map(theme => <option value={theme} selected={data.theme == data.meta.themes[theme]}>{data.meta.themes[theme]}</option>)}
+                    <select value={data.theme} onChange={e => setData({ ...data, theme: e.target.value })}>
+                        {Object.values(data.meta.themes).map(theme => <option key={theme} value={theme}>{theme}</option>)}
                     </select>
                 </div>
                 <div className="input-group">
@@ -45,8 +45,8 @@ const General = ({ data, setData }) => {
                 <div className="input-group">
                     <label>{t('website_language')}</label>
                     <span className="description">{t('website_language_description')}</span>
-                    <select onChange={e => setData({ ...data, language: e.target.value })}>
-                        {data.meta.languages.map(lang => <option value={lang} selected={data.language == lang}>{lang}</option>)}
+                    <select value={data.language} onChange={e => setData({ ...data, language: e.target.value })}>
+                        {data.meta.languages.map(lang => <option key={lang} value={lang}>{lang}</option>)}
                     </select>
                 </div>
                 <div className="input-group">
@@ -58,8 +58,8 @@ const General = ({ data, setData }) => {
             <div className="input-group-container">
                 <div className="input-group">
                     <label>{t('timezone')}</label>
-                    <select onChange={e => setData({ ...data, timezone: e.target.value })}>
-                        {data.meta.timezones.map(tz => <option value={tz} selected={data.timezone == tz}>{tz.replace('_', ' ')}</option>)}
+                    <select value={data.timezone} onChange={e => setData({ ...data, timezone: e.target.value })}>
+                        {data.meta.timezones.map(tz => <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>)}
                     </select>
                 </div>
                 <div className="input-group">

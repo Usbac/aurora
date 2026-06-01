@@ -123,9 +123,9 @@ export default function Page() {
                     </div>
                     <div className="input-group">
                         <label htmlFor="static-file">{t('static_file')}</label>
-                        <select id="static-file" disabled={is_loading_view_files} aria-busy={is_loading_view_files ? true : undefined} onChange={e => setData({ ...data, static_file: e.target.value })}>
+                        <select id="static-file" value={data.static_file ?? ''} disabled={is_loading_view_files} aria-busy={is_loading_view_files ? true : undefined} onChange={e => setData({ ...data, static_file: e.target.value })}>
                             <option value="">{t('none')}</option>
-                            {view_files.map(file => <option key={file} value={file} selected={file === data.static_file}>{file}</option>)}
+                            {view_files.map(file => <option key={file} value={file}>{file}</option>)}
                         </select>
                     </div>
                 </div>
