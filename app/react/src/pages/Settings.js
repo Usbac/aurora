@@ -77,19 +77,19 @@ const Meta = ({ data, setData }) => {
     return <div className="grid">
         <div className="card v-spacing">
             <div className="input-group">
-                <label for="meta_title">{t('meta_title')}</label>
+                <label htmlFor="meta_title">{t('meta_title')}</label>
                 <Input id="meta_title" type="text" value={data.meta_title} onChange={e => setData({ ...data, meta_title: e.target.value })} charCount/>
             </div>
             <div className="input-group">
-                <label for="description">{t('description')}</label>
+                <label htmlFor="description">{t('description')}</label>
                 <Textarea value={data.description} onChange={e => setData({ ...data, description: e.target.value })} charCount/>
             </div>
             <div className="input-group">
-                <label for="meta_description">{t('meta_description')}</label>
+                <label htmlFor="meta_description">{t('meta_description')}</label>
                 <Textarea value={data.meta_description} onChange={e => setData({ ...data, meta_description: e.target.value })} charCount/>
             </div>
             <div className="input-group">
-                <label for="meta_keywords">{t('meta_keywords')}</label>
+                <label htmlFor="meta_keywords">{t('meta_keywords')}</label>
                 <Input type="text" value={data.meta_keywords} onChange={e => setData({ ...data, meta_keywords: e.target.value })}/>
             </div>
         </div>
@@ -140,7 +140,7 @@ const Data = ({ data, setData, user }) => {
                 <button type="button" className="light" onClick={downloadDatabase} disabled={!user?.actions?.edit_settings}>.json</button>
             </div>
             <div id="db-upload" className="input-group">
-                <label for="database">{t('upload_database')}</label>
+                <label htmlFor="database">{t('upload_database')}</label>
                 <div className="input-file">
                     <input ref={file_ref} id="database" type="file" name="db" className="hidden" onChange={e => setDatabaseFile(e.target.files[0])}/>
                     <input type="text" disabled value={database_file?.name}/>
@@ -198,7 +198,7 @@ const Advanced = ({ data, setData, user }) => {
                 <Switch checked={data.log_errors == 1} onChange={e => setData({ ...data, log_errors: e.target.checked ? 1 : 0 })}/>
             </div>
             <div className="input-group">
-                <label for="log_file">{t('log_file')}</label>
+                <label htmlFor="log_file">{t('log_file')}</label>
                 <span className="description">Relative to the Aurora root folder</span>
                 <input id="log_file" name="log_file" type="text" value={data.log_file} onChange={e => setData({ ...data, log_file: e.target.value })}/>
             </div>
@@ -347,17 +347,17 @@ const Code = ({ data, setData }) => {
     return <div className="grid">
         <div className="card v-spacing">
             <div className="input-group">
-                <label for="site-header">{t('site_header')}</label>
+                <label htmlFor="site-header">{t('site_header')}</label>
                 <span className="description">Code here will be injected into the header of all pages.</span>
                 <textarea id="site-header" name="header_code" className="code" value={data.header_code} onChange={e => setData({ ...data, header_code: e.target.value })}></textarea>
             </div>
             <div className="input-group">
-                <label for="site-footer">{t('site_footer')}</label>
+                <label htmlFor="site-footer">{t('site_footer')}</label>
                 <span className="description">Code here will be injected into the footer of all pages.</span>
                 <textarea id="site-footer" name="footer_code" className="code" value={data.footer_code} onChange={e => setData({ ...data, footer_code: e.target.value })}></textarea>
             </div>
             <div className="input-group">
-                <label for="post-code">{t('post_code')}</label>
+                <label htmlFor="post-code">{t('post_code')}</label>
                 <span className="description">Code here will be injected at the bottom of all post pages. Useful for things like adding a comment system.</span>
                 <textarea id="post-code" name="post_code" className="code" value={data.post_code} onChange={e => setData({ ...data, post_code: e.target.value })}></textarea>
             </div>
