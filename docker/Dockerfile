@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY app/react/package*.json ./
 
+RUN mkdir -p /public/assets/js
+
 RUN npm install
 
 COPY app/react .
@@ -46,5 +48,10 @@ WORKDIR /var/www/html
 COPY composer.json composer.lock ./
 
 RUN composer install --no-interaction --prefer-dist
+
+COPY . .
+
+COPY --from=frontend /public/assets/js/admin.js app/public/assets/js/admin.js
+COPY --from=frontend /public/assets/js/tinymce app/public/assets/js/tinymce
 
 EXPOSE 80
