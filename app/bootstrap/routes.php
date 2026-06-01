@@ -834,6 +834,11 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             exit;
         }
 
+        if (empty($ids)) {
+            http_response_code(400);
+            exit;
+        }
+
         $success = match ($mod_str) {
             'pages' => $page_mod->remove($ids),
             'posts' => $post_mod->remove($ids),
