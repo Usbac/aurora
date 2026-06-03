@@ -205,12 +205,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $login = function($user_id) use ($db, $setAuthToken) {
-        $data = [ 'token' => bin2hex(random_bytes(64)) ];
+        $token = bin2hex(random_bytes(64));
 
         try {
-            $data['success'] = (bool) $db->insert('tokens', [
+            $success = (bool) $db->insert('tokens', [
                 'user_id' => $user_id,
-                'token' => $data['token'],
+                'token' => $token,
                 'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
                 'ip' => Helper::getUserIP(),
                 'created_at' => time(),
@@ -223,19 +223,17 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             ];
         }
 
-        if ($data['success']) {
+        if ($success) {
             $total = (int) $db->query('SELECT COUNT(*) FROM tokens WHERE user_id = ?', $user_id)->fetchColumn();
             $to_remove = (int) ($total - \Aurora\Core\Kernel::config('max_active_sessions'));
             if ($to_remove > 0) {
                 $db->query('DELETE FROM tokens WHERE user_id = ? ORDER BY created_at ASC, token ASC LIMIT ?', $user_id, $to_remove);
             }
 
-            $setAuthToken($data['token'], time() + (60 * 60 * 24 * 30)); // 30 days
-        } else {
-            unset($data['token']);
+            $setAuthToken($token, time() + (60 * 60 * 24 * 30)); // 30 days
         }
 
-        return $data;
+        return [ 'success' => $success ];
     };
 
     /**
@@ -318,6 +316,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             }
 
             $db->delete('password_restores', $hash, 'hash');
+            $db->query('DELETE FROM tokens WHERE user_id = ?', $user['id']);
             $db->update($user_mod->getTable(), [ 'password' => $user_mod->getPassword($password) ], $user['id']);
             return json_encode($login($user['id']));
         }
@@ -373,7 +372,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $me = $user;
 
         if ($me) {
-            unset($me['password']);
+            unset($me['password'], $me['token']);
             foreach (\Aurora\App\Permission::getPermissions() as $action) {
                 $me['actions'][$action] = \Aurora\App\Permission::can($action);
             }
