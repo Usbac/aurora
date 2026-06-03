@@ -77,6 +77,37 @@ final class Helper
     }
 
     /**
+     * Returns the Authorization header value from the current request
+     * @return string the Authorization header value, or an empty string if missing
+     */
+    public static function getAuthorizationHeader(): string
+    {
+        foreach ([ 'HTTP_AUTHORIZATION', 'REDIRECT_HTTP_AUTHORIZATION' ] as $key) {
+            if (!empty($_SERVER[$key])) {
+                return $_SERVER[$key];
+            }
+        }
+
+        $headers = function_exists('getallheaders') ? getallheaders() : [];
+
+        if ($headers === false) {
+            $headers = [];
+        }
+
+        if (function_exists('apache_request_headers')) {
+            $headers = array_merge($headers, apache_request_headers() ?: []);
+        }
+
+        foreach ($headers as $name => $value) {
+            if (strcasecmp($name, 'Authorization') === 0) {
+                return $value;
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Copies the given source (file or directory) to the given destination
      * @param string $source the source
      * @param string $destination the destination

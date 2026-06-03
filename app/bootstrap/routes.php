@@ -15,9 +15,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     $router = $kernel->router;
 
     $getAuthToken = function() {
-        $headers = getallheaders();
-
-        return preg_match('/Bearer\s(\S+)/', $headers['Authorization'] ?? '', $matches)
+        return preg_match('/Bearer\s(\S+)/i', Helper::getAuthorizationHeader(), $matches)
             ? $matches[1]
             : ($_COOKIE['auth_token'] ?? false);
     };
