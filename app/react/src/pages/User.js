@@ -81,7 +81,7 @@ export default function User() {
         } else {
             setData({});
         }
-    }, []);
+    }, [ id ]);
 
     const remove = () => {
         if (confirm(t('confirm_delete_user', data.name))) {
