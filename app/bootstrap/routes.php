@@ -683,7 +683,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode([ 'success' => !file_exists($path) || (is_writable($path) && unlink($path)) ]);
     });
 
-    $router->get('json:api/reset_views_count', function() use ($db) {
+    $router->post('json:api/reset_views_count', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
             http_response_code(403);
             exit;

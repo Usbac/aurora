@@ -127,7 +127,7 @@ const Data = ({ data, setData, user }) => {
     const resetViewsCount = () => {
         if (confirm(t('confirm_reset_views'))) {
             request({
-                method: 'GET',
+                method: 'POST',
                 url: '/api/reset_views_count',
             }).then(res => alert(t(res?.data?.success ? 'views_reset_successfully' : 'error_resetting_views')));
         }
