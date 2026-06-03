@@ -340,7 +340,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
     });
 
-    $router->any('json:api/auth', function($body) use ($user_mod, $login) {
+    $router->post('json:api/auth', function($body) use ($user_mod, $login) {
         $email = $body['email'] ?? '';
         $password = $body['password'] ?? '';
         $user = $user_mod->get([
