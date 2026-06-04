@@ -16,7 +16,8 @@
     "scripts": {
         "post-autoload-dump": [
             "mkdir -p public/content"
-        ]
+        ],
+        "test": "vendor/bin/phpunit"
     },
     "require": {
         "php": ">=8.0.0",
