@@ -17,7 +17,7 @@
         "post-autoload-dump": [
             "mkdir -p public/content"
         ],
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit -c phpunit.xml.dist"
     },
     "require": {
         "php": ">=8.0.0",

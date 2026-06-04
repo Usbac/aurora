@@ -17,5 +17,5 @@ composer test
 Or directly:
 
 ```bash
-vendor/bin/phpunit
+vendor/bin/phpunit -c phpunit.xml.dist
 ```
