@@ -202,6 +202,21 @@ final class User extends \Aurora\App\ModuleBase
     }
 
     /**
+     * Returns the user id if the given credentials are valid, false otherwise
+     * @param string $email the user email
+     * @param string $password the plain password
+     * @return int|false the user id on success, false otherwise
+     */
+    public function authenticate(string $email, string $password): int|false
+    {
+        $row = $this->db->query("SELECT id, password FROM $this->table WHERE email = ? AND status = 1", $email)->fetch();
+
+        return !$row || !password_verify($password, $row['password'])
+            ? false
+            : ((int) $row['id']);
+    }
+
+    /**
      * Returns the given password hashed
      * @param string $password the password
      * @return string the password hashed

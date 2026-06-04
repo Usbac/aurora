@@ -334,21 +334,11 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->post('json:api/auth', function($body) use ($user_mod, $login) {
-        $email = $body['email'] ?? '';
-        $password = $body['password'] ?? '';
-        $user = $user_mod->get([
-            'email' => $email,
-            'status' => 1,
-        ]);
+        $user_id = $user_mod->authenticate((string) ($body['email'] ?? ''), (string) ($body['password'] ?? ''));
 
-        if (!$user || !password_verify($password, $user['password'])) {
-            return json_encode([
-                'success' => false,
-                'error' => 'invalid_credentials',
-            ]);
-        }
-
-        return json_encode($login($user['id']));
+        return json_encode($user_id === false
+            ? [ 'success' => false, 'error' => 'invalid_credentials' ]
+            : $login($user_id));
     });
 
     $router->post('json:api/logout', function() use ($db, $getAuthToken, $setAuthToken) {

@@ -82,6 +82,17 @@ final class UserTest extends \Aurora\Tests\Modules\Base
     /**
      * @depends on testAdd
      */
+    public function testAuthenticate(): void
+    {
+        $this->assertSame(1, $this->mod->authenticate('sebas.cas@mail.com', 'sebas123'));
+        $this->assertSame(2, $this->mod->authenticate('leon98@mail.com', 'leon98*'));
+        $this->assertFalse($this->mod->authenticate('sebas.cas@mail.com', 'wrong'));
+        $this->assertFalse($this->mod->authenticate('unknown@mail.com', 'sebas123'));
+    }
+
+    /**
+     * @depends on testAdd
+     */
     public function testSave(): void
     {
         $this->assertEquals(2, $this->mod->save(2, [
