@@ -252,9 +252,9 @@ final class Route
      * A string is used as the response body.
      * A two-element list [body, statusCode] sets both body and HTTP status.
      * @param mixed $response the handler return value
-     * @param int $default_status the HTTP status when the response is not a tuple
+     * @param int|null $default_status the HTTP status when the response is not a tuple
      */
-    private function outputResponse(mixed $response, int $default_status = 200): void
+    private function outputResponse(mixed $response, ?int $default_status = null): void
     {
         $body = $response;
         $status = $default_status;
@@ -264,7 +264,10 @@ final class Route
             $status = (int) $response[1];
         }
 
-        http_response_code($status);
+        if (isset($status)) {
+            http_response_code($status);
+        }
+
         echo $body;
     }
 
