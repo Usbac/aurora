@@ -63,7 +63,6 @@ final class Tag extends \Aurora\App\ModuleBase
         }
 
         if (!\Aurora\App\Permission::can('edit_tags')) {
-            http_response_code(403);
             $errors[] = 'no_permission';
         }
 

@@ -95,12 +95,10 @@ final class Post extends \Aurora\App\ModuleBase
         }
 
         if (!\Aurora\App\Permission::can('edit_posts')) {
-            http_response_code(403);
             $errors[] = 'no_permission';
         }
 
         if (!empty($data['status']) && !\Aurora\App\Permission::can('publish_posts')) {
-            http_response_code(403);
             $errors[] = 'no_publish_permission';
         }
 

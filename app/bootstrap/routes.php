@@ -801,7 +801,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $id = $_GET['id'] ?? '';
         $errors = $mod->checkFields($body, $id, $user);
 
-        if (in_array('no_permission', $errors, true)) {
+        if (array_intersect([ 'no_permission', 'no_publish_permission' ], $errors)) {
             http_response_code(403);
         }
 

@@ -64,7 +64,6 @@ final class Page extends \Aurora\App\ModuleBase
         }
 
         if (!\Aurora\App\Permission::can('edit_pages')) {
-            http_response_code(403);
             $errors[] = 'no_permission';
         }
 
