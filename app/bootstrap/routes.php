@@ -764,7 +764,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         return json_encode(array_values($view_files));
     });
 
-    $router->post('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod, $user) {
+    $router->post('json:api/{mod}', function($body) use ($page_mod, $post_mod, $user_mod, $tag_mod, $link_mod, &$user) {
         switch ($_GET['mod']) {
             case 'pages': $mod = $page_mod; break;
             case 'posts': $mod = $post_mod; break;
