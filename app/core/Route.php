@@ -127,7 +127,12 @@ final class Route
 
             if ($this->matchesRoute($current, $len, $route)) {
                 $this->mapParameters($current, $route);
-                $middleware['action']($request_body);
+                $response = $middleware['action']($request_body);
+
+                if ($this->isResponseTuple($response)) {
+                    $this->outputResponse($response);
+                    return;
+                }
             }
         }
 
@@ -254,12 +259,21 @@ final class Route
         $body = $response;
         $status = $default_status;
 
-        if (is_array($response)) {
+        if ($this->isResponseTuple($response)) {
             $body = $response[0];
             $status = (int) $response[1];
         }
 
         http_response_code($status);
         echo $body;
+    }
+
+    /**
+     * Returns true if the value is a [body, statusCode] response tuple
+     * @param mixed $response the handler return value
+     */
+    private function isResponseTuple(mixed $response): bool
+    {
+        return is_array($response) && array_keys($response) === [ 0, 1 ];
     }
 }

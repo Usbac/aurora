@@ -89,8 +89,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $per_page = \Aurora\App\Setting::get('per_page');
 
         if (!$author) {
-            http_response_code(404);
-            return;
+            return [ '', 404 ];
         }
 
         $where = implode(' AND ', [
@@ -114,8 +113,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $tag = $tag_mod->get([ 'slug' => $_GET['tag'] ]);
 
         if (!$tag) {
-            http_response_code(404);
-            return;
+            return [ '', 404 ];
         }
 
         $where = implode(' AND ', [
@@ -142,8 +140,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
 
         if (!$post) {
-            http_response_code(404);
-            return;
+            return [ '', 404 ];
         }
 
         if (\Aurora\App\Setting::get('views_count')) {
@@ -179,8 +176,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
 
         if (!$page) {
-            http_response_code(404);
-            return;
+            return [ '', 404 ];
         }
 
         if (\Aurora\App\Setting::get('views_count')) {
@@ -327,8 +323,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->middleware('api/*', function() use ($db, &$user) {
         if (empty($user) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm', 'api/logout' ])) {
-            http_response_code(401);
-            exit;
+            return [ '', 401 ];
         }
 
         if (!empty($user['id'])) {
@@ -424,8 +419,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         ]);
 
         if (!\Aurora\App\Permission::can('impersonate') || empty($subject) || (int) ($subject['role'] ?? 0) >= (int) ($user['role'] ?? 0)) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         return json_encode($login($subject['id']));
@@ -433,8 +427,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/media/create_folder', function($body) {
         if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         try {
@@ -455,8 +448,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         try {
@@ -474,8 +466,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         try {
@@ -489,8 +480,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/media/move', function($body) {
         if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         try {
@@ -504,8 +494,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/media/upload', function() {
         if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         $success = true;
@@ -536,8 +525,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $path = Helper::getPath(Kernel::config('content') . '/' . ltrim($_GET['path'] ?? '', '/'));
 
         if (!\Aurora\App\Media::isValidPath($path)) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         $zip = new ZipArchive();
@@ -585,8 +573,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/media', function() {
         if (!\Aurora\App\Permission::can('edit_media')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         $success = true;
@@ -614,8 +601,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('json:api/db', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         return json_encode([
@@ -629,8 +615,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/db', function() use ($db, $lang) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         $error = false;
@@ -661,8 +646,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('api/logs', function() {
         if (!\Aurora\App\Permission::can('edit_settings')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         $path = \Aurora\Core\Helper::getPath(\Aurora\App\Setting::get('log_file'));
@@ -671,8 +655,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->delete('json:api/logs', function() {
         if (!\Aurora\App\Permission::can('edit_settings')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         $path = Helper::getPath(\Aurora\App\Setting::get('log_file'));
@@ -682,8 +665,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/reset_views_count', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         return json_encode([ 'success' => $db->delete('views') ]);
@@ -691,8 +673,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/settings', function($body) use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         try {
@@ -714,8 +695,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('json:api/server', function() use ($db) {
         if (!\Aurora\App\Permission::can('edit_settings')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         return json_encode([
@@ -731,8 +711,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->get('json:api/update_version', function() {
         if (!\Aurora\App\Permission::can('update')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         return json_encode((new \Aurora\App\Update())->getLatestRelease());
@@ -740,8 +719,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
     $router->post('json:api/update', function($body) {
         if (!\Aurora\App\Permission::can('update')) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         $result = (new \Aurora\App\Update())->run($body['zip'] ?? '', fn($line) => Helper::log($line));
@@ -794,22 +772,20 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             case 'tags': $mod = $tag_mod; break;
             case 'links': $mod = $link_mod; break;
             default:
-                http_response_code(404);
-                return;
+                return [ '', 404 ];
         }
 
         $id = $_GET['id'] ?? '';
         $errors = $mod->checkFields($body, $id, $user);
 
-        if (array_intersect([ 'no_permission', 'no_publish_permission' ], $errors)) {
-            http_response_code(403);
-        }
-
         if (!empty($errors)) {
-            return json_encode([
-                'success' => false,
-                'errors' => $errors,
-            ]);
+            return [
+                json_encode([
+                    'success' => false,
+                    'errors' => $errors,
+                ]),
+                array_intersect([ 'no_permission', 'no_publish_permission' ], $errors) ? 403 : 200,
+            ];
         }
 
         return json_encode([
@@ -827,13 +803,11 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         $mod_str = $_GET['mod'] ?? '';
 
         if (!\Aurora\App\Permission::can("edit_$mod_str")) {
-            http_response_code(403);
-            exit;
+            return [ '', 403 ];
         }
 
         if (empty($ids)) {
-            http_response_code(400);
-            exit;
+            return [ '', 400 ];
         }
 
         $success = match ($mod_str) {
@@ -868,11 +842,12 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
                 return $success;
             })(),
-            default => (function() {
-                http_response_code(404);
-                exit;
-            })(),
+            default => null,
         };
+
+        if ($success === null) {
+            return [ '', 404 ];
+        }
 
         return json_encode([ 'success' => $success ]);
     });
@@ -929,8 +904,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
                     ],
                 ]);
             default:
-                http_response_code(404);
-                return;
+                return [ '', 404 ];
         }
 
         $page = (int) max($_GET['page'] ?? 1, 1);
