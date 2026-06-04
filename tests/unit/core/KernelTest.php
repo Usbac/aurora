@@ -17,9 +17,6 @@ final class KernelTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($kernel::config('another'));
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testInit(): void
     {
         $kernel = new \Aurora\Core\Kernel([

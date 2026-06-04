@@ -26,9 +26,6 @@ final class RouteTest extends \PHPUnit\Framework\TestCase
         ob_end_clean();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testRouting(): void
     {
         $route = new \Aurora\Core\Route();
