@@ -56,7 +56,7 @@ final class PostTest extends \Aurora\Tests\Modules\Base
                 'meta_title' => 'Traveling while working remotely',
                 'meta_description' => 'A post about how to travel while working remotely',
                 'canonical_url' => '/traveling-while-working-remotely',
-                'published_at' => 1728677100,
+                'published_at' => 10,
             ],
             [
                 'id' => 2,
@@ -64,14 +64,14 @@ final class PostTest extends \Aurora\Tests\Modules\Base
                 'slug' => 'top-beaches',
                 'description' => 'The best beaches in the whole world',
                 'html' => '',
-                'user_id' => null,
+                'user_id' => 0,
                 'image' => null,
                 'image_alt' => '',
                 'status' => 0,
                 'meta_title' => 'Top 5 beaches',
                 'meta_description' => 'The best beaches',
                 'canonical_url' => '/top-beaches',
-                'published_at' => 1728677100,
+                'published_at' => 10,
             ],
         ], $this->db->query('SELECT * FROM posts')->fetchAll());
     }
@@ -109,7 +109,7 @@ final class PostTest extends \Aurora\Tests\Modules\Base
                 'meta_title' => 'Traveling while working remotely',
                 'meta_description' => 'A post about how to travel while working remotely',
                 'canonical_url' => '/traveling-while-working-remotely',
-                'published_at' => 1728677100,
+                'published_at' => 10,
             ],
             [
                 'id' => 2,
@@ -117,14 +117,14 @@ final class PostTest extends \Aurora\Tests\Modules\Base
                 'slug' => 'top-beaches',
                 'description' => 'The best beaches in the whole world',
                 'html' => '',
-                'user_id' => null,
+                'user_id' => 0,
                 'image' => null,
                 'image_alt' => '',
                 'status' => 0,
                 'meta_title' => 'Top 5 beaches',
                 'meta_description' => 'The best beaches',
                 'canonical_url' => '/top-beaches',
-                'published_at' => 1728677100,
+                'published_at' => 10,
             ],
         ], $this->db->query('SELECT * FROM posts')->fetchAll());
     }
@@ -136,8 +136,8 @@ final class PostTest extends \Aurora\Tests\Modules\Base
     {
         \Aurora\App\Permission::set([ 'edit_posts' => 1, 'publish_posts' => 1 ], 1);
         $this->assertEquals([
-            'title' => 'Invalid value',
-            'slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
+            'invalid_title',
+            'invalid_slug',
         ], $this->mod->checkFields([ 'title' => '', 'slug' => '' ], 0, []));
 
         $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Top countries', 'slug' => 'top-countries' ], 1, []));
@@ -145,12 +145,12 @@ final class PostTest extends \Aurora\Tests\Modules\Base
         $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech' ], 1, []));
 
         $this->assertEquals([
-            'slug' => 'Slug already in use, try a different one',
+            'repeated_slug',
         ], $this->mod->checkFields([ 'title' => 'Top beaches', 'slug' => 'top-beaches' ], 1, []));
 
         \Aurora\App\Permission::set([ 'edit_posts' => 2 ], 1);
         $this->assertEquals([
-            'You do not have permissions to perform this action',
+            'no_permission',
         ], $this->mod->checkFields([ 'title' => 'Travel', 'slug' => 'travel' ], 0, []));
 
         \Aurora\App\Permission::set([ 'edit_posts' => 1, 'publish_posts' => 2 ], 1);
@@ -158,7 +158,7 @@ final class PostTest extends \Aurora\Tests\Modules\Base
         $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech', 'status' => 0 ], 1, []));
 
         $this->assertEquals([
-            'You are not allowed to handle published posts',
+            'no_publish_permission',
         ], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech', 'status' => 1 ], 1, []));
     }
 

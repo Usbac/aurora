@@ -117,13 +117,13 @@ final class UserTest extends \Aurora\Tests\Modules\Base
         \Aurora\App\Permission::set([ 'edit_users' => 1 ], 1);
 
         $this->assertEquals([
-            'slug' => 'Invalid value. Slug may only contain alpha-numeric characters, underscores, and dashes',
-            'password' => 'Password must be at least 8 characters long',
-            'email' => 'Invalid value',
+            'invalid_slug',
+            'invalid_value',
+            'bad_password',
         ], $this->mod->checkFields([ 'name' => 'John', 'slug' => '' ], '', $user));
 
         $this->assertEquals([
-            'You do not have permissions to perform this action',
+            'no_permission',
         ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com' ], 1, $user));
 
         $user = [ 'id' => 3, 'role' => 3, 'role_slug' => 'admin' ];
@@ -140,15 +140,15 @@ final class UserTest extends \Aurora\Tests\Modules\Base
         ], 2, $user));
 
         $this->assertEquals([
-            'slug' => 'Slug already in use, try a different one',
+            'repeated_slug',
         ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'leon-kennedy', 'email' => 'john@mail.com' ], 1, $user));
 
         $this->assertEquals([
-            'password' => 'Password must be at least 8 characters long',
+            'bad_password',
         ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123', 'password_confirm' => '123' ], 1, $user));
 
         $this->assertEquals([
-            'password' => 'Password and its confirmation must match',
+            'bad_password_confirm',
         ], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123456789', 'password_confirm' => '123' ], 1, $user));
 
         $this->assertEquals([], $this->mod->checkFields([ 'name' => 'John', 'slug' => 'john', 'email' => 'john@mail.com', 'password' => '123456789', 'password_confirm' => '123456789' ], 1, $user));
