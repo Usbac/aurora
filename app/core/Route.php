@@ -108,7 +108,7 @@ final class Route
     public function handleRouteCode(int $code): void
     {
         if (array_key_exists($code, $this->codes)) {
-            echo $this->codes[$code]();
+            $this->outputResponse($this->codes[$code]());
         }
     }
 
@@ -142,8 +142,7 @@ final class Route
             if ($this->matchesRoute($current, $len, $route)) {
                 $this->mapParameters($current, $route);
                 header('Content-Type: ' . $val['content_type']);
-                http_response_code($val['status'] ?? 200);
-                echo $val['action']($request_body);
+                $this->outputResponse($val['action']($request_body), $val['status'] ?? 200);
                 return;
             }
         }
@@ -241,5 +240,26 @@ final class Route
     private function isGet(string $str): bool
     {
         return preg_match(self::GET_FORMAT, $str);
+    }
+
+    /**
+     * Sends the route handler response.
+     * A string is used as the response body.
+     * A two-element list [body, statusCode] sets both body and HTTP status.
+     * @param mixed $response the handler return value
+     * @param int $default_status the HTTP status when the response is not a tuple
+     */
+    private function outputResponse(mixed $response, int $default_status = 200): void
+    {
+        $body = $response;
+        $status = $default_status;
+
+        if (is_array($response)) {
+            $body = $response[0];
+            $status = (int) $response[1];
+        }
+
+        http_response_code($status);
+        echo $body;
     }
 }
