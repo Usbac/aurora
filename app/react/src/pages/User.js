@@ -159,7 +159,7 @@ export default function User() {
                     {!is_current_user && user?.role > data.role && <button type="button" onClick={impersonate}><IconUsers/></button>}
                     <button type="button" onClick={() => window.open(`/${settings.blog_url}/author/${data.slug}`, '_blank').focus()}><IconEye/></button>
                 </>}
-                <button type="submit" disabled={!user?.actions?.edit_users}>{t('save')}</button>
+                <button type="submit" disabled={!is_current_user && !Boolean(user?.actions?.edit_users)}>{t('save')}</button>
             </div>
         </div>
         <div className="grid grid-two-columns wide">
@@ -201,7 +201,7 @@ export default function User() {
                             aria-busy={is_loading_roles ? true : undefined}
                             onChange={e => setData({ ...data, role: parseInt(e.target.value, 10) })}
                         >
-                            {roles.map(role => <option key={role.level} value={role.level}>{getRoleTitle(role.slug)}</option>)}
+                            {roles.filter(role => !is_current_user || role.level <= (user?.role ?? 0)).map(role => <option key={role.level} value={role.level}>{getRoleTitle(role.slug)}</option>)}
                         </select>
                     </div>
                     <div className="input-group">

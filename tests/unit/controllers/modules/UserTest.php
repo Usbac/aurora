@@ -170,4 +170,17 @@ final class UserTest extends \Aurora\Tests\Modules\Base
         $this->assertEquals('', $this->mod->getCondition([]));
         $this->assertEquals("(users.name LIKE '%John%' OR users.email LIKE '%John%')", $this->mod->getCondition([ 'search' => 'John' ]));
     }
+
+    public function testCanEditSelf(): void
+    {
+        \Aurora\App\Permission::set([ 'edit_users' => 3 ], 2);
+
+        $actor = [ 'id' => 2, 'role' => 2 ];
+        $subject = [ 'id' => 2, 'role' => 2 ];
+
+        $this->assertTrue(\Aurora\App\Modules\User::canEdit($actor, $subject, 2));
+        $this->assertTrue(\Aurora\App\Modules\User::canEdit($actor, $subject, 1));
+        $this->assertFalse(\Aurora\App\Modules\User::canEdit($actor, $subject, 3));
+        $this->assertFalse(\Aurora\App\Modules\User::canEdit($actor, [ 'id' => 1, 'role' => 1 ], 1));
+    }
 }
