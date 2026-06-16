@@ -178,9 +178,9 @@ final class UserTest extends \Aurora\Tests\Modules\Base
         $actor = [ 'id' => 2, 'role' => 2 ];
         $subject = [ 'id' => 2, 'role' => 2 ];
 
-        $this->assertTrue(\Aurora\App\Modules\User::canEdit($actor, $subject, 2));
-        $this->assertTrue(\Aurora\App\Modules\User::canEdit($actor, $subject, 1));
-        $this->assertFalse(\Aurora\App\Modules\User::canEdit($actor, $subject, 3));
-        $this->assertFalse(\Aurora\App\Modules\User::canEdit($actor, [ 'id' => 1, 'role' => 1 ], 1));
+        $this->assertTrue(\Aurora\App\Modules\User::canEdit($actor, $subject, [ 'role' => 2 ]));
+        $this->assertTrue(\Aurora\App\Modules\User::canEdit($actor, $subject, [ 'role' => 1 ]));
+        $this->assertFalse(\Aurora\App\Modules\User::canEdit($actor, $subject, [ 'role' => 3 ]));
+        $this->assertFalse(\Aurora\App\Modules\User::canEdit($actor, [ 'id' => 1, 'role' => 1 ], [ 'role' => 1 ]));
     }
 }

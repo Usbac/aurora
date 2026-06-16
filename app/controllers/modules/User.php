@@ -117,14 +117,7 @@ final class User extends \Aurora\App\ModuleBase
             }
         }
 
-        $subject = \Aurora\Core\Helper::isValidId($id) ? $this->get([ 'id' => $id ]) : null;
-
-        if ($subject !== null && ((int) ($subject['id'] ?? 0)) === ((int) ($user['id'] ?? 0)) &&
-            isset($data['status']) && ((int) $data['status']) !== ((int) ($subject['status'] ?? 0))) {
-            $errors[] = 'no_permission';
-        }
-
-        if (!$user || !self::canEdit($user, $subject, (int) ($data['role'] ?? 0))) {
+        if (!$user || !self::canEdit($user, \Aurora\Core\Helper::isValidId($id) ? $this->get([ 'id' => $id ]) : null, $data)) {
             $errors[] = 'no_permission';
         }
 
@@ -133,47 +126,36 @@ final class User extends \Aurora\App\ModuleBase
 
     /**
      * Returns true if the given actor user can edit the subject user and assign the given role
-     * @param array $actor the user performing the action
+     * @param array $current_user the user performing the action
      * @param array|null $subject the user being edited, null when creating a new user
-     * @param int|null $new_role the role to assign, null to skip role assignment checks
+     * @param array|null $new_data the new data for the subject
      * @return bool true if the actor can edit the subject user, false otherwise
      */
-    public static function canEdit(array $actor, ?array $subject, ?int $new_role = null): bool
+    public static function canEdit(array $current_user, ?array $subject, ?array $new_data = null): bool
     {
-        $actor_role = (int) ($actor['role'] ?? 0);
-        $is_owner = $actor_role == 4;
+        $current_user_role = (int) ($current_user['role'] ?? 0);
+        $is_owner = $current_user_role == 4;
+        $new_role = $new_data['role'] ?? null;
 
-        if ($subject !== null && ((int) ($subject['id'] ?? 0)) === ((int) ($actor['id'] ?? 0))) {
-            return $new_role === null || $new_role <= $actor_role;
+        if ($subject !== null && (int) ($subject['id'] ?? 0) === (int) ($current_user['id'] ?? 0)) {
+            if (isset($new_data['status']) && (int) $new_data['status'] !== (int) ($subject['status'] ?? 0)) {
+                return false;
+            }
+
+            return $new_role === null || $new_role <= $current_user_role;
         }
 
         if (!\Aurora\App\Permission::can('edit_users')) {
             return false;
         }
 
-        if ($subject !== null) {
-
-            $subject_role = (int) ($subject['role'] ?? 0);
-            $can_edit_subject = $is_owner
-                ? $subject_role <= $actor_role
-                : $subject_role < $actor_role;
-
-            if (!$can_edit_subject) {
-                return false;
-            }
+        if ($subject !== null && !$is_owner && (int) ($subject['role'] ?? 0) >= $current_user_role) {
+            return false;
         }
 
-        if ($new_role !== null) {
-            if ($new_role > $actor_role) {
-                return false;
-            }
+        $max_assignable_role = $is_owner ? $current_user_role : $current_user_role - 1;
 
-            if (!$is_owner && $new_role >= $actor_role) {
-                return false;
-            }
-        }
-
-        return true;
+        return $new_role === null || $new_role <= $max_assignable_role;
     }
 
     /**
