@@ -26,7 +26,7 @@ Posts have a "Publish date" which is not only used for sorting when listing them
 
 `/admin/media`
 
-Media refers to all files within the content directory, by default it is `public/content`.
+Media refers to all files within the content directory, by default it is `app/public/content`.
 
 The content directory is not versioned and is supposed to have public files like images, audios and videos used by pages and posts in the website.
 
