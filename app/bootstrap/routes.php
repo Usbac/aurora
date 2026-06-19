@@ -327,9 +327,11 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         if (!empty($user['id'])) {
+            $now = time();
             $db->query('UPDATE tokens
                 SET updated_at = ?, user_agent = ?
-                WHERE token = ?', time(), $_SERVER['HTTP_USER_AGENT'] ?? '', $user['token']);
+                WHERE token = ?', $now, $_SERVER['HTTP_USER_AGENT'] ?? '', $user['token']);
+            $db->query('UPDATE users SET last_active = ? WHERE id = ?', $now, $user['id']);
         }
     });
 
