@@ -563,6 +563,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->any('json:api/media/upload_image', function() {
+        if (!\Aurora\App\Permission::can('edit_media')) {
+            return [ '', 403 ];
+        }
+
         $path = Kernel::config('content') . '/' . date('Y/m/');
         \Aurora\App\Media::uploadFile($_FILES['file'], $path);
 
