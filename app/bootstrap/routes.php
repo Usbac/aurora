@@ -322,7 +322,13 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->middleware('api/*', function() use ($db, &$user) {
-        if (empty($user) && !in_array(Helper::getCurrentPath(), [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm', 'api/logout' ])) {
+        $path = Helper::getCurrentPath();
+
+        if (str_starts_with($path, 'api/blog')) {
+            return;
+        }
+
+        if (empty($user) && !in_array($path, [ 'api/auth', 'api/password-reset/request', 'api/password-reset/confirm', 'api/logout' ])) {
             return [ '', 401 ];
         }
 
