@@ -201,7 +201,6 @@ final class Media
     public static function uploadFile($file, string $path): bool
     {
         $path = \Aurora\Core\Helper::getPath($path);
-        $container_path = mb_substr($path, 0, mb_strrpos($path, '/') + 1);
 
         if (!$file) {
             throw new \InvalidArgumentException('File is empty');
@@ -211,11 +210,14 @@ final class Media
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
         }
 
+        $destination = self::getFilePath($path, $file['name']);
+        $container_path = dirname($destination);
+
         if (!file_exists($container_path)) {
             mkdir($container_path, self::FOLDER_PERMISSION, true);
         }
 
-        return move_uploaded_file($file['tmp_name'], self::getFilePath($path, $file['name']));
+        return move_uploaded_file($file['tmp_name'], $destination);
     }
 
     /**
