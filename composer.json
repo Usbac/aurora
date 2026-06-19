@@ -15,7 +15,7 @@
     ],
     "scripts": {
         "post-autoload-dump": [
-            "mkdir -p public/content"
+            "mkdir -p app/public/content"
         ],
         "test": "vendor/bin/phpunit -c phpunit.xml.dist"
     },
