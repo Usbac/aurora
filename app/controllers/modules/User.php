@@ -30,9 +30,10 @@ final class User extends \Aurora\App\ModuleBase
      * Updates an existing user
      * @param int $id the user id
      * @param array $data the new data
+     * @param array|null $user user to keep the token for when revoking sessions after a password change
      * @return bool true on success, false otherwise
      */
-    public function save(int $id, array $data): bool
+    public function save(int $id, array $data, ?array $user = null): bool
     {
         $res = $this->db->update($this->table, [
             'name' => $data['name'],
@@ -46,6 +47,12 @@ final class User extends \Aurora\App\ModuleBase
 
         if ($res && !empty($data['password'])) {
             $this->db->update($this->table, [ 'password' => $this->getPassword($data['password']) ], $id);
+
+            if ($id == ($user['id'] ?? 0)) {
+                $this->db->query('DELETE FROM tokens WHERE user_id = ? AND token != ?', $id, ($user['token'] ?? null));
+            } else {
+                $this->db->query('DELETE FROM tokens WHERE user_id = ?', $id);
+            }
         }
 
         return $res;

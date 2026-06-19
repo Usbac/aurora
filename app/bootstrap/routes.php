@@ -795,7 +795,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
 
         return json_encode([
             'success' => Helper::isValidId($id)
-                ? $mod->save($id, $body)
+                ? $mod->save($id, $body, $user)
                 : ($id = $mod->add($body)) !== false,
             'id' => $id,
         ]);
