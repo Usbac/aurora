@@ -196,9 +196,9 @@ final class Media
      * @throws \InvalidArgumentException
      * @param array $file the file
      * @param string $path the path relative to the project root directory
-     * @return bool true if the file was uploaded successfully, false otherwise
+     * @return string|false the file path relative to the project root directory on success, false otherwise
      */
-    public static function uploadFile($file, string $path): bool
+    public static function uploadFile($file, string $path): string|false
     {
         $path = \Aurora\Core\Helper::getPath($path);
 
@@ -217,7 +217,9 @@ final class Media
             mkdir($container_path, self::FOLDER_PERMISSION, true);
         }
 
-        return move_uploaded_file($file['tmp_name'], $destination);
+        return move_uploaded_file($file['tmp_name'], $destination)
+            ? mb_substr($destination, mb_strlen(\Aurora\Core\Helper::getPath()) + 1)
+            : false;
     }
 
     /**

@@ -567,13 +567,13 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             return [ '', 403 ];
         }
 
-        $path = Kernel::config('content') . '/' . date('Y/m/');
-        
-        if (!\Aurora\App\Media::uploadFile($_FILES['file'], $path)) {
+        $file_path = \Aurora\App\Media::uploadFile($_FILES['file'], Kernel::config('content') . '/' . date('Y/m/'));
+
+        if ($file_path === false) {
             return [ '', 500 ];
         }
 
-        return json_encode([ 'location' => "/$path/" . $_FILES['file']['name'] ]);
+        return json_encode([ 'location' => '/' . $file_path ]);
     });
 
     $router->post('json:api/media', function() {
