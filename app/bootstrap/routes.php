@@ -568,7 +568,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
         }
 
         $path = Kernel::config('content') . '/' . date('Y/m/');
-        \Aurora\App\Media::uploadFile($_FILES['file'], $path);
+        
+        if (!\Aurora\App\Media::uploadFile($_FILES['file'], $path)) {
+            return [ '', 500 ];
+        }
 
         return json_encode([ 'location' => "/$path/" . $_FILES['file']['name'] ]);
     });
