@@ -798,7 +798,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             return [ '', 403 ];
         }
 
-        if (empty($ids)) {
+        if ($mod_str !== 'media' && empty($ids)) {
             return [ '', 400 ];
         }
 
