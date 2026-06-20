@@ -38,7 +38,7 @@ final class Page extends \Aurora\App\ModuleBase
      */
     public function save(int $id, array $data, ?array $user = null): bool
     {
-        return $this->db->update($this->table, $this->getBaseData($data), $id) ? $id : false;
+        return $this->db->update($this->table, $this->getBaseData($data), $id);
     }
 
     /**
