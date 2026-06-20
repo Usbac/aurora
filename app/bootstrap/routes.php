@@ -391,6 +391,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     $router->get('json:api/settings', function() use ($db, $lang) {
         $settings = \Aurora\App\Setting::get();
 
+        if (!empty($settings['logo'])) {
+            $settings['logo'] = Helper::getContentPath($settings['logo']);
+        }
+
         if (!\Aurora\App\Permission::can('edit_settings')) {
             return json_encode(array_intersect_key($settings,
                 array_flip([ 'blog_url', 'views_count', 'language', 'timezone', 'date_format' ])));

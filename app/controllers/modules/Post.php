@@ -151,6 +151,13 @@ final class Post extends \Aurora\App\ModuleBase
     protected function getRowData($data): mixed
     {
         $data['tags'] = $this->getTags(empty($data['tags_id']) ? [] : explode(',', $data['tags_id']));
+
+        foreach ([ 'image', 'user_image' ] as $key) {
+            if (!empty($data[$key])) {
+                $data[$key] = \Aurora\Core\Helper::getContentPath($data[$key]);
+            }
+        }
+
         return $data;
     }
 

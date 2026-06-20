@@ -43,11 +43,14 @@ final class Media
 
         $files = array_map(function($file) use ($content_path_length) {
             $mime = mime_content_type($file);
+            $relative_path = mb_substr($file, $content_path_length);
+            $is_file = is_file($file);
+
             return [
                 'name'     => basename($file),
-                'path'     => mb_substr($file, $content_path_length),
+                'path'     => $is_file ? \Aurora\Core\Helper::getContentPath($relative_path) : $relative_path,
                 'mime'     => $mime,
-                'is_file'  => is_file($file),
+                'is_file'  => $is_file,
                 'is_image' => str_starts_with($mime, 'image/'),
                 'size'     => filesize($file),
                 'time'     => filemtime($file),

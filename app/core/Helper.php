@@ -35,6 +35,25 @@ final class Helper
     }
 
     /**
+     * Returns the public path of the given content file
+     * @param string|null $path the path relative to the content directory
+     * @return string|null the public path
+     */
+    public static function getContentPath(?string $path = ''): ?string
+    {
+        if ($path === null || $path === '' || parse_url($path, PHP_URL_HOST)) {
+            return $path;
+        }
+
+        $content = trim(\Aurora\Core\Kernel::config('content'), '/');
+        $path = ltrim($path, '/');
+
+        return $path === $content || str_starts_with($path, "$content/")
+            ? "/$path"
+            : "/$content/$path";
+    }
+
+    /**
      * Returns the full url of the given path
      * @param [string] $path the path
      * @return string the full url

@@ -245,6 +245,10 @@ final class User extends \Aurora\App\ModuleBase
      */
     protected function getRowData($data): mixed
     {
+        if (!empty($data['image'])) {
+            $data['image'] = \Aurora\Core\Helper::getContentPath($data['image']);
+        }
+
         unset($data['password']);
         return $data;
     }
