@@ -102,7 +102,7 @@ export default function Posts() {
                     class: 'w100 align-center',
                     content: post => <>
                         <img
-                            src={post.image ? getContentUrl(post.image) : ''}
+                            src={post.image}
                             alt={post.image_alt || ''}
                             className="row-thumb"
                             style={{ visibility: post.image ? 'visible' : 'hidden' }}

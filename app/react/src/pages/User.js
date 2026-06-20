@@ -165,7 +165,7 @@ export default function User() {
         <div className="grid grid-two-columns wide">
             <div>
                 <div className="user-image pointer" onClick={() => setOpenImageDialog(true)}>
-                    <img src={data.image ? getContentUrl(data.image) : '/public/assets/no-image.svg'} className={!data.image ? 'empty-img' : ''}/>
+                    <img src={data.image ? data.image : '/public/assets/no-image.svg'} className={!data.image ? 'empty-img' : ''}/>
                 </div>
                 {id && <div className="extra-info">
                     <p>ID: {id}</p>

@@ -436,22 +436,6 @@ export const getUrl = (path = '') => {
 };
 
 /**
- * Prefixes a path with the site content base from `<meta name="content_path">` (uploads / static files).
- * @param {string} [path=''] - Path relative to content.
- * @returns {string} The URL path starting with `/…/`.
- */
-export const getContentUrl = (path = '') => {
-    const content_path = document.querySelector('meta[name="content_path"]')?.content || '';
-    path = path.replace(/^\/+|\/+$/g, '');
-
-    if (path === content_path || path.startsWith(`${content_path}/`)) {
-        path = path.slice(content_path.length).replace(/^\/+/, '');
-    }
-
-    return `/${content_path}/${path}`.replace(/\/+$/, '');
-};
-
-/**
  * Modal image picker (portal to `document.body`): browses `/api/media`, uploads files, calls `onSave` with a content path or `null`.
  * @param {Object} props
  * @param {function (string|null): void} props.onSave - Called with the selected file path, or `null` when removing the image.
@@ -510,7 +494,6 @@ export const ImageDialog = ({ onSave, onClose }) => {
                 <div className="w20" title="Last modification">Last modification</div>
             </div>
             {files.map(file => {
-                const file_path = getContentUrl(file.path);
                 return <div
                     className="listing-row"
                     onClick={() => {
@@ -524,8 +507,8 @@ export const ImageDialog = ({ onSave, onClose }) => {
                 >
                     <div className="w100 align-center">
                         {file.is_file
-                            ? <a href={file_path} target="_blank" className="pointer" onClick={e => e.stopPropagation()}>
-                                <img src={file_path} className="row-thumb"/>
+                            ? <a href={file.path} target="_blank" className="pointer" onClick={e => e.stopPropagation()}>
+                                <img src={file.path} className="row-thumb"/>
                             </a>
                             : <div className="pointer custom-media folder">
                                 <IconFolderFill className="row-thumb"/>

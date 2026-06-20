@@ -73,7 +73,7 @@ const AdminPages = () => {
             </div>
             <div className="current-user">
                 <RouterLink to={`/admin/users/edit?id=${user?.id}`} title={user?.name}>
-                    <img src={user?.image ? getContentUrl(user.image) : '/public/assets/no-image.svg'} className={!user?.image ? 'empty-img' : ''}/>
+                    <img src={user?.image ? user.image : '/public/assets/no-image.svg'} className={!user?.image ? 'empty-img' : ''}/>
                 </RouterLink>
                 <div id="toggle-theme" className="pointer" title={t('switch_theme')} onClick={toggleTheme} data-theme={theme}>
                     {theme == 'light' ? <IconMoon/> : <IconSun/>}

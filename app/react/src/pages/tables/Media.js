@@ -32,7 +32,7 @@ const DialogEditFile = ({ file, onClose, onSuccess }) => {
             url: '/api/media/rename',
             data: {
                 name: name,
-                path: getContentUrl(file.path),
+                path: file.path,
             },
         }).then(res => {
             alert(t(res?.data?.success ? 'item_renamed_successfully' : 'error_renaming_item'));
@@ -76,7 +76,7 @@ const DialogDuplicate = ({ file, onClose, onSuccess }) => {
             url: '/api/media/duplicate',
             data: {
                 name: name,
-                path: getContentUrl(file.path),
+                path: file.path,
             },
         }).then(res => {
             alert(t(res?.data?.success ? 'item_duplicated_successfully' : 'error_duplicating_item'));
@@ -128,8 +128,8 @@ const DialogMove = ({ file, onClose, onSuccess }) => {
             method: 'POST',
             url: '/api/media/move',
             data: {
-                name: getContentUrl(destination_folder),
-                path: getContentUrl(file.path),
+                name: destination_folder,
+                path: file.path,
             },
         }).then(res => {
             alert(t(res?.data?.success ? 'item_moved_successfully' : 'error_moving_item'));
@@ -223,7 +223,7 @@ export default function Media() {
             request({
                 method: 'DELETE',
                 url: '/api/media',
-                data: [ getContentUrl(file.path) ],
+                data: [ file.path ],
             }).then(res => {
                 alert(t(res?.data?.success ? 'file_deleted_successfully' : 'error_deleting_file'));
                 if (res?.data?.success) {
@@ -349,7 +349,7 @@ export default function Media() {
                             request({
                                 method: 'DELETE',
                                 url: '/api/media',
-                                data: files.map(f => getContentUrl(f.path)),
+                                data: files.map(f => f.path),
                             }).then(res => {
                                 alert(t(res?.data?.success ? 'files_deleted_successfully' : 'error_deleting_files'));
                                 if (res?.data?.success) {
@@ -364,10 +364,10 @@ export default function Media() {
                 {
                     class: 'w100 align-center',
                     content: file => <>
-                        {file.is_image && <a href={getContentUrl(file.path)} target="_blank" className="pointer">
-                            <img src={getContentUrl(file.path)} className="row-thumb"/>
+                        {file.is_image && <a href={file.path} target="_blank" className="pointer">
+                            <img src={file.path} className="row-thumb"/>
                         </a>}
-                        {!file.is_image && file.is_file && <a href={getContentUrl(file.path)} target="_blank" className="pointer custom-media file">
+                        {!file.is_image && file.is_file && <a href={file.path} target="_blank" className="pointer custom-media file">
                             <IconFile/>
                         </a>}
                         {!file.is_file && <div onClick={() => setPath(file.path)} className="pointer custom-media folder">
@@ -393,7 +393,7 @@ export default function Media() {
                         className="three-dots"
                         options={[
                             {
-                                onClick: () => copyPath(getContentUrl(file.path)),
+                                onClick: () => copyPath(file.path),
                                 content: <><IconClipboard/> {t('copy_path')}</>,
                             },
                             {

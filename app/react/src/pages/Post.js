@@ -120,7 +120,7 @@ export default function Post() {
                 <div className="card v-spacing">
                     <div className="input-group">
                         <label>{t('image')}</label>
-                        <img src={data.image ? getContentUrl(data.image) : '/public/assets/no-image.svg'} className={`post-image pointer ${!data.image ? 'empty-img' : ''}`} alt="Post image" onClick={() => setOpenImageDialog(true)}/>
+                        <img src={data.image ? data.image : '/public/assets/no-image.svg'} className={`post-image pointer ${!data.image ? 'empty-img' : ''}`} alt="Post image" onClick={() => setOpenImageDialog(true)}/>
                         {open_image_dialog && <ImageDialog onSave={path => setData({ ...data, image: path })} onClose={() => setOpenImageDialog(false)}/>}
                     </div>
                     <div className="input-group">

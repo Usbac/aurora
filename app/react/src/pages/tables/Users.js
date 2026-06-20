@@ -100,7 +100,7 @@ export default function Users() {
                     content: item => (<>
                         <div className="user-image">
                             <img
-                                src={item.image ? getContentUrl(item.image) : '/assets/no-image.svg'}
+                                src={item.image ? item.image : '/assets/no-image.svg'}
                                 className={item.image ? '' : 'empty-img'}
                                 alt={item.name}
                                 style={{ visibility: item.image ? 'visible' : 'hidden' }}

@@ -12,7 +12,7 @@ const General = ({ data, setData }) => {
         <div className="card v-spacing">
             <div className="input-group">
                 <label>{t('logo')}</label>
-                <img src={data.logo ? getContentUrl(data.logo) : '/public/assets/no-image.svg'} className={`logo pointer ${!data.logo ? 'empty-img' : ''}`} alt="logo" onClick={() => setOpenImageDialog(true)}/>
+                <img src={data.logo ? data.logo : '/public/assets/no-image.svg'} className={`logo pointer ${!data.logo ? 'empty-img' : ''}`} alt="logo" onClick={() => setOpenImageDialog(true)}/>
                 {open_image_dialog && <ImageDialog onSave={path => setData({ ...data, logo: path })} onClose={() => setOpenImageDialog(false)}/>}
             </div>
             <div className="input-group">

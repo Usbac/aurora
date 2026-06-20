@@ -54,7 +54,7 @@ export default function Dashboard() {
                         <div className="dashboard-card-rows">
                             {posts && posts.length > 0 && <>
                                 {posts.map(post => <a href={`/${settings.blog_url}/${post.slug}`} target="_blank">
-                                    <img src={post.image ? getContentUrl(post.image) : ''} alt={post.title} style={{ visibility: post.image ? 'initial' : 'hidden' }}/>
+                                    <img src={post.image} alt={post.title} style={{ visibility: post.image ? 'initial' : 'hidden' }}/>
                                     <div>
                                         <b>{post.title}</b>
                                         <span className="subtitle">{post.user_id ? `${t('by')} ${post.user_name}` : <>&nbsp;</>}</span>
