@@ -33,9 +33,10 @@ final class Page extends \Aurora\App\ModuleBase
      * Updates an existing page
      * @param int $id the page id
      * @param array $data the new data
+     * @param array|null $user the user performing the action
      * @return bool true on success, false otherwise
      */
-    public function save(int $id, array $data): bool
+    public function save(int $id, array $data, ?array $user = null): bool
     {
         return $this->db->update($this->table, $this->getBaseData($data), $id) ? $id : false;
     }

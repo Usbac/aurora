@@ -53,9 +53,10 @@ final class Post extends \Aurora\App\ModuleBase
      * Updates an existing post
      * @param int $id the post id
      * @param array $data the new data
+     * @param array|null $user the user performing the action
      * @return bool true on success, false otherwise
      */
-    public function save(int $id, array $data): bool
+    public function save(int $id, array $data, ?array $user = null): bool
     {
         try {
             $this->db->connection->beginTransaction();
