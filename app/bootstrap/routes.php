@@ -689,6 +689,10 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
             $db->connection->beginTransaction();
 
             foreach ($body as $key => $val) {
+                if ($key === 'logo') {
+                    $val = Helper::normalizeContentPath($val);
+                }
+
                 $db->replace('settings', [ 'key' => $key, 'value' => $val ]);
             }
 

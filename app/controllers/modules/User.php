@@ -40,7 +40,7 @@ final class User extends \Aurora\App\ModuleBase
             'slug' => $data['slug'],
             'email' => $data['email'],
             'status' => $data['status'],
-            'image' => $data['image'],
+            'image' => \Aurora\Core\Helper::normalizeContentPath($data['image']),
             'bio' => $data['bio'],
             'role' => $data['role'],
         ], $id);
@@ -72,7 +72,7 @@ final class User extends \Aurora\App\ModuleBase
             'email' => $data['email'] ?? '',
             'password' => $this->getPassword($data['password']),
             'status' => $data['status'] ?? false,
-            'image' => $data['image'] ?? null,
+            'image' => \Aurora\Core\Helper::normalizeContentPath($data['image'] ?? null),
             'bio' => $data['bio'] ?? '',
             'role' => $data['role'] ?? 0,
             'created_at' => $time,

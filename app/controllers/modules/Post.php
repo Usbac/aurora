@@ -212,7 +212,7 @@ final class Post extends \Aurora\App\ModuleBase
             'description' => $data['description'] ?? '',
             'html' => $data['html'] ?? '',
             'user_id' => $data['user_id'] ?? 0,
-            'image' => $data['image'] ?? null,
+            'image' => \Aurora\Core\Helper::normalizeContentPath($data['image'] ?? null),
             'image_alt' => $data['image_alt'] ?? '',
             'status' => $data['status'] ?? false,
             'meta_title' => $data['meta_title'] ?? '',

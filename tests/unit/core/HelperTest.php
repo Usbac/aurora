@@ -22,6 +22,38 @@ final class HelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('blog', \Aurora\Core\Helper::getCurrentPath());
     }
 
+    public function testGetContentPath(): void
+    {
+        new \Aurora\Core\Kernel([
+            'bootstrap' => fn() => null,
+            'content' => 'public/content',
+            'mail' => fn() => null,
+            'views' => 'views',
+        ]);
+
+        $this->assertNull(\Aurora\Core\Helper::getContentPath(null));
+        $this->assertSame('', \Aurora\Core\Helper::getContentPath(''));
+        $this->assertSame('https://example.com/img.png', \Aurora\Core\Helper::getContentPath('https://example.com/img.png'));
+        $this->assertSame('/public/content/111.png', \Aurora\Core\Helper::getContentPath('111.png'));
+        $this->assertSame('/public/content/sub/111.png', \Aurora\Core\Helper::getContentPath('sub/111.png'));
+    }
+
+    public function testNormalizeContentPath(): void
+    {
+        new \Aurora\Core\Kernel([
+            'bootstrap' => fn() => null,
+            'content' => 'public/content',
+            'mail' => fn() => null,
+            'views' => 'views',
+        ]);
+
+        $this->assertNull(\Aurora\Core\Helper::normalizeContentPath(null));
+        $this->assertSame('', \Aurora\Core\Helper::normalizeContentPath(''));
+        $this->assertSame('https://example.com/img.png', \Aurora\Core\Helper::normalizeContentPath('https://example.com/img.png'));
+        $this->assertSame('111.png', \Aurora\Core\Helper::normalizeContentPath('/public/content/111.png'));
+        $this->assertSame('sub/111.png', \Aurora\Core\Helper::normalizeContentPath('public/content/sub/111.png'));
+    }
+
     public function testGetUrl(): void
     {
         $_SERVER['SERVER_NAME'] = 'localhost';

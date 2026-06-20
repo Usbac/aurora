@@ -35,9 +35,9 @@ final class Helper
     }
 
     /**
-     * Returns the public path of the given content file
-     * @param string|null $path the path relative to the content directory
-     * @return string|null the public path
+     * Returns the path relative to the content directory with the content directory prefix
+     * @param string|null $path the path
+     * @return string|null the path with the content directory prefix
      */
     public static function getContentPath(?string $path = ''): ?string
     {
@@ -46,11 +46,24 @@ final class Helper
         }
 
         $content = trim(\Aurora\Core\Kernel::config('content'), '/');
-        $path = ltrim($path, '/');
 
-        return $path === $content || str_starts_with($path, "$content/")
-            ? "/$path"
-            : "/$content/$path";
+        return "/$content/" . ltrim($path, '/');
+    }
+
+    /**
+     * Returns the path relative to the content directory without the content directory prefix
+     * @param string|null $path the path
+     * @return string|null the path without the content directory prefix
+     */
+    public static function normalizeContentPath(?string $path): ?string
+    {
+        if ($path === null || $path === '' || parse_url($path, PHP_URL_HOST)) {
+            return $path;
+        }
+
+        $content = trim(\Aurora\Core\Kernel::config('content'), '/');
+
+        return mb_substr(ltrim($path, '/'), mb_strlen($content) + 1);
     }
 
     /**
