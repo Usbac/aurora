@@ -214,7 +214,7 @@
             },
             {
                 "key": "log_file",
-                "value": "app/aurora.log"
+                "value": "aurora.log"
             },
             {
                 "key": "rss",

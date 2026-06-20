@@ -7,14 +7,14 @@ final class Media
     public const FOLDER_PERMISSION = 0755;
 
     /**
-     * The content directory relative to the project root directory
+     * The content directory relative to the app root directory
      * @var string
      */
     private static string $directory = '';
 
     /**
      * Sets the content directory
-     * @param string $directory the content directory relative to the project root directory
+     * @param string $directory the content directory relative to the app root directory
      */
     public static function setDirectory(string $directory): void
     {
@@ -24,7 +24,7 @@ final class Media
     /**
      * Returns the files and folders in the given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @param [string] $search the search string
      * @param [string] $order the order (name, type, size)
      * @param [bool] $asc the order direction. true for ascending, false for descending
@@ -97,7 +97,7 @@ final class Media
     /**
      * Deletes the file/folder with given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @return bool true if the file/folder was deleted successfully, false otherwise
      */
     public static function remove(string $path): bool
@@ -114,7 +114,7 @@ final class Media
     /**
      * Renames the file/folder with given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @param string $name the new name
      * @return bool true if the file/folder was renamed successfully, false otherwise
      */
@@ -132,8 +132,8 @@ final class Media
     /**
      * Moves the file/folder with given path to the given folder
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
-     * @param string $name the destination folder relative to the project root directory
+     * @param string $path the path relative to the app root directory
+     * @param string $folder the destination folder relative to the app root directory
      * @return bool true if the file/folder was moved successfully, false otherwise
      */
     public static function move(string $path, string $folder): bool
@@ -155,7 +155,7 @@ final class Media
     /**
      * Duplicates the file with given path with the given name
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @param string $name the new name
      * @return bool true if the file was duplicated successfully, false otherwise
      */
@@ -195,8 +195,8 @@ final class Media
      * Uploads the given file to the given path
      * @throws \InvalidArgumentException
      * @param array $file the file
-     * @param string $path the path relative to the project root directory
-     * @return string|false the file path relative to the project root directory on success, false otherwise
+     * @param string $path the path relative to the app root directory
+     * @return string|false the file path relative to the app root directory on success, false otherwise
      */
     public static function uploadFile($file, string $path): string|false
     {

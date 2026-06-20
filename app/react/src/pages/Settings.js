@@ -199,7 +199,7 @@ const Advanced = ({ data, setData, user }) => {
             </div>
             <div className="input-group">
                 <label htmlFor="log_file">{t('log_file')}</label>
-                <span className="description">Relative to the Aurora root folder</span>
+                <span className="description">Relative to the app folder</span>
                 <input id="log_file" name="log_file" type="text" value={data.log_file} onChange={e => setData({ ...data, log_file: e.target.value })}/>
             </div>
         </div>

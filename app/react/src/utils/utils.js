@@ -437,12 +437,18 @@ export const getUrl = (path = '') => {
 
 /**
  * Prefixes a path with the site content base from `<meta name="content_path">` (uploads / static files).
- * @param {string} [path=''] - The path inside content; slashes are normalized.
+ * @param {string} [path=''] - Path relative to content.
  * @returns {string} The URL path starting with `/…/`.
  */
 export const getContentUrl = (path = '') => {
-    const content_path = document.querySelector('meta[name="content_path"]')?.content || '/';
-    return '/' + content_path + '/' + path.replace(/^\/+|\/+$/g, '');
+    const content_path = document.querySelector('meta[name="content_path"]')?.content || '';
+    path = path.replace(/^\/+|\/+$/g, '');
+
+    if (path === content_path || path.startsWith(`${content_path}/`)) {
+        path = path.slice(content_path.length).replace(/^\/+/, '');
+    }
+
+    return `/${content_path}/${path}`.replace(/\/+$/, '');
 };
 
 /**

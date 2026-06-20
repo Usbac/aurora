@@ -4,9 +4,11 @@ final class HelperTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetPath(): void
     {
-        $this->assertEquals(dirname(__DIR__, 3) . '/app', \Aurora\Core\Helper::getPath('app'));
-        $this->assertEquals(dirname(__DIR__, 3) . '/app/views', \Aurora\Core\Helper::getPath('app/views'));
-        $this->assertEquals(dirname(__DIR__, 3) . '/file.txt', \Aurora\Core\Helper::getPath('/file.txt'));
+        $this->assertEquals(dirname(__DIR__, 3) . '/app', \Aurora\Core\Helper::getPath());
+        $this->assertEquals(dirname(__DIR__, 3) . '/app/views', \Aurora\Core\Helper::getPath('views'));
+        $this->assertEquals(dirname(__DIR__, 3) . '/app/file.txt', \Aurora\Core\Helper::getPath('/file.txt'));
+        $this->assertEquals(dirname(__DIR__, 3), \Aurora\Core\Helper::getProjectPath());
+        $this->assertEquals(dirname(__DIR__, 3) . '/composer.json', \Aurora\Core\Helper::getProjectPath('composer.json'));
     }
 
     public function testCurrentPath(): void

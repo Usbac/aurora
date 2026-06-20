@@ -50,7 +50,7 @@ final class Update
         $archive->close();
         @unlink($zip_file);
 
-        $root = \Aurora\Core\Helper::getPath();
+        $root = \Aurora\Core\Helper::getProjectPath();
         $update = "$temp/" . trim($index, '/');
         $backup = "$temp/" . uniqid('aurora-backup-');
         mkdir($backup);
@@ -97,7 +97,7 @@ final class Update
      */
     private function installComposer(?callable $on_output = null): bool
     {
-        $root = \Aurora\Core\Helper::getPath();
+        $root = \Aurora\Core\Helper::getProjectPath();
 
         if (!is_file("$root/composer.json")) {
             return true;
@@ -123,7 +123,7 @@ final class Update
      */
     private function buildReact(?callable $on_output = null): bool
     {
-        $react_dir = \Aurora\Core\Helper::getPath('app/react');
+        $react_dir = \Aurora\Core\Helper::getPath('react');
 
         if (!is_file("$react_dir/package.json")) {
             return true;

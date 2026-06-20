@@ -5,13 +5,23 @@ namespace Aurora\Core;
 final class Helper
 {
     /**
+     * Returns the given path relative to the app root directory
+     * @param string $path the path
+     * @return string the given path relative to the app root directory
+     */
+    public static function getPath(string $path = ''): string
+    {
+        return dirname(__DIR__) . (empty($path) ? '' : '/' . trim($path, '/'));
+    }
+
+    /**
      * Returns the given path relative to the project root directory
      * @param string $path the path
      * @return string the given path relative to the project root directory
      */
-    public static function getPath(string $path = ''): string
+    public static function getProjectPath(string $path = ''): string
     {
-        return dirname(__DIR__, 2) . (empty($path) ? '' : '/' . trim($path, '/'));
+        return dirname(self::getPath()) . (empty($path) ? '' : '/' . trim($path, '/'));
     }
 
     /**

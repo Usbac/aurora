@@ -33,7 +33,7 @@ return function (\Aurora\Core\Kernel $kernel) {
     date_default_timezone_set($settings['timezone']);
 
     $languages = [];
-    foreach (glob(\Aurora\Core\Helper::getPath('app/languages/*.php')) as $file) {
+    foreach (glob(\Aurora\Core\Helper::getPath('languages/*.php')) as $file) {
         $languages[pathinfo($file, PATHINFO_FILENAME)] = require_once($file);
     }
 
