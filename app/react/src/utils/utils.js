@@ -710,3 +710,14 @@ export const getDeviceType = (user_agent) => {
 
     return 'Desktop';
 };
+
+/**
+ * Returns a string with the specified character trimmed from the beginning and end.
+ * @param {String} str The string to trim.
+ * @param {String} char The character to trim.
+ * @returns {String} The trimmed string.
+ */
+export const trimChar = (str, char) => {
+    const escaped = char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return str.replace(new RegExp(`^${escaped}+|${escaped}+$`, 'g'), '');
+}
