@@ -125,6 +125,10 @@ export default function User() {
         }).then(res => {
             if (res?.data?.success) {
                 alert(t('user_saved_successfully'));
+                if (is_current_user) {
+                    fetch_user();
+                }
+
                 if (res?.data?.id) {
                     navigate(`/admin/users/edit?id=${res.data.id}`, { replace: true });
                     setId(res.data.id);
