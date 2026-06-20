@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { I18nProvider } from './providers/I18nProvider';
 import { IconBook, IconHome, IconImage, IconLink, IconLogout, IconMoon, IconPencil, IconSettings, IconSun, IconTag, IconUser, IconWindow } from './utils/icons';
 import { Link as RouterLink, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { getContentUrl, LoadingPage, useApi, useElement } from './utils/utils';
+import { LoadingPage, useApi, useElement } from './utils/utils';
 import { useI18n } from './providers/I18nProvider';
 import NewPassword from './pages/NewPassword';
 import Login from './pages/Login';

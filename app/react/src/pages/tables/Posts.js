@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Table } from '../../utils/Table';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { DropdownMenu, formatDate, getContentUrl, useApi, useRequest } from '../../utils/utils';
+import { DropdownMenu, formatDate, useApi, useRequest } from '../../utils/utils';
 import { IconEye, IconThreeDots, IconTrash } from '../../utils/icons';
 import { useI18n } from '../../providers/I18nProvider';
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Table } from '../../utils/Table';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
-import { downloadFile, DropdownMenu, formatDate, formatSize, getContentUrl, useApi } from '../../utils/utils';
+import { downloadFile, DropdownMenu, formatDate, formatSize, trimChar, useApi } from '../../utils/utils';
 import { IconClipboard, IconDuplicate, IconFile, IconFolder, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 import { useI18n } from '../../providers/I18nProvider';

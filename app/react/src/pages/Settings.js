@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { downloadFile, formatSize, getContentUrl, ImageDialog, Input, LoadingPage, useApi, MenuButton, Switch, Textarea } from '../utils/utils';
+import { downloadFile, formatSize, ImageDialog, Input, LoadingPage, useApi, MenuButton, Switch, Textarea } from '../utils/utils';
 import { IconCode, IconDatabase, IconNote, IconServer, IconSettings, IconSync, IconTerminal } from '../utils/icons';
 import { Navigate, useLocation, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';

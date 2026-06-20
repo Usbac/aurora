@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getContentUrl, LoadingPage, MenuButton, useRequest } from '../utils/utils';
+import { LoadingPage, MenuButton, useRequest } from '../utils/utils';
 import { IconBook, IconPencil, IconTag, IconUser } from '../utils/icons';
 import { useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';

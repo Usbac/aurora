@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DateTimeInput, Editor, getContentUrl, getSlug, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest } from '../utils/utils';
+import { DateTimeInput, Editor, getSlug, getUrl, ImageDialog, Input, LoadingPage, MenuButton, Switch, Textarea, useApi, useRequest } from '../utils/utils';
 import { IconEye, IconTrash } from '../utils/icons';
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom';
 import { useI18n } from '../providers/I18nProvider';
