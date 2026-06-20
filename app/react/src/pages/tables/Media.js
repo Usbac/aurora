@@ -111,8 +111,7 @@ const DialogDuplicate = ({ file, onClose, onSuccess }) => {
 
 const DialogMove = ({ file, onClose, onSuccess }) => {
     const [ folders, setFolders ] = useState(undefined);
-    const initial_destination_folder = file.path.slice(0, file.path.lastIndexOf('/')).replace(/^\/+|\/+$/g, '');
-    const [ destination_folder, setDestinationFolder ] = useState(initial_destination_folder.length == 0 ? '/' : initial_destination_folder);
+    const [ destination_folder, setDestinationFolder ] = useState('/');
     const { t } = useI18n();
     const { request } = useApi();
 
@@ -128,7 +127,7 @@ const DialogMove = ({ file, onClose, onSuccess }) => {
             method: 'POST',
             url: '/api/media/move',
             data: {
-                name: destination_folder,
+                name: trimChar(document.querySelector('meta[name="content_path"]')?.content, '/') + '/' + trimChar(destination_folder, '/'),
                 path: file.path,
             },
         }).then(res => {
