@@ -549,7 +549,7 @@ return function (\Aurora\Core\Kernel $kernel, DB $db, View $view, Language $lang
     });
 
     $router->get('json:api/media/folders', function() {
-        $folders = [ Kernel::config('content') => '/' ];
+        $folders = [ '/' ];
         $content_dir = Helper::getPath(Kernel::config('content'));
 
         foreach (new RecursiveIteratorIterator(
