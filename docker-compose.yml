@@ -1,9 +1,12 @@
 services:
   app:
-    build: ./docker
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     container_name: Aurora
     ports:
       - "80:80"
     volumes:
       - ./:/var/www/html
+      - ./docker/php.ini:/usr/local/etc/php/php.ini:ro
     restart: unless-stopped

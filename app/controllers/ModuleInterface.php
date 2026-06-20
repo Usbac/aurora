@@ -6,9 +6,9 @@ interface ModuleInterface
 {
     public function add(array $data): string|bool;
 
-    public function save(int $id, array $data): bool;
+    public function save(int $id, array $data, ?array $user = null): bool;
 
-    public function checkFields(array $data, $id = null): array;
+    public function checkFields(array $data, $id, $user): array;
 
     public function getCondition(array $search): string;
 }

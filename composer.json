@@ -15,13 +15,12 @@
     ],
     "scripts": {
         "post-autoload-dump": [
-            "cp -a vendor/tinymce/tinymce/. public/assets/js/tinymce",
-            "mkdir -p public/content"
-        ]
+            "mkdir -p app/public/content"
+        ],
+        "test": "vendor/bin/phpunit -c phpunit.xml.dist"
     },
     "require": {
         "php": ">=8.0.0",
-        "tinymce/tinymce": "^6.7",
         "symfony/console": "^5.4"
     },
     "autoload": {
@@ -29,7 +28,7 @@
             "Aurora\\App\\": "app/controllers",
             "Aurora\\App\\Modules\\": "app/controllers/modules",
             "Aurora\\Bin\\": "bin",
-            "Aurora\\Core\\": "core",
+            "Aurora\\Core\\": "app/core",
             "Aurora\\Tests\\Modules\\": "tests/unit/controllers/modules"
         }
     },

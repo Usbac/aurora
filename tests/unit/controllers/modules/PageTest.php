@@ -124,21 +124,21 @@ final class PageTest extends \Aurora\Tests\Modules\Base
     {
         \Aurora\App\Permission::set([ 'edit_pages' => 1 ], 1);
         $this->assertEquals([
-            'title' => 'Invalid value',
-        ], $this->mod->checkFields([ 'title' => '', 'slug' => '' ], 0));
+            'invalid_title',
+        ], $this->mod->checkFields([ 'title' => '', 'slug' => '' ], 0, []));
 
-        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => '' ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => '' ], 1, []));
 
-        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech' ], 1));
+        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Tech', 'slug' => 'tech' ], 1, []));
 
         $this->assertEquals([
-            'slug' => 'Slug already in use, try a different one',
-        ], $this->mod->checkFields([ 'title' => 'Health & Wellness', 'slug' => 'home' ], 2));
+            'repeated_slug',
+        ], $this->mod->checkFields([ 'title' => 'Health & Wellness', 'slug' => 'home' ], 2, []));
 
         \Aurora\App\Permission::set([ 'edit_pages' => 2 ], 1);
         $this->assertEquals([
-            'You do not have permissions to perform this action',
-        ], $this->mod->checkFields([ 'title' => 'Travel', 'slug' => 'travel' ], 0));
+            'no_permission',
+        ], $this->mod->checkFields([ 'title' => 'Travel', 'slug' => 'travel' ], 0, []));
     }
 
     public function testGetCondition(): void

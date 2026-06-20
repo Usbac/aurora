@@ -1,0 +1,8 @@
+.git
+.github
+.vscode
+app/react/node_modules
+app/public/content
+vendor
+*.log
+.DS_Store

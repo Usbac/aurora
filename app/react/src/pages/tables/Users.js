@@ -1,0 +1,188 @@
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Table } from '../../utils/Table';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { DropdownMenu, formatDate, getRoleTitle, useApi, useRequest } from '../../utils/utils';
+import { IconEye, IconThreeDots, IconTrash, IconUsers } from '../../utils/icons';
+import { useI18n } from '../../providers/I18nProvider';
+
+export default function Users() {
+    const { user, settings, fetch_user } = useOutletContext();
+    const navigate = useNavigate();
+    const { t } = useI18n();
+    const { request } = useApi();
+    const table_ref = useRef(null);
+    const { data: roles_req, is_loading: is_loading_roles, fetch: fetch_roles } = useRequest({
+        method: 'GET',
+        url: '/api/roles',
+    });
+    const roles_options = useMemo(() => {
+        const roles = Array.isArray(roles_req?.data) ? roles_req.data : [];
+
+        return [
+            { key: '', title: t('all') },
+            ...roles.map(role => ({ key: role.level, title: getRoleTitle(role.slug) })),
+        ];
+    }, [ roles_req, t ]);
+
+    useEffect(() => {
+        fetch_roles();
+    }, []);
+
+    return <div className="content">
+        <Table
+            ref={table_ref}
+            url="/api/users"
+            title={t('users')}
+            topOptions={[
+                {
+                    content: <><b>+</b>&nbsp;{t('new')}</>,
+                    condition: Boolean(user?.actions?.edit_users),
+                    onClick: () => navigate('/admin/users/edit'),
+                },
+            ]}
+            rowOnClick={item => navigate(`/admin/users/edit?id=${item.id}`)}
+            filters={{
+                status: {
+                    title: t('status'),
+                    options: [
+                        { key: '', title: t('all') },
+                        { key: '1', title: t('active') },
+                        { key: '0', title: t('inactive') },
+                    ],
+                },
+                role: {
+                    title: t('role'),
+                    disabled: is_loading_roles,
+                    options: roles_options,
+                },
+                order: {
+                    title: t('sort_by'),
+                    options: [
+                        { key: 'name', title: t('name') },
+                        { key: 'email', title: t('email') },
+                        { key: 'status', title: t('status') },
+                        { key: 'role', title: t('role') },
+                        { key: 'last_active', title: t('last_active') },
+                        { key: 'posts', title: t('no_posts') },
+                    ],
+                },
+                sort: {
+                    options: [
+                        { key: 'asc', title: t('ascending') },
+                        { key: 'desc', title: t('descending') },
+                    ],
+                },
+            }}
+            options={[
+                {
+                    title: t('delete'),
+                    class: 'danger',
+                    condition: Boolean(user?.actions?.edit_users),
+                    onClick: (users) => {
+                        if (confirm(t('confirm_delete_selected_users'))) {
+                            request({
+                                method: 'DELETE',
+                                url: '/api/users',
+                                data: { id: users.map(u => u.id) },
+                            }).then(res => {
+                                alert(t(res?.data?.success ? 'users_deleted_successfully' : 'error_deleting_users'));
+                                if (res?.data?.success) {
+                                    table_ref?.current?.refetch();
+                                }
+                            });
+                        }
+                    },
+                },
+            ]}
+            columns={[
+                {
+                    class: 'w100 align-center',
+                    content: item => (<>
+                        <div className="user-image">
+                            <img
+                                src={item.image ? item.image : '/assets/no-image.svg'}
+                                className={item.image ? '' : 'empty-img'}
+                                alt={item.name}
+                                style={{ visibility: item.image ? 'visible' : 'hidden' }}
+                            />
+                        </div>
+                        <div>
+                            <h3>
+                                {item.name}
+                                {item.id == user?.id && <span className="you-tag">{t('you')}</span>}
+                                {item.status != 1 && <span className="title-label red">{t('inactive')}</span>}
+                            </h3>
+                            <p className="subtitle">{item.email}</p>
+                        </div>
+                    </>),
+                },
+                {
+                    title: t('role'),
+                    class: 'w20',
+                    content: item => getRoleTitle(item.role_slug),
+                },
+                {
+                    title: t('last_active'),
+                    class: 'w20',
+                    content: item => formatDate(item.last_active),
+                },
+                {
+                    title: t('no_posts'),
+                    class: 'w10 numeric',
+                    content: item => item.posts,
+                },
+                {
+                    class: 'w10 row-actions',
+                    content: item => <DropdownMenu
+                        content={<IconThreeDots/>}
+                        className="three-dots"
+                        options={[
+                            {
+                                onClick: () => window.open(`/${settings.blog_url}/author/${item.slug}`, '_blank').focus(),
+                                content: <><IconEye/> {t('view')}</>
+                            },
+                            {
+                                condition: item.id != user?.id && user.role > item.role,
+                                onClick: () => {
+                                    if (confirm(t('confirm_impersonate_user'))) {
+                                        request({
+                                            method: 'POST',
+                                            url: '/api/users/impersonate',
+                                            data: { id: item.id },
+                                        }).then(res => {
+                                            if (!res?.data?.success) {
+                                                alert(t('error_impersonating_user'));
+                                            } else {
+                                                fetch_user();
+                                            }
+                                        });
+                                    }
+                                },
+                                content: <><IconUsers/> {t('impersonate')}</>
+                            },
+                            {
+                                class: 'danger',
+                                condition: item.id != user?.id && Boolean(user?.actions?.edit_users),
+                                onClick: () => {
+                                    if (confirm(t('confirm_delete_user', item.name))) {
+                                        request({
+                                            method: 'DELETE',
+                                            url: '/api/users',
+                                            data: { id: item.id },
+                                        }).then(res => {
+                                            alert(t(res?.data?.success ? 'user_deleted_successfully' : 'error_deleting_user'));
+                                            if (res?.data?.success) {
+                                                table_ref?.current?.refetch();
+                                            }
+                                        });
+                                    }
+                                },
+                                content: <><IconTrash/> {t('delete')}</>
+                            },
+                        ]}
+                    />,
+                },
+            ]}
+        />
+    </div>
+}

@@ -170,6 +170,15 @@ abstract class ModuleBase implements ModuleInterface
     }
 
     /**
+     * Returns the table name
+     * @return string the table name
+     */
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    /**
      * Returns the row with additional data mapped into it
      * @param mixed $data the row
      * @return mixed the row with additional data

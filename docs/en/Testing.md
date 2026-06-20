@@ -11,5 +11,11 @@ composer install
 Then, to run the automated tests, just execute the following command:
 
 ```bash
-vendor/bin/phpunit tests
+composer test
+```
+
+Or directly:
+
+```bash
+vendor/bin/phpunit -c phpunit.xml.dist
 ```

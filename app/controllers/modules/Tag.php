@@ -31,39 +31,40 @@ final class Tag extends \Aurora\App\ModuleBase
      * Updates an existing tag
      * @param int $id the tag id
      * @param array $data the new data
+     * @param array|null $user the user performing the action
      * @return bool true on success, false otherwise
      */
-    public function save(int $id, array $data): bool
+    public function save(int $id, array $data, ?array $user = null): bool
     {
-        return $this->db->update($this->table, $this->getBaseData($data), $id) ? $id : false;
+        return $this->db->update($this->table, $this->getBaseData($data), $id);
     }
 
     /**
      * Returns an array with all the tag fields that contain an error
      * @param array $data the tag fields
-     * @param [mixed] $id the tag id
+     * @param mixed $id the tag id
+     * @param mixed $user the user data
      * @return array the array with the tag fields that contain an error
      */
-    public function checkFields(array $data, $id = null): array
+    public function checkFields(array $data, $id, $user): array
     {
         $errors = [];
 
         if (empty($data['name'])) {
-            $errors['name'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_name';
         }
 
         if (!empty($data['slug']) &&
             !empty($this->get([ 'slug' => $data['slug'], '!id' => $id ]))) {
-            $errors['slug'] = $this->language->get('repeated_slug');
+            $errors[] = 'repeated_slug';
         }
 
         if (empty($data['slug']) || !\Aurora\Core\Helper::isSlugValid($data['slug'])) {
-            $errors['slug'] = $this->language->get('invalid_slug');
+            $errors[] = 'invalid_slug';
         }
 
         if (!\Aurora\App\Permission::can('edit_tags')) {
-            http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         return $errors;
@@ -77,6 +78,10 @@ final class Tag extends \Aurora\App\ModuleBase
     public function getCondition(array $filters): string
     {
         $where = [];
+
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'tags.id = ' . ((int) $filters['id']);
+        }
 
         if (!empty($filters['search'])) {
             $search = $this->db->escape($filters['search']);
@@ -94,11 +99,11 @@ final class Tag extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'name' => $data['name'],
-            'slug' => $data['slug'],
-            'description' => $data['description'],
-            'meta_title' => $data['meta_title'],
-            'meta_description' => $data['meta_description'],
+            'name' => $data['name'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'description' => $data['description'] ?? '',
+            'meta_title' => $data['meta_title'] ?? '',
+            'meta_description' => $data['meta_description'] ?? '',
         ];
     }
 }

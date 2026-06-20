@@ -38,30 +38,31 @@ final class Link extends \Aurora\App\ModuleBase
      * Updates an existing link
      * @param int $id the link id
      * @param array $data the new data
+     * @param array|null $user the user performing the action
      * @return bool true on success, false otherwise
      */
-    public function save(int $id, array $data): bool
+    public function save(int $id, array $data, ?array $user = null): bool
     {
-        return $this->db->update($this->table, $this->getBaseData($data), $id) ? $id : false;
+        return $this->db->update($this->table, $this->getBaseData($data), $id);
     }
 
     /**
      * Returns an array with all the link fields that contain an error
      * @param array $data the link fields
-     * @param [mixed] $id the link id
+     * @param mixed $id the link id
+     * @param mixed $user the user data
      * @return array the array with the link fields that contain an error
      */
-    public function checkFields(array $data, $id = null): array
+    public function checkFields(array $data, $id, $user): array
     {
         $errors = [];
 
         if (empty($data['title'])) {
-            $errors['title'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_title';
         }
 
         if (!\Aurora\App\Permission::can('edit_links')) {
-            http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+            $errors[] = 'no_permission';
         }
 
         return $errors;
@@ -75,6 +76,10 @@ final class Link extends \Aurora\App\ModuleBase
     public function getCondition(array $filters): string
     {
         $where = [];
+
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'links.id = ' . ((int) $filters['id']);
+        }
 
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = 'links.status = ' . ((int) $filters['status']);
@@ -96,10 +101,10 @@ final class Link extends \Aurora\App\ModuleBase
     private function getBaseData(array $data): array
     {
         return [
-            'title' => $data['title'],
-            'url' => $data['url'],
-            'order' => $data['order'],
-            'status' => $data['status'],
+            'title' => $data['title'] ?? '',
+            'url' => $data['url'] ?? '',
+            'order' => $data['order'] ?? 0,
+            'status' => $data['status'] ?? false,
         ];
     }
 }

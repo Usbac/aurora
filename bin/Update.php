@@ -33,11 +33,14 @@ class Update extends \Aurora\Bin\BaseCommand
         }
 
         if (!$io->confirm("Are you sure about updating Aurora to version " . $latest_release['version'] . "?\n It is recommended to make a backup of your files before continuing.", false)) {
-            $output->writeln('The update has ben cancelled.');
+            $output->writeln('The update has been cancelled.');
             return Command::SUCCESS;
         }
 
-        switch ($update->run($latest_release['zip'])) {
+        switch ($update->run($latest_release['zip'], function ($line) use ($output) {
+            \Aurora\Core\Helper::log($line);
+            $output->writeln($line);
+        })) {
             case \Aurora\App\Update::ERROR_CONNECTION:
                 $io->error('The update file could not be downloaded.');
                 return Command::FAILURE;
@@ -47,9 +50,15 @@ class Update extends \Aurora\Bin\BaseCommand
             case \Aurora\App\Update::ERROR_COPY:
                 $io->error("An error occurred while copying files. The update could not be completed.\nPlease make sure your files have the right permissions and try again.");
                 return Command::FAILURE;
+            case \Aurora\App\Update::ERROR_BUILD:
+                $io->error("The React admin panel could not be built.\nPlease make sure Node.js and npm are installed and try again.");
+                return Command::FAILURE;
+            case \Aurora\App\Update::ERROR_COMPOSER:
+                $io->error("PHP dependencies could not be installed.\nPlease make sure Composer is installed and try again.");
+                return Command::FAILURE;
         }
 
-        $io->success('Aurora has been succesfully updated to version ' . $latest_release['version'] . '.');
+        $io->success('Aurora has been successfully updated to version ' . $latest_release['version'] . '.');
         return Command::SUCCESS;
     }
 }

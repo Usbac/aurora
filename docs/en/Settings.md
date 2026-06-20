@@ -92,14 +92,6 @@ The `Reset views count` button will reset the views counter of all posts and pag
 
 ## Advanced
 
-### Session lifetime
-
-PHP Session lifetime in seconds (e.g. 3600 = 1 hour).
-
-### Session SameSite cookie
-
-Value for the PHP session SameSite cookie. This controls whether or not a cookie is sent with cross-site requests, providing some protection against cross-site request forgery attacks (CSRF).
-
 ### Display errors
 
 Display PHP errors on the website. It's recommended to enable this option ONLY in non-production environments. For it to work properly, the Log errors option must also be enabled.
@@ -129,29 +121,6 @@ Code that will be added to the footer of the website. This is useful to add cust
 ### Posts code
 
 Code that will be added at the bottom of all posts pages. This is useful to add something like a comments section via js. The `$post` PHP variable will be available in this code and will contain all the post data.
-
-### HTML editor
-
-The code that defines the WYSIWYG editor used for the pages and posts in the admin panel.
-
-By default the [TinyMCE](https://www.tiny.cloud) editor is used, but you can use any other editor that can be loaded via js.
-
-The query selector for the textarea field used in both pages and posts is `textarea#html` and the endpoint which can be used to upload images is `/admin/posts/upload_image`.
-
-This is an example using the default editor.
-
-```js
-<script src="/public/assets/js/tinymce/tinymce.min.js"></script>
-<script>
-    let selector = 'textarea#html';
-    tinymce.init({
-        selector: selector,
-        plugins: [ 'image', 'wordcount', 'autoresize', 'code', 'link', 'lists' ],
-        images_upload_url: '/admin/posts/upload_image',
-        setup: editor => editor.on('Change Keyup', () => get(selector).innerHTML = editor.getContent()),
-    });
-</script>
-```
 
 ## Update
 

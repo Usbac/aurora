@@ -10,7 +10,7 @@
         <meta property="og:title" content="<?= e(setting('meta_title')) ?>"/>
         <meta property="og:description" content="<?= e(setting('meta_description')) ?>"/>
     <?php endif ?>
-    <link rel="canonical" href="<?= e($this->url($_SERVER['REQUEST_URI'])) ?>"/>
+    <link rel="canonical" href="<?= e(\Aurora\Core\Helper::getUrl($_SERVER['REQUEST_URI'])) ?>"/>
 </head>
 <body>
     <?= $this->include('themes/default/partials/header.html') ?>
@@ -28,7 +28,7 @@
             <script>var next_page_args = 'tag=' + <?= js($tag['id']) ?>;</script>
         <?php elseif (isset($user)): ?>
             <div class="section author">
-                <img src="<?= !empty($user['image']) ? e($this->getContentUrl($user['image'])) : '/public/assets/user.svg' ?>" alt="<?= $this->t('author') ?>"/>
+                <img src="<?= !empty($user['image']) ? e($user['image']) : '/public/assets/user.svg' ?>" alt="<?= $this->t('author') ?>"/>
                 <div>
                     <h2><?= e($user['name']) ?></h2>
                     <span><?= e($user['bio']) ?></span>
@@ -59,7 +59,7 @@
 
             btn.classList.add('loading');
 
-            fetch('/api/posts?page=' + next_page + '&' + args)
+            fetch('/api/blog/posts?page=' + next_page + '&' + args)
                 .then(res => res.json())
                 .then(res => {
                     window.history.replaceState(null, null, window.location.pathname + '?page=' + next_page);

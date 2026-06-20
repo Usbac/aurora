@@ -71,6 +71,16 @@ final class Migration
             'meta_title'       => 'TEXT',
             'meta_description' => 'TEXT',
         ],
+        'tokens' => [
+            'id'         => 'INTEGER PRIMARY KEY',
+            'user_id'    => 'INTEGER',
+            'token'      => 'TEXT',
+            'user_agent' => 'TEXT',
+            'ip'         => 'TEXT',
+            'created_at' => 'INTEGER',
+            'updated_at' => 'INTEGER',
+            ''           => 'CONSTRAINT tokens_pk UNIQUE (`user_id`, `token`)',
+        ],
         'users' => [
             'id'          => 'INTEGER PRIMARY KEY',
             'name'        => 'TEXT',

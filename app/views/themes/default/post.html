@@ -10,7 +10,7 @@
     <?php foreach ($post['tags'] as $tag): ?>
         <meta property="article:tag" content="<?= e($tag) ?>"/>
     <?php endforeach ?>
-    <link rel="canonical" href="<?= e(empty($post['canonical_url']) ? $this->url($_SERVER['REQUEST_URI']) : $post['canonical_url']) ?>"/>
+    <link rel="canonical" href="<?= e(empty($post['canonical_url']) ? \Aurora\Core\Helper::getUrl($_SERVER['REQUEST_URI']) : $post['canonical_url']) ?>"/>
 </head>
 <body>
     <?= $this->include('themes/default/partials/header.html') ?>
@@ -26,14 +26,14 @@
                 <span><?= e($post['description']) ?></span>
             <?php endif ?>
             <?php if (!empty($post['image'])): ?>
-                <img src="<?= e($this->getContentUrl($post['image'])) ?> " alt="<?= e($post['image_alt'] ?? '') ?>"/>
+                <img src="<?= e($post['image']) ?> " alt="<?= e($post['image_alt'] ?? '') ?>"/>
             <?php endif ?>
             <div class="meta">
                 <?php if ($post['user_id']): ?>
                     <div>
                         <?php $user_url = '/' . setting('blog_url') . '/author/' . $post['user_slug'] ?>
                         <a href="<?= e($user_url) ?>" class="pointer">
-                            <img src="<?= !empty($post['user_image']) ? e($this->getContentUrl($post['user_image'])) : '/public/assets/user.svg' ?>" alt="<?= $this->t('author') ?>"/>
+                            <img src="<?= !empty($post['user_image']) ? e($post['user_image']) : '/public/assets/user.svg' ?>" alt="<?= $this->t('author') ?>"/>
                         </a>
                         <a href="<?= e($user_url) ?>"><?= e($post['user_name']) ?></a>
                     </div>
@@ -58,7 +58,7 @@
                         <?php $related_post_url = '/' . setting('blog_url') . '/' . $related['slug'] ?>
                         <div class="related-card">
                             <a href="<?= e($related_post_url) ?>">
-                                <img src="<?= e($this->getContentUrl($related['image'])) ?>" alt="<?= e($related['image_alt'] ?? '') ?>" class="pointer"/>
+                                <img src="<?= e($related['image']) ?>" alt="<?= e($related['image_alt'] ?? '') ?>" class="pointer"/>
                             </a>
                             <?php if (!$related['status']): ?>
                                 <span class="label red"><?= $this->t('draft') ?></span>

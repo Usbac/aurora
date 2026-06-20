@@ -100,16 +100,16 @@ final class LinkTest extends \Aurora\Tests\Modules\Base
     {
         \Aurora\App\Permission::set([ 'edit_links' => 1 ], 1);
         $this->assertEquals([
-            'title' => 'Invalid value',
-        ], $this->mod->checkFields([ 'title' => '' ]));
+            'invalid_title',
+        ], $this->mod->checkFields([ 'title' => '' ], '', []));
 
-        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Home' ]));
+        $this->assertEquals([], $this->mod->checkFields([ 'title' => 'Home' ], '', []));
 
         \Aurora\App\Permission::set([ 'edit_links' => 2 ], 1);
         $this->assertEquals([
-            'You do not have permissions to perform this action',
-            'title' => 'Invalid value',
-        ], $this->mod->checkFields([ 'title' => '' ]));
+            'invalid_title',
+            'no_permission',
+        ], $this->mod->checkFields([ 'title' => '' ], '', []));
     }
 
     public function testGetCondition(): void

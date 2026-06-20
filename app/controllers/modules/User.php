@@ -12,7 +12,10 @@ final class User extends \Aurora\App\ModuleBase
     protected string $join = 'LEFT JOIN posts ON posts.user_id = users.id
         LEFT JOIN roles ON roles.level = users.role';
     protected string $group_by = 'users.id';
-    protected array $relations = [ 'password_restores' => 'user_id' ];
+    protected array $relations = [
+        'password_restores' => 'user_id',
+        'tokens' => 'user_id',
+    ];
     protected array $orders = [
         'name' => 'users.name',
         'email' => 'users.email',
@@ -27,22 +30,29 @@ final class User extends \Aurora\App\ModuleBase
      * Updates an existing user
      * @param int $id the user id
      * @param array $data the new data
+     * @param array|null $user the user performing the save, its current token will be kept when revoking sessions after a password change
      * @return bool true on success, false otherwise
      */
-    public function save(int $id, array $data): bool
+    public function save(int $id, array $data, ?array $user = null): bool
     {
         $res = $this->db->update($this->table, [
             'name' => $data['name'],
             'slug' => $data['slug'],
             'email' => $data['email'],
             'status' => $data['status'],
-            'image' => $data['image'],
+            'image' => \Aurora\Core\Helper::normalizeContentPath($data['image']),
             'bio' => $data['bio'],
             'role' => $data['role'],
         ], $id);
 
         if ($res && !empty($data['password'])) {
             $this->db->update($this->table, [ 'password' => $this->getPassword($data['password']) ], $id);
+
+            if ($id == ($user['id'] ?? 0)) {
+                $this->db->query('DELETE FROM tokens WHERE user_id = ? AND token != ?', $id, ($user['token'] ?? null));
+            } else {
+                $this->db->query('DELETE FROM tokens WHERE user_id = ?', $id);
+            }
         }
 
         return $res;
@@ -57,167 +67,102 @@ final class User extends \Aurora\App\ModuleBase
     {
         $time = time();
         return $this->db->insert($this->table, [
-            'name' => $data['name'],
-            'slug' => $data['slug'],
-            'email' => $data['email'],
+            'name' => $data['name'] ?? '',
+            'slug' => $data['slug'] ?? '',
+            'email' => $data['email'] ?? '',
             'password' => $this->getPassword($data['password']),
-            'status' => $data['status'],
-            'image' => $data['image'] ?? null,
-            'bio' => $data['bio'],
-            'role' => $data['role'],
+            'status' => $data['status'] ?? false,
+            'image' => \Aurora\Core\Helper::normalizeContentPath($data['image'] ?? null),
+            'bio' => $data['bio'] ?? '',
+            'role' => $data['role'] ?? 0,
             'created_at' => $time,
             'last_active' => $time,
         ]);
     }
 
     /**
-     * Handles the login of an user
-     * @param string $email the user's email
-     * @param string $password the user's password
-     * @return array the array with the login errors, if empty it means the user has successfully logged in.
-     */
-    public function handleLogin(string $email, string $password): array
-    {
-        $user = $this->get([
-            'email' => $email,
-            'status' => 1,
-        ]);
-        $errors = [];
-
-        if (!$user) {
-            $errors['email'] = $this->language->get('no_active_user');
-        } elseif (!password_verify($password, $user['password'])) {
-            $errors['password'] = $this->language->get('wrong_password');
-        }
-
-        if (empty($errors)) {
-            $_SESSION['user'] = $user;
-        }
-
-        return $errors;
-    }
-
-    /**
-     * Sends an email to restore the password of an user
-     * @param string $email the user's email
-     * @param string $hash the hash to restore the password
-     * @param string $message the email's content
-     * @return array the array with the errors, if empty it means the email has been sent.
-     */
-    public function requestPasswordRestore(string $email, string $hash, string $message): array
-    {
-        $user = $this->get([
-            'email' => $email,
-            'status' => 1,
-        ]);
-        $errors = [];
-
-        if (!$user) {
-            $errors['email'] = $this->language->get('no_active_user');
-        }
-
-        if (empty($errors)) {
-            $this->db->replace('password_restores', [
-                'user_id' => $user['id'],
-                'hash' => $hash,
-                'created_at' => time(),
-            ]);
-
-            if (!\Aurora\Core\Kernel::config('mail')($email, $this->language->get('restore_your_password'), $message)) {
-                $errors['email'] = $this->language->get('error_sending_email');
-            }
-        }
-
-        return $errors;
-    }
-
-    /**
-     * Restores an user's password
-     * @param string $hash the hash to restore the password
-     * @param string $password the new password
-     * @param string $password_confirm the confirmation of the new password
-     * @return string the error message, if empty it means the password has been successfully been restored
-     */
-    public function passwordRestore(string $hash, string $password, string $password_confirm): string
-    {
-        $restore = $this->db->query('SELECT * FROM password_restores WHERE hash = ?', $hash)->fetch();
-
-        if (empty($restore) || $restore['created_at'] < strtotime('-2 hours')) {
-            return $this->language->get('error_expired_restore');
-        }
-
-        $error = $this->checkPassword($password, $password_confirm);
-        if (empty($error)) {
-            $user = $this->get([
-                'id' => $restore['user_id'],
-                'status' => 1,
-            ]);
-
-            if (!$user) {
-                return $this->language->get('no_active_user');
-            }
-
-            $this->db->delete('password_restores', $hash, 'hash');
-            $this->db->update($this->table, [ 'password' => $this->getPassword($password) ], $user['id']);
-            $_SESSION['user'] = $user;
-        }
-
-        return $error;
-    }
-
-    /**
      * Returns an array with all the user fields that contain an error
      * @param array $data the user fields
-     * @param [mixed] $id the user id
+     * @param mixed $id the user id
+     * @param mixed $user the user data
      * @return array the array with the user fields that contain an error
      */
-    public function checkFields(array $data, $id = null): array
+    public function checkFields(array $data, $id, $user): array
     {
         $errors = [];
 
         if (empty($data['name'])) {
-            $errors['name'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_name';
         }
 
         if (!empty($data['slug']) &&
             !empty($this->get([ 'slug' => $data['slug'], '!id' => $id ]))) {
-            $errors['slug'] = $this->language->get('repeated_slug');
+            $errors[] = 'repeated_slug';
         }
 
         if (empty($data['slug']) || !\Aurora\Core\Helper::isSlugValid($data['slug'])) {
-            $errors['slug'] = $this->language->get('invalid_slug');
+            $errors[] = 'invalid_slug';
         }
 
         if (!empty($data['email']) && !empty($this->get([ 'email' => $data['email'], '!id' => $id ]))) {
-            $errors['email'] = $this->language->get('repeated_email');
+            $errors[] = 'repeated_email';
         }
 
         if (empty($data['email']) ||
             filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
-            $errors['email'] = $this->language->get('invalid_value');
+            $errors[] = 'invalid_value';
         }
 
         if (empty($id) && empty($data['password'])) {
-            $errors['password'] = $this->language->get('bad_password');
+            $errors[] = 'bad_password';
         }
 
         if (!empty($data['password'])) {
-            $password_error = $this->checkPassword($data['password'], $data['password_confirm']);
+            $password_error = $this->checkPassword($data['password'], $data['password_confirm'] ?? '');
             if (!empty($password_error)) {
-                $errors['password'] = $password_error;
+                $errors[] = $password_error;
             }
         }
 
-        $can_edit = empty($id)
-            ? \Aurora\App\Permission::can('edit_users')
-            : \Aurora\App\Permission::edit_user($this->get([ 'id' => $id ]));
-
-        if (!$can_edit) {
-            http_response_code(403);
-            $errors[0] = $this->language->get('no_permission');
+        if (!$user || !self::canEdit($user, \Aurora\Core\Helper::isValidId($id) ? $this->get([ 'id' => $id ]) : null, $data)) {
+            $errors[] = 'no_permission';
         }
 
         return $errors;
+    }
+
+    /**
+     * Returns true if the given actor user can edit the subject user and assign the given role
+     * @param array $current_user the user performing the action
+     * @param array|null $subject the user being edited, null when creating a new user
+     * @param array|null $new_data the new data for the subject
+     * @return bool true if the actor can edit the subject user, false otherwise
+     */
+    public static function canEdit(array $current_user, ?array $subject, ?array $new_data = null): bool
+    {
+        $current_user_role = (int) ($current_user['role'] ?? 0);
+        $is_owner = $current_user_role == 4;
+        $new_role = $new_data['role'] ?? null;
+
+        if ($subject !== null && (int) ($subject['id'] ?? 0) === (int) ($current_user['id'] ?? 0)) {
+            if (isset($new_data['status']) && (int) $new_data['status'] !== (int) ($subject['status'] ?? 0)) {
+                return false;
+            }
+
+            return $new_role === null || $new_role <= $current_user_role;
+        }
+
+        if (!\Aurora\App\Permission::can('edit_users')) {
+            return false;
+        }
+
+        if ($subject !== null && !$is_owner && (int) ($subject['role'] ?? 0) >= $current_user_role) {
+            return false;
+        }
+
+        $max_assignable_role = $is_owner ? $current_user_role : $current_user_role - 1;
+
+        return $new_role === null || $new_role <= $max_assignable_role;
     }
 
     /**
@@ -228,6 +173,10 @@ final class User extends \Aurora\App\ModuleBase
     public function getCondition(array $filters): string
     {
         $where = [];
+
+        if (isset($filters['id']) && \Aurora\Core\Helper::isValidId($filters['id'])) {
+            $where[] = 'users.id = ' . ((int) $filters['id']);
+        }
 
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = 'users.status = ' . ((int) $filters['status']);
@@ -246,6 +195,21 @@ final class User extends \Aurora\App\ModuleBase
     }
 
     /**
+     * Returns the user id if the given credentials are valid, false otherwise
+     * @param string $email the user email
+     * @param string $password the plain password
+     * @return int|false the user id on success, false otherwise
+     */
+    public function authenticate(string $email, string $password): int|false
+    {
+        $row = $this->db->query("SELECT id, password FROM $this->table WHERE email = ? AND status = 1", $email)->fetch();
+
+        return !$row || !password_verify($password, $row['password'])
+            ? false
+            : ((int) $row['id']);
+    }
+
+    /**
      * Returns the given password hashed
      * @param string $password the password
      * @return string the password hashed
@@ -259,18 +223,33 @@ final class User extends \Aurora\App\ModuleBase
      * Checks the given password and its confirmation
      * @param string $password the password
      * @param string $password_confirm the password confirmation
-     * @return string the error message, if empty it means both passwords are equal and valid
+     * @return string|false the error message, if false it means both passwords are equal and valid
      */
-    private function checkPassword(string $password, string $password_confirm): string
+    public function checkPassword(string $password, string $password_confirm): string|false
     {
         if (mb_strlen($password) < 8) {
-            return $this->language->get('bad_password');
+            return 'bad_password';
         }
 
         if ($password !== $password_confirm) {
-            return $this->language->get('bad_password_confirm');
+            return 'bad_password_confirm';
         }
 
-        return '';
+        return false;
+    }
+
+    /**
+     * Returns the user with additional data mapped into it
+     * @param mixed $data the user data
+     * @return mixed the user with additional data
+     */
+    protected function getRowData($data): mixed
+    {
+        if (!empty($data['image'])) {
+            $data['image'] = \Aurora\Core\Helper::getContentPath($data['image']);
+        }
+
+        unset($data['password']);
+        return $data;
     }
 }

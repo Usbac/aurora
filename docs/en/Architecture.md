@@ -1,10 +1,8 @@
 The Aurora codebase is structured in several directories.
 
-- `app` - Contains the code related to the project configuration, database, controllers, languages and views.
+- `app` - Contains the code related to the project configuration, database, controllers, languages, views, and `app/core` (router, database abstraction layer, language manager, etc.).
 
 - `bin` Contains the CLI code.
-
-- `core` - Contains the core code of Aurora. Like the router, database abstraction layer, language manager, etc.
 
 - `docs` - Contains the Aurora documentation.
 

@@ -7,14 +7,14 @@ final class Media
     public const FOLDER_PERMISSION = 0755;
 
     /**
-     * The content directory relative to the project root directory
+     * The content directory relative to the app root directory
      * @var string
      */
     private static string $directory = '';
 
     /**
      * Sets the content directory
-     * @param string $directory the content directory relative to the project root directory
+     * @param string $directory the content directory relative to the app root directory
      */
     public static function setDirectory(string $directory): void
     {
@@ -24,7 +24,7 @@ final class Media
     /**
      * Returns the files and folders in the given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @param [string] $search the search string
      * @param [string] $order the order (name, type, size)
      * @param [bool] $asc the order direction. true for ascending, false for descending
@@ -43,9 +43,11 @@ final class Media
 
         $files = array_map(function($file) use ($content_path_length) {
             $mime = mime_content_type($file);
+            $relative_path = mb_substr($file, $content_path_length);
+
             return [
                 'name'     => basename($file),
-                'path'     => mb_substr($file, $content_path_length),
+                'path'     => \Aurora\Core\Helper::getContentPath($relative_path),
                 'mime'     => $mime,
                 'is_file'  => is_file($file),
                 'is_image' => str_starts_with($mime, 'image/'),
@@ -80,29 +82,24 @@ final class Media
     /**
      * Creates a new folder with the given name in the given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
-     * @param string $name the folder name
+     * @param string $path the folder path relative to the project root directory
      * @return bool true if the folder was created successfully, false otherwise
      */
-    public static function addFolder(string $path, string $name): bool
+    public static function addFolder(string $path): bool
     {
         $path = \Aurora\Core\Helper::getPath($path);
-
-        if (empty(trim($name))) {
-            throw new \InvalidArgumentException('Folder name is empty');
-        }
 
         if (!self::isValidPath($path)) {
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
         }
 
-        return mkdir("$path/$name", self::FOLDER_PERMISSION);
+        return mkdir($path, self::FOLDER_PERMISSION);
     }
 
     /**
      * Deletes the file/folder with given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @return bool true if the file/folder was deleted successfully, false otherwise
      */
     public static function remove(string $path): bool
@@ -119,7 +116,7 @@ final class Media
     /**
      * Renames the file/folder with given path
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @param string $name the new name
      * @return bool true if the file/folder was renamed successfully, false otherwise
      */
@@ -137,8 +134,8 @@ final class Media
     /**
      * Moves the file/folder with given path to the given folder
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
-     * @param string $name the destination folder relative to the project root directory
+     * @param string $path the path relative to the app root directory
+     * @param string $folder the destination folder relative to the app root directory
      * @return bool true if the file/folder was moved successfully, false otherwise
      */
     public static function move(string $path, string $folder): bool
@@ -160,7 +157,7 @@ final class Media
     /**
      * Duplicates the file with given path with the given name
      * @throws \InvalidArgumentException
-     * @param string $path the path relative to the project root directory
+     * @param string $path the path relative to the app root directory
      * @param string $name the new name
      * @return bool true if the file was duplicated successfully, false otherwise
      */
@@ -200,13 +197,12 @@ final class Media
      * Uploads the given file to the given path
      * @throws \InvalidArgumentException
      * @param array $file the file
-     * @param string $path the path relative to the project root directory
-     * @return bool true if the file was uploaded successfully, false otherwise
+     * @param string $path the path relative to the app root directory
+     * @return string|false the file path relative to the app root directory on success, false otherwise
      */
-    public static function uploadFile($file, string $path): bool
+    public static function uploadFile($file, string $path): string|false
     {
         $path = \Aurora\Core\Helper::getPath($path);
-        $container_path = mb_substr($path, 0, mb_strrpos($path, '/') + 1);
 
         if (!$file) {
             throw new \InvalidArgumentException('File is empty');
@@ -216,11 +212,16 @@ final class Media
             throw new \InvalidArgumentException("Path '$path' is not a valid path within " . self::$directory);
         }
 
+        $destination = self::getFilePath($path, $file['name']);
+        $container_path = dirname($destination);
+
         if (!file_exists($container_path)) {
             mkdir($container_path, self::FOLDER_PERMISSION, true);
         }
 
-        return move_uploaded_file($file['tmp_name'], self::getFilePath($path, $file['name']));
+        return move_uploaded_file($file['tmp_name'], $destination)
+            ? mb_substr($destination, mb_strlen(\Aurora\Core\Helper::getPath()) + 1)
+            : false;
     }
 
     /**
