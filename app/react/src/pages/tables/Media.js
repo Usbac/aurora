@@ -1,23 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Table } from '../../utils/Table';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
-import { downloadFile, DropdownMenu, formatDate, formatSize, trimChar, useApi } from '../../utils/utils';
+import { downloadFile, DropdownMenu, formatDate, formatSize, normalizeContentPath, trimChar, useApi } from '../../utils/utils';
 import { IconClipboard, IconDuplicate, IconFile, IconFolder, IconFolderFill, IconHome, IconMoveFile, IconPencil, IconThreeDots, IconTrash, IconX, IconZip } from '../../utils/icons';
 import { createPortal } from 'react-dom';
 import { useI18n } from '../../providers/I18nProvider';
 
 const MediaPath = ({ path, setPath }) => {
-    const paths = path.split('/');
+    const paths = path.split('/').filter(Boolean);
 
     return <div className="media-paths">
-        {paths.map((folder, i) => {
-            const folder_path = paths.slice(0, i + 1).join('/');
-            
-            return <>
-                <div onClick={() => setPath(folder_path)} className="pointer">{i == 0 ? <IconHome/> : folder}</div>
-                <span>/</span>
-            </>;
-        })}
+        <div onClick={() => setPath('')} className="pointer"><IconHome/></div>
+        {paths.map((folder, i) => <>
+            <span>/</span>
+            <div onClick={() => setPath(paths.slice(0, i + 1).join('/'))} className="pointer">{folder}</div>
+        </>)}
     </div>;
 };
 
@@ -369,7 +366,7 @@ export default function Media() {
                         {!file.is_image && file.is_file && <a href={file.path} target="_blank" className="pointer custom-media file">
                             <IconFile/>
                         </a>}
-                        {!file.is_file && <div onClick={() => setPath(file.path)} className="pointer custom-media folder">
+                        {!file.is_file && <div onClick={() => setPath(normalizeContentPath(file.path))} className="pointer custom-media folder">
                             <IconFolderFill/>
                         </div>}
                         <span>{file.name}</span>

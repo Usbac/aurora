@@ -1497,10 +1497,6 @@ body[data-nav-open] {
     opacity: 0.6;
 }
 
-.media-paths > span:last-of-type {
-    display: none;
-}
-
 .listing-row.file input {
     min-width: 60%;
     margin-right: 10px;

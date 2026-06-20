@@ -450,7 +450,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
         method: 'GET',
         url: `/api/media?images=1&path=${path}`,
     });
-    const folders = path.split('/');
+    const folders = path.split('/').filter(Boolean);
     const input_ref = useRef(null);
     const { request } = useApi();
 
@@ -501,7 +501,7 @@ export const ImageDialog = ({ onSave, onClose }) => {
                             onSave(file.path);
                             onClose();
                         } else {
-                            setPath(file.path);
+                            setPath(normalizeContentPath(file.path));
                         }
                     }}
                 >
@@ -545,9 +545,10 @@ export const ImageDialog = ({ onSave, onClose }) => {
                 <ListingContent/>
             </div>
             <div className="media-paths">
+                <div className="pointer" onClick={() => setPath('')}><IconHome/></div>
                 {folders.map((folder, i) => <>
-                    <div className="pointer" onClick={() => setPath(folders.slice(0, i + 1).join('/'))}>{i == 0 ? <IconHome/> : folder}</div>
                     <span>/</span>
+                    <div className="pointer" onClick={() => setPath(folders.slice(0, i + 1).join('/'))}>{folder}</div>
                 </>)}
             </div>
         </div>
@@ -720,4 +721,16 @@ export const getDeviceType = (user_agent) => {
 export const trimChar = (str, char) => {
     const escaped = char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return str.replace(new RegExp(`^${escaped}+|${escaped}+$`, 'g'), '');
+};
+
+/**
+ * Returns the path relative to the content directory without the content prefix.
+ * @param {string} path - The path with the content directory prefix.
+ * @returns {string} The path without the content directory prefix.
+ */
+export const normalizeContentPath = (path) => {
+    const content = trimChar(document.querySelector('meta[name="content_path"]')?.content || '', '/');
+    const normalized = trimChar(path, '/');
+
+    return content ? normalized.slice(content.length + 1) : normalized;
 };
