@@ -720,4 +720,4 @@ export const getDeviceType = (user_agent) => {
 export const trimChar = (str, char) => {
     const escaped = char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return str.replace(new RegExp(`^${escaped}+|${escaped}+$`, 'g'), '');
-}
+};
