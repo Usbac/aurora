@@ -1348,6 +1348,10 @@ body[data-nav-open] {
     border-radius: 4px;
 }
 
+.custom-media {
+    flex-shrink: 0;
+}
+
 .custom-media.file svg {
     height: 50px;
     width: auto;
