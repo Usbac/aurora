@@ -30,7 +30,7 @@ final class User extends \Aurora\App\ModuleBase
      * Updates an existing user
      * @param int $id the user id
      * @param array $data the new data
-     * @param array|null $user user to keep the token for when revoking sessions after a password change
+     * @param array|null $user the user performing the save, its current token will be kept when revoking sessions after a password change
      * @return bool true on success, false otherwise
      */
     public function save(int $id, array $data, ?array $user = null): bool
